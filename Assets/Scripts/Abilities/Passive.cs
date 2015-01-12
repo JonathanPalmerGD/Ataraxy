@@ -4,6 +4,11 @@ using System.Collections;
 public class Passive : Ability
 {
 	private float durationRemaining;
+	public float DurationRemaining
+	{
+		get { return durationRemaining; }
+		set { durationRemaining = value; }
+	}
 	private bool timed;
 
 	public void UpdatePassive(float time)

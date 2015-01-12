@@ -16,7 +16,6 @@ public class Entity : MonoBehaviour
 		get { return icon; }
 		set { icon = value; }
 	}
-
 	private int health = 8;
 	public int Health
 	{

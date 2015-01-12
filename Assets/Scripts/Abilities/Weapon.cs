@@ -41,6 +41,7 @@ public class Weapon : Ability
 			if (Durability >= durabilityLost)
 			{
 				Durability -= durabilityLost;
+				Remainder.text = Durability.ToString();
 				CdLeft = Cooldown;
 			}
 		}

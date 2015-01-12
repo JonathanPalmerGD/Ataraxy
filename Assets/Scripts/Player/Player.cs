@@ -51,6 +51,7 @@ public class Player : Entity
 
 	void Start()
 	{
+		SelectorUI.gameObject.SetActive(true);
 		SelectorUI.fillMethod = Image.FillMethod.Radial360;
 		SelectorUI.fillClockwise = true;
 
@@ -68,7 +69,8 @@ public class Player : Entity
 
 		//Debug.Log(AssetDatabase.GetAssetPath(thing) +"\n");
 		//Debug.Log(Icons.Length + "\n");
-		
+
+		SetupAbility(Passive.New());
 		SetupAbility(Passive.New());
 		SetupResourceSystem();
 
@@ -114,11 +116,15 @@ public class Player : Entity
 				{
 					if (weapons[i].CdLeft > 0)
 					{
+						SelectorUI.type = Image.Type.Filled;
+						SelectorUI.fillCenter = true;
 						SelectorUI.fillAmount = 1 - (weapons[i].CdLeft / weapons[i].Cooldown);
 					}
 					else
 					{
-						SelectorUI.fillAmount = 1;
+						//SelectorUI.fillAmount = 1;
+						SelectorUI.type = Image.Type.Sliced;
+						SelectorUI.fillCenter = false;
 					}
 				}
 				weapons[i].UpdateWeapon(Time.deltaTime);
@@ -201,7 +207,7 @@ public class Player : Entity
 		#endregion
 
 		#region Scroll Wheel
-		if (Input.GetAxis("Mouse ScrollWheel") < 0)
+		if (Input.GetAxis("Mouse ScrollWheel") > 0 || Input.GetButtonDown("Previous"))
 		{
 			if (weaponIndex == 0)
 			{
@@ -212,7 +218,7 @@ public class Player : Entity
 				weaponIndex -= 1;
 			}
 		}
-		else if (Input.GetAxis("Mouse ScrollWheel") > 0)
+		else if (Input.GetAxis("Mouse ScrollWheel") < 0 || Input.GetButtonDown("Next"))
 		{
 			if (weaponIndex == weapons.Count - 1)
 			{
@@ -235,18 +241,45 @@ public class Player : Entity
 
 			Image panel = ((GameObject)GameObject.Instantiate(iconPrefab)).GetComponent<Image>();
 
-			panel.sprite = (Sprite)Icons[Random.Range(0, Icons.Length)];
+			panel.sprite = (Sprite)Icons[Random.Range(1, Icons.Length)];
 			//w.Icon = (Sprite)Icons[Random.Range(0, 64)];
-			panel.rectTransform.parent = WeaponUI.transform;
-			
+			panel.rectTransform.SetParent(WeaponUI.transform);
+			w.Remainder = panel.transform.FindChild("Remainder").GetComponent<Text>();
+			w.Remainder.text = w.Durability.ToString();
 			weapons.Add(w);
-			panel.rectTransform.position = new Vector3(((weapons.Count - 1) * 67) + 3, 35.5f);
+			panel.rectTransform.position = new Vector3(((weapons.Count - 1) * 67) + 3, 67);
+
+
+
+			/*Weapon w = (Weapon)ToAdd;
+			//WeaponUI
+
+			Image panel = ((GameObject)GameObject.Instantiate(iconPrefab)).GetComponent<Image>();
+
+			panel.sprite = (Sprite)Icons[Random.Range(1, Icons.Length)];
+			//w.Icon = (Sprite)Icons[Random.Range(0, 64)];
+			panel.rectTransform.SetParent(WeaponUI.transform);
+			w.Remainder = panel.transform.FindChild("Remainder").GetComponent<Text>();
+			w.Remainder.text = w.Durability.ToString();
+			weapons.Add(w);
+			panel.rectTransform.position = new Vector3(((weapons.Count - 1) * 67) + 3, 67);*/
 		
 		}
 		else if( ToAdd is Passive)
 		{
-			passives.Add((Passive)ToAdd);
+			/*
+			Passive p = (Passive)ToAdd;
 
+			Image panel = ((GameObject)GameObject.Instantiate(iconPrefab)).GetComponent<Image>();
+
+			panel.sprite = (Sprite)Icons[Random.Range(1, Icons.Length)];
+			panel.color = new Color(0, .8f, 0); 
+			panel.rectTransform.SetParent(PassiveUI.transform);
+			p.Remainder = panel.transform.FindChild("Remainder").GetComponent<Text>();
+			p.Remainder.text = ((int)(p.DurationRemaining * 10)).ToString();
+			passives.Add(p);
+			//panel.rectTransform.an = new Vector3(((passives.Count - 1) * 67) + 3, 67 + 150);
+			*/
 		}
 	}
 

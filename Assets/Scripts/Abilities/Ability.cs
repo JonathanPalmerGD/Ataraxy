@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class Ability : ScriptableObject 
@@ -14,6 +15,12 @@ public class Ability : ScriptableObject
 	{
 		get { return icon; }
 		set { icon = value; }
+	}
+	private Text remainder;
+	public Text Remainder
+	{
+		get { return remainder; }
+		set { remainder = value; }
 	}
 	private int timesGained;
 	public int TimesGained
