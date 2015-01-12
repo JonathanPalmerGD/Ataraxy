@@ -62,6 +62,8 @@ public class MultiToken : MonoBehaviour
 				player.GetComponent<Player>().SetupAbility(Passive.New());
 			}
 
+			TerrainManager.Instance.CreateNewCluster();
+
 			if (playOnPickup && acquireClip != null)
 			{
 				player.audio.clip = acquireClip;
