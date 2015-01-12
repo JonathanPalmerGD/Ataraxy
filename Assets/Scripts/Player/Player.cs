@@ -14,6 +14,7 @@ public class Player : Entity
 	public GameObject WeaponUI;
 	public GameObject PassiveUI;
 	public GameObject iconPrefab;
+	public Camera mainCamera;
 
 	public Object[] Icons;
 
@@ -63,15 +64,17 @@ public class Player : Entity
 
 		SetupAbility(Weapon.New());
 		SetupAbility(Weapon.New());
-		SetupAbility(Weapon.New());
-		SetupAbility(Weapon.New());
-		SetupAbility(Weapon.New());
+		//SetupAbility(Weapon.New());
+		//SetupAbility(Weapon.New());
+		//SetupAbility(Weapon.New());
 
 		//Debug.Log(AssetDatabase.GetAssetPath(thing) +"\n");
 		//Debug.Log(Icons.Length + "\n");
 
 		SetupAbility(Passive.New());
 		SetupAbility(Passive.New());
+		//SetupAbility(Passive.New());
+		//SetupAbility(Passive.New());
 		SetupResourceSystem();
 
 		base.Start();
@@ -146,6 +149,8 @@ public class Player : Entity
 		int index = SelectorUI.transform.GetSiblingIndex();
 		SelectorUI.transform.SetSiblingIndex(index + 1);
 		#endregion
+
+		TargetScan();
 
 		Damaged = false;
 	}
@@ -232,7 +237,7 @@ public class Player : Entity
 		#endregion
 	}
 
-	void SetupAbility(Ability ToAdd)
+	public void SetupAbility(Ability ToAdd)
 	{
 		if(ToAdd is Weapon)
 		{
@@ -247,39 +252,27 @@ public class Player : Entity
 			w.Remainder = panel.transform.FindChild("Remainder").GetComponent<Text>();
 			w.Remainder.text = w.Durability.ToString();
 			weapons.Add(w);
-			panel.rectTransform.position = new Vector3(((weapons.Count - 1) * 67) + 3, 67);
-
-
-
-			/*Weapon w = (Weapon)ToAdd;
-			//WeaponUI
-
-			Image panel = ((GameObject)GameObject.Instantiate(iconPrefab)).GetComponent<Image>();
-
-			panel.sprite = (Sprite)Icons[Random.Range(1, Icons.Length)];
-			//w.Icon = (Sprite)Icons[Random.Range(0, 64)];
-			panel.rectTransform.SetParent(WeaponUI.transform);
-			w.Remainder = panel.transform.FindChild("Remainder").GetComponent<Text>();
-			w.Remainder.text = w.Durability.ToString();
-			weapons.Add(w);
-			panel.rectTransform.position = new Vector3(((weapons.Count - 1) * 67) + 3, 67);*/
-		
+			panel.rectTransform.anchoredPosition = new Vector2((weapons.Count - 1) * 67, 0);
 		}
 		else if( ToAdd is Passive)
 		{
-			/*
+			
 			Passive p = (Passive)ToAdd;
 
 			Image panel = ((GameObject)GameObject.Instantiate(iconPrefab)).GetComponent<Image>();
+			
+			panel.rectTransform.anchorMin = new Vector2(1, 1);
+			panel.rectTransform.anchorMax = new Vector2(1, 1);
 
 			panel.sprite = (Sprite)Icons[Random.Range(1, Icons.Length)];
 			panel.color = new Color(0, .8f, 0); 
 			panel.rectTransform.SetParent(PassiveUI.transform);
 			p.Remainder = panel.transform.FindChild("Remainder").GetComponent<Text>();
 			p.Remainder.text = ((int)(p.DurationRemaining * 10)).ToString();
+
 			passives.Add(p);
-			//panel.rectTransform.an = new Vector3(((passives.Count - 1) * 67) + 3, 67 + 150);
-			*/
+			
+			panel.rectTransform.anchoredPosition = new Vector2((passives.Count) * -67, 0);
 		}
 	}
 
@@ -304,6 +297,23 @@ public class Player : Entity
 				break;
 		}
 
+	}
+
+	void TargetScan()
+	{
+		Ray ray = mainCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
+		RaycastHit hit;
+		//Debug.DrawLine(transform.position, (transform.position + ray) * 100, Color.green);
+
+		if (Physics.Raycast(ray, out hit))
+		{
+			if (hit.collider.gameObject.tag == "Enemy")
+			{
+				Enemy e = hit.collider.gameObject.GetComponent<Enemy>();
+				e.Targeted = true;
+			}
+			//Debug.Log(hit.collider.gameObject.name + "\n");
+		}
 	}
 
 	void OnGUI()

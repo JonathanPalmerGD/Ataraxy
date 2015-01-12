@@ -14,6 +14,7 @@ public class Passive : Ability
 	public void UpdatePassive(float time)
 	{
 		durationRemaining -= time;
+		Remainder.text = durationRemaining.ToString();
 	}
 
 	public override bool CheckAbility()
@@ -35,7 +36,7 @@ public class Passive : Ability
 	{
 		Passive p = ScriptableObject.CreateInstance<Passive>();
 		p.Name = Passive.GetPassiveName();
-		p.durationRemaining = Random.Range(60.0f, 120.0f);
+		p.durationRemaining = Random.Range(30.0f, 99.0f);
 		return p;
 	}
 

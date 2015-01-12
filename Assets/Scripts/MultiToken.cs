@@ -46,11 +46,21 @@ public class MultiToken : MonoBehaviour
 	void OnTriggerEnter(Collider collider)
 	{
 		//Only when we hit the player
-		if (collider.gameObject.name == "Player")
+		if (collider.gameObject.tag == "Player")
 		{
+			//Debug.Log("Collected");
 			//Give the player a new passive/weapon.
 			//Spawn new terrain
 			//Spawn new enemies
+
+			if(Random.Range(0, 1) == 0)
+			{
+				player.GetComponent<Player>().SetupAbility(Weapon.New());
+			}
+			else
+			{
+				player.GetComponent<Player>().SetupAbility(Passive.New());
+			}
 
 			if (playOnPickup && acquireClip != null)
 			{
@@ -63,7 +73,10 @@ public class MultiToken : MonoBehaviour
 			}
 			enabled = false;
 			renderer.enabled = false;
-			//particleSystem.enableEmission = false;
+			if (particleSystem != null)
+			{
+				particleSystem.enableEmission = false;
+			}
 		}
 	}
 }
