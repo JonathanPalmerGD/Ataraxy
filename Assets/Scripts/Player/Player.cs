@@ -64,8 +64,8 @@ public class Player : Entity
 
 		SetupAbility(Weapon.New());
 		SetupAbility(Weapon.New());
-		//SetupAbility(Weapon.New());
-		//SetupAbility(Weapon.New());
+		SetupAbility(Weapon.New());
+		SetupAbility(Weapon.New());
 		//SetupAbility(Weapon.New());
 
 		//Debug.Log(AssetDatabase.GetAssetPath(thing) +"\n");
@@ -185,6 +185,7 @@ public class Player : Entity
 		}
 		#endregion
 
+		#region Testing Zone
 		if (Input.GetKeyDown(KeyCode.T))
 		{
 			CharacterMotor charMotor = gameObject.GetComponent<CharacterMotor>();
@@ -194,6 +195,7 @@ public class Player : Entity
 				charMotor.movement.velocity = new Vector3(charMotor.movement.velocity.x, 20, charMotor.movement.velocity.z);
 			}
 		}
+		#endregion
 
 		#region Health & Resources
 		if (Input.GetKeyDown(KeyCode.R))
@@ -233,6 +235,29 @@ public class Player : Entity
 			{
 				weaponIndex += 1;
 			}
+		}
+		#endregion
+
+		#region Number Checking
+		if (Input.GetButton("1"))
+		{
+			weaponIndex = 0;
+		}
+		if (Input.GetButton("2"))
+		{
+			weaponIndex = 1;
+		}
+		if (Input.GetButton("3"))
+		{
+			weaponIndex = 2;
+		}
+		if (Input.GetButton("4"))
+		{
+			weaponIndex = 3;
+		}
+		if (Input.GetButton("5"))
+		{
+			weaponIndex = 4;
 		}
 		#endregion
 	}
