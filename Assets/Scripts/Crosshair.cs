@@ -27,6 +27,9 @@ public class Crosshair : MonoBehaviour
 		}
 	}
 
+
+	//Needs code for adjusting the size of the crosshair.
+
 	/// <summary>
 	/// Stores the crosshair sprites of all available crosshairs.
 	/// Will be used for different weapons having separate crosshairs.
@@ -57,6 +60,20 @@ public class Crosshair : MonoBehaviour
 		else
 		{
 			RefreshCrosshair();
+		}
+	}
+
+	void Update()
+	{
+		if (Input.GetKeyDown(KeyCode.Minus))
+		{
+			Image img = this.GetComponent<Image>();
+			img.rectTransform.sizeDelta = new Vector2(img.rectTransform.rect.width / 2, img.rectTransform.rect.height / 2);	
+		}
+		if (Input.GetKeyDown(KeyCode.Equals))
+		{
+			Image img = this.GetComponent<Image>();
+			img.rectTransform.sizeDelta = new Vector2(img.rectTransform.rect.width * 2, img.rectTransform.rect.height * 2);
 		}
 	}
 
