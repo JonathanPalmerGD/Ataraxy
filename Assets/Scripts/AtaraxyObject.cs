@@ -56,6 +56,7 @@ public class AtaraxyObject : MonoBehaviour
 		set { damaged = value; }
 	}
 
+	public Canvas infoHUD;
 	public Slider healthSlider;
 	public Slider resourceSlider;
 	public Text healthText;
@@ -68,7 +69,7 @@ public class AtaraxyObject : MonoBehaviour
 	{
 		damaged = true;
 
-		Health += amount;
+		Health -= amount;
 
 		if (healthSlider != null)
 		{

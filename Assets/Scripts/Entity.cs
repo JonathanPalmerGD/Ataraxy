@@ -34,6 +34,7 @@ public class Entity : AtaraxyObject
 	{
 		if (Targeted)
 		{
+			infoHUD.enabled = true;
 			counter -= Time.deltaTime;
 			renderer.material.shader = outline;
 
@@ -44,6 +45,7 @@ public class Entity : AtaraxyObject
 		}
 		else
 		{
+			infoHUD.enabled = false;
 			renderer.material.shader = diffuse;
 		}
 

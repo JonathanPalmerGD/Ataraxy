@@ -339,6 +339,11 @@ public class Player : AtaraxyObject
 			{
 				Enemy e = hit.collider.gameObject.GetComponent<Enemy>();
 				e.Targeted = true;
+
+				if (Input.GetMouseButtonDown(0))
+				{
+					e.TakeDamage(1);
+				}
 			}
 			//Debug.Log(hit.collider.gameObject.name + "\n");
 		}
