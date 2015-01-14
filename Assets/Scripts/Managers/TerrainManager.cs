@@ -5,36 +5,24 @@ using System.Collections.Generic;
 
 public class TerrainManager : Singleton<TerrainManager>
 {
-	public static Vector3 minDistance = new Vector3(5, 0, 5);
-	public static float maxDistance = 25;
-	public static Vector3 minScale = new Vector3(5, 2, 5);
+	public static Vector3 minDistance = new Vector3(10, 0, 10);
+	public static Vector3 maxDistance = new Vector3(50, 15, 50);
+	public static Vector3 minScale = new Vector3(3, 2, 3);
 	public static Vector3 maxScale = new Vector3(45, 25, 45);
-	public static float minTilt = -20;
-	public static float maxTilt = 20;
-	public static int minCountInCluster = 4;
-	public static int maxCountInCluster = 12;
+	public static float minTilt = -15;
+	public static float maxTilt = 15;
+	public static int minCountInCluster = 6;
+	public static int maxCountInCluster = 9;
+
+	public GameObject clusterPrefab;
 
 	public List<Cluster> clusters;
+	public List<Texture2D> textures;
 
 	void Awake()
 	{
 		clusters = new List<Cluster>();
-	}
-
-	void Start() 
-	{
-		/*
-		GameObject[] clusterArray = GameObject.FindGameObjectsWithTag("Cluster");
-
-		for (int i = 0; i < clusterArray.Length; i++)
-		{
-			clusters.Add(clusterArray[i].GetComponent<Cluster>());
-		}*/
-	}
-
-	void Update() 
-	{
-	
+		textures = Resources.LoadAll<Texture2D>("Terrain").ToList();
 	}
 
 	public void RegisterCluster(Cluster reportingCluster)
@@ -44,8 +32,7 @@ public class TerrainManager : Singleton<TerrainManager>
 
 	public void CreateNewCluster()
 	{
-		GameObject NewCluster = new GameObject();
-		NewCluster.AddComponent<Cluster>();
+		
 
 	}
 }

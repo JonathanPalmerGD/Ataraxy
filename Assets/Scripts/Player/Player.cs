@@ -112,6 +112,7 @@ public class Player : AtaraxyObject
 		#region Resource System
 		ManageResourceSystem();
 		#endregion
+		bool dirtyAbilityBar = false;
 		#region Update Passive Durations & Check Removal
 		for (int i = 0; i < passives.Count; i++)
 		{
@@ -122,11 +123,13 @@ public class Player : AtaraxyObject
 				{
 					passives.RemoveAt(i);
 					i--;
+					dirtyAbilityBar = true;
 				}
 			}
 		}
 		#endregion
 		#region Check Weapons for Removal
+		
 		for (int i = 0; i < weapons.Count; i++)
 		{
 			if (weapons[i] != null)
@@ -158,8 +161,10 @@ public class Player : AtaraxyObject
 				weapons[i].UpdateWeapon(Time.deltaTime);
 				if (weapons[i].CheckAbility())
 				{
+					weapons[i].CleanUp();
 					weapons.RemoveAt(i);
 					i--;
+					dirtyAbilityBar = true;
 				}
 			}
 		}
@@ -167,6 +172,11 @@ public class Player : AtaraxyObject
 		if (weaponIndex > weapons.Count - 1)
 		{
 			weaponIndex = weapons.Count - 1;
+		}
+		
+		if (dirtyAbilityBar)
+		{
+			MaintainAbilities();
 		}
 		#endregion
 		#region Handle Selector Location
@@ -192,7 +202,10 @@ public class Player : AtaraxyObject
 		}
 		if (Input.GetButton("Fire1"))
 		{
-			weapons[weaponIndex].UseWeapon(1, true);
+			if (weapons.Count > 0)
+			{
+				weapons[weaponIndex].UseWeapon(1, true);
+			}
 		}
 		if (Input.GetButtonUp("Fire1"))
 		{
@@ -205,7 +218,10 @@ public class Player : AtaraxyObject
 		}
 		if (Input.GetButton("Fire2"))
 		{
-			weapons[weaponIndex].UseWeapon(5, false);
+			if (weapons.Count > 0)
+			{
+				weapons[weaponIndex].UseWeapon(5, false);
+			}
 		}
 		if (Input.GetButtonUp("Fire2"))
 		{
@@ -221,6 +237,19 @@ public class Player : AtaraxyObject
 			{
 				//Debug.Log(charMotor.movement.velocity.y + "\n");
 				charMotor.movement.velocity = new Vector3(charMotor.movement.velocity.x, 20, charMotor.movement.velocity.z);
+			}
+		}
+
+		if (Input.GetKeyDown(KeyCode.LeftShift))
+		{
+			CharacterMotor charMotor = gameObject.GetComponent<CharacterMotor>();
+			if (charMotor.jumping.jumping)
+			{
+				//Debug.Log(charMotor.movement.velocity.y + "\n");
+				charMotor.movement.velocity = new Vector3(charMotor.movement.velocity.x * 20.0f, 75, charMotor.movement.velocity.z * 20.0f);
+
+				charMotor.movement.velocity.Normalize();
+				charMotor.movement.velocity *= 120;
 			}
 		}
 		#endregion
@@ -242,7 +271,7 @@ public class Player : AtaraxyObject
 		#endregion
 
 		#region Scroll Wheel
-		if (Input.GetAxis("Mouse ScrollWheel") > 0 || Input.GetButtonDown("Previous"))
+		if (Input.GetAxis("Mouse ScrollWheel") > 0 || Input.GetButtonDown("Previous Weapon"))
 		{
 			if (weaponIndex == 0)
 			{
@@ -253,7 +282,7 @@ public class Player : AtaraxyObject
 				weaponIndex -= 1;
 			}
 		}
-		else if (Input.GetAxis("Mouse ScrollWheel") < 0 || Input.GetButtonDown("Next"))
+		else if (Input.GetAxis("Mouse ScrollWheel") < 0 || Input.GetButtonDown("Next Weapon"))
 		{
 			if (weaponIndex == weapons.Count - 1)
 			{
@@ -267,27 +296,49 @@ public class Player : AtaraxyObject
 		#endregion
 
 		#region Number Checking
-		if (Input.GetButton("1"))
+		if (Input.GetButton("Quickslot 1"))
 		{
 			weaponIndex = 0;
 		}
-		if (Input.GetButton("2"))
+		if (Input.GetButton("Quickslot 2"))
 		{
 			weaponIndex = 1;
 		}
-		if (Input.GetButton("3"))
+		if (Input.GetButton("Quickslot 3"))
 		{
 			weaponIndex = 2;
 		}
-		if (Input.GetButton("4"))
+		if (Input.GetButton("Quickslot 4"))
 		{
 			weaponIndex = 3;
 		}
-		if (Input.GetButton("5"))
+		if (Input.GetButton("Quickslot 5"))
 		{
 			weaponIndex = 4;
 		}
 		#endregion
+
+		#region Quit Section
+		if (Input.GetButton("Quit"))
+		{
+			AppHelper.Quit();
+		}
+		#endregion
+	}
+
+	public void MaintainAbilities()
+	{
+		for (int i = 0; i < weapons.Count; i++)
+		{
+			weapons[i].IconUI.rectTransform.anchoredPosition = new Vector2((i) * 67, 0);
+		}
+		for (int i = 0; i < passives.Count; i++)
+		{
+			passives[i].IconUI.rectTransform.anchorMin = new Vector2(1, 1);
+			passives[i].IconUI.rectTransform.anchorMax = new Vector2(1, 1);
+
+			passives[i].IconUI.rectTransform.anchoredPosition = new Vector2((i + 1) * -67, 0);
+		}
 	}
 
 	public void SetupAbility(Ability ToAdd)
@@ -304,9 +355,11 @@ public class Player : AtaraxyObject
 			panel.sprite = (Sprite)Icons[Random.Range(1, Icons.Length)];
 			panel.rectTransform.SetParent(WeaponUI.transform);
 			w.Remainder = panel.transform.FindChild("Remainder").GetComponent<Text>();
-			w.Cooldown = Random.Range(.01f, 2);
+			w.Cooldown = Random.Range(.01f, .7f);
 			w.SpecialCooldown = Random.Range(4, 16);
 			w.Remainder.text = w.Durability.ToString();
+
+			w.IconUI = panel;
 			weapons.Add(w);
 			panel.rectTransform.anchoredPosition = new Vector2((weapons.Count - 1) * 67, 0);
 		}
@@ -328,6 +381,7 @@ public class Player : AtaraxyObject
 			p.Remainder = panel.transform.FindChild("Remainder").GetComponent<Text>();
 			p.Remainder.text = ((int)(p.DurationRemaining * 10)).ToString();
 
+			p.IconUI = panel;
 			passives.Add(p);
 			
 			panel.rectTransform.anchoredPosition = new Vector2((passives.Count) * -67, 0);

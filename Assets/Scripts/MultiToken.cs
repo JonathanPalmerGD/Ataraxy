@@ -5,23 +5,14 @@ public class MultiToken : MonoBehaviour
 {
 	//Bunch of references to stats and such. We could trim this down honestly.
 	private GameObject player;
-	private GameObject boss;
-	//private BossStats bStats;
-	//private PlayerStats pStats;
-	//private Cryomancer runner;
 
-	//What the token does. This class is more complex, but it's easier than having it inherit into anywhere from 3-10 different tokens. May get broken up later
-	public bool damageBoss = true;
 	public bool healPlayer = true;
-	public bool restoreIce = true;
-	public bool increaseMaxIce = true;
-	public bool drainLava = false;
-	
-	public int damage = 5;
+	public bool grantWeapon = true;
+	public bool grantPassive = true;
+	public bool grantExperience = false;
+
 	public int heal = 10;
-	public int iceGain = 10;
-	public int maxIceGain = 5;
-	public int lavaDrainDuration = 5;
+	public float experience = 12;
 
 	//Some audio info
 	public bool playOnPickup = true;
@@ -53,7 +44,7 @@ public class MultiToken : MonoBehaviour
 			//Spawn new terrain
 			//Spawn new enemies
 
-			if(Random.Range(0, 1) == 0)
+			if(Random.Range(0, 2) == 0)
 			{
 				player.GetComponent<Player>().SetupAbility(Weapon.New());
 			}
@@ -73,7 +64,7 @@ public class MultiToken : MonoBehaviour
 			{
 				light.enabled = false;
 			}
-			enabled = false;
+			gameObject.SetActive(false);
 			renderer.enabled = false;
 			if (particleSystem != null)
 			{

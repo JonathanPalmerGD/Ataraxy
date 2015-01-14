@@ -14,7 +14,7 @@ public class Passive : Ability
 	public void UpdatePassive(float time)
 	{
 		durationRemaining -= time;
-		Remainder.text = durationRemaining.ToString();
+		Remainder.text = ((int)durationRemaining).ToString();
 	}
 
 	public override bool CheckAbility()

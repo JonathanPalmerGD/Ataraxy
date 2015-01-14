@@ -16,6 +16,12 @@ public class Ability : ScriptableObject
 		get { return icon; }
 		set { icon = value; }
 	}
+	private Image iconUI;
+	public Image IconUI
+	{
+		get { return iconUI; }
+		set { iconUI = value; }
+	}
 	private Text remainder;
 	public Text Remainder
 	{
@@ -37,6 +43,11 @@ public class Ability : ScriptableObject
 	public void Update() 
 	{
 	
+	}
+
+	public virtual void CleanUp()
+	{
+		Destroy(IconUI.gameObject);
 	}
 
 	public virtual bool CheckAbility()
