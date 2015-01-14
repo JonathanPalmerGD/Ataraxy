@@ -28,6 +28,11 @@ public class AtaraxyObject : MonoBehaviour
 		get { return maxHealth; }
 		set { maxHealth = value; }
 	}
+	private Allegiance faction;
+	public virtual Allegiance Faction
+	{
+		get { return Allegiance.Neutral; }
+	}
 
 	private int resource = 30;
 	public int Resource

@@ -21,6 +21,12 @@ public class Player : AtaraxyObject
 	public Color flashColor = new Color(1f, 0f, 0f, 0.15f);
 
 	public Entity targetedEntity = null;
+
+	public override Allegiance Faction
+	{
+		get { return Allegiance.Player; }
+	}
+
 	private float counter = 0.0f;
 	private static float targetFade = 3.0f;
 
