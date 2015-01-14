@@ -20,6 +20,10 @@ public class Player : AtaraxyObject
 	public float flashSpeed = 5f;
 	public Color flashColor = new Color(1f, 0f, 0f, 0.15f);
 
+	public Entity targetedEntity = null;
+	private float counter = 0.0f;
+	private static float targetFade = 3.0f;
+
 	private int weaponIndex = 0;
 	public int WeaponIndex
 	{
@@ -76,6 +80,17 @@ public class Player : AtaraxyObject
 		//SetupAbility(Passive.New());
 		SetupResourceSystem();
 
+		HealthSlider = UIManager.Instance.player_HP;
+		HealthText = UIManager.Instance.player_HPText;
+		ResourceSlider = UIManager.Instance.player_Resource;
+		ResourceText = UIManager.Instance.player_ResourceText;
+
+		SetupHealthUI();
+		SetupResourceUI();
+		SetNameUI();
+
+		DamageImage = UIManager.Instance.damage_Indicator;
+
 		base.Start();
 
 		gameObject.tag = "Player";
@@ -87,11 +102,11 @@ public class Player : AtaraxyObject
 		#region Handle Damage
 		if (Damaged)
 		{
-			damageImage.color = flashColor;
+			DamageImage.color = flashColor;
 		}
 		else
 		{
-			damageImage.color = Color.Lerp(damageImage.color, Color.clear, flashSpeed * Time.deltaTime);
+			DamageImage.color = Color.Lerp(DamageImage.color, Color.clear, flashSpeed * Time.deltaTime);
 		}
 		#endregion
 		#region Resource System
@@ -122,7 +137,16 @@ public class Player : AtaraxyObject
 					{
 						SelectorUI.type = Image.Type.Filled;
 						SelectorUI.fillCenter = true;
-						SelectorUI.fillAmount = 1 - (weapons[i].CdLeft / weapons[i].Cooldown);
+						float startCooldownAmt = 0;
+						if (weapons[i].UseSpecialCooldown)
+						{
+							startCooldownAmt = weapons[i].SpecialCooldown;
+						}
+						else
+						{
+							startCooldownAmt = weapons[i].Cooldown;
+						}
+						SelectorUI.fillAmount = 1 - (weapons[i].CdLeft / startCooldownAmt);
 					}
 					else
 					{
@@ -152,6 +176,7 @@ public class Player : AtaraxyObject
 		#endregion
 
 		TargetScan();
+		HandleTarget();
 
 		Damaged = false;
 
@@ -165,9 +190,9 @@ public class Player : AtaraxyObject
 		{
 			//Debug.Log("Firing\n");
 		}
-		if (Input.GetButtonDown("Fire1"))
+		if (Input.GetButton("Fire1"))
 		{
-			weapons[weaponIndex].UseWeapon(1);
+			weapons[weaponIndex].UseWeapon(1, true);
 		}
 		if (Input.GetButtonUp("Fire1"))
 		{
@@ -178,9 +203,9 @@ public class Player : AtaraxyObject
 		{
 			//Debug.Log("Firing\n");
 		}
-		if (Input.GetButtonDown("Fire2"))
+		if (Input.GetButton("Fire2"))
 		{
-			weapons[weaponIndex].UseWeapon(5);
+			weapons[weaponIndex].UseWeapon(5, false);
 		}
 		if (Input.GetButtonUp("Fire2"))
 		{
@@ -203,7 +228,7 @@ public class Player : AtaraxyObject
 		#region Health & Resources
 		if (Input.GetKeyDown(KeyCode.R))
 		{
-			TakeDamage(-1);
+			TakeDamage(1);
 		}
 
 		if (Input.GetKeyDown(KeyCode.Y))
@@ -274,10 +299,13 @@ public class Player : AtaraxyObject
 
 			Image panel = ((GameObject)GameObject.Instantiate(iconPrefab)).GetComponent<Image>();
 
+			panel.name = "I: " + w.AbilityName;
+
 			panel.sprite = (Sprite)Icons[Random.Range(1, Icons.Length)];
-			//w.Icon = (Sprite)Icons[Random.Range(0, 64)];
 			panel.rectTransform.SetParent(WeaponUI.transform);
 			w.Remainder = panel.transform.FindChild("Remainder").GetComponent<Text>();
+			w.Cooldown = Random.Range(.01f, 2);
+			w.SpecialCooldown = Random.Range(4, 16);
 			w.Remainder.text = w.Durability.ToString();
 			weapons.Add(w);
 			panel.rectTransform.anchoredPosition = new Vector2((weapons.Count - 1) * 67, 0);
@@ -286,9 +314,11 @@ public class Player : AtaraxyObject
 		{
 			
 			Passive p = (Passive)ToAdd;
-
+			
 			Image panel = ((GameObject)GameObject.Instantiate(iconPrefab)).GetComponent<Image>();
 			
+			panel.name = "I: " + p.AbilityName;
+
 			panel.rectTransform.anchorMin = new Vector2(1, 1);
 			panel.rectTransform.anchorMax = new Vector2(1, 1);
 
@@ -335,17 +365,75 @@ public class Player : AtaraxyObject
 
 		if (Physics.Raycast(ray, out hit))
 		{
+			if(hit.collider.gameObject.tag == "Entity")
+			{
+				Entity e = hit.collider.gameObject.GetComponent<Entity>();
+				CheckNewTarget((Entity)e);
+			}
+			if (hit.collider.gameObject.tag == "Island")
+			{
+				Island e = hit.collider.gameObject.GetComponent<Island>();
+				CheckNewTarget((Entity)e);
+			}
 			if (hit.collider.gameObject.tag == "Enemy")
 			{
 				Enemy e = hit.collider.gameObject.GetComponent<Enemy>();
-				e.Targeted = true;
-
+				CheckNewTarget((Entity)e);
+				
 				if (Input.GetMouseButtonDown(0))
 				{
 					e.TakeDamage(1);
 				}
+				if (Input.GetMouseButtonDown(1))
+				{
+					e.TakeDamage(5);
+				}
 			}
 			//Debug.Log(hit.collider.gameObject.name + "\n");
+		}
+	}
+
+	void CheckNewTarget(Entity newTarget)
+	{
+		//If we had a target
+		if (targetedEntity != null)
+		{
+			//If our new target is different
+			if (newTarget != targetedEntity)
+			{
+				//Untarget the old.
+				targetedEntity.Untarget();
+
+				//Set new target.
+				targetedEntity = newTarget;
+
+				//Tell em they're fabulous
+				targetedEntity.Target();
+
+			}
+		}
+		//If we had no target
+		else
+		{
+			//Set new target.
+			targetedEntity = newTarget;
+
+			//Tell em they're fabulous
+			targetedEntity.Target();
+		}
+		counter = Player.targetFade;
+	}
+
+	void HandleTarget()
+	{
+		if (targetedEntity != null)
+		{
+			counter -= Time.deltaTime;
+			if (counter <= 0)
+			{
+				targetedEntity.Untarget();
+				targetedEntity = null;
+			}
 		}
 	}
 

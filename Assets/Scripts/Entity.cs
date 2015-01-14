@@ -5,21 +5,6 @@ public class Entity : AtaraxyObject
 {
 	public Shader outline;
 	public Shader diffuse;
-	private bool targeted = false;
-	public bool Targeted
-	{
-		get { return targeted; }
-		set
-		{
-			if (value)
-			{
-				counter = targetFade;
-			}
-			targeted = value;
-		}
-	}
-	private float counter = 0.0f;
-	private float targetFade = 3.0f;
 
 	public new void Start()
 	{
@@ -28,36 +13,37 @@ public class Entity : AtaraxyObject
 
 		gameObject.tag = "Entity";
 		base.Start();
+
+		HealthSlider = UIManager.Instance.target_HP;
+		NameText = UIManager.Instance.target_Name;
+		InfoHUD = UIManager.Instance.target_HUD;
+		Untarget();
+	}
+
+	public virtual void Untarget()
+	{
+		if (InfoHUD != null)
+		{
+			InfoHUD.enabled = false;
+			renderer.material.shader = diffuse;
+		}
+	}
+
+	public virtual void Target()
+	{
+		if (InfoHUD != null)
+		{
+			InfoHUD.enabled = true;
+			renderer.material.shader = outline;
+
+			SetupHealthUI();
+			SetupResourceUI();
+			SetNameUI();
+		}
 	}
 
 	public new void Update()
 	{
-		if (Targeted)
-		{
-			infoHUD.enabled = true;
-			counter -= Time.deltaTime;
-			renderer.material.shader = outline;
-
-			if (counter < 0)
-			{
-				Targeted = false;
-			}
-		}
-		else
-		{
-			infoHUD.enabled = false;
-			renderer.material.shader = diffuse;
-		}
-
-		/*if (Input.GetKey(KeyCode.M))
-		{
-			Debug.Log("M Held\n");
-			Targeted = true;
-		}
-		else
-		{
-			Targeted = false;
-		}*/
 		base.Update();
 	}
 }

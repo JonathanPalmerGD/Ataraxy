@@ -59,7 +59,7 @@ public class Nomenclature
 	//12 values
 	static string[] third = { "", " ", "-", "_", "'", "^", "?", "%", "#", "~", "+", "*" };
 	//12 values
-	static string[] fourth = { "Foxtrot", "Tebos", "Ostril", "Iuscone", "Dreuogawa", "Oltheon", "Neria", "Eastworth", "Creoruta", "Zalia", "Vokilk", "Tiamandias" };
+	static string[] fourth = { "Foxtrot", "Merp", "Ostril", "Iuscone", "Dreuogawa", "Oltheon", "Neria", "Eastworth", "Creoruta", "Zalia", "Vokilk", "Tiamandias" };
 
 	/// <summary>
 	/// Provides a random name for an island or cluster. Provide 4 randomly generated numbers from 0-11.

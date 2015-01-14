@@ -56,14 +56,54 @@ public class AtaraxyObject : MonoBehaviour
 		set { damaged = value; }
 	}
 
-	public Canvas infoHUD;
-	public Slider healthSlider;
-	public Slider resourceSlider;
-	public Text healthText;
-	public Text resourceText;
-	public Text nameText;
-	public Image damageImage;
-	public AudioClip deathClip;
+	private Canvas infoHUD;
+	public Canvas InfoHUD
+	{
+		get { return infoHUD; }
+		set { infoHUD = value; }
+	}
+	private Slider healthSlider;
+	public Slider HealthSlider
+	{
+		get { return healthSlider; }
+		set { healthSlider = value; }
+	}
+	private Slider resourceSlider;
+	public Slider ResourceSlider
+	{
+		get { return resourceSlider; }
+		set { resourceSlider = value; }
+	}
+	private Text healthText;
+	public Text HealthText
+	{
+		get { return healthText; }
+		set { healthText = value; }
+	}
+	private Text resourceText;
+	public Text ResourceText
+	{
+		get { return resourceText; }
+		set { resourceText = value; }
+	}
+	private Text nameText;
+	public Text NameText
+	{
+		get { return nameText; }
+		set { nameText = value; }
+	}
+	private Image damageImage;
+	public Image DamageImage
+	{
+		get { return damageImage; }
+		set { damageImage = value; }
+	}
+	private AudioClip deathClip;
+	public AudioClip DeathClip
+	{
+		get { return deathClip; }
+		set { deathClip = value; }
+	}
 
 	public void TakeDamage(int amount)
 	{
@@ -134,6 +174,16 @@ public class AtaraxyObject : MonoBehaviour
 
 	public void Start()
 	{
+	}
+	
+	public void Update()
+	{
+	
+	}
+
+	#region UI Setup - Health, Name, Resource
+	public void SetupHealthUI()
+	{
 		if (healthSlider != null)
 		{
 			healthSlider.maxValue = MaxHealth;
@@ -143,6 +193,18 @@ public class AtaraxyObject : MonoBehaviour
 		{
 			healthText.text = Health.ToString();
 		}
+	}
+
+	public void SetNameUI()
+	{
+		if (nameText != null)
+		{
+			nameText.text = gameObject.name;
+		}
+	}
+
+	public void SetupResourceUI()
+	{
 		if (resourceSlider != null)
 		{
 			resourceSlider.maxValue = MaxResource;
@@ -152,14 +214,6 @@ public class AtaraxyObject : MonoBehaviour
 		{
 			resourceText.text = Resource.ToString();
 		}
-		if (nameText != null)
-		{
-			nameText.text = gameObject.name;
-		}
 	}
-	
-	public void Update()
-	{
-	
-	}
+	#endregion
 }

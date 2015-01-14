@@ -29,12 +29,12 @@ public class Ability : ScriptableObject
 		set { timesGained = value; }
 	}
 
-	void Start () 
+	public void Start () 
 	{
 	
 	}
-	
-	void Update () 
+
+	public void Update() 
 	{
 	
 	}

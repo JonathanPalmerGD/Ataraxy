@@ -3,11 +3,23 @@ using System.Collections;
 
 public class Weapon : Ability 
 {
+	private bool useSpecialCooldown = false;
+	public bool UseSpecialCooldown
+	{
+		get { return useSpecialCooldown; }
+		set { useSpecialCooldown = value; }
+	}
 	private float cooldown;
 	public float Cooldown
 	{
 		get { return cooldown; }
 		set { cooldown = value; }
+	}
+	private float specialCooldown;
+	public float SpecialCooldown
+	{
+		get { return specialCooldown; }
+		set { specialCooldown = value; }
 	}
 	private float cdLeft;
 	public float CdLeft
@@ -34,7 +46,12 @@ public class Weapon : Ability
 		}
 	}
 
-	public void UseWeapon(int durabilityLost)
+	/// <summary>
+	/// Activates the weapon.
+	/// </summary>
+	/// <param name="durabilityLost">The amount of durability list</param>
+	/// <param name="normalCooldown">True if normal cooldown, false for special</param>
+	public void UseWeapon(int durabilityLost, bool normalCooldown)
 	{
 		if (CdLeft <= 0)
 		{
@@ -42,7 +59,16 @@ public class Weapon : Ability
 			{
 				Durability -= durabilityLost;
 				Remainder.text = Durability.ToString();
-				CdLeft = Cooldown;
+				UseSpecialCooldown = !normalCooldown;
+
+				if (UseSpecialCooldown)
+				{
+					CdLeft = SpecialCooldown;
+				}
+				else
+				{
+					CdLeft = Cooldown;
+				}
 			}
 		}
 	}
@@ -69,6 +95,7 @@ public class Weapon : Ability
 		//w.Icon = Resources.Load("Atlases/VortexIconAtlas");
 		w.durability = Random.Range(10, 60);
 		w.Cooldown = 1;
+		w.SpecialCooldown = 6;
 		w.CdLeft = 0;
 		return w;
 	}	

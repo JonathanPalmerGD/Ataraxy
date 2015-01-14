@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Island : MonoBehaviour
+public class Island : Entity
 {
 	public List<Island> neighbors;
 	private Cluster family;
@@ -22,13 +22,37 @@ public class Island : MonoBehaviour
 		}
 	}
 
-	void Start()
+	public new void Start()
 	{
 		gameObject.name = "Island: " + Nomenclature.GetName(Random.Range(0, 12), Random.Range(0, 12), Random.Range(0, 12), Random.Range(0, 12));
+
+		base.Start();
+		gameObject.tag = "Island";
 	}
 
-	void Update()
+	public new void Update()
 	{
+		base.Update();
+	}
 
+	public override void Target()
+	{
+		if (InfoHUD != null)
+		{
+			InfoHUD.enabled = true;
+			
+			SetupHealthUI();
+			SetupResourceUI();
+			SetNameUI();
+		}
+	}
+
+	public override void Untarget()
+	{
+		if (InfoHUD != null)
+		{
+			InfoHUD.enabled = false;
+			renderer.material.shader = diffuse;
+		}
 	}
 }
