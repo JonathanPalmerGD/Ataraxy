@@ -1,129 +1,61 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
 
-public class Entity : MonoBehaviour 
+public class Entity : AtaraxyObject 
 {
-	private string name;
-	public string Name
+	public Shader outline;
+	public Shader diffuse;
+	private bool targeted = false;
+	public bool Targeted
 	{
-		get { return name; }
-		set { name = value; }
-	}
-	private Sprite icon;
-	public Sprite Icon
-	{
-		get { return icon; }
-		set { icon = value; }
-	}
-	private int health = 8;
-	public int Health
-	{
-		get { return health; }
-		set { health = value; }
-	}
-	private int maxHealth = 8;
-	public int MaxHealth
-	{
-		get { return maxHealth; }
-		set { maxHealth = value; }
-	}
-
-	private int resource = 30;
-	public int Resource
-	{
-		get { return resource; }
-		set { resource = value; }
-	}
-	private int maxResource = 30;
-	public int MaxResource
-	{
-		get { return maxResource; }
-		set { maxResource = value; }
-	}
-
-	private bool isDead = false;
-	public bool IsDead
-	{
-		get { return isDead; }
-		set { isDead = value; }
-	}
-
-	private bool damaged = false;
-	public bool Damaged
-	{
-		get { return damaged; }
-		set { damaged = value; }
-	}
-
-	public Slider healthSlider;
-	public Slider resourceSlider;
-	public Text healthText;
-	public Text resourceText;
-	public Image damageImage;
-	public AudioClip deathClip;
-
-	public void TakeDamage(int amount)
-	{
-		damaged = true;
-
-		Health += amount;
-
-		healthSlider.value = Health;
-		healthText.text = Health.ToString();
-
-		if (Health <= 0 && !isDead)
+		get { return targeted; }
+		set
 		{
-			KillEntity();
+			if (value)
+			{
+				counter = targetFade;
+			}
+			targeted = value;
 		}
 	}
+	private float counter = 0.0f;
+	private float targetFade = 3.0f;
 
-	public void RestoreHealth(int amount)
+	public new void Start()
 	{
-		if (Health + amount >= MaxHealth)
+		outline = Shader.Find("Outlined/Silhouetted Diffuse");
+		diffuse = Shader.Find("Diffuse");
+
+		gameObject.tag = "Entity";
+		base.Start();
+	}
+
+	public new void Update()
+	{
+		if (Targeted)
 		{
-			Health = MaxHealth;
+			counter -= Time.deltaTime;
+			renderer.material.shader = outline;
+
+			if (counter < 0)
+			{
+				Targeted = false;
+			}
 		}
 		else
 		{
-			Health += amount;
+			renderer.material.shader = diffuse;
 		}
 
-		healthSlider.value = Health;
-		healthText.text = Health.ToString();
-	}
-
-	public bool AdjustResource(int amount)
-	{
-		if (Resource + amount <= MaxResource && Resource + amount >= 0)
+		/*if (Input.GetKey(KeyCode.M))
 		{
-			Resource += amount;
-
-			resourceSlider.value = Resource;
-			resourceText.text = Resource.ToString();
-
-			return true;
+			Debug.Log("M Held\n");
+			Targeted = true;
 		}
-		return false;
-	}
-
-	public void KillEntity()
-	{
-		IsDead = true;
-	}
-
-	public void Start()
-	{
-		healthSlider.maxValue = MaxHealth;
-		healthSlider.value = Health;
-		healthText.text = Health.ToString();
-		resourceSlider.maxValue = MaxResource;
-		resourceSlider.value = Resource;
-		resourceText.text = Resource.ToString();
-	}
-	
-	void Update()
-	{
-	
+		else
+		{
+			Targeted = false;
+		}*/
+		base.Update();
 	}
 }

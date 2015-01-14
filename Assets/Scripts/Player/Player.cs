@@ -1,10 +1,9 @@
 ﻿using UnityEngine.UI;
 using UnityEngine;
-using UnityEditor;
 using System.Collections.Generic;
 using System.Collections;
 
-public class Player : Entity
+public class Player : AtaraxyObject
 {
 	public List<Weapon> weapons;
 	public List<Passive> passives;
@@ -50,7 +49,7 @@ public class Player : Entity
 	public enum ResourceSystem { Mana, Rage, Energy };
 	public ResourceSystem rSystem = ResourceSystem.Energy;
 
-	void Start()
+	public new void Start()
 	{
 		SelectorUI.gameObject.SetActive(true);
 		SelectorUI.fillMethod = Image.FillMethod.Radial360;
@@ -78,9 +77,11 @@ public class Player : Entity
 		SetupResourceSystem();
 
 		base.Start();
+
+		gameObject.tag = "Player";
 	}
 
-	void Update()
+	public new void Update()
 	{
 		GetInput();
 		#region Handle Damage
@@ -153,6 +154,8 @@ public class Player : Entity
 		TargetScan();
 
 		Damaged = false;
+
+		base.Update();
 	}
 
 	void GetInput()

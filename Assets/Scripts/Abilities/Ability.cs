@@ -4,11 +4,11 @@ using System.Collections;
 
 public class Ability : ScriptableObject 
 {
-	private string name;
-	public string Name
+	private string abilityName;
+	public string AbilityName
 	{
-		get { return name; }
-		set { name = value; }
+		get { return abilityName; }
+		set { abilityName = value; }
 	}
 	private Sprite icon;
 	public Sprite Icon
@@ -46,6 +46,6 @@ public class Ability : ScriptableObject
 
 	public virtual string GetInfo()
 	{
-		return name + " (" + timesGained + ")";
+		return abilityName + " (" + timesGained + ")";
 	}
 }

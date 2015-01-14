@@ -28,14 +28,14 @@ public class Passive : Ability
 
 	public override string GetInfo()
 	{
-		return Name + " : " + (int)durationRemaining + " seconds left";
+		return AbilityName + " : " + (int)durationRemaining + " seconds left";
 	}
 
 	#region Static Functions
 	public static Passive New()
 	{
 		Passive p = ScriptableObject.CreateInstance<Passive>();
-		p.Name = Passive.GetPassiveName();
+		p.AbilityName = Passive.GetPassiveName();
 		p.durationRemaining = Random.Range(30.0f, 99.0f);
 		return p;
 	}

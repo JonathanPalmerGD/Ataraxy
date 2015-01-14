@@ -58,14 +58,14 @@ public class Weapon : Ability
 
 	public override string GetInfo()
 	{
-		return Name + " : " + durability + " uses left";
+		return AbilityName + " : " + durability + " uses left";
 	}
 
 	#region Static Functions
 	public static Weapon New()
 	{
 		Weapon w = ScriptableObject.CreateInstance<Weapon>();
-		w.Name = Weapon.GetWeaponName();
+		w.AbilityName = Weapon.GetWeaponName();
 		//w.Icon = Resources.Load("Atlases/VortexIconAtlas");
 		w.durability = Random.Range(10, 60);
 		w.Cooldown = 1;
