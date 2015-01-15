@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Enemy : Entity
+public class Enemy : NPC
 {
 	public GameObject projectilePrefab;
 	private GameObject gunMuzzle;
@@ -59,7 +59,7 @@ public class Enemy : Entity
 
 	public void HandleExperience()
 	{
-		XP += Time.deltaTime * xpRateOverTime;
+		GainExperience(Time.deltaTime * xpRateOverTime);
 
 		if (XP > 100)
 		{
@@ -99,7 +99,7 @@ public class Enemy : Entity
 			counter = FiringCooldown;
 
 			//Learn from the experience. Leveling up is checked earlier in the update loop.
-			XP += expGainPerShot;
+			GainExperience(expGainPerShot);
 		}
 		else
 		{
@@ -107,12 +107,12 @@ public class Enemy : Entity
 		}
 	}
 
-	public override void TakeDamage(int amount)
+	public override void AdjustHealth(int amount)
 	{
-		base.TakeDamage(amount);
+		base.AdjustHealth(amount);
 		if (gainXpWhenHit)
 		{
-			XP += xpGainWhenHit;
+			GainExperience(xpGainWhenHit);
 		}
 	}
 
@@ -145,8 +145,8 @@ public class Enemy : Entity
 
 		//Drop a token.
 		GameObject newToken = (GameObject)GameObject.Instantiate(GameManager.Instance.tokenPrefab, transform.position + Vector3.up * 2, Quaternion.identity);
-		
-		newToken.rigidbody.AddForce(newToken.rigidbody.mass * (Vector3.up * Random.Range(.8f, 1.5f) * 1000) + new Vector3(Random.Range(-10, 10), 0, Random.Range(-10, 10))); 
+		float randBound = 8000;
+		newToken.rigidbody.AddForce(newToken.rigidbody.mass * (Vector3.up * Random.Range(.8f, 1.5f) * randBound / 8) + new Vector3(Random.Range(-randBound, randBound), 0, Random.Range(-randBound, randBound))); 
 
 		//Give nearby enemies experience.
 

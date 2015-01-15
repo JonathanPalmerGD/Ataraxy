@@ -3,24 +3,23 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 
-public class Player : AtaraxyObject
+public class Player : Entity
 {
 	public List<Weapon> weapons;
 	public List<Passive> passives;
 
-	public Sprite thing;
 	public Image SelectorUI;
 	public GameObject WeaponUI;
 	public GameObject PassiveUI;
 	public GameObject iconPrefab;
 	public Camera mainCamera;
 
-	public Object[] Icons;
+	public Sprite[] Icons;
 
 	public float flashSpeed = 5f;
 	public Color flashColor = new Color(1f, 0f, 0f, 0.15f);
 
-	public Entity targetedEntity = null;
+	public NPC targetedEntity = null;
 
 	public override Allegiance Faction
 	{
@@ -65,8 +64,8 @@ public class Player : AtaraxyObject
 		SelectorUI.fillMethod = Image.FillMethod.Radial360;
 		SelectorUI.fillClockwise = true;
 
-		Icons = new Object[1];
-		Icons = Resources.LoadAll("Atlases/VortexIconAtlas");
+		Icons = new Sprite[1];
+		Icons = Resources.LoadAll<Sprite>("Atlases/AtaraxyIconAtlas");
 
 		weapons = new List<Weapon>();
 		passives = new List<Passive>();
@@ -262,16 +261,16 @@ public class Player : AtaraxyObject
 		#region Health & Resources
 		if (Input.GetKeyDown(KeyCode.R))
 		{
-			TakeDamage(1);
+			AdjustHealth(-1);
 		}
 
 		if (Input.GetKeyDown(KeyCode.Y))
 		{
-			AdjustResource(3);
+			AdjustResource(-3);
 		}
 		if (Input.GetKeyDown(KeyCode.H))
 		{
-			AdjustResource(-3);
+			AdjustResource(3);
 		}
 		#endregion
 
@@ -357,13 +356,14 @@ public class Player : AtaraxyObject
 
 			panel.name = "I: " + w.AbilityName;
 
-			panel.sprite = (Sprite)Icons[Random.Range(1, Icons.Length)];
+			w.Icon = Icons[Random.Range(1, Icons.Length)];
 			panel.rectTransform.SetParent(WeaponUI.transform);
 			w.Remainder = panel.transform.FindChild("Remainder").GetComponent<Text>();
 			w.Cooldown = Random.Range(.01f, .7f);
 			w.SpecialCooldown = Random.Range(4, 16);
 			w.Remainder.text = w.Durability.ToString();
 
+			panel.sprite = w.Icon;
 			w.IconUI = panel;
 			weapons.Add(w);
 			panel.rectTransform.anchoredPosition = new Vector2((weapons.Count - 1) * 67, 0);
@@ -380,12 +380,13 @@ public class Player : AtaraxyObject
 			panel.rectTransform.anchorMin = new Vector2(1, 1);
 			panel.rectTransform.anchorMax = new Vector2(1, 1);
 
-			panel.sprite = (Sprite)Icons[Random.Range(1, Icons.Length)];
+			p.Icon = Icons[Random.Range(1, Icons.Length)];
 			panel.color = new Color(0, .8f, 0); 
 			panel.rectTransform.SetParent(PassiveUI.transform);
 			p.Remainder = panel.transform.FindChild("Remainder").GetComponent<Text>();
 			p.Remainder.text = ((int)(p.DurationRemaining * 10)).ToString();
 
+			panel.sprite = p.Icon;
 			p.IconUI = panel;
 			passives.Add(p);
 			
@@ -424,35 +425,37 @@ public class Player : AtaraxyObject
 
 		if (Physics.Raycast(ray, out hit))
 		{
-			if(hit.collider.gameObject.tag == "Entity")
+			if(hit.collider.gameObject.tag == "NPC")
 			{
-				Entity e = hit.collider.gameObject.GetComponent<Entity>();
-				CheckNewTarget((Entity)e);
-			}
-			if (hit.collider.gameObject.tag == "Island")
-			{
-				Island e = hit.collider.gameObject.GetComponent<Island>();
-				CheckNewTarget((Entity)e);
+				NPC e = hit.collider.gameObject.GetComponent<NPC>();
+				CheckNewTarget((NPC)e);
 			}
 			if (hit.collider.gameObject.tag == "Enemy")
 			{
 				Enemy e = hit.collider.gameObject.GetComponent<Enemy>();
-				CheckNewTarget((Entity)e);
-				
+				CheckNewTarget((Enemy)e);
+
 				if (Input.GetMouseButtonDown(0))
 				{
-					e.TakeDamage(1);
+					e.AdjustHealth(-1);
 				}
 				if (Input.GetMouseButtonDown(1))
 				{
-					e.TakeDamage(5);
+					e.AdjustHealth(-5);
 				}
 			}
+			//This isn't necessary for right now.
+			if (hit.collider.gameObject.tag == "WorldObject")
+			{
+				//Island e = hit.collider.gameObject.GetComponent<Island>();
+				//CheckNewTarget((Entity)e);
+			}
+			
 			//Debug.Log(hit.collider.gameObject.name + "\n");
 		}
 	}
 
-	void CheckNewTarget(Entity newTarget)
+	void CheckNewTarget(NPC newTarget)
 	{
 		//If we had a target
 		if (targetedEntity != null)
@@ -494,13 +497,6 @@ public class Player : AtaraxyObject
 				targetedEntity = null;
 			}
 		}
-	}
-
-	public void GainExperience(float xpValue, int level = 1)
-	{
-		//Debug.Log(xpValue + " " + level + "\n");
-		XP += xpValue * level;
-		//Debug.Log(XP + "\n");
 	}
 
 	void OnGUI()

@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Cluster : MonoBehaviour 
+public class Cluster : WorldObject 
 {
 	public List<Island> platforms;
 	public GameObject[] islandPrefabs;
@@ -12,7 +12,7 @@ public class Cluster : MonoBehaviour
 	public int poissonKVal = 20;
 	public int sizeBonus = 0;
 
-	void Start()
+	public override void Start()
 	{
 		TerrainManager.Instance.RegisterCluster(this);
 		gameObject.name = "Cluster: " + Nomenclature.GetName(Random.Range(0, 12), Random.Range(0, 12), Random.Range(0, 12), Random.Range(0, 12));
@@ -36,6 +36,8 @@ public class Cluster : MonoBehaviour
 		{
 			CreateIslands();
 		}
+		base.Start();
+		gameObject.tag = "Cluster";
 	}
 	
 	void Update() 

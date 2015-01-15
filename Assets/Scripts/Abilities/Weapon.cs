@@ -92,7 +92,7 @@ public class Weapon : Ability
 	{
 		Weapon w = ScriptableObject.CreateInstance<Weapon>();
 		w.AbilityName = Weapon.GetWeaponName();
-		//w.Icon = Resources.Load("Atlases/VortexIconAtlas");
+		//w.Icon = Resources.Load("Atlases/AtaraxyIconAtlas");
 		w.durability = Random.Range(10, 60);
 		w.Cooldown = 1;
 		w.SpecialCooldown = 6;

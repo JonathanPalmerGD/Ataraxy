@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Island : Entity
+public class Island : WorldObject
 {
 	public List<Island> neighbors;
 	private Cluster family;
@@ -35,6 +35,9 @@ public class Island : Entity
 		base.Update();
 	}
 
+	//This functionality has been removed from islands.
+	//Hover targetting them was mostly annoying. May return later?
+	/*
 	public override void Target()
 	{
 		if (InfoHUD != null)
@@ -54,5 +57,5 @@ public class Island : Entity
 			InfoHUD.enabled = false;
 			renderer.material.shader = diffuse;
 		}
-	}
+	}*/
 }

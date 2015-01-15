@@ -7,14 +7,14 @@ public class Projectile : MonoBehaviour
 	private bool awardXPOnHit = false;
 	private float xpBountyOnHit = 5;
 
-	private AtaraxyObject shooter;
-	public AtaraxyObject Shooter
+	private Entity shooter;
+	public Entity Shooter
 	{
 		get { return shooter; }
 		set { shooter = value; }
 	}
 
-	private int damage = 1;
+	private int damage = -1;
 	public int Damage
 	{
 		get { return damage; }
@@ -56,12 +56,12 @@ public class Projectile : MonoBehaviour
 		string cTag = collider.gameObject.tag;
 		if (cTag == "Enemy" || cTag == "Player")// || cTag == "Entity" || cTag == "Island")
 		{
-			AtaraxyObject atObj = collider.gameObject.GetComponent<AtaraxyObject>();
+			Entity atObj = collider.gameObject.GetComponent<Entity>();
 			if (atObj != null)
 			{
 				if (atObj.Faction == Faction)
 				{
-					Debug.Log("Projectile collided with same Faction as firing source.\n");
+					Debug.LogWarning("Projectile collided with same Faction as firing source.\n");
 					return;
 				}
 				else
@@ -71,7 +71,7 @@ public class Projectile : MonoBehaviour
 					{
 					
 						//Deal damage to the enemy
-						atObj.GetComponent<Enemy>().TakeDamage(damage);
+						atObj.GetComponent<Enemy>().AdjustHealth(damage);
 
 						//Apply AbilityEffect to the target.
 						for (int i = 0; i < projectileEffects.Count; i++)
@@ -83,7 +83,7 @@ public class Projectile : MonoBehaviour
 					else if (Faction == Allegiance.Enemy && atObj.Faction == Allegiance.Player)
 					{
 						//Deal damage to the enemy
-						GameManager.Instance.player.TakeDamage(damage);
+						GameManager.Instance.player.AdjustHealth(damage);
 
 						//Apply AbilityEffect to the target.
 						for (int i = 0; i < projectileEffects.Count; i++)
@@ -94,7 +94,7 @@ public class Projectile : MonoBehaviour
 						//Award experience to the enemy who fired it.
 						if (awardXPOnHit && shooter != null)
 						{
-							shooter.XP += xpBountyOnHit;
+							shooter.GainExperience(xpBountyOnHit);
 						}
 					}
 				}
