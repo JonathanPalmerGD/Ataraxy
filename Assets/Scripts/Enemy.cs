@@ -58,7 +58,9 @@ public class Enemy : NPC
 
 	public override void KillEntity()
 	{
-		//AtaraxyObject sets IsDead to true but nothing else.
+		Untarget();
+
+		//Entity sets IsDead to true but nothing else.
 		base.KillEntity();
 
 		//Give the player experience.

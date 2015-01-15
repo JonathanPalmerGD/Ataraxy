@@ -3,11 +3,23 @@ using System.Collections;
 
 public class Weapon : Ability
 {
-	#region Weapon's Faction
+	#region Weapon's Faction & Bearer
 	private Allegiance faction;
 	public virtual Allegiance Faction
 	{
 		get { return Allegiance.Neutral; }
+	}
+	private GameObject weaponBearer;
+	public GameObject WeaponBearer
+	{
+		get { return weaponBearer; }
+		set { weaponBearer = value; }
+	}
+	private Color beamColor;
+	public Color BeamColor
+	{
+		get { return beamColor; }
+		set { beamColor = value; }
 	}
 	#endregion
 	#region Cooldown
@@ -17,6 +29,8 @@ public class Weapon : Ability
 		get { return cdLeft; }
 		set { cdLeft = value; }
 	}
+	
+
 	private bool useSpecialCooldown = false;
 	public bool UseSpecialCooldown
 	{
@@ -43,13 +57,13 @@ public class Weapon : Ability
 		get { return durability; }
 		set { durability = value; }
 	}
-	private int durCost;
+	private int durCost = 1;
 	public int DurCost
 	{
 		get { return durCost; }
 		set { durCost = value; }
 	}
-	private int durSpecialCost;
+	private int durSpecialCost = 5;
 	public int DurSpecialCost
 	{
 		get { return durSpecialCost; }
@@ -64,10 +78,20 @@ public class Weapon : Ability
 		get { return primaryDamage; }
 		set { primaryDamage = value; }
 	}
-	
+	private float specialDamage = 8;
+	public float SpecialDamage
+	{
+		get { return specialDamage; }
+		set { specialDamage = value; }
+	}
 	#endregion
 
 	public bool hitscan = true;
+
+	public override void Start()
+	{
+		base.Start();
+	}
 
 	public void UpdateWeapon(float time)
 	{
@@ -81,8 +105,27 @@ public class Weapon : Ability
 		}
 	}
 
-	public virtual void UseWeapon(GameObject target = null, System.Type targType = null, bool lockOn = false)
+	public virtual void UseWeapon(GameObject target = null, System.Type targType = null, Vector3 firePoint = default(Vector3), Vector3 hitPoint = default(Vector3), bool lockOn = false)
 	{
+		if (hitPoint != default(Vector3) && firePoint != default(Vector3))
+		{
+			LineRenderer lr = WeaponBearer.GetComponent<LineRenderer>();
+			if (lr == null)
+			{
+				lr = WeaponBearer.AddComponent<LineRenderer>();
+			}
+
+			lr.material = new Material(Shader.Find("Particles/Additive"));
+
+			lr.SetVertexCount(2);
+			lr.SetColors(beamColor, Color.grey);
+			lr.SetWidth(.1f, .1f);
+			lr.SetPosition(0, firePoint);
+			lr.SetPosition(1, hitPoint);
+			Destroy(lr, .3f);
+		}
+
+
 		if (targType == typeof(Enemy))
 		{
 			//Debug.Log("Used Weapon on Enemy\n");
@@ -92,6 +135,8 @@ public class Weapon : Ability
 			if (e.Faction != Faction)
 			{
 				//Display visual effect
+
+				
 
 				//Damage the enemy
 				e.AdjustHealth(-PrimaryDamage);
@@ -110,9 +155,54 @@ public class Weapon : Ability
 		}
 	}
 
-	public virtual void UseWeaponSpecial(GameObject target = null, bool lockOn = false)
+	public virtual void UseWeaponSpecial(GameObject target = null, System.Type targType = null, Vector3 firePoint = default(Vector3), Vector3 hitPoint = default(Vector3), bool lockOn = false)
 	{
+		if (hitPoint != default(Vector3) && firePoint != default(Vector3))
+		{
+			LineRenderer lr = WeaponBearer.GetComponent<LineRenderer>();
+			if (lr == null)
+			{
+				lr = WeaponBearer.AddComponent<LineRenderer>();
+			}
 
+			lr.material = new Material(Shader.Find("Particles/Additive"));
+
+			lr.SetVertexCount(2);
+			lr.SetColors(Color.red, Color.red);
+			lr.SetWidth(.2f, .2f);
+			lr.SetPosition(0, firePoint);
+			lr.SetPosition(1, hitPoint);
+			Destroy(lr, 1f);
+		}
+
+
+		if (targType == typeof(Enemy))
+		{
+			//Debug.Log("Used Weapon on Enemy\n");
+			Enemy e = target.GetComponent<Enemy>();
+
+			//Check Faction
+			if (e.Faction != Faction)
+			{
+				//Display visual effect
+
+
+
+				//Damage the enemy
+				e.AdjustHealth(-SpecialDamage);
+			}
+		}
+		else if (targType == typeof(NPC))
+		{
+			//Debug.Log("Used Weapon on NPC\n");
+
+		}
+		//If our targType is null from targetting a piece of terrain or something?
+		else
+		{
+			//Debug.Log("Weapon hitscan'd something else\n");
+			//Do something like play a 'bullet hitting metal wall' audio.
+		}
 	}
 
 	public virtual bool HandleDurability(bool specialAttack = false, GameObject target = null, bool lockOn = false)
@@ -122,6 +212,8 @@ public class Weapon : Ability
 		{
 			//If this is a special attack, use the special cost, otherwise normal cost.
 			int curCost = specialAttack ? DurSpecialCost : DurCost;
+
+			Debug.Log(curCost + " " + DurSpecialCost + " " + DurCost);
 
 			if (Durability >= curCost)
 			{

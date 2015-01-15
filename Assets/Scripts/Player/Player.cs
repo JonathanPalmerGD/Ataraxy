@@ -24,6 +24,7 @@ public class Player : Entity
 	public Camera mainCamera;
 	public NPC targetedEntity = null;
 	public GameObject hitscanTarget = null;
+	public Vector3 hitPoint = Vector3.zero;
 	#endregion
 
 	#region Weapon Variables
@@ -133,6 +134,8 @@ public class Player : Entity
 			w.NormalCooldown = Random.Range(.01f, .7f);
 			w.SpecialCooldown = Random.Range(4, 16);
 			w.Remainder.text = w.Durability.ToString();
+			w.WeaponBearer = gameObject;
+			w.BeamColor = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
 
 			panel.sprite = w.Icon;
 			w.IconUI = panel;
@@ -298,11 +301,11 @@ public class Player : Entity
 					//If we have the same target this frame as our HUD
 					if (targetedEntity != null && hitscanTarget == targetedEntity.gameObject)
 					{
-						weapons[weaponIndex].UseWeapon(targetedEntity.gameObject, targetedEntity.GetType(), true);
+						weapons[weaponIndex].UseWeapon(targetedEntity.gameObject, targetedEntity.GetType(), transform.position, hitPoint, true);
 					}
 					else
 					{
-						weapons[weaponIndex].UseWeapon(hitscanTarget);
+						weapons[weaponIndex].UseWeapon(hitscanTarget, null, transform.position, hitPoint, true);
 					}
 				}
 				
@@ -321,9 +324,23 @@ public class Player : Entity
 		}
 		if (Input.GetButton("Fire2"))
 		{
+			//If we have a weapon
 			if (weapons.Count > 0)
 			{
-				//weapons[weaponIndex].UseWeaponSpecial();
+				//If the weapon has ammo and is off cooldown, DO IT.
+				if (weapons[weaponIndex].HandleDurability(true))
+				{
+					//If we have the same target this frame as our HUD
+					if (targetedEntity != null && hitscanTarget == targetedEntity.gameObject)
+					{
+						weapons[weaponIndex].UseWeaponSpecial(targetedEntity.gameObject, targetedEntity.GetType(), transform.position, hitPoint, true);
+					}
+					else
+					{
+						weapons[weaponIndex].UseWeaponSpecial(hitscanTarget, null, transform.position, hitPoint, true);
+					}
+				}
+
 			}
 		}
 		if (Input.GetButtonUp("Fire2"))
@@ -438,6 +455,7 @@ public class Player : Entity
 
 		if (Physics.Raycast(ray, out hit))
 		{
+			hitPoint = hit.point;
 			if (hit.collider.gameObject.tag == "NPC")
 			{
 				NPC n = hit.collider.gameObject.GetComponent<NPC>();
@@ -469,6 +487,11 @@ public class Player : Entity
 			}
 
 			//Debug.Log(hit.collider.gameObject.name + "\n");
+		}
+		else
+		{
+			//If we fire into infinity, set hitPoint to someplace arbitrarily far away in the shooting direction.
+			hitPoint = transform.position + (ray.direction * 500);
 		}
 		return null;
 	}
