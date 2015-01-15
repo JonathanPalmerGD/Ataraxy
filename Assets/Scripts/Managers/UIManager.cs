@@ -21,6 +21,8 @@ public class UIManager : Singleton<UIManager>
 	public Text player_ResourceText;
 	public Slider player_Resource;
 
+	public Sprite[] Icons;
+
 	void Awake()
 	{
 		target_HUD = GameObject.Find("Target_HUD").GetComponent<Canvas>();
@@ -33,11 +35,12 @@ public class UIManager : Singleton<UIManager>
 		player_HP = GameObject.Find("player_HP").GetComponent<Slider>();
 		player_ResourceText = GameObject.Find("player_ResourceText").GetComponent<Text>();
 		player_Resource = GameObject.Find("player_Resource").GetComponent<Slider>();
+		Icons = new Sprite[1];
+		Icons = Resources.LoadAll<Sprite>("Atlases/AtaraxyIconAtlas");	
 	}
 
 	void Start()
 	{
-	
 	}
 	
 	void Update()

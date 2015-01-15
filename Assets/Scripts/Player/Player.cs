@@ -5,29 +5,29 @@ using System.Collections;
 
 public class Player : Entity
 {
+	#region Lists - Weapons & Passives
 	public List<Weapon> weapons;
 	public List<Passive> passives;
+	#endregion
 
+	#region Player Unique Interface
 	public Image SelectorUI;
 	public GameObject WeaponUI;
 	public GameObject PassiveUI;
 	public GameObject iconPrefab;
-	public Camera mainCamera;
-
-	public Sprite[] Icons;
 
 	public float flashSpeed = 5f;
 	public Color flashColor = new Color(1f, 0f, 0f, 0.15f);
+	#endregion
 
+	#region Key GameObjects - Camera, Target
+	public Camera mainCamera;
 	public NPC targetedEntity = null;
+	public GameObject hitscanTarget = null;
+	#endregion
 
-	public override Allegiance Faction
-	{
-		get { return Allegiance.Player; }
-	}
-
+	#region Weapon Variables
 	private float counter = 0.0f;
-	private static float targetFade = 3.0f;
 
 	private int weaponIndex = 0;
 	public int WeaponIndex
@@ -35,16 +35,9 @@ public class Player : Entity
 		get { return weaponIndex; }
 		set { weaponIndex = value; }
 	}
+	#endregion
 
 	#region Player Stats
-	
-	private int experience;
-	public int Experience
-	{
-		get { return experience; }
-		set { experience = value; }
-	}
-
 	//Damage Amplification
 	//Invincibility Frames
 	//Double Jump
@@ -55,17 +48,41 @@ public class Player : Entity
 	
 	#endregion
 
+	#region Resource System
 	public enum ResourceSystem { Mana, Rage, Energy };
 	public ResourceSystem rSystem = ResourceSystem.Energy;
 
-	public new void Start()
+	void SetupResourceSystem()
+	{
+
+	}
+
+	void ManageResourceSystem()
+	{
+		switch (rSystem)
+		{
+			case ResourceSystem.Mana:
+
+				break;
+			case ResourceSystem.Rage:
+
+				break;
+			case ResourceSystem.Energy:
+				//Check distance from nearby enemies.
+
+				break;
+		}
+
+	}
+	#endregion
+
+	#region Core Functions - Start, Update, GetInput
+	#region Initialization
+	public override void Start()
 	{
 		SelectorUI.gameObject.SetActive(true);
 		SelectorUI.fillMethod = Image.FillMethod.Radial360;
 		SelectorUI.fillClockwise = true;
-
-		Icons = new Sprite[1];
-		Icons = Resources.LoadAll<Sprite>("Atlases/AtaraxyIconAtlas");
 
 		weapons = new List<Weapon>();
 		passives = new List<Passive>();
@@ -73,16 +90,14 @@ public class Player : Entity
 		SetupAbility(Weapon.New());
 		SetupAbility(Weapon.New());
 		SetupAbility(Weapon.New());
-		SetupAbility(Weapon.New());
+		//SetupAbility(Weapon.New());
 		//SetupAbility(Weapon.New());
 
-		//Debug.Log(AssetDatabase.GetAssetPath(thing) +"\n");
-		//Debug.Log(Icons.Length + "\n");
+		SetupAbility(Passive.New());
+		SetupAbility(Passive.New());
+		//SetupAbility(Passive.New());
+		//SetupAbility(Passive.New());
 
-		SetupAbility(Passive.New());
-		SetupAbility(Passive.New());
-		//SetupAbility(Passive.New());
-		//SetupAbility(Passive.New());
 		SetupResourceSystem();
 
 		HealthSlider = UIManager.Instance.player_HP;
@@ -101,9 +116,59 @@ public class Player : Entity
 		gameObject.tag = "Player";
 	}
 
-	public new void Update()
+	public void SetupAbility(Ability ToAdd)
 	{
-		GetInput();
+		if (ToAdd is Weapon)
+		{
+			Weapon w = (Weapon)ToAdd;
+
+			//WeaponUI
+			Image panel = ((GameObject)GameObject.Instantiate(iconPrefab)).GetComponent<Image>();
+
+			panel.name = "I: " + w.AbilityName;
+
+			w.Icon = UIManager.Instance.Icons[Random.Range(1, UIManager.Instance.Icons.Length)];
+			panel.rectTransform.SetParent(WeaponUI.transform);
+			w.Remainder = panel.transform.FindChild("Remainder").GetComponent<Text>();
+			w.NormalCooldown = Random.Range(.01f, .7f);
+			w.SpecialCooldown = Random.Range(4, 16);
+			w.Remainder.text = w.Durability.ToString();
+
+			panel.sprite = w.Icon;
+			w.IconUI = panel;
+			weapons.Add(w);
+			panel.rectTransform.anchoredPosition = new Vector2((weapons.Count - 1) * 67, 0);
+		}
+		else if (ToAdd is Passive)
+		{
+
+			Passive p = (Passive)ToAdd;
+
+			Image panel = ((GameObject)GameObject.Instantiate(iconPrefab)).GetComponent<Image>();
+
+			panel.name = "I: " + p.AbilityName;
+
+			panel.rectTransform.anchorMin = new Vector2(1, 1);
+			panel.rectTransform.anchorMax = new Vector2(1, 1);
+
+			p.Icon = UIManager.Instance.Icons[Random.Range(1, UIManager.Instance.Icons.Length)];
+			panel.color = new Color(0, .8f, 0);
+			panel.rectTransform.SetParent(PassiveUI.transform);
+			p.Remainder = panel.transform.FindChild("Remainder").GetComponent<Text>();
+			p.Remainder.text = ((int)(p.DurationRemaining * 10)).ToString();
+
+			panel.sprite = p.Icon;
+			p.IconUI = panel;
+			passives.Add(p);
+
+			panel.rectTransform.anchoredPosition = new Vector2((passives.Count) * -67, 0);
+		}
+	}
+	#endregion
+
+	#region Update, MaintainAbilities
+	public override void Update()
+	{
 		#region Handle Damage
 		if (Damaged)
 		{
@@ -152,7 +217,7 @@ public class Player : Entity
 						}
 						else
 						{
-							startCooldownAmt = weapons[i].Cooldown;
+							startCooldownAmt = weapons[i].NormalCooldown;
 						}
 						SelectorUI.fillAmount = 1 - (weapons[i].CdLeft / startCooldownAmt);
 					}
@@ -190,34 +255,67 @@ public class Player : Entity
 		SelectorUI.transform.SetSiblingIndex(index + 1);
 		#endregion
 
-		TargetScan();
+		hitscanTarget = TargetScan();
 		HandleTarget();
 
 		Damaged = false;
 
+		GetInput();
 		base.Update();
 	}
 
+	public void MaintainAbilities()
+	{
+		for (int i = 0; i < weapons.Count; i++)
+		{
+			weapons[i].IconUI.rectTransform.anchoredPosition = new Vector2((i) * 67, 0);
+		}
+		for (int i = 0; i < passives.Count; i++)
+		{
+			passives[i].IconUI.rectTransform.anchorMin = new Vector2(1, 1);
+			passives[i].IconUI.rectTransform.anchorMax = new Vector2(1, 1);
+
+			passives[i].IconUI.rectTransform.anchoredPosition = new Vector2((i + 1) * -67, 0);
+		}
+	}
+	#endregion
+
 	void GetInput()
 	{
-		#region Mouse Buttons 1 & 2
-		if (Input.GetButton("Fire1"))
+		#region Mouse Buttons 1
+		if (Input.GetButtonDown("Fire1"))
 		{
 			//Debug.Log("Firing\n");
 		}
 		if (Input.GetButton("Fire1"))
 		{
+			//If we have a weapon
 			if (weapons.Count > 0)
 			{
-				weapons[weaponIndex].UseWeapon(1, true);
+				//If the weapon has ammo and is off cooldown, DO IT.
+				if (weapons[weaponIndex].HandleDurability(false))
+				{
+					//If we have the same target this frame as our HUD
+					if (targetedEntity != null && hitscanTarget == targetedEntity.gameObject)
+					{
+						weapons[weaponIndex].UseWeapon(targetedEntity.gameObject, targetedEntity.GetType(), true);
+					}
+					else
+					{
+						weapons[weaponIndex].UseWeapon(hitscanTarget);
+					}
+				}
+				
 			}
 		}
 		if (Input.GetButtonUp("Fire1"))
 		{
 			//Debug.Log("Fire Ceased\n");
 		}
+		#endregion
 
-		if (Input.GetButton("Fire2"))
+		#region Mouse Buttons 2
+		if (Input.GetButtonDown("Fire2"))
 		{
 			//Debug.Log("Firing\n");
 		}
@@ -225,7 +323,7 @@ public class Player : Entity
 		{
 			if (weapons.Count > 0)
 			{
-				weapons[weaponIndex].UseWeapon(5, false);
+				//weapons[weaponIndex].UseWeaponSpecial();
 			}
 		}
 		if (Input.GetButtonUp("Fire2"))
@@ -329,95 +427,10 @@ public class Player : Entity
 		}
 		#endregion
 	}
+	#endregion
 
-	public void MaintainAbilities()
-	{
-		for (int i = 0; i < weapons.Count; i++)
-		{
-			weapons[i].IconUI.rectTransform.anchoredPosition = new Vector2((i) * 67, 0);
-		}
-		for (int i = 0; i < passives.Count; i++)
-		{
-			passives[i].IconUI.rectTransform.anchorMin = new Vector2(1, 1);
-			passives[i].IconUI.rectTransform.anchorMax = new Vector2(1, 1);
-
-			passives[i].IconUI.rectTransform.anchoredPosition = new Vector2((i + 1) * -67, 0);
-		}
-	}
-
-	public void SetupAbility(Ability ToAdd)
-	{
-		if(ToAdd is Weapon)
-		{
-			Weapon w = (Weapon)ToAdd;
-			//WeaponUI
-
-			Image panel = ((GameObject)GameObject.Instantiate(iconPrefab)).GetComponent<Image>();
-
-			panel.name = "I: " + w.AbilityName;
-
-			w.Icon = Icons[Random.Range(1, Icons.Length)];
-			panel.rectTransform.SetParent(WeaponUI.transform);
-			w.Remainder = panel.transform.FindChild("Remainder").GetComponent<Text>();
-			w.Cooldown = Random.Range(.01f, .7f);
-			w.SpecialCooldown = Random.Range(4, 16);
-			w.Remainder.text = w.Durability.ToString();
-
-			panel.sprite = w.Icon;
-			w.IconUI = panel;
-			weapons.Add(w);
-			panel.rectTransform.anchoredPosition = new Vector2((weapons.Count - 1) * 67, 0);
-		}
-		else if( ToAdd is Passive)
-		{
-			
-			Passive p = (Passive)ToAdd;
-			
-			Image panel = ((GameObject)GameObject.Instantiate(iconPrefab)).GetComponent<Image>();
-			
-			panel.name = "I: " + p.AbilityName;
-
-			panel.rectTransform.anchorMin = new Vector2(1, 1);
-			panel.rectTransform.anchorMax = new Vector2(1, 1);
-
-			p.Icon = Icons[Random.Range(1, Icons.Length)];
-			panel.color = new Color(0, .8f, 0); 
-			panel.rectTransform.SetParent(PassiveUI.transform);
-			p.Remainder = panel.transform.FindChild("Remainder").GetComponent<Text>();
-			p.Remainder.text = ((int)(p.DurationRemaining * 10)).ToString();
-
-			panel.sprite = p.Icon;
-			p.IconUI = panel;
-			passives.Add(p);
-			
-			panel.rectTransform.anchoredPosition = new Vector2((passives.Count) * -67, 0);
-		}
-	}
-
-	void SetupResourceSystem()
-	{
-
-	}
-
-	void ManageResourceSystem()
-	{
-		switch (rSystem)
-		{
-			case ResourceSystem.Mana:
-
-				break;
-			case ResourceSystem.Rage:
-
-				break;
-			case ResourceSystem.Energy:
-				//Check distance from nearby enemies.
-
-				break;
-		}
-
-	}
-
-	void TargetScan()
+	#region Targetting and Hitscan
+	GameObject TargetScan()
 	{
 		Ray ray = mainCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
 		RaycastHit hit;
@@ -425,16 +438,20 @@ public class Player : Entity
 
 		if (Physics.Raycast(ray, out hit))
 		{
-			if(hit.collider.gameObject.tag == "NPC")
+			if (hit.collider.gameObject.tag == "NPC")
 			{
-				NPC e = hit.collider.gameObject.GetComponent<NPC>();
-				CheckNewTarget((NPC)e);
+				NPC n = hit.collider.gameObject.GetComponent<NPC>();
+				CheckNewTarget((NPC)n);
+
+				return n.gameObject;
 			}
 			if (hit.collider.gameObject.tag == "Enemy")
 			{
 				Enemy e = hit.collider.gameObject.GetComponent<Enemy>();
 				CheckNewTarget((Enemy)e);
 
+				return e.gameObject;
+				/*
 				if (Input.GetMouseButtonDown(0))
 				{
 					e.AdjustHealth(-1);
@@ -442,7 +459,7 @@ public class Player : Entity
 				if (Input.GetMouseButtonDown(1))
 				{
 					e.AdjustHealth(-5);
-				}
+				}*/
 			}
 			//This isn't necessary for right now.
 			if (hit.collider.gameObject.tag == "WorldObject")
@@ -450,9 +467,10 @@ public class Player : Entity
 				//Island e = hit.collider.gameObject.GetComponent<Island>();
 				//CheckNewTarget((Entity)e);
 			}
-			
+
 			//Debug.Log(hit.collider.gameObject.name + "\n");
 		}
+		return null;
 	}
 
 	void CheckNewTarget(NPC newTarget)
@@ -471,7 +489,6 @@ public class Player : Entity
 
 				//Tell em they're fabulous
 				targetedEntity.Target();
-
 			}
 		}
 		//If we had no target
@@ -483,7 +500,7 @@ public class Player : Entity
 			//Tell em they're fabulous
 			targetedEntity.Target();
 		}
-		counter = Player.targetFade;
+		counter = Constants.targetFade;
 	}
 
 	void HandleTarget()
@@ -498,7 +515,9 @@ public class Player : Entity
 			}
 		}
 	}
+	#endregion
 
+	#region Unneeded Code
 	void OnGUI()
 	{
 		//float rectWidth = 250;
@@ -529,4 +548,5 @@ public class Player : Entity
 		int index = transform.GetSiblingIndex();
 		transform.SetSiblingIndex(index + delta);
 	}
+	#endregion
 }

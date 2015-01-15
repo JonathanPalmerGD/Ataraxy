@@ -6,7 +6,7 @@ public class NPC : Entity
 	public Shader outline;
 	public Shader diffuse;
 
-	public virtual void Start() 
+	public override void Start() 
 	{
 		outline = Shader.Find("Outlined/Silhouetted Diffuse");
 		diffuse = Shader.Find("Diffuse");
@@ -19,7 +19,7 @@ public class NPC : Entity
 		Untarget();
 	}
 
-	public virtual void Update() 
+	public override void Update() 
 	{
 	
 	}

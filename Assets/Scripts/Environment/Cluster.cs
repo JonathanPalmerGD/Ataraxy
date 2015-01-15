@@ -40,9 +40,9 @@ public class Cluster : WorldObject
 		gameObject.tag = "Cluster";
 	}
 	
-	void Update() 
+	public override void Update() 
 	{
-		
+		base.Update();
 	}
 
 	public void CreateIslandsPoissonApproach()

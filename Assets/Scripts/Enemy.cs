@@ -3,17 +3,15 @@ using System.Collections;
 
 public class Enemy : NPC
 {
-	public GameObject projectilePrefab;
-	private GameObject gunMuzzle;
+	/// <summary>
+	/// A Vector3 that tracks the muzzle to the player (for firing projectiles)
+	/// </summary>
 	private Vector3 dirToTarget;
 
-	private float counter;
-	public float Counter
-	{
-		get { return counter; }
-		set { counter = value; }
-	}
-
+	#region Experience Values
+	/// <summary>
+	/// The value this enemy provides when slain.
+	/// </summary>
 	private float xpReward = 5;
 
 	private float xpRateOverTime = .5f;
@@ -21,21 +19,65 @@ public class Enemy : NPC
 	private bool gainXpWhenHit = false;
 	private float xpGainWhenHit = .5f;
 
+	private float expGainPerShot = 5;
+	#endregion
+
+	#region Projectile Attack Variables
+	public GameObject projectilePrefab;
+	private GameObject gunMuzzle;
+
+	private float firingTimer;
+	public float FiringTimer
+	{
+		get { return firingTimer; }
+		set { firingTimer = value; }
+	}
+
 	private float firingCooldown;
 	public float FiringCooldown
 	{
 		get { return firingCooldown; }
 		set { firingCooldown = value; }
 	}
+	#endregion
 
-	public float expGainPerShot = 5;
-
+	#region Override Methods - Faction, AdjustHealth, KillEntity
 	public override Allegiance Faction
 	{
 		get { return Allegiance.Enemy; }
 	}
 
-	public new void Start()
+	public override void AdjustHealth(float amount)
+	{
+		base.AdjustHealth(amount);
+		if (gainXpWhenHit)
+		{
+			GainExperience(xpGainWhenHit);
+		}
+	}
+
+	public override void KillEntity()
+	{
+		//AtaraxyObject sets IsDead to true but nothing else.
+		base.KillEntity();
+
+		//Give the player experience.
+		GameManager.Instance.player.GainExperience(xpReward, Level);
+
+		//Drop a token.
+		GameObject newToken = (GameObject)GameObject.Instantiate(GameManager.Instance.tokenPrefab, transform.position + Vector3.up * 2, Quaternion.identity);
+		float randBound = 8000;
+		newToken.rigidbody.AddForce(newToken.rigidbody.mass * (Vector3.up * Random.Range(.8f, 1.5f) * randBound / 8) + new Vector3(Random.Range(-randBound, randBound), 0, Random.Range(-randBound, randBound)));
+
+		//Give nearby enemies experience.
+
+		//And after all that, destroy ourself.
+		Destroy(gameObject);
+	}
+	#endregion
+
+	#region Core Functions - Start, Update
+	public override void Start()
 	{
 		base.Start();
 		gameObject.tag = "Enemy";
@@ -43,9 +85,9 @@ public class Enemy : NPC
 		FiringCooldown = 2;
 	}
 
-	public new void Update()
+	public override void Update()
 	{
-		counter -= Time.deltaTime;
+		firingTimer -= Time.deltaTime;
 		//If we know where the player is, update them as the target.
 
 		HandleExperience();
@@ -56,7 +98,9 @@ public class Enemy : NPC
 
 		base.Update();
 	}
+	#endregion
 
+	#region Enemy Behavior Functions
 	public void HandleExperience()
 	{
 		GainExperience(Time.deltaTime * xpRateOverTime);
@@ -90,13 +134,13 @@ public class Enemy : NPC
 	public void HandleAggression()
 	{
 		//Raycast to the player, if it is a clear shot, fire in that direction.
-		if (counter <= 0)
+		if (firingTimer <= 0)
 		{
 			//Fire at the player
 			AttackPlayer();
 
 			//Set ourselves on cooldown
-			counter = FiringCooldown;
+			firingTimer = FiringCooldown;
 
 			//Learn from the experience. Leveling up is checked earlier in the update loop.
 			GainExperience(expGainPerShot);
@@ -107,17 +151,8 @@ public class Enemy : NPC
 		}
 	}
 
-	public override void AdjustHealth(int amount)
-	{
-		base.AdjustHealth(amount);
-		if (gainXpWhenHit)
-		{
-			GainExperience(xpGainWhenHit);
-		}
-	}
-
 	/// <summary>
-	/// 
+	/// Basic projectile attack. Creates, pushes and initializes projectile.
 	/// </summary>
 	public void AttackPlayer()
 	{
@@ -134,23 +169,6 @@ public class Enemy : NPC
 			Destroy(projectile, proj.ProjLife);
 		}
 	}
+	#endregion
 
-	public override void KillEntity()
-	{
-		//AtaraxyObject sets IsDead to true but nothing else.
-		base.KillEntity();
-
-		//Give the player experience.
-		GameManager.Instance.player.GainExperience(xpReward, Level);
-
-		//Drop a token.
-		GameObject newToken = (GameObject)GameObject.Instantiate(GameManager.Instance.tokenPrefab, transform.position + Vector3.up * 2, Quaternion.identity);
-		float randBound = 8000;
-		newToken.rigidbody.AddForce(newToken.rigidbody.mass * (Vector3.up * Random.Range(.8f, 1.5f) * randBound / 8) + new Vector3(Random.Range(-randBound, randBound), 0, Random.Range(-randBound, randBound))); 
-
-		//Give nearby enemies experience.
-
-		//And after all that, destroy ourself.
-		Destroy(gameObject);
-	}
 }

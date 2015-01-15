@@ -30,15 +30,15 @@ public class Entity : MonoBehaviour
 	#endregion
 
 	#region Health, Resource, Experience, and Level
-	private int health = 8;
-	public int Health
+	private float health = 8;
+	public float Health
 	{
 		get { return health; }
 		set { health = value; }
 	}
 
-	private int maxHealth = 8;
-	public int MaxHealth
+	private float maxHealth = 8;
+	public float MaxHealth
 	{
 		get { return maxHealth; }
 		set { maxHealth = value; }
@@ -58,15 +58,15 @@ public class Entity : MonoBehaviour
 		set { level = value; }
 	}
 
-	private int resource = 30;
-	public int Resource
+	private float resource = 30;
+	public float Resource
 	{
 		get { return resource; }
 		set { resource = value; }
 	}
 
-	private int maxResource = 30;
-	public int MaxResource
+	private float maxResource = 30;
+	public float MaxResource
 	{
 		get { return maxResource; }
 		set { maxResource = value; }
@@ -172,7 +172,7 @@ public class Entity : MonoBehaviour
 	
 	}
 
-	public virtual void AdjustHealth(int amount)
+	public virtual void AdjustHealth(float amount)
 	{
 		if (amount < 0)
 		{
@@ -194,7 +194,7 @@ public class Entity : MonoBehaviour
 		}
 		if (healthText != null)
 		{
-			healthText.text = Health.ToString();
+			healthText.text = ((int)Health).ToString();
 		}
 
 		if (Health <= 0 && !isDead)
@@ -203,7 +203,7 @@ public class Entity : MonoBehaviour
 		}
 	}
 
-	public bool AdjustResource(int amount)
+	public bool AdjustResource(float amount)
 	{
 		if (Resource + amount <= MaxResource && Resource + amount >= 0)
 		{

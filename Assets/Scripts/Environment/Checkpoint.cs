@@ -6,7 +6,7 @@ public class Checkpoint : MonoBehaviour
 	//Public means anyone can access this. Private means only this class can.
 	//Player is private because we're automatically populating it with the player.
 	private GameObject player;
-	private ParticleSystem particleSystem;
+	private ParticleSystem partSys;
 
 	private float collisionRadius = 3.0f;
 	//Don't forget to face the checkpoint
@@ -23,10 +23,10 @@ public class Checkpoint : MonoBehaviour
 		}
 
 		//Turn off the particle system. We'll turn it back on when the player collides with it.
-		particleSystem = GetComponent<ParticleSystem>();
-		if (particleSystem != null)
+		partSys = GetComponent<ParticleSystem>();
+		if (partSys != null)
 		{
-			particleSystem.enableEmission = false;
+			partSys.enableEmission = false;
 		}
 	}
 
@@ -36,9 +36,9 @@ public class Checkpoint : MonoBehaviour
 		{
 			if (player.GetComponent<TeleTarget>().teleTarget != gameObject)
 			{
-				if (particleSystem != null)
+				if (partSys != null)
 				{
-					particleSystem.enableEmission = true;
+					partSys.enableEmission = true;
 				}
 
 				Checkpoint c = player.GetComponent<TeleTarget>().teleTarget.GetComponent<Checkpoint>();
@@ -52,9 +52,9 @@ public class Checkpoint : MonoBehaviour
 
 	public void Deactivate()
 	{
-		if (particleSystem != null)
+		if (partSys != null)
 		{
-			particleSystem.enableEmission = false;
+			partSys.enableEmission = false;
 		}
 	}
 }
