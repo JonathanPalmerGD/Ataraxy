@@ -6,6 +6,15 @@ public class Entity : AtaraxyObject
 	public Shader outline;
 	public Shader diffuse;
 
+	
+
+	private int level = 1;
+	public int Level
+	{
+		get { return level; }
+		set { level = value; }
+	}
+
 	public new void Start()
 	{
 		outline = Shader.Find("Outlined/Silhouetted Diffuse");

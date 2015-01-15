@@ -8,6 +8,7 @@ public class GameManager : Singleton<GameManager>
 {
 	public GameObject playerGO;
 	public Player player;
+	public GameObject tokenPrefab;
 	public List<Enemy> enemies;
 									//Pl	//Neu	//Env	//En	//Dr
 	/*public bool[][] FactionHatred = {{false,	false, false,	true,	true},
@@ -17,7 +18,7 @@ public class GameManager : Singleton<GameManager>
 								  {false,	false, false,	true,	true},
 								  };*/
 
-	public 
+	
 
 	void Awake () 
 	{

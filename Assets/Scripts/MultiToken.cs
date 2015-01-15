@@ -12,7 +12,7 @@ public class MultiToken : MonoBehaviour
 	public bool grantExperience = false;
 
 	public int heal = 10;
-	public float experience = 12;
+	public float xpReward = 10;
 
 	//Some audio info
 	public bool playOnPickup = true;
@@ -43,6 +43,11 @@ public class MultiToken : MonoBehaviour
 			//Give the player a new passive/weapon.
 			//Spawn new terrain
 			//Spawn new enemies
+
+			if (grantExperience)
+			{
+				GameManager.Instance.player.GainExperience(xpReward);
+			}
 
 			if(Random.Range(0, 2) == 0)
 			{

@@ -5,13 +5,18 @@ using System.Collections.Generic;
 
 public class TerrainManager : Singleton<TerrainManager>
 {
-	public static Vector3 minDistance = new Vector3(10, 0, 10);
-	public static Vector3 maxDistance = new Vector3(50, 15, 50);
+	public static Vector3 minDistance = new Vector3(10, -12, 10);
+	public static Vector3 maxDistance = new Vector3(50, 5, 50);
 	public static Vector3 minScale = new Vector3(3, 2, 3);
-	public static Vector3 maxScale = new Vector3(45, 25, 45);
-	public static float minTilt = -15;
-	public static float maxTilt = 15;
-	public static int minCountInCluster = 6;
+	public static Vector3 maxScale = new Vector3(45, 15, 45);
+	public static Vector3 poissonMinScale = new Vector3(10, 1, 10);
+	public static Vector3 poissonMaxScale = new Vector3(18, 12, 18);
+	public static Vector3 clusterSize = new Vector3(75, 20, 75);
+	public static int poissonMinK = 8;
+	public static int poissonMaxK = 30;
+	public static float minTilt = -8;
+	public static float maxTilt = 8;
+	public static int minCountInCluster = 5;
 	public static int maxCountInCluster = 9;
 
 	public GameObject clusterPrefab;
@@ -33,6 +38,20 @@ public class TerrainManager : Singleton<TerrainManager>
 	public void CreateNewCluster()
 	{
 		
+
+	}
+
+	void Update()
+	{
+		if (Input.GetKeyDown(KeyCode.P))
+		{
+			int islandCount = 0;
+			foreach (Cluster c in clusters)
+			{
+				islandCount += c.platforms.Count;
+			}
+			Debug.Log("There are currently " + islandCount + " islands.\n");
+		}
 
 	}
 }

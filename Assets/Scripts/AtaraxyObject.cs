@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class AtaraxyObject : MonoBehaviour 
 {
@@ -32,6 +33,13 @@ public class AtaraxyObject : MonoBehaviour
 	public virtual Allegiance Faction
 	{
 		get { return Allegiance.Neutral; }
+	}
+
+	private float xP;
+	public float XP
+	{
+		get { return xP; }
+		set { xP = value; }
 	}
 
 	private int resource = 30;
@@ -110,7 +118,9 @@ public class AtaraxyObject : MonoBehaviour
 		set { deathClip = value; }
 	}
 
-	public void TakeDamage(int amount)
+	public List<AbilityEffect> abilityEffects;
+
+	public virtual void TakeDamage(int amount)
 	{
 		damaged = true;
 
@@ -172,7 +182,19 @@ public class AtaraxyObject : MonoBehaviour
 		return false;
 	}
 
-	public void KillEntity()
+	public bool ApplyAbilityEffect(AbilityEffect newEffect)
+	{
+		if (abilityEffects == null)
+		{
+			abilityEffects = new List<AbilityEffect>();
+		}
+
+		abilityEffects.Add(newEffect);
+
+		return true;
+	}
+
+	public virtual void KillEntity()
 	{
 		IsDead = true;
 	}

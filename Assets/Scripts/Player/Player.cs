@@ -239,24 +239,23 @@ public class Player : AtaraxyObject
 		if (Input.GetKeyDown(KeyCode.T))
 		{
 			CharacterMotor charMotor = gameObject.GetComponent<CharacterMotor>();
-			if (charMotor.jumping.jumping)
-			{
-				//Debug.Log(charMotor.movement.velocity.y + "\n");
-				charMotor.movement.velocity = new Vector3(charMotor.movement.velocity.x, 20, charMotor.movement.velocity.z);
-			}
+			charMotor.movement.velocity = new Vector3(charMotor.movement.velocity.x, 20, charMotor.movement.velocity.z);
 		}
 
 		if (Input.GetKeyDown(KeyCode.LeftShift))
 		{
 			CharacterMotor charMotor = gameObject.GetComponent<CharacterMotor>();
-			if (charMotor.jumping.jumping)
-			{
-				//Debug.Log(charMotor.movement.velocity.y + "\n");
-				charMotor.movement.velocity = new Vector3(charMotor.movement.velocity.x * 20.0f, 75, charMotor.movement.velocity.z * 20.0f);
+			charMotor.movement.velocity = new Vector3(charMotor.movement.velocity.x * 20.0f, 0, charMotor.movement.velocity.z * 20.0f);
+			charMotor.movement.velocity.Normalize();
+			charMotor.movement.velocity *= 120;
+		}
+		if (Input.GetKeyDown(KeyCode.LeftControl))
+		{
+			CharacterMotor charMotor = gameObject.GetComponent<CharacterMotor>();
+			charMotor.movement.velocity = new Vector3(0, 100, 0);
 
-				charMotor.movement.velocity.Normalize();
-				charMotor.movement.velocity *= 120;
-			}
+			charMotor.movement.velocity.Normalize();
+			charMotor.movement.velocity *= 100;
 		}
 		#endregion
 
@@ -495,6 +494,13 @@ public class Player : AtaraxyObject
 				targetedEntity = null;
 			}
 		}
+	}
+
+	public void GainExperience(float xpValue, int level = 1)
+	{
+		//Debug.Log(xpValue + " " + level + "\n");
+		XP += xpValue * level;
+		//Debug.Log(XP + "\n");
 	}
 
 	void OnGUI()
