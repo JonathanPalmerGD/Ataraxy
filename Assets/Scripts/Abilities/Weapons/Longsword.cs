@@ -1,38 +1,99 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Longsword : Weapon
 {
 	public static int IconIndex = 35;
-
-
-	//Angle of the sweep
-	//Check the distance then check the angle.
+	public GameObject bladeSlashPrefab;
 	Vector3 movementVector;
 
 	public override void Init()
 	{
 		base.Init();
-		//rocketPrefab = Resources.Load<GameObject>("Rocket");
+		bladeSlashPrefab = Resources.Load<GameObject>("BladeSlash");
 		Icon = UIManager.Instance.Icons[IconIndex];
 
+		DurSpecialCost = 1;
 #if CHEAT
-		NormalCooldown = 1.2f;
-		SpecialCooldown = 1.2f;
+		NormalCooldown = .5f;
+		SpecialCooldown = .5f;
 		Durability = 100;
 #else
-		SpecialCooldown = Random.Range(4, 5);
+		
 #endif
-		BeamColor = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
+		BeamColor = Color.white;
 	}
-	public override void UseWeapon(GameObject target = null, System.Type targType = null, Vector3 firePoint = default(Vector3), Vector3 hitPoint = default(Vector3), bool lockOn = false)
+
+	public override void UseWeapon(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
 	{
-		//Check if the target is within the distance of our weapon.
+		Vector3 firePoint = firePoints[0].transform.position;
 
-		//Check if the target is within the angle of our attack
+		Vector3 dir = hitPoint - firePoint;
+		dir.Normalize();
 
-		//Check for collateral enemies?
+		GameObject go = (GameObject)GameObject.Instantiate(bladeSlashPrefab, firePoint, Quaternion.identity);
+		BladeSlash slash = go.GetComponent<BladeSlash>();
+
+		List<Vector3> slashPoints = new List<Vector3>();
+		slashPoints.Add(-1*(slash.transform.position - firePoints[1].transform.position));
+		slashPoints.Add(slash.transform.position - firePoints[0].transform.position);
+		slashPoints.Add(-1*(slash.transform.position - firePoints[4].transform.position));
+
+		/*for (int i = 0; i < slashPoints.Count; i++)
+		{
+			Debug.Log(slashPoints[i].ToString() + "\n");
+		}*/
+
+		SetupSlash(slash, dir, slashPoints);
 	}
+
+	public override void UseWeaponSpecial(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
+	{
+		Vector3 firePoint = firePoints[0].transform.position;
+
+		Vector3 dir = hitPoint - firePoint;
+		dir.Normalize();
+
+		GameObject go = (GameObject)GameObject.Instantiate(bladeSlashPrefab, firePoint, Quaternion.identity);
+		BladeSlash slash = go.GetComponent<BladeSlash>();
+
+		List<Vector3> slashPoints = new List<Vector3>();
+		slashPoints.Add(-1*(slash.transform.position - firePoints[2].transform.position));
+		slashPoints.Add(slash.transform.position - firePoints[0].transform.position);
+		slashPoints.Add(-1*(slash.transform.position - firePoints[3].transform.position));
+
+		SetupSlash(slash, dir, slashPoints);
+	}
+
+	public void SetupSlash(BladeSlash slash, Vector3 velocityDirection, List<Vector3> slashPoints)
+	{
+		slash.lr.material = new Material(Shader.Find("Particles/Additive"));
+
+		slash.lr.SetVertexCount(3);
+		slash.lr.SetColors(BeamColor, BeamColor);
+		slash.lr.SetWidth(.2f, .2f);
+
+		slash.slashPoints = new System.Collections.Generic.List<Vector3>();
+		//Debug.Log("Point: " + firePoints[1].transform.position + "\n");
+		for (int i = 0; i < slashPoints.Count; i++)
+		{
+			slash.slashPoints.Add(slashPoints[i]);
+		}
+		slash.Faction = Faction;
+		slash.creator = this;
+
+		slash.rigidbody.AddForce(velocityDirection * slash.ProjVel * slash.rigidbody.mass);
+
+		//Vector3 target = new Vector3(-800, 8, -25);
+		Vector3 target = slash.transform.position + (velocityDirection * 8);
+
+		slash.slashCollider.transform.LookAt(target, Vector3.Cross(slashPoints[0], slashPoints[2]));
+
+		slash.slashCollider.transform.position -= slash.slashCollider.transform.forward * .4f;
+		Destroy(slash.gameObject, 10f);
+	}
+
 
 	void Start() 
 	{

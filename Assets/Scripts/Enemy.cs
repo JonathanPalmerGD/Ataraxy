@@ -39,6 +39,8 @@ public class Enemy : NPC
 		get { return firingCooldown; }
 		set { firingCooldown = value; }
 	}
+
+	public bool firing = false;
 	#endregion
 
 	#region Override Methods - Faction, AdjustHealth, KillEntity
@@ -84,7 +86,7 @@ public class Enemy : NPC
 		base.Start();
 		gameObject.tag = "Enemy";
 		gunMuzzle = transform.FindChild("Gun Muzzle").gameObject;
-		FiringCooldown = 2;
+		FiringCooldown = 6;
 	}
 
 	public override void Update()
@@ -135,21 +137,24 @@ public class Enemy : NPC
 
 	public void HandleAggression()
 	{
-		//Raycast to the player, if it is a clear shot, fire in that direction.
-		if (firingTimer <= 0)
+		if (firing)
 		{
-			//Fire at the player
-			AttackPlayer();
+			//Raycast to the player, if it is a clear shot, fire in that direction.
+			if (firingTimer <= 0)
+			{
+				//Fire at the player
+				AttackPlayer();
 
-			//Set ourselves on cooldown
-			firingTimer = FiringCooldown;
+				//Set ourselves on cooldown
+				firingTimer = FiringCooldown;
 
-			//Learn from the experience. Leveling up is checked earlier in the update loop.
-			GainExperience(expGainPerShot);
-		}
-		else
-		{
-			//Debug.Log("Cooldown Remaining: " + Counter + "\n");
+				//Learn from the experience. Leveling up is checked earlier in the update loop.
+				GainExperience(expGainPerShot);
+			}
+			else
+			{
+				//Debug.Log("Cooldown Remaining: " + Counter + "\n");
+			}
 		}
 	}
 

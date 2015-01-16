@@ -29,14 +29,21 @@ public class Homing : Projectile
 
 			if (homing)
 			{
-				//Update the direction we want to go.
-				dirToTarget = target.transform.position - (transform.position + Time.deltaTime * rigidbody.velocity);
-				dirToTarget.Normalize();
+				if (target == null)
+				{
+					fuelRemaining = 0;
+				}
+				else
+				{
+					//Update the direction we want to go.
+					dirToTarget = target.transform.position - (transform.position + Time.deltaTime * rigidbody.velocity);
+					dirToTarget.Normalize();
 
-				//Apply a force in 
-				rigidbody.AddForce(dirToTarget * homingVelocity * rigidbody.mass);
+					//Apply a force in 
+					rigidbody.AddForce(dirToTarget * homingVelocity * rigidbody.mass);
 
-				//Debug.Log("Current Speed: " + rigidbody.velocity.magnitude + "\nFuel: " + fuelRemaining);
+					//Debug.Log("Current Speed: " + rigidbody.velocity.magnitude + "\nFuel: " + fuelRemaining);
+				}
 			}
 		}
 		else
@@ -100,19 +107,20 @@ public class Homing : Projectile
 					}
 				}
 			}
-
-			explosive.Explode();
-			gameObject.particleSystem.enableEmission = false;
-			gameObject.collider.enabled = false;
-			enabled = false;
-			body.SetActive(false);
-			Destroy(gameObject, 3.0f);
+			Collide();
 		}
 	}
 
-	/*void OnDrawGizmos()
+
+	public override void Collide()
 	{
-		Gizmos.color = Color.black;
-		Gizmos.DrawLine(transform.position, transform.position + rigidbody.velocity * 50);
-	}*/
+		rigidbody.drag += 2;
+
+		explosive.Explode();
+		gameObject.particleSystem.enableEmission = false;
+		gameObject.collider.enabled = false;
+		enabled = false;
+		body.SetActive(false);
+		Destroy(gameObject, 3.0f);
+	}
 }

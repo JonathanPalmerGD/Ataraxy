@@ -13,7 +13,8 @@ public class RocketLauncher : Weapon
 		base.Init();
 		rocketPrefab = Resources.Load<GameObject>("Rocket");
 		Icon = UIManager.Instance.Icons[IconIndex];
-
+		primaryFirePointIndex = 1;
+		specialFirePointIndex = 1;
 #if CHEAT
 		NormalCooldown = .7f;
 		Durability = 100;
@@ -23,12 +24,12 @@ public class RocketLauncher : Weapon
 		BeamColor = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
 	}
 
-	public override void UseWeapon(GameObject target = null, System.Type targType = null, Vector3 firePoint = default(Vector3), Vector3 hitPoint = default(Vector3), bool lockOn = false)
+	public override void UseWeapon(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
 	{
+		Vector3 firePoint = firePoints[primaryFirePointIndex].transform.position;
 		if (targType == typeof(Enemy))
 		{
 			Enemy e = target.GetComponent<Enemy>();
-
 			//Check Faction
 			if (e.Faction != Faction)
 			{

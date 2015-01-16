@@ -12,6 +12,9 @@ public class ShockRifle : Weapon
 		shockBallPrefab = Resources.Load<GameObject>("ShockBall");
 		Icon = UIManager.Instance.Icons[IconIndex];
 
+		primaryFirePointIndex = 1;
+		specialFirePointIndex = 1;
+
 		PrimaryDamage = 1;
 		SpecialDamage = 4;
 		DurSpecialCost = 2;
@@ -26,9 +29,11 @@ public class ShockRifle : Weapon
 		BeamColor = new Color(.75f, .14f, .77f);
 	}
 
-	public override void UseWeapon(GameObject target = null, System.Type targType = null, Vector3 firePoint = default(Vector3), Vector3 hitPoint = default(Vector3), bool lockOn = false)
+	public override void UseWeapon(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
 	{
-		if (hitPoint != default(Vector3) && firePoint != default(Vector3))
+		Vector3 firePoint = firePoints[primaryFirePointIndex].transform.position;
+
+		if (hitPoint != default(Vector3))
 		{
 			LineRenderer lr = WeaponBearer.GetComponent<LineRenderer>();
 			if (lr == null)
@@ -81,8 +86,10 @@ public class ShockRifle : Weapon
 		}
 	}
 
-	public override void UseWeaponSpecial(GameObject target = null, System.Type targType = null, Vector3 firePoint = default(Vector3), Vector3 hitPoint = default(Vector3), bool lockOn = false)
+	public override void UseWeaponSpecial(GameObject target = null, System.Type targType = null,  GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
 	{
+		Vector3 firePoint = firePoints[specialFirePointIndex].transform.position;
+
 		GameObject go = (GameObject)GameObject.Instantiate(shockBallPrefab, firePoint, Quaternion.identity);
 		ShockBall shock = go.GetComponent<ShockBall>();
 

@@ -26,7 +26,11 @@ public class Player : Entity
 	public NPC targetedEntity = null;
 	public GameObject hitscanTarget = null;
 	public Vector3 hitPoint = Vector3.zero;
-	public GameObject firePoint;
+	public GameObject leftShFirePoint;
+	public GameObject rightShFirePoint;
+	public GameObject leftHipFirePoint;
+	public GameObject rightHipFirePoint;
+	public GameObject[] FirePoints;
 	#endregion
 
 	#region Weapon Variables
@@ -84,7 +88,16 @@ public class Player : Entity
 	public override void Start()
 	{
 		NameInGame = "Vant";
-		firePoint = transform.FindChild("Main Camera").transform.FindChild("Firing Point").gameObject;
+
+		List<GameObject> fPoints = new List<GameObject>();
+		fPoints.Add(transform.FindChild("Main Camera").transform.FindChild("Front Firing Point").gameObject);
+		fPoints.Add(transform.FindChild("Main Camera").transform.FindChild("RightShoulder Firing Point").gameObject);
+		fPoints.Add(transform.FindChild("Main Camera").transform.FindChild("LeftShoulder Firing Point").gameObject);
+		fPoints.Add(transform.FindChild("Main Camera").transform.FindChild("RightHip Firing Point").gameObject);
+		fPoints.Add(transform.FindChild("Main Camera").transform.FindChild("LeftHip Firing Point").gameObject);
+
+		FirePoints = fPoints.ToArray();
+
 		SelectorUI.gameObject.SetActive(true);
 		SelectorUI.fillMethod = Image.FillMethod.Radial360;
 		SelectorUI.fillClockwise = true;
@@ -92,9 +105,9 @@ public class Player : Entity
 		weapons = new List<Weapon>();
 		passives = new List<Passive>();
 
+		SetupAbility(Longsword.New());
 		SetupAbility(RocketLauncher.New());
 		SetupAbility(ShockRifle.New());
-		SetupAbility(Longsword.New());
 		SetupAbility(Weapon.New());
 		SetupAbility(Weapon.New());
 		
@@ -315,11 +328,11 @@ public class Player : Entity
 					//If we have the same target this frame as our HUD
 					if (targetedEntity != null && hitscanTarget != null && hitscanTarget == targetedEntity.gameObject)
 					{
-						weapons[weaponIndex].UseWeapon(targetedEntity.gameObject, targetedEntity.GetType(), firePoint.transform.position, hitPoint, true);
+						weapons[weaponIndex].UseWeapon(targetedEntity.gameObject, targetedEntity.GetType(), FirePoints, hitPoint, true);
 					}
 					else
 					{
-						weapons[weaponIndex].UseWeapon(hitscanTarget, null, firePoint.transform.position, hitPoint, true);
+						weapons[weaponIndex].UseWeapon(hitscanTarget, null, FirePoints, hitPoint, true);
 					}
 				}
 				
@@ -347,11 +360,11 @@ public class Player : Entity
 					//If we have the same target this frame as our HUD
 					if (targetedEntity != null && hitscanTarget != null && hitscanTarget == targetedEntity.gameObject)
 					{
-						weapons[weaponIndex].UseWeaponSpecial(targetedEntity.gameObject, targetedEntity.GetType(), firePoint.transform.position, hitPoint, true);
+						weapons[weaponIndex].UseWeaponSpecial(targetedEntity.gameObject, targetedEntity.GetType(), FirePoints, hitPoint, true);
 					}
 					else
 					{
-						weapons[weaponIndex].UseWeaponSpecial(hitscanTarget, null, firePoint.transform.position, hitPoint, true);
+						weapons[weaponIndex].UseWeaponSpecial(hitscanTarget, null, FirePoints, hitPoint, true);
 					}
 				}
 

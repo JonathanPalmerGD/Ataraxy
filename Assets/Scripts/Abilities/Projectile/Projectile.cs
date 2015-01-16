@@ -24,7 +24,7 @@ public class Projectile : MonoBehaviour
 		set { shooter = value; }
 	}
 
-	private int damage = -1;
+	private int damage = 1;
 	public int Damage
 	{
 		get { return damage; }
@@ -49,6 +49,8 @@ public class Projectile : MonoBehaviour
 		set { faction = value; }
 	}*/
 
+	public Weapon creator;
+
 	public List<AbilityEffect> projectileEffects;
 
 	void Start() 
@@ -65,7 +67,7 @@ public class Projectile : MonoBehaviour
 	{
 		if (enabled)
 		{
-			//Debug.Log("Projectile collided with: " + collider.gameObject.name + "\n" + collider.gameObject.tag);
+			//Debug.Log("Projectile collided with: " + collider.gameObject.name + "\n" + collider.gameObject.tag + " Faction: " + Faction + " " + Damage);
 			string cTag = collider.gameObject.tag;
 			if (cTag == "Enemy" || cTag == "Player")// || cTag == "Entity" || cTag == "Island")
 			{
@@ -83,9 +85,8 @@ public class Projectile : MonoBehaviour
 						//If the projectile is from the Player
 						if (Faction == Allegiance.Player && atObj.Faction == Allegiance.Enemy)
 						{
-
 							//Deal damage to the enemy
-							atObj.GetComponent<Enemy>().AdjustHealth(Damage);
+							atObj.GetComponent<Enemy>().AdjustHealth(-Damage);
 
 							//Apply AbilityEffect to the target.
 							for (int i = 0; i < projectileEffects.Count; i++)
@@ -97,7 +98,7 @@ public class Projectile : MonoBehaviour
 						else if (Faction == Allegiance.Enemy && atObj.Faction == Allegiance.Player)
 						{
 							//Deal damage to the enemy
-							GameManager.Instance.player.AdjustHealth(Damage);
+							GameManager.Instance.player.AdjustHealth(-Damage);
 
 							//Apply AbilityEffect to the target.
 							for (int i = 0; i < projectileEffects.Count; i++)
@@ -116,7 +117,13 @@ public class Projectile : MonoBehaviour
 			}
 
 			//Clean up the bullet. This should be updated to add it to an object pool
-			GameObject.Destroy(gameObject);
+			Collide();
 		}
+	}
+
+	public virtual void Collide()
+	{
+
+		GameObject.Destroy(gameObject);
 	}
 }

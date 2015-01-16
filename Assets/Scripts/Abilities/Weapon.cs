@@ -66,7 +66,10 @@ public class Weapon : Ability
 		set { durSpecialCost = value; }
 	}
 	#endregion
-
+	#region Indexes (Fire Point, Icon)
+	public int primaryFirePointIndex = 1;
+	public int specialFirePointIndex = 1;
+	#endregion
 	#region Weapon Attributes
 	private float primaryDamage = 2;
 	public float PrimaryDamage
@@ -104,9 +107,10 @@ public class Weapon : Ability
 		BeamColor = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
 	}
 
-	public virtual void UseWeapon(GameObject target = null, System.Type targType = null, Vector3 firePoint = default(Vector3), Vector3 hitPoint = default(Vector3), bool lockOn = false)
+	//public virtual void UseWeapon(GameObject target = null, System.Type targType = null, Vector3 firePoint = default(Vector3), GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
+	public virtual void UseWeapon(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
 	{
-		if (hitPoint != default(Vector3) && firePoint != default(Vector3))
+		if (hitPoint != default(Vector3) && firePoints.Length > 0)
 		{
 			LineRenderer lr = WeaponBearer.GetComponent<LineRenderer>();
 			if (lr == null)
@@ -119,7 +123,7 @@ public class Weapon : Ability
 			lr.SetVertexCount(2);
 			lr.SetColors(BeamColor, Color.grey);
 			lr.SetWidth(.1f, .1f);
-			lr.SetPosition(0, firePoint);
+			lr.SetPosition(0, firePoints[0].transform.position);
 			lr.SetPosition(1, hitPoint);
 			Destroy(lr, .3f);
 		}
@@ -154,9 +158,9 @@ public class Weapon : Ability
 		}
 	}
 
-	public virtual void UseWeaponSpecial(GameObject target = null, System.Type targType = null, Vector3 firePoint = default(Vector3), Vector3 hitPoint = default(Vector3), bool lockOn = false)
+	public virtual void UseWeaponSpecial(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
 	{
-		if (hitPoint != default(Vector3) && firePoint != default(Vector3))
+		if (hitPoint != default(Vector3) && firePoints.Length > 0)
 		{
 			LineRenderer lr = WeaponBearer.GetComponent<LineRenderer>();
 			if (lr == null)
@@ -169,7 +173,7 @@ public class Weapon : Ability
 			lr.SetVertexCount(2);
 			lr.SetColors(Color.red, Color.red);
 			lr.SetWidth(.2f, .2f);
-			lr.SetPosition(0, firePoint);
+			lr.SetPosition(0, firePoints[0].transform.position);
 			lr.SetPosition(1, hitPoint);
 			Destroy(lr, 1f);
 		}
