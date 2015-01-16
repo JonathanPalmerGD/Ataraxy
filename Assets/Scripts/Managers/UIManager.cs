@@ -23,6 +23,7 @@ public class UIManager : Singleton<UIManager>
 	public Text player_XPText;
 	public Text player_LevelText;
 	public Text player_ResourceText;
+	public Text player_WeaponText;
 	public Slider player_Resource;
 
 	public Sprite[] Icons;
@@ -44,6 +45,7 @@ public class UIManager : Singleton<UIManager>
 		//player_ResourceText = GameObject.Find("player_ResourceText").GetComponent<Text>();
 		//player_Resource = GameObject.Find("player_Resource").GetComponent<Slider>();
 		player_Name = GameObject.Find("Player_Name").GetComponent<Text>();
+		player_WeaponText = GameObject.Find("WeaponText").GetComponent<Text>();
 		Icons = new Sprite[1];
 		Icons = Resources.LoadAll<Sprite>("Atlases/AtaraxyIconAtlas");	
 	}

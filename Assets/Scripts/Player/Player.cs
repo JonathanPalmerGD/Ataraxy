@@ -12,6 +12,7 @@ public class Player : Entity
 
 	#region Player Unique Interface
 	public Image SelectorUI;
+	public Text WeaponText;
 	public GameObject WeaponUI;
 	public GameObject PassiveUI;
 	public GameObject iconPrefab;
@@ -91,11 +92,12 @@ public class Player : Entity
 		weapons = new List<Weapon>();
 		passives = new List<Passive>();
 
-		//SetupAbility(RocketLauncher.New());
+		SetupAbility(RocketLauncher.New());
 		SetupAbility(ShockRifle.New());
-		//SetupAbility(Weapon.New());
-		//SetupAbility(Weapon.New());
-
+		SetupAbility(Longsword.New());
+		SetupAbility(Weapon.New());
+		SetupAbility(Weapon.New());
+		
 		SetupAbility(Passive.New());
 		SetupAbility(Passive.New());
 		//SetupAbility(Passive.New());
@@ -112,6 +114,7 @@ public class Player : Entity
 		NameText = UIManager.Instance.player_Name;
 		ResourceSlider = UIManager.Instance.player_Resource;
 		ResourceText = UIManager.Instance.player_ResourceText;
+		WeaponText = UIManager.Instance.player_WeaponText;
 
 		SetupHealthUI();
 		SetupResourceUI();
@@ -219,6 +222,7 @@ public class Player : Entity
 			{
 				if (weaponIndex == i)
 				{
+					WeaponText.text = weapons[i].AbilityName;
 					if (weapons[i].CdLeft > 0)
 					{
 						SelectorUI.type = Image.Type.Filled;

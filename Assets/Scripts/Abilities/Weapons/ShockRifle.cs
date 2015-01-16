@@ -12,10 +12,12 @@ public class ShockRifle : Weapon
 		shockBallPrefab = Resources.Load<GameObject>("ShockBall");
 		Icon = UIManager.Instance.Icons[IconIndex];
 
+		PrimaryDamage = 1;
+		SpecialDamage = 4;
 		DurSpecialCost = 2;
 		SpecialCooldown = Random.Range(3, 4);
 #if CHEAT
-		NormalCooldown = .6f;
+		NormalCooldown = .3f;
 		SpecialCooldown = 1f;
 		Durability = 100;
 #else
