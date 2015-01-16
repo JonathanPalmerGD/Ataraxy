@@ -10,13 +10,8 @@ public class AbilityEffect : Ability
 		set { duration = value; }
 	}
 
-	public override void Start()
+	public override void Init()
 	{
-		base.Update();
-	}
-
-	public override void Update() 
-	{
-		base.Update();
+		base.Init();
 	}
 }

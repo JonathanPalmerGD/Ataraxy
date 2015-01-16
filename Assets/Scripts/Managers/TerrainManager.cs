@@ -12,7 +12,7 @@ public class TerrainManager : Singleton<TerrainManager>
 	public static Vector3 poissonMinScale = new Vector3(10, 1, 10);
 	public static Vector3 poissonMaxScale = new Vector3(18, 12, 18);
 	public static Vector3 clusterSize = new Vector3(75, 20, 75);
-	public static int poissonMinK = 8;
+	public static int poissonMinK = 13;
 	public static int poissonMaxK = 30;
 	public static float minTilt = -8;
 	public static float maxTilt = 8;

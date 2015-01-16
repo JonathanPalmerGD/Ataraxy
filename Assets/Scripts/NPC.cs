@@ -13,6 +13,7 @@ public class NPC : Entity
 
 		//Set up HUD with UIManager
 		HealthSlider = UIManager.Instance.target_HP;
+		XPSlider = UIManager.Instance.target_XP;
 		NameText = UIManager.Instance.target_Name;
 		InfoHUD = UIManager.Instance.target_HUD;
 

@@ -25,6 +25,7 @@ public class Player : Entity
 	public NPC targetedEntity = null;
 	public GameObject hitscanTarget = null;
 	public Vector3 hitPoint = Vector3.zero;
+	public GameObject firePoint;
 	#endregion
 
 	#region Weapon Variables
@@ -81,6 +82,8 @@ public class Player : Entity
 	#region Initialization
 	public override void Start()
 	{
+		NameInGame = "Vant";
+		firePoint = transform.FindChild("Main Camera").transform.FindChild("Firing Point").gameObject;
 		SelectorUI.gameObject.SetActive(true);
 		SelectorUI.fillMethod = Image.FillMethod.Radial360;
 		SelectorUI.fillClockwise = true;
@@ -88,9 +91,8 @@ public class Player : Entity
 		weapons = new List<Weapon>();
 		passives = new List<Passive>();
 
-		SetupAbility(Weapon.New());
-		SetupAbility(Weapon.New());
-		SetupAbility(Weapon.New());
+		SetupAbility(RocketLauncher.New());
+		SetupAbility(ShockRifle.New());
 		//SetupAbility(Weapon.New());
 		//SetupAbility(Weapon.New());
 
@@ -100,21 +102,28 @@ public class Player : Entity
 		//SetupAbility(Passive.New());
 
 		SetupResourceSystem();
+		Level = 1;
 
 		HealthSlider = UIManager.Instance.player_HP;
 		HealthText = UIManager.Instance.player_HPText;
+		XPSlider = UIManager.Instance.player_XP;
+		XPText = UIManager.Instance.player_XPText;
+		LevelText = UIManager.Instance.player_LevelText;
+		NameText = UIManager.Instance.player_Name;
 		ResourceSlider = UIManager.Instance.player_Resource;
 		ResourceText = UIManager.Instance.player_ResourceText;
 
 		SetupHealthUI();
 		SetupResourceUI();
 		SetNameUI();
+		SetXPUI();
 
 		DamageImage = UIManager.Instance.damage_Indicator;
 
 		base.Start();
 
 		gameObject.tag = "Player";
+		Faction = Allegiance.Player;
 	}
 
 	public void SetupAbility(Ability ToAdd)
@@ -123,20 +132,21 @@ public class Player : Entity
 		{
 			Weapon w = (Weapon)ToAdd;
 
+			w.Init();
+
 			//WeaponUI
 			Image panel = ((GameObject)GameObject.Instantiate(iconPrefab)).GetComponent<Image>();
 
 			panel.name = "I: " + w.AbilityName;
 
-			w.Icon = UIManager.Instance.Icons[Random.Range(1, UIManager.Instance.Icons.Length)];
+			w.Faction = Allegiance.Player;
+
 			panel.rectTransform.SetParent(WeaponUI.transform);
 			w.Remainder = panel.transform.FindChild("Remainder").GetComponent<Text>();
-			w.NormalCooldown = Random.Range(.01f, .7f);
-			w.SpecialCooldown = Random.Range(4, 16);
+			
 			w.Remainder.text = w.Durability.ToString();
 			w.WeaponBearer = gameObject;
-			w.BeamColor = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
-
+			
 			panel.sprite = w.Icon;
 			w.IconUI = panel;
 			weapons.Add(w);
@@ -301,11 +311,11 @@ public class Player : Entity
 					//If we have the same target this frame as our HUD
 					if (targetedEntity != null && hitscanTarget == targetedEntity.gameObject)
 					{
-						weapons[weaponIndex].UseWeapon(targetedEntity.gameObject, targetedEntity.GetType(), transform.position, hitPoint, true);
+						weapons[weaponIndex].UseWeapon(targetedEntity.gameObject, targetedEntity.GetType(), firePoint.transform.position, hitPoint, true);
 					}
 					else
 					{
-						weapons[weaponIndex].UseWeapon(hitscanTarget, null, transform.position, hitPoint, true);
+						weapons[weaponIndex].UseWeapon(hitscanTarget, null, firePoint.transform.position, hitPoint, true);
 					}
 				}
 				
@@ -359,7 +369,7 @@ public class Player : Entity
 		if (Input.GetKeyDown(KeyCode.LeftShift))
 		{
 			CharacterMotor charMotor = gameObject.GetComponent<CharacterMotor>();
-			charMotor.movement.velocity = new Vector3(charMotor.movement.velocity.x * 20.0f, 0, charMotor.movement.velocity.z * 20.0f);
+			charMotor.movement.velocity = new Vector3(transform.forward.x * 20.0f, 1, transform.forward.z * 20.0f);
 			charMotor.movement.velocity.Normalize();
 			charMotor.movement.velocity *= 120;
 		}

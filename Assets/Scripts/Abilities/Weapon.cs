@@ -4,11 +4,7 @@ using System.Collections;
 public class Weapon : Ability
 {
 	#region Weapon's Faction & Bearer
-	private Allegiance faction;
-	public virtual Allegiance Faction
-	{
-		get { return Allegiance.Neutral; }
-	}
+	public Allegiance Faction;
 	private GameObject weaponBearer;
 	public GameObject WeaponBearer
 	{
@@ -84,14 +80,10 @@ public class Weapon : Ability
 		get { return specialDamage; }
 		set { specialDamage = value; }
 	}
+
 	#endregion
 
 	public bool hitscan = true;
-
-	public override void Start()
-	{
-		base.Start();
-	}
 
 	public void UpdateWeapon(float time)
 	{
@@ -103,6 +95,15 @@ public class Weapon : Ability
 		{
 			CdLeft = 0;
 		}
+	}
+
+	public override void Init()
+	{
+		base.Init();
+		NormalCooldown = Random.Range(.01f, .7f);
+		SpecialCooldown = Random.Range(4, 16);
+		Icon = UIManager.Instance.Icons[Random.Range(1, UIManager.Instance.Icons.Length)];
+		BeamColor = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
 	}
 
 	public virtual void UseWeapon(GameObject target = null, System.Type targType = null, Vector3 firePoint = default(Vector3), Vector3 hitPoint = default(Vector3), bool lockOn = false)
@@ -118,7 +119,7 @@ public class Weapon : Ability
 			lr.material = new Material(Shader.Find("Particles/Additive"));
 
 			lr.SetVertexCount(2);
-			lr.SetColors(beamColor, Color.grey);
+			lr.SetColors(BeamColor, Color.grey);
 			lr.SetWidth(.1f, .1f);
 			lr.SetPosition(0, firePoint);
 			lr.SetPosition(1, hitPoint);
@@ -213,8 +214,6 @@ public class Weapon : Ability
 			//If this is a special attack, use the special cost, otherwise normal cost.
 			int curCost = specialAttack ? DurSpecialCost : DurCost;
 
-			Debug.Log(curCost + " " + DurSpecialCost + " " + DurCost);
-
 			if (Durability >= curCost)
 			{
 				//Reduce Durability, update our text
@@ -258,8 +257,7 @@ public class Weapon : Ability
 	{
 		Weapon w = ScriptableObject.CreateInstance<Weapon>();
 		w.AbilityName = Weapon.GetWeaponName();
-		//w.Icon = Resources.Load("Atlases/AtaraxyIconAtlas");
-		w.durability = Random.Range(10, 60);
+		w.Durability = Random.Range(10, 60);
 		w.NormalCooldown = 1;
 		w.SpecialCooldown = 6;
 		w.CdLeft = 0;

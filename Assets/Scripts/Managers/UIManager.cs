@@ -11,6 +11,7 @@ public class UIManager : Singleton<UIManager>
 	public Canvas target_HUD;
 	public Text target_Name;
 	public Slider target_HP;
+	public Slider target_XP;
 	public Slider target_Resource;
 	public Image damage_Indicator;
 
@@ -18,6 +19,9 @@ public class UIManager : Singleton<UIManager>
 	public Text player_Name;
 	public Text player_HPText;
 	public Slider player_HP;
+	public Slider player_XP;
+	public Text player_XPText;
+	public Text player_LevelText;
 	public Text player_ResourceText;
 	public Slider player_Resource;
 
@@ -28,13 +32,18 @@ public class UIManager : Singleton<UIManager>
 		target_HUD = GameObject.Find("Target_HUD").GetComponent<Canvas>();
 		target_Name = GameObject.Find("Target_Name").GetComponent<Text>();
 		target_HP = GameObject.Find("Target_HP").GetComponent<Slider>();
+		target_XP = GameObject.Find("Target_XP").GetComponent<Slider>();
 		//target_Resource = GameObject.Find("Target_Resource").GetComponent<Slider>();
 		damage_Indicator = GameObject.Find("Damage_Indicator").GetComponent<Image>();
 
-		player_HPText = GameObject.Find("player_HPText").GetComponent<Text>();
-		player_HP = GameObject.Find("player_HP").GetComponent<Slider>();
-		player_ResourceText = GameObject.Find("player_ResourceText").GetComponent<Text>();
-		player_Resource = GameObject.Find("player_Resource").GetComponent<Slider>();
+		//player_HPText = GameObject.Find("player_HPText").GetComponent<Text>();
+		player_HP = GameObject.Find("Player_HP").GetComponent<Slider>();
+		//player_XPText = GameObject.Find("player_XPText").GetComponent<Text>();
+		player_LevelText = GameObject.Find("Player_LevelText").GetComponent<Text>();
+		player_XP = GameObject.Find("Player_XP").GetComponent<Slider>();
+		//player_ResourceText = GameObject.Find("player_ResourceText").GetComponent<Text>();
+		//player_Resource = GameObject.Find("player_Resource").GetComponent<Slider>();
+		player_Name = GameObject.Find("Player_Name").GetComponent<Text>();
 		Icons = new Sprite[1];
 		Icons = Resources.LoadAll<Sprite>("Atlases/AtaraxyIconAtlas");	
 	}

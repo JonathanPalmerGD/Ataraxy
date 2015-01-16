@@ -5,7 +5,17 @@ using System.Collections.Generic;
 public class Projectile : MonoBehaviour 
 {
 	private bool awardXPOnHit = false;
+	public bool AwardXPOnHit
+	{
+		get { return awardXPOnHit; }
+		set { awardXPOnHit = value; }
+	}
 	private float xpBountyOnHit = 5;
+	public float XpBountyOnHit
+	{
+		get { return xpBountyOnHit; }
+		set { xpBountyOnHit = value; }
+	}
 
 	private Entity shooter;
 	public Entity Shooter
@@ -32,17 +42,18 @@ public class Projectile : MonoBehaviour
 		get { return projLife; }
 		set { projLife = value; }
 	}
-	private Allegiance faction;
-	public Allegiance Faction
+	public Allegiance Faction;
+	/*public Allegiance Faction
 	{
 		get { return faction; }
 		set { faction = value; }
-	}
+	}*/
 
 	public List<AbilityEffect> projectileEffects;
 
 	void Start() 
 	{
+
 	}
 	
 	void Update() 
@@ -52,56 +63,60 @@ public class Projectile : MonoBehaviour
 
 	void OnTriggerEnter(Collider collider)
 	{
-		//Debug.Log("Projectile collided with: " + collider.gameObject.name + "\n" + collider.gameObject.tag);
-		string cTag = collider.gameObject.tag;
-		if (cTag == "Enemy" || cTag == "Player")// || cTag == "Entity" || cTag == "Island")
+		if (enabled)
 		{
-			Entity atObj = collider.gameObject.GetComponent<Entity>();
-			if (atObj != null)
+			//Debug.Log("Projectile collided with: " + collider.gameObject.name + "\n" + collider.gameObject.tag);
+			string cTag = collider.gameObject.tag;
+			if (cTag == "Enemy" || cTag == "Player")// || cTag == "Entity" || cTag == "Island")
 			{
-				if (atObj.Faction == Faction)
+				Entity atObj = collider.gameObject.GetComponent<Entity>();
+				if (atObj != null)
 				{
-					Debug.LogWarning("Projectile collided with same Faction as firing source.\n");
-					return;
-				}
-				else
-				{
-					//If the projectile is from the Player
-					if (Faction == Allegiance.Player && atObj.Faction == Allegiance.Enemy)
+					if (atObj.Faction == Faction)
 					{
-					
-						//Deal damage to the enemy
-						atObj.GetComponent<Enemy>().AdjustHealth(damage);
-
-						//Apply AbilityEffect to the target.
-						for (int i = 0; i < projectileEffects.Count; i++)
-						{
-							atObj.GetComponent<Enemy>().ApplyAbilityEffect(projectileEffects[i]);
-						}
+						Debug.LogWarning("Projectile collided with same Faction as firing source.\n");
+						return;
 					}
-					//Else if it is from an Enemy
-					else if (Faction == Allegiance.Enemy && atObj.Faction == Allegiance.Player)
+					else
 					{
-						//Deal damage to the enemy
-						GameManager.Instance.player.AdjustHealth(damage);
-
-						//Apply AbilityEffect to the target.
-						for (int i = 0; i < projectileEffects.Count; i++)
+						//Debug.Log("F" + Faction + " " + atObj.Faction + "\n");
+						//If the projectile is from the Player
+						if (Faction == Allegiance.Player && atObj.Faction == Allegiance.Enemy)
 						{
-							GameManager.Instance.player.ApplyAbilityEffect(projectileEffects[i]);
+
+							//Deal damage to the enemy
+							atObj.GetComponent<Enemy>().AdjustHealth(Damage);
+
+							//Apply AbilityEffect to the target.
+							for (int i = 0; i < projectileEffects.Count; i++)
+							{
+								atObj.GetComponent<Enemy>().ApplyAbilityEffect(projectileEffects[i]);
+							}
 						}
-
-						//Award experience to the enemy who fired it.
-						if (awardXPOnHit && shooter != null)
+						//Else if it is from an Enemy
+						else if (Faction == Allegiance.Enemy && atObj.Faction == Allegiance.Player)
 						{
-							shooter.GainExperience(xpBountyOnHit);
+							//Deal damage to the enemy
+							GameManager.Instance.player.AdjustHealth(Damage);
+
+							//Apply AbilityEffect to the target.
+							for (int i = 0; i < projectileEffects.Count; i++)
+							{
+								GameManager.Instance.player.ApplyAbilityEffect(projectileEffects[i]);
+							}
+
+							//Award experience to the enemy who fired it.
+							if (AwardXPOnHit && Shooter != null)
+							{
+								Shooter.GainExperience(XpBountyOnHit);
+							}
 						}
 					}
 				}
 			}
-		}
 
-		//Clean up the bullet. This should be updated to add it to an object pool
-		GameObject.Destroy(gameObject);
+			//Clean up the bullet. This should be updated to add it to an object pool
+			GameObject.Destroy(gameObject);
+		}
 	}
 }

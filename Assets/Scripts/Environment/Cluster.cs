@@ -18,7 +18,7 @@ public class Cluster : WorldObject
 		gameObject.name = "Cluster: " + Nomenclature.GetName(Random.Range(0, 12), Random.Range(0, 12), Random.Range(0, 12), Random.Range(0, 12));
 
 		poissonKVal = Random.Range(TerrainManager.poissonMinK, TerrainManager.poissonMaxK);
-		sizeBonus = Random.Range(0, 10);
+		sizeBonus = Random.Range(0, 8);
 
 		if (GenApproach == GenMethod.Poisson)
 		{

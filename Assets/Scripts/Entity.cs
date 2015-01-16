@@ -25,7 +25,8 @@ public class Entity : MonoBehaviour
 	private Allegiance faction;
 	public virtual Allegiance Faction
 	{
-		get { return Allegiance.Neutral; }
+		get { return faction; }
+		set { faction = value; }
 	}
 	#endregion
 
@@ -92,6 +93,12 @@ public class Entity : MonoBehaviour
 		get { return resourceSlider; }
 		set { resourceSlider = value; }
 	}
+	private Slider xPSlider;
+	public Slider XPSlider
+	{
+		get { return xPSlider; }
+		set { xPSlider = value; }
+	}
 	private Text healthText;
 	public Text HealthText
 	{
@@ -103,6 +110,18 @@ public class Entity : MonoBehaviour
 	{
 		get { return resourceText; }
 		set { resourceText = value; }
+	}
+	private Text xPText;
+	public Text XPText
+	{
+		get { return xPText; }
+		set { xPText = value; }
+	}
+	private Text levelText;
+	public Text LevelText
+	{
+		get { return levelText; }
+		set { levelText = value; }
 	}
 	private Text nameText;
 	public Text NameText
@@ -188,13 +207,13 @@ public class Entity : MonoBehaviour
 			Health += amount;
 		}
 
-		if (healthSlider != null)
+		if (HealthSlider != null)
 		{
-			healthSlider.value = Health;
+			HealthSlider.value = Health;
 		}
-		if (healthText != null)
+		if (HealthText != null)
 		{
-			healthText.text = ((int)Health).ToString();
+			HealthText.text = ((int)Health).ToString();
 		}
 
 		if (Health <= 0 && !isDead)
@@ -209,13 +228,13 @@ public class Entity : MonoBehaviour
 		{
 			Resource += amount;
 
-			if (resourceSlider != null)
+			if (ResourceSlider != null)
 			{
-				resourceSlider.value = Resource;
+				ResourceSlider.value = Resource;
 			}
-			if (resourceText != null)
+			if (ResourceText != null)
 			{
-				resourceText.text = Resource.ToString();
+				ResourceText.text = Resource.ToString();
 			}
 
 			return true;
@@ -230,6 +249,15 @@ public class Entity : MonoBehaviour
 			Debug.LogError("Negative Experience value (" + xpValue + ")  provided to : " + gameObject.name + "\n");
 		}
 		XP += xpValue * level;
+
+		if (XPSlider != null)
+		{
+			XPSlider.value = XP;
+		}
+		if (XPText != null)
+		{
+			XPText.text = XP.ToString();
+		}
 	}
 
 	#region UI Setup - Health, Name, Resource
@@ -251,6 +279,22 @@ public class Entity : MonoBehaviour
 		if (nameText != null)
 		{
 			nameText.text = gameObject.name;
+		}
+	}
+
+	public void SetXPUI()
+	{
+		if (XPSlider != null)
+		{
+			XPSlider.value = XP;
+		}
+		if (XPText != null)
+		{
+			XPText.text = XP.ToString();
+		}
+		if (LevelText != null)
+		{
+			LevelText.text = Level.ToString();
 		}
 	}
 

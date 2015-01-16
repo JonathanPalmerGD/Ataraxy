@@ -35,14 +35,8 @@ public class Ability : ScriptableObject
 		set { timesGained = value; }
 	}
 
-	public virtual void Start () 
+	public virtual void Init()
 	{
-	
-	}
-
-	public virtual void Update() 
-	{
-	
 	}
 
 	public virtual void CleanUp()
