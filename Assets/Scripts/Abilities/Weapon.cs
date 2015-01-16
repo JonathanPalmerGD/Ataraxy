@@ -83,8 +83,6 @@ public class Weapon : Ability
 
 	#endregion
 
-	public bool hitscan = true;
-
 	public void UpdateWeapon(float time)
 	{
 		if (CdLeft > time)

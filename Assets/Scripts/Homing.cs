@@ -108,7 +108,6 @@ public class Homing : Projectile
 			body.SetActive(false);
 			Destroy(gameObject, 3.0f);
 		}
-		
 	}
 
 	/*void OnDrawGizmos()

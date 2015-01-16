@@ -91,7 +91,7 @@ public class Player : Entity
 		weapons = new List<Weapon>();
 		passives = new List<Passive>();
 
-		SetupAbility(RocketLauncher.New());
+		//SetupAbility(RocketLauncher.New());
 		SetupAbility(ShockRifle.New());
 		//SetupAbility(Weapon.New());
 		//SetupAbility(Weapon.New());
@@ -309,7 +309,7 @@ public class Player : Entity
 				if (weapons[weaponIndex].HandleDurability(false))
 				{
 					//If we have the same target this frame as our HUD
-					if (targetedEntity != null && hitscanTarget == targetedEntity.gameObject)
+					if (targetedEntity != null && hitscanTarget != null && hitscanTarget == targetedEntity.gameObject)
 					{
 						weapons[weaponIndex].UseWeapon(targetedEntity.gameObject, targetedEntity.GetType(), firePoint.transform.position, hitPoint, true);
 					}
@@ -341,13 +341,13 @@ public class Player : Entity
 				if (weapons[weaponIndex].HandleDurability(true))
 				{
 					//If we have the same target this frame as our HUD
-					if (targetedEntity != null && hitscanTarget == targetedEntity.gameObject)
+					if (targetedEntity != null && hitscanTarget != null && hitscanTarget == targetedEntity.gameObject)
 					{
-						weapons[weaponIndex].UseWeaponSpecial(targetedEntity.gameObject, targetedEntity.GetType(), transform.position, hitPoint, true);
+						weapons[weaponIndex].UseWeaponSpecial(targetedEntity.gameObject, targetedEntity.GetType(), firePoint.transform.position, hitPoint, true);
 					}
 					else
 					{
-						weapons[weaponIndex].UseWeaponSpecial(hitscanTarget, null, transform.position, hitPoint, true);
+						weapons[weaponIndex].UseWeaponSpecial(hitscanTarget, null, firePoint.transform.position, hitPoint, true);
 					}
 				}
 
@@ -473,7 +473,7 @@ public class Player : Entity
 
 				return n.gameObject;
 			}
-			if (hit.collider.gameObject.tag == "Enemy")
+			else if (hit.collider.gameObject.tag == "Enemy")
 			{
 				Enemy e = hit.collider.gameObject.GetComponent<Enemy>();
 				CheckNewTarget((Enemy)e);
@@ -490,12 +490,15 @@ public class Player : Entity
 				}*/
 			}
 			//This isn't necessary for right now.
-			if (hit.collider.gameObject.tag == "WorldObject")
+			else if (hit.collider.gameObject.tag == "WorldObject")
 			{
 				//Island e = hit.collider.gameObject.GetComponent<Island>();
 				//CheckNewTarget((Entity)e);
 			}
-
+			else
+			{
+				return hit.collider.gameObject;
+			}
 			//Debug.Log(hit.collider.gameObject.name + "\n");
 		}
 		else

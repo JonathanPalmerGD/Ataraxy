@@ -13,7 +13,6 @@ public class RocketLauncher : Weapon
 		base.Init();
 		rocketPrefab = Resources.Load<GameObject>("Rocket");
 		Icon = UIManager.Instance.Icons[IconIndex];
-		hitscan = false;
 
 #if CHEAT
 		NormalCooldown = .7f;
@@ -78,6 +77,8 @@ public class RocketLauncher : Weapon
 			dir.Normalize();
 
 			homing.rigidbody.AddForce((dir * homing.ProjVel * homing.rigidbody.mass));
+
+			Destroy(homing, fuelPerRocket + 8);
 		}
 	}
 

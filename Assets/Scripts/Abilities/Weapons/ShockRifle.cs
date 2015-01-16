@@ -11,10 +11,12 @@ public class ShockRifle : Weapon
 		base.Init();
 		shockBallPrefab = Resources.Load<GameObject>("ShockBall");
 		Icon = UIManager.Instance.Icons[IconIndex];
-		hitscan = false;
 
+		DurSpecialCost = 2;
+		SpecialCooldown = Random.Range(3, 4);
 #if CHEAT
 		NormalCooldown = .6f;
+		SpecialCooldown = 1f;
 		Durability = 100;
 #else
 		SpecialCooldown = Random.Range(4, 5);
@@ -22,7 +24,7 @@ public class ShockRifle : Weapon
 		BeamColor = new Color(.75f, .14f, .77f);
 	}
 
-	public virtual void UseWeapon(GameObject target = null, System.Type targType = null, Vector3 firePoint = default(Vector3), Vector3 hitPoint = default(Vector3), bool lockOn = false)
+	public override void UseWeapon(GameObject target = null, System.Type targType = null, Vector3 firePoint = default(Vector3), Vector3 hitPoint = default(Vector3), bool lockOn = false)
 	{
 		if (hitPoint != default(Vector3) && firePoint != default(Vector3))
 		{
@@ -42,6 +44,15 @@ public class ShockRifle : Weapon
 			Destroy(lr, .3f);
 		}
 
+		if (target != null)
+		{
+			ShockBall sb = target.GetComponent<ShockBall>();
+			if (sb != null)
+			{
+				//Detonate the shock ball.
+				sb.Shocked();
+			}
+		}
 
 		if (targType == typeof(Enemy))
 		{
@@ -59,8 +70,6 @@ public class ShockRifle : Weapon
 		}
 		else if (targType == typeof(NPC))
 		{
-			//Debug.Log("Used Weapon on NPC\n");
-
 		}
 		//If our targType is null from targetting a piece of terrain or something?
 		else
@@ -76,8 +85,12 @@ public class ShockRifle : Weapon
 		ShockBall shock = go.GetComponent<ShockBall>();
 
 		shock.Faction = Faction;
+		Vector3 dir = hitPoint - firePoint;
+		dir.Normalize();
 
-		shock.rigidbody.AddForce((hitPoint - firePoint) * shock.ProjVel * shock.rigidbody.mass);
+		shock.rigidbody.AddForce(dir * shock.ProjVel * shock.rigidbody.mass);
+
+		Destroy(shock, 20);
 	}
 
 	#region Static Functions
