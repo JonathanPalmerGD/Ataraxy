@@ -6,8 +6,10 @@ public class Homing : Projectile
 	public GameObject target;
 
 	public bool homing = true;
+	public float explosiveDamage;
 
 	public float homingVelocity = 30;
+	public float blastRadius;
 	public Vector3 dirToTarget;
 	private float fuelRemaining = 8;
 	private bool detonateOnAnything = false;
@@ -17,6 +19,8 @@ public class Homing : Projectile
 	void Start()
 	{
 		Damage = 5;
+		blastRadius = 5;
+		explosiveDamage = 1;
 		body = transform.FindChild("Rocket Body").gameObject;
 		explosive = transform.FindChild("Detonator-Base").GetComponent<Detonator>();
 	}
@@ -56,71 +60,25 @@ public class Homing : Projectile
 		transform.LookAt(transform.position + rigidbody.velocity * 3);
 	}
 
-	void OnTriggerEnter(Collider collider)
-	{
-		if (enabled)
-		{
-			string cTag = collider.gameObject.tag;
-			if (cTag == "Enemy" || cTag == "Player")// || cTag == "Entity" || cTag == "Island")
-			{
-				Entity atObj = collider.gameObject.GetComponent<Entity>();
-				if (atObj != null)
-				{
-					if (atObj.Faction == Faction)
-					{
-						//Debug.LogWarning("Projectile collided with same Faction as firing source.\n");
-						return;
-					}
-					else
-					{
-						//If the projectile is from the Player
-						if (Faction == Allegiance.Player && atObj.Faction == Allegiance.Enemy)
-						{
-
-							//Deal damage to the enemy
-							atObj.GetComponent<Enemy>().AdjustHealth(-Damage);
-
-							//Apply AbilityEffect to the target.
-							for (int i = 0; i < projectileEffects.Count; i++)
-							{
-								atObj.GetComponent<Enemy>().ApplyAbilityEffect(projectileEffects[i]);
-							}
-						}
-						//Else if it is from an Enemy
-						else if (Faction == Allegiance.Enemy && atObj.Faction == Allegiance.Player)
-						{
-							//Deal damage to the enemy
-							GameManager.Instance.player.AdjustHealth(-Damage);
-
-							//Apply AbilityEffect to the target.
-							for (int i = 0; i < projectileEffects.Count; i++)
-							{
-								GameManager.Instance.player.ApplyAbilityEffect(projectileEffects[i]);
-							}
-
-							//Award experience to the enemy who fired it.
-							if (AwardXPOnHit && Shooter != null)
-							{
-								Shooter.GainExperience(XpBountyOnHit);
-							}
-						}
-					}
-				}
-			}
-			Collide();
-		}
-	}
-
-
 	public override void Collide()
 	{
 		rigidbody.drag += 2;
-
 		explosive.Explode();
 		gameObject.particleSystem.enableEmission = false;
 		gameObject.collider.enabled = false;
 		enabled = false;
 		body.SetActive(false);
+
+		Collider[] hitColliders = Physics.OverlapSphere(explosive.transform.position, blastRadius);
+		int i = 0;
+		while (i < hitColliders.Length)
+		{
+			float distFromBlast = Vector3.Distance(hitColliders[i].transform.position, explosive.transform.position);
+			float parameterForMessage = -(explosiveDamage * blastRadius / distFromBlast);
+
+			hitColliders[i].gameObject.SendMessage("AdjustHealth", parameterForMessage, SendMessageOptions.DontRequireReceiver);
+			i++;
+		} 
 		Destroy(gameObject, 3.0f);
 	}
 }

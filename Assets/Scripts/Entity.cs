@@ -193,6 +193,7 @@ public class Entity : MonoBehaviour
 
 	public virtual void AdjustHealth(float amount)
 	{
+		//Debug.Log("I AM HURT " + gameObject.name + " " + amount);
 		if (amount < 0)
 		{
 			damaged = true;

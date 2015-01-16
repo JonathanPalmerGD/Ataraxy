@@ -64,7 +64,6 @@ public class BladeSlash : Projectile
 			}
 		}
 
-
 		for (int i = 0; i < slashPoints.Count; i++)
 		{
 			lr.SetPosition(i, transform.position + slashPoints[i]);
