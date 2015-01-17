@@ -51,7 +51,7 @@ public class MultiToken : MonoBehaviour
 
 			if(Random.Range(0, 2) == 0)
 			{
-				player.GetComponent<Player>().SetupAbility(Weapon.New());
+				player.GetComponent<Player>().SetupAbility(NewWeapon());
 			}
 			else
 			{
@@ -75,6 +75,21 @@ public class MultiToken : MonoBehaviour
 			{
 				particleSystem.enableEmission = false;
 			}
+		}
+	}
+
+	Ability NewWeapon()
+	{
+		switch(Random.Range(0, 3))
+		{
+			case 0:
+				return RocketLauncher.New();
+			case 1:
+				return ShockRifle.New();
+			case 2:
+				return Longsword.New();
+			default:
+				return Weapon.New();
 		}
 	}
 }

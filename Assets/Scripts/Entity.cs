@@ -278,7 +278,7 @@ public class Entity : MonoBehaviour
 		Level++;
 
 		MaxHealth += 5;
-		AdjustHealth(Health);
+		AdjustHealth(MaxHealth);
 
 		if (LevelText != null)
 		{
@@ -308,7 +308,7 @@ public class Entity : MonoBehaviour
 		}
 	}
 
-	public void SetXPUI()
+	public void SetupXPUI()
 	{
 		if (XPSlider != null)
 		{

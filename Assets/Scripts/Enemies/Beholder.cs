@@ -8,13 +8,24 @@ public class Beholder : FlyingEnemy
 	{
 		base.Start();
 
+		name = "Beholder";
+		FiringTimer = Random.Range(0, FiringCooldown);
+		GetComponent<Floatation>().homeRegion = transform.position + Vector3.up * 20;
 		projectilePrefab = Resources.Load<GameObject>("Projectile");
 	}
 	
 	public override void Update() 
 	{
 		base.Update();
-		transform.LookAt(GameManager.Instance.playerGO.transform);
+
+		if (CanSeePlayer)
+		{
+			transform.LookAt(GameManager.Instance.playerGO.transform);
+		}
+		else
+		{
+			transform.Rotate(Vector3.up, Random.Range(.3f, .7f));
+		}
 	}
 
 	public override void Untarget()

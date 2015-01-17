@@ -7,6 +7,7 @@ public class Enemy : NPC
 	/// A Vector3 that tracks the muzzle to the player (for firing projectiles)
 	/// </summary>
 	private Vector3 dirToTarget;
+	public bool CanSeePlayer = false;
 
 	#region Experience Values
 	/// <summary>
@@ -14,7 +15,8 @@ public class Enemy : NPC
 	/// </summary>
 	private float xpReward = 5;
 
-	private float xpRateOverTime = .5f;
+	//private float xpRateOverTime = .5f;
+	private float xpRateOverTime = 5.5f;
 
 	private bool gainXpWhenHit = false;
 	private float xpGainWhenHit = .5f;
@@ -115,6 +117,23 @@ public class Enemy : NPC
 	public override void GainLevel()
 	{
 		xpReward += 5;
+		int randomBonuses = Random.Range(0, 3);
+		if(randomBonuses == 1)
+		{
+			if(FiringCooldown > 3)
+			{
+				FiringCooldown -= 3f;
+			}
+		}
+		else if (randomBonuses == 2)
+		{
+			projectilePrefab.GetComponent<Projectile>().Damage += 2;
+		}
+		else
+		{
+			Health += 5;
+			AdjustHealth(MaxHealth);
+		}
 		base.GainLevel();
 	}
 
@@ -135,6 +154,17 @@ public class Enemy : NPC
 		dirToTarget = (GameManager.Instance.player.transform.position - gunMuzzle.transform.position);// +charMotor.movement.velocity * percentagePlayerVelLeading;
 
 		dirToTarget.Normalize();
+
+		if (Vector3.Distance(transform.position, GameManager.Instance.player.transform.position) < 50)
+		{
+			CanSeePlayer = true;
+		}
+		else
+		{
+			CanSeePlayer = false;
+		}
+
+		firing = CanSeePlayer;
 	}
 
 	public void HandleAggression()

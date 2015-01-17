@@ -38,7 +38,7 @@ public class Island : WorldObject
 
 	public void PlaceRandomObject()
 	{
-		if (Random.Range(0, 100) > 96)
+		if (Random.Range(0, 100) > 90)
 		{
 			Vector3 featurePosition = transform.position + Vector3.up * transform.localScale.y / 2;
 			float xRnd = Random.Range(-transform.localScale.x / 2, transform.localScale.x / 2);

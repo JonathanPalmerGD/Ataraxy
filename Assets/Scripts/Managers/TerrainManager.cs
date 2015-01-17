@@ -14,6 +14,8 @@ public class TerrainManager : Singleton<TerrainManager>
 	public static Vector3 clusterSize = new Vector3(75, 20, 75);
 	public static int poissonMinK = 13;
 	public static int poissonMaxK = 30;
+	public static float minTiltDeviation = 2;
+	public static float maxTiltDeviation = 60;
 	public static float minTilt = -8;
 	public static float maxTilt = 8;
 	public static int minCountInCluster = 5;

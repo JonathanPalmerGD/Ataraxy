@@ -12,6 +12,13 @@ public class Cluster : WorldObject
 	public int poissonKVal = 20;
 	public int sizeBonus = 0;
 
+	public float tiltDeviation;
+
+	public bool RandomScale = true;
+	public bool RandomRotation = true;
+	public bool RandomTexture = true;
+	public bool RandomLandmarks = true;
+
 	public override void Start()
 	{
 		TerrainManager.Instance.RegisterCluster(this);
@@ -19,13 +26,22 @@ public class Cluster : WorldObject
 
 		poissonKVal = Random.Range(TerrainManager.poissonMinK, TerrainManager.poissonMaxK);
 		sizeBonus = Random.Range(0, 8);
+		tiltDeviation = Random.Range(TerrainManager.minTiltDeviation, TerrainManager.maxTiltDeviation);
+		Debug.Log(tiltDeviation);
+		RandomScale = Random.Range(0, 10) < 8;
+		RandomRotation = Random.Range(0, 10) < 8;
+		RandomTexture = Random.Range(0, 10) < 8;
+		RandomLandmarks = Random.Range(0, 10) > 8;
 
 		if (GenApproach == GenMethod.Poisson)
 		{
 			CreateIslandsPoissonApproach();
-			if (Random.Range(0, 100) > 90)
+			if (RandomLandmarks)
 			{
+				//if (Random.Range(0, 100) > 90)
+				//{
 				CreateLandmarksPoissonApproach();
+				//}
 			}
 		}
 		else if (GenApproach == GenMethod.Grid)
@@ -34,7 +50,7 @@ public class Cluster : WorldObject
 		}
 		else
 		{
-			CreateIslands();
+			CreatePrimitiveIslands();
 		}
 		base.Start();
 		gameObject.tag = "Cluster";
@@ -45,6 +61,7 @@ public class Cluster : WorldObject
 		base.Update();
 	}
 
+	#region Approaches
 	public void CreateIslandsPoissonApproach()
 	{
 		PoissonDiscSampler pds = new PoissonDiscSampler(100, 100, 16+(int)(sizeBonus * 1.5), poissonKVal);
@@ -176,7 +193,7 @@ public class Cluster : WorldObject
 		}
 	}
 	
-	public void CreateIslands()
+	public void CreatePrimitiveIslands()
 	{
 		int islandsToCreate = Random.Range(TerrainManager.minCountInCluster, TerrainManager.maxCountInCluster);
 
@@ -203,56 +220,66 @@ public class Cluster : WorldObject
 			ApplyIslandParent(newIsland);
 		}
 	}
+	#endregion
 
 	public void ApplyRandomScale(GameObject island, bool poisson)
 	{
-		Vector3 scale = Vector3.zero;
+		if (RandomScale)
+		{
+			Vector3 scale = Vector3.zero;
 
-		if (poisson)
-		{
-			scale = new Vector3(
-						Random.Range(TerrainManager.poissonMinScale.x + sizeBonus, TerrainManager.poissonMaxScale.x + sizeBonus),
-						Random.Range(TerrainManager.poissonMinScale.y + sizeBonus, TerrainManager.poissonMaxScale.y + (sizeBonus / 2)),
-						Random.Range(TerrainManager.poissonMinScale.z + sizeBonus, TerrainManager.poissonMaxScale.z + sizeBonus));
-		}
-		else
-		{
-			scale = new Vector3(
-						Random.Range(TerrainManager.minScale.x, TerrainManager.maxScale.x),
-						Random.Range(TerrainManager.minScale.y, TerrainManager.maxScale.y),
-						Random.Range(TerrainManager.minScale.z, TerrainManager.maxScale.z));
-		}
-		float smallest = Mathf.Min(scale.x, scale.z);
-		smallest = Mathf.Min(scale.y, smallest);
+			if (poisson)
+			{
+				scale = new Vector3(
+							Random.Range(TerrainManager.poissonMinScale.x + sizeBonus, TerrainManager.poissonMaxScale.x + sizeBonus),
+							Random.Range(TerrainManager.poissonMinScale.y + sizeBonus, TerrainManager.poissonMaxScale.y + (sizeBonus / 2)),
+							Random.Range(TerrainManager.poissonMinScale.z + sizeBonus, TerrainManager.poissonMaxScale.z + sizeBonus));
+			}
+			else
+			{
+				scale = new Vector3(
+							Random.Range(TerrainManager.minScale.x, TerrainManager.maxScale.x),
+							Random.Range(TerrainManager.minScale.y, TerrainManager.maxScale.y),
+							Random.Range(TerrainManager.minScale.z, TerrainManager.maxScale.z));
+			}
+			float smallest = Mathf.Min(scale.x, scale.z);
+			smallest = Mathf.Min(scale.y, smallest);
 
-		if (scale.x == smallest)
-		{
-			scale.x = scale.y;
-		}
-		else if (scale.z == smallest)
-		{
-			scale.z = scale.y;
-		}
-		scale.y = smallest;
+			if (scale.x == smallest)
+			{
+				scale.x = scale.y;
+			}
+			else if (scale.z == smallest)
+			{
+				scale.z = scale.y;
+			}
+			scale.y = smallest;
 
-		island.transform.localScale = scale;
+			island.transform.localScale = scale;
+		}
 	}
 
 	public void ApplyRandomRotation(GameObject island)
 	{
-		Vector3 rndRotation = transform.eulerAngles;
-		rndRotation = new Vector3(
-			Random.Range(TerrainManager.minTilt, TerrainManager.maxTilt),
-			Random.Range(0, 360),
-			Random.Range(TerrainManager.minTilt, TerrainManager.maxTilt));
-		island.transform.eulerAngles = rndRotation;
+		if (RandomRotation)
+		{
+			Vector3 rndRotation = transform.eulerAngles;
+			rndRotation = new Vector3(
+				Random.Range(-tiltDeviation / 2, tiltDeviation / 2),
+				Random.Range(0, 360),
+				Random.Range(-tiltDeviation / 2, tiltDeviation / 2));
+			island.transform.eulerAngles = rndRotation;
+		}
 	}
 
 	public void ApplyRandomTexturing(GameObject island)
 	{
-		island.renderer.material.mainTexture = TerrainManager.Instance.textures[Random.Range(0, TerrainManager.Instance.textures.Count)];
-		island.renderer.material.mainTextureScale = new Vector2(Random.Range(5, 25), Random.Range(5, 25));
-		island.renderer.material.color = new Color(Random.Range(.7f, 1f), Random.Range(.7f, 1f), Random.Range(.7f, 1f));
+		if (RandomTexture)
+		{
+			island.renderer.material.mainTexture = TerrainManager.Instance.textures[Random.Range(0, TerrainManager.Instance.textures.Count)];
+			island.renderer.material.mainTextureScale = new Vector2(Random.Range(5, 25), Random.Range(5, 25));
+			island.renderer.material.color = new Color(Random.Range(.7f, 1f), Random.Range(.7f, 1f), Random.Range(.7f, 1f));
+		}
 	}
 
 	public void ApplyIslandParent(GameObject island)

@@ -62,6 +62,9 @@ public class Player : Entity
 	public override void GainLevel()
 	{
 		base.GainLevel();
+
+		SetupHealthUI();
+		SetupXPUI();
 		XPNeeded += 20;
 
 	}
@@ -112,14 +115,14 @@ public class Player : Entity
 		weapons = new List<Weapon>();
 		passives = new List<Passive>();
 
-		SetupAbility(Longsword.New());
-		SetupAbility(RocketLauncher.New());
-		SetupAbility(ShockRifle.New());
+		//SetupAbility(Longsword.New());
+		//SetupAbility(RocketLauncher.New());
+		//SetupAbility(ShockRifle.New());
 		SetupAbility(Weapon.New());
 		SetupAbility(Weapon.New());
 		
-		SetupAbility(Passive.New());
-		SetupAbility(Passive.New());
+		//SetupAbility(Passive.New());
+		//SetupAbility(Passive.New());
 		//SetupAbility(Passive.New());
 		//SetupAbility(Passive.New());
 
@@ -140,7 +143,7 @@ public class Player : Entity
 		SetupHealthUI();
 		SetupResourceUI();
 		SetNameUI();
-		SetXPUI();
+		SetupXPUI();
 
 		DamageImage = UIManager.Instance.damage_Indicator;
 
