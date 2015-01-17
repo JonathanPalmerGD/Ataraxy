@@ -28,6 +28,7 @@ public class Island : WorldObject
 
 		base.Start();
 		gameObject.tag = "Island";
+		PlaceRandomObject();
 	}
 
 	public new void Update()
@@ -35,27 +36,23 @@ public class Island : WorldObject
 		base.Update();
 	}
 
-	//This functionality has been removed from islands.
-	//Hover targetting them was mostly annoying. May return later?
-	/*
-	public override void Target()
+	public void PlaceRandomObject()
 	{
-		if (InfoHUD != null)
+		if (Random.Range(0, 100) > 96)
 		{
-			InfoHUD.enabled = true;
-			
-			SetupHealthUI();
-			SetupResourceUI();
-			SetNameUI();
+			Vector3 featurePosition = transform.position + Vector3.up * transform.localScale.y / 2;
+			float xRnd = Random.Range(-transform.localScale.x / 2, transform.localScale.x / 2);
+			float zRnd = Random.Range(-transform.localScale.z / 2, transform.localScale.z / 2);
+
+			/*xRnd = 0;
+			zRnd = 0;*/
+
+			featurePosition = new Vector3(transform.position.x + xRnd * .8f, transform.position.y + transform.localScale.y / 2 + .2f, transform.position.z + zRnd * .8f);
+
+			GameObject newFeature = (GameObject)GameObject.Instantiate(TerrainManager.Instance.terrainFeatures[Random.Range(0, TerrainManager.Instance.terrainFeatures.Count)], Vector3.zero, transform.rotation);
+
+			newFeature.transform.SetParent(transform.parent);
+			newFeature.transform.position = featurePosition;
 		}
 	}
-
-	public override void Untarget()
-	{
-		if (InfoHUD != null)
-		{
-			InfoHUD.enabled = false;
-			renderer.material.shader = diffuse;
-		}
-	}*/
 }

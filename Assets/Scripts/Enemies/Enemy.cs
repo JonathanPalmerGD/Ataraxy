@@ -109,11 +109,13 @@ public class Enemy : NPC
 	{
 		GainExperience(Time.deltaTime * xpRateOverTime);
 
-		if (XP > 100)
-		{
-			XP -= 100;
-			Level++;
-		}
+		
+	}
+
+	public override void GainLevel()
+	{
+		xpReward += 5;
+		base.GainLevel();
 	}
 
 	/// <summary>

@@ -55,9 +55,16 @@ public class Player : Entity
 	
 	#endregion
 
-	#region Resource System
+	#region XP & Resource System
 	public enum ResourceSystem { Mana, Rage, Energy };
 	public ResourceSystem rSystem = ResourceSystem.Energy;
+
+	public override void GainLevel()
+	{
+		base.GainLevel();
+		XPNeeded += 20;
+
+	}
 
 	void SetupResourceSystem()
 	{
@@ -118,6 +125,7 @@ public class Player : Entity
 
 		SetupResourceSystem();
 		Level = 1;
+		XPNeeded = 30;
 
 		HealthSlider = UIManager.Instance.player_HP;
 		HealthText = UIManager.Instance.player_HPText;

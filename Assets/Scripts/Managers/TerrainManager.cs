@@ -23,11 +23,13 @@ public class TerrainManager : Singleton<TerrainManager>
 
 	public List<Cluster> clusters;
 	public List<Texture2D> textures;
+	public List<GameObject> terrainFeatures;
 
 	void Awake()
 	{
 		clusters = new List<Cluster>();
 		textures = Resources.LoadAll<Texture2D>("Terrain").ToList();
+		terrainFeatures = Resources.LoadAll<GameObject>("TerrainFeatures").ToList();
 	}
 
 	public void RegisterCluster(Cluster reportingCluster)

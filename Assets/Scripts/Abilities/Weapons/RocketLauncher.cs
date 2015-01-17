@@ -27,35 +27,38 @@ public class RocketLauncher : Weapon
 	public override void UseWeapon(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
 	{
 		Vector3 firePoint = firePoints[primaryFirePointIndex].transform.position;
-		if (targType == typeof(Enemy))
+		if (targType != null)
 		{
-			Enemy e = target.GetComponent<Enemy>();
-			//Check Faction
-			if (e.Faction != Faction)
+			if (targType.IsSubclassOf(typeof(Enemy)) || targType.IsAssignableFrom(typeof(Enemy)))
 			{
-				GameObject go = (GameObject)GameObject.Instantiate(rocketPrefab, firePoint, Quaternion.identity);
-				Homing homing = go.GetComponent<Homing>();
-
-				homing.Faction = Faction;
-
-				if (lockOn)
+				Enemy e = target.GetComponent<Enemy>();
+				//Check Faction
+				if (e.Faction != Faction)
 				{
-					homing.target = target;
-					homing.homing = true;
-				}
-				else
-				{
-					homing.target = null;
-					homing.homing = false;
+					GameObject go = (GameObject)GameObject.Instantiate(rocketPrefab, firePoint, Quaternion.identity);
+					Homing homing = go.GetComponent<Homing>();
 
-					homing.rigidbody.AddForce((hitPoint - firePoint) * homing.ProjVel * homing.rigidbody.mass);
+					homing.Faction = Faction;
+
+					if (lockOn)
+					{
+						homing.target = target;
+						homing.homing = true;
+					}
+					else
+					{
+						homing.target = null;
+						homing.homing = false;
+
+						homing.rigidbody.AddForce((hitPoint - firePoint) * homing.ProjVel * homing.rigidbody.mass);
+					}
 				}
 			}
-		}
-		else if (targType == typeof(NPC))
-		{
-			//Debug.Log("Used Weapon on NPC\n");
+			else if (targType == typeof(NPC))
+			{
+				//Debug.Log("Used Weapon on NPC\n");
 
+			}
 		}
 		//If our targType is null from targetting a piece of terrain or something?
 		else

@@ -51,6 +51,12 @@ public class Entity : MonoBehaviour
 		get { return xP; }
 		set { xP = value; }
 	}
+	private float xPNeeded = 100;
+	public float XPNeeded
+	{
+		get { return xPNeeded; }
+		set { xPNeeded = value; }
+	}
 
 	private int level = 1;
 	public int Level
@@ -258,6 +264,25 @@ public class Entity : MonoBehaviour
 		if (XPText != null)
 		{
 			XPText.text = XP.ToString();
+		}
+
+		if (XP > XPNeeded)
+		{
+			GainLevel();
+		}
+	}
+
+	public virtual void GainLevel()
+	{
+		XP -= XPNeeded;
+		Level++;
+
+		MaxHealth += 5;
+		AdjustHealth(Health);
+
+		if (LevelText != null)
+		{
+			LevelText.text = Level.ToString();
 		}
 	}
 
