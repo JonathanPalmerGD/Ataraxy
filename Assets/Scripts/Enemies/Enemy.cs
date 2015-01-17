@@ -119,7 +119,7 @@ public class Enemy : NPC
 	/// <summary>
 	/// A method for handling movement
 	/// </summary>
-	public void HandleMovement()
+	public virtual void HandleMovement()
 	{
 
 	}

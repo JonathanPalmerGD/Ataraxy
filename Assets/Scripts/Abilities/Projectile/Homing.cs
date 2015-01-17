@@ -8,10 +8,10 @@ public class Homing : Projectile
 	public bool homing = true;
 	public float explosiveDamage;
 
-	public float homingVelocity = 30;
+	public float homingVelocity = 1200;
 	public float blastRadius;
 	public Vector3 dirToTarget;
-	private float fuelRemaining = 8;
+	private float fuelRemaining;
 	private bool detonateOnAnything = false;
 	public Detonator explosive;
 	public GameObject body;
@@ -21,6 +21,7 @@ public class Homing : Projectile
 		Damage = 5;
 		blastRadius = 5;
 		explosiveDamage = 1;
+		fuelRemaining = 5f;
 		body = transform.FindChild("Rocket Body").gameObject;
 		explosive = transform.FindChild("Detonator-Base").GetComponent<Detonator>();
 	}
@@ -53,7 +54,8 @@ public class Homing : Projectile
 		else
 		{
 			rigidbody.useGravity = true;
-			rigidbody.drag = 0;
+			rigidbody.drag = .3f;
+			gameObject.particleSystem.enableEmission = false;
 		}
 
 		//Face the the homing object in the direction it is moving. This gives the illusion of turning.
@@ -66,6 +68,7 @@ public class Homing : Projectile
 		explosive.Explode();
 		gameObject.particleSystem.enableEmission = false;
 		gameObject.collider.enabled = false;
+		body.renderer.enabled = false;
 		enabled = false;
 		body.SetActive(false);
 

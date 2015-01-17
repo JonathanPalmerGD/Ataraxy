@@ -72,8 +72,7 @@ public class RocketLauncher : Weapon
 			homing.target = null;
 			homing.homing = false;
 
-			Debug.DrawLine(firePoint, hitPoint, Color.red, 5.0f);
-
+			//Debug.DrawLine(firePoint, hitPoint, Color.red, 5.0f);
 			Vector3 dir = hitPoint - firePoint;
 			dir.Normalize();
 

@@ -110,45 +110,33 @@ public class Weapon : Ability
 	//public virtual void UseWeapon(GameObject target = null, System.Type targType = null, Vector3 firePoint = default(Vector3), GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
 	public virtual void UseWeapon(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
 	{
-		if (hitPoint != default(Vector3) && firePoints.Length > 0)
+		Color[] lrColors = new Color[2];
+		lrColors[0] = BeamColor;
+		lrColors[1] = Color.grey;
+		Vector2 lineSize = new Vector2( .1f, .1f );
+		SetupLineRenderer(lrColors, lineSize, .3f, firePoints, hitPoint);
+
+		if (targType != null)
 		{
-			LineRenderer lr = WeaponBearer.GetComponent<LineRenderer>();
-			if (lr == null)
+			if (targType.IsSubclassOf(typeof(Enemy)) || targType.IsAssignableFrom(typeof(Enemy)))
 			{
-				lr = WeaponBearer.AddComponent<LineRenderer>();
+				//Debug.Log("Used Weapon on Enemy\n");
+				Enemy e = target.GetComponent<Enemy>();
+
+				//Check Faction
+				if (e.Faction != Faction)
+				{
+					//Display visual effect
+
+					//Damage the enemy
+					e.AdjustHealth(-PrimaryDamage);
+				}
 			}
-
-			lr.material = new Material(Shader.Find("Particles/Additive"));
-
-			lr.SetVertexCount(2);
-			lr.SetColors(BeamColor, Color.grey);
-			lr.SetWidth(.1f, .1f);
-			lr.SetPosition(0, firePoints[0].transform.position);
-			lr.SetPosition(1, hitPoint);
-			Destroy(lr, .3f);
-		}
-
-
-		if (targType == typeof(Enemy))
-		{
-			//Debug.Log("Used Weapon on Enemy\n");
-			Enemy e = target.GetComponent<Enemy>();
-
-			//Check Faction
-			if (e.Faction != Faction)
+			if (targType.IsSubclassOf(typeof(NPC)) || targType.IsAssignableFrom(typeof(NPC)))
 			{
-				//Display visual effect
+				//Debug.Log("Used Weapon on NPC\n");
 
-				
-
-				//Damage the enemy
-				e.AdjustHealth(-PrimaryDamage);
 			}
-		}
-		else if (targType == typeof(NPC))
-		{
-			//Debug.Log("Used Weapon on NPC\n");
-
 		}
 		//If our targType is null from targetting a piece of terrain or something?
 		else
@@ -159,6 +147,44 @@ public class Weapon : Ability
 	}
 
 	public virtual void UseWeaponSpecial(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
+	{
+		Color[] lrColors = new Color[2];
+		lrColors[0] = Color.red;
+		lrColors[1] = Color.red;
+		Vector2 lineSize = new Vector2(.2f, .2f);
+		SetupLineRenderer(lrColors, lineSize, 1f, firePoints, hitPoint);
+
+		if (targType != null)
+		{
+			if (targType.IsSubclassOf(typeof(Enemy)) || targType.IsAssignableFrom(typeof(Enemy)))
+			{
+				//Debug.Log("Used Weapon on Enemy\n");
+				Enemy e = target.GetComponent<Enemy>();
+
+				//Check Faction
+				if (e.Faction != Faction)
+				{
+					//Display visual effect
+
+					//Damage the enemy
+					e.AdjustHealth(-SpecialDamage);
+				}
+			}
+			else if (targType != null && targType.IsAssignableFrom(typeof(NPC)))
+			{
+				//Debug.Log("Used Weapon on NPC\n");
+
+			}
+		}
+		//If our targType is null from targetting a piece of terrain or something?
+		else
+		{
+			//Debug.Log("Weapon hitscan'd something else\n");
+			//Do something like play a 'bullet hitting metal wall' audio.
+		}
+	}
+
+	public virtual void SetupLineRenderer(Color[] colors, Vector2 lineSize, float time, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3))
 	{
 		if (hitPoint != default(Vector3) && firePoints.Length > 0)
 		{
@@ -171,40 +197,11 @@ public class Weapon : Ability
 			lr.material = new Material(Shader.Find("Particles/Additive"));
 
 			lr.SetVertexCount(2);
-			lr.SetColors(Color.red, Color.red);
-			lr.SetWidth(.2f, .2f);
+			lr.SetColors(colors[0], colors[1]);
+			lr.SetWidth(lineSize.x, lineSize.y);
 			lr.SetPosition(0, firePoints[0].transform.position);
 			lr.SetPosition(1, hitPoint);
-			Destroy(lr, 1f);
-		}
-
-
-		if (targType == typeof(Enemy))
-		{
-			//Debug.Log("Used Weapon on Enemy\n");
-			Enemy e = target.GetComponent<Enemy>();
-
-			//Check Faction
-			if (e.Faction != Faction)
-			{
-				//Display visual effect
-
-
-
-				//Damage the enemy
-				e.AdjustHealth(-SpecialDamage);
-			}
-		}
-		else if (targType == typeof(NPC))
-		{
-			//Debug.Log("Used Weapon on NPC\n");
-
-		}
-		//If our targType is null from targetting a piece of terrain or something?
-		else
-		{
-			//Debug.Log("Weapon hitscan'd something else\n");
-			//Do something like play a 'bullet hitting metal wall' audio.
+			Destroy(lr, time);
 		}
 	}
 

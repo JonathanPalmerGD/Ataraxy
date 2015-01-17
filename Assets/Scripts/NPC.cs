@@ -4,12 +4,16 @@ using System.Collections;
 public class NPC : Entity 
 {
 	public Shader outline;
+	public Shader outlineOnly;
 	public Shader diffuse;
+	public Shader normalShader;
 
-	public override void Start() 
+	public override void Start()
 	{
 		outline = Shader.Find("Outlined/Silhouetted Diffuse");
+		outlineOnly = Shader.Find("Outlined/Silhouette Only");
 		diffuse = Shader.Find("Diffuse");
+		normalShader = renderer.material.shader; 
 
 		//Set up HUD with UIManager
 		HealthSlider = UIManager.Instance.target_HP;

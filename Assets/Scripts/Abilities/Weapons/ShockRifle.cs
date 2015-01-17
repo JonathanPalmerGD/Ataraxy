@@ -31,25 +31,11 @@ public class ShockRifle : Weapon
 
 	public override void UseWeapon(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
 	{
-		Vector3 firePoint = firePoints[primaryFirePointIndex].transform.position;
-
-		if (hitPoint != default(Vector3))
-		{
-			LineRenderer lr = WeaponBearer.GetComponent<LineRenderer>();
-			if (lr == null)
-			{
-				lr = WeaponBearer.AddComponent<LineRenderer>();
-			}
-
-			lr.material = new Material(Shader.Find("Particles/Additive"));
-
-			lr.SetVertexCount(2);
-			lr.SetColors(BeamColor, BeamColor);
-			lr.SetWidth(.1f, .1f);
-			lr.SetPosition(0, firePoint);
-			lr.SetPosition(1, hitPoint);
-			Destroy(lr, .3f);
-		}
+		Color[] lrColors = new Color[2];
+		lrColors[0] = BeamColor;
+		lrColors[1] = BeamColor;
+		Vector2 lineSize = new Vector2(.1f, .1f);
+		SetupLineRenderer(lrColors, lineSize, .3f, firePoints, hitPoint);
 
 		if (target != null)
 		{
@@ -60,23 +46,27 @@ public class ShockRifle : Weapon
 				sb.Shocked();
 			}
 		}
-
-		if (targType == typeof(Enemy))
+		if (targType != null)
 		{
-			//Debug.Log("Used Weapon on Enemy\n");
-			Enemy e = target.GetComponent<Enemy>();
-
-			//Check Faction
-			if (e.Faction != Faction)
+			if (targType.IsSubclassOf(typeof(Enemy)) || targType.IsAssignableFrom(typeof(Enemy)))
 			{
-				//Display visual effect
+				{
+					//Debug.Log("Used Weapon on Enemy\n");
+					Enemy e = target.GetComponent<Enemy>();
 
-				//Damage the enemy
-				e.AdjustHealth(-PrimaryDamage);
+					//Check Faction
+					if (e.Faction != Faction)
+					{
+						//Display visual effect
+
+						//Damage the enemy
+						e.AdjustHealth(-PrimaryDamage);
+					}
+				}
 			}
-		}
-		else if (targType == typeof(NPC))
-		{
+			else if (targType != null && targType.IsAssignableFrom(typeof(NPC)))
+			{
+			}
 		}
 		//If our targType is null from targetting a piece of terrain or something?
 		else

@@ -380,23 +380,34 @@ public class Player : Entity
 		if (Input.GetKeyDown(KeyCode.T))
 		{
 			CharacterMotor charMotor = gameObject.GetComponent<CharacterMotor>();
-			charMotor.movement.velocity = new Vector3(charMotor.movement.velocity.x, 20, charMotor.movement.velocity.z);
+			Vector3 newVel = new Vector3(0.0f, 1, 0.0f);
+			newVel.Normalize();
+			newVel *= 30;
+			charMotor.SetVelocity(newVel);
 		}
-
+		if (Input.GetKeyDown(KeyCode.G))
+		{
+			CharacterMotor charMotor = gameObject.GetComponent<CharacterMotor>();
+			Vector3 newVel = new Vector3(0.0f, -1, 0.0f);
+			newVel.Normalize();
+			newVel *= 50;
+			charMotor.SetVelocity(newVel);
+		}
 		if (Input.GetKeyDown(KeyCode.LeftShift))
 		{
 			CharacterMotor charMotor = gameObject.GetComponent<CharacterMotor>();
-			charMotor.movement.velocity = new Vector3(transform.forward.x * 20.0f, 1, transform.forward.z * 20.0f);
-			charMotor.movement.velocity.Normalize();
-			charMotor.movement.velocity *= 120;
+			Vector3 newVel = new Vector3(transform.forward.x * 20.0f, 1, transform.forward.z * 20.0f);
+			newVel.Normalize();
+			newVel *= 120;
+			charMotor.SetVelocity(newVel);
 		}
 		if (Input.GetKeyDown(KeyCode.LeftControl))
 		{
 			CharacterMotor charMotor = gameObject.GetComponent<CharacterMotor>();
-			charMotor.movement.velocity = new Vector3(0, 100, 0);
-
-			charMotor.movement.velocity.Normalize();
-			charMotor.movement.velocity *= 100;
+			Vector3 newVel = new Vector3(0, 100, 0);
+			newVel.Normalize();
+			newVel *= 100;
+			charMotor.SetVelocity(newVel);
 		}
 		#endregion
 
