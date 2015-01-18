@@ -2,20 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class DaggerStab : Projectile 
+public class DaggerStab : MeleeProjectile 
 {
-	public LineRenderer lr;
-	public List<Vector3> stabPoints;
-	public float movementDecay;
-	public float visualDecay;
-	public float counter;
-	public Collider stabCollider;
-	public Color stabColor;
-
-	void Start()
+	public override void Init()
 	{
+		ColliderName = "StabCollider";
+		base.Init();
+
 		Damage = 1;
-		ProjVel = 200;
+		ProjVel = 1200;
 		movementDecay = 0f;
 		visualDecay = .35f;
 		rigidbody.drag = 8;
@@ -24,50 +19,11 @@ public class DaggerStab : Projectile
 #else
 		
 #endif
-		stabCollider = transform.FindChild("StabCollider").collider;
-
-		if (lr == null)
-		{
-			lr = GetComponent<LineRenderer>();
-			if (lr == null)
-			{
-				lr = gameObject.AddComponent<LineRenderer>();
-			}
-		}
 	}
 
-	void Update() 
+	public override void Update()
 	{
-		if (movementDecay > 0)
-		{
-			movementDecay -= Time.deltaTime;
-		}
-		else
-		{
-			counter += Time.deltaTime;
-			float per = (visualDecay - counter) / visualDecay;
-			Dagger ls = (Dagger)creator;
-			if (ls != null)
-			{
-				Color origColor = ls.BeamColor;
-				//Color newColor = Color.cyan;
-				stabColor = new Color(origColor.r, origColor.b, origColor.g, origColor.a * per);
-				lr.SetColors(stabColor, stabColor);
-			}
-			if (per < .3f)
-			{
-				stabCollider.enabled = false;
-			}
-			if (per < 0)
-			{
-				Destroy(gameObject);
-			}
-		}
-
-		for (int i = 0; i < stabPoints.Count; i++)
-		{
-			lr.SetPosition(i, transform.position + stabPoints[i]);
-		}
+		base.Update();
 	}
 
 	public override void Collide()

@@ -2,29 +2,27 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class BladeSlash : MeleeProjectile
+public class RapierStab : MeleeProjectile
 {
 	public override void Init()
 	{
-		//This needs to happen before our parent's execution.
-
-		ColliderName = "SlashCollider";
+		ColliderName = "StabCollider";
 		base.Init();
 
 		Damage = 3;
-		ProjVel = 2400;
+		
+		ProjVel = 1900;
 		movementDecay = 0f;
-		visualDecay = .75f;
+		visualDecay = .45f;
 		rigidbody.drag = 8;
 #if CHEAT
 		//visualDecay = 50f;
 #else
 		
 #endif
-		//Reaching this point.
 	}
 
-	public override void Update() 
+	public override void Update()
 	{
 		base.Update();
 	}

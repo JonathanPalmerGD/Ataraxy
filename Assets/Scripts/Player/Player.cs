@@ -115,8 +115,9 @@ public class Player : Entity
 		weapons = new List<Weapon>();
 		passives = new List<Passive>();
 
-		SetupAbility(Dagger.New());
 		SetupAbility(Longsword.New());
+		SetupAbility(Rapier.New());
+		SetupAbility(Dagger.New());
 		//SetupAbility(RocketLauncher.New());
 		//SetupAbility(ShockRifle.New());
 		SetupAbility(Weapon.New());
@@ -503,9 +504,11 @@ public class Player : Entity
 		RaycastHit hit;
 		//Debug.DrawLine(transform.position, (transform.position + ray) * 100, Color.green);
 
+		//If we fire, set hitPoint to someplace arbitrarily far away in the shooting. Even if we hit something, we want to target wherever the cursor pointed.
+		hitPoint = transform.position + (ray.direction * 500);
+
 		if (Physics.Raycast(ray, out hit))
 		{
-			hitPoint = hit.point;
 			if (hit.collider.gameObject.tag == "NPC")
 			{
 				NPC n = hit.collider.gameObject.GetComponent<NPC>();
@@ -535,6 +538,9 @@ public class Player : Entity
 				//Island e = hit.collider.gameObject.GetComponent<Island>();
 				//CheckNewTarget((Entity)e);
 			}
+			else if (hit.collider.gameObject.tag == "Projectile")
+			{
+			}
 			else
 			{
 				return hit.collider.gameObject;
@@ -543,8 +549,7 @@ public class Player : Entity
 		}
 		else
 		{
-			//If we fire into infinity, set hitPoint to someplace arbitrarily far away in the shooting direction.
-			hitPoint = transform.position + (ray.direction * 500);
+			
 		}
 		return null;
 	}

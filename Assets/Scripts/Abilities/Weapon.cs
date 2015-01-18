@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Weapon : Ability
 {
@@ -242,6 +243,43 @@ public class Weapon : Ability
 		}
 	}
 
+	public virtual void SetupMeleeProjectile(MeleeProjectile proj, Vector3 velocityDirection, List<Vector3> linePoints, Vector2 lineWidth, float specialVelocity = 0)
+	{
+		proj.lr.material = new Material(Shader.Find("Particles/Additive"));
+
+		proj.lr.SetVertexCount(3);
+		proj.lrColor = BeamColor;
+		proj.lr.SetWidth(lineWidth.x, lineWidth.y);
+
+		proj.lrPoints = new System.Collections.Generic.List<Vector3>();
+
+		for (int i = 0; i < linePoints.Count; i++)
+		{
+			proj.lrPoints.Add(linePoints[i]);
+		}
+		proj.Faction = Faction;
+		proj.creator = this;
+		if (specialVelocity != 0)
+		{
+			proj.rigidbody.AddForce(velocityDirection * specialVelocity * proj.rigidbody.mass);
+		}
+		else
+		{
+			proj.rigidbody.AddForce(velocityDirection * proj.ProjVel * proj.rigidbody.mass);
+		}
+
+		Vector3 target = proj.transform.position + (velocityDirection * 8);
+
+		proj.projectileCollider.transform.LookAt(target, Vector3.Cross(linePoints[0], linePoints[2]));
+
+		proj.projectileCollider.transform.position -= AdjProjectileColliderPosition(proj);
+		Destroy(proj.gameObject, 10f);
+	}
+
+	public virtual Vector3 AdjProjectileColliderPosition(MeleeProjectile proj)
+	{
+		return proj.projectileCollider.transform.forward * .4f;
+	}
 
 	public virtual bool HandleDurability(bool specialAttack = false, GameObject target = null, bool lockOn = false)
 	{

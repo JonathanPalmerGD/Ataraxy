@@ -2,21 +2,22 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Dagger : Weapon 
+public class Rapier : Weapon 
 {
-	public static int IconIndex = 29;
+	public static int IconIndex = 38;
 	public GameObject daggerStabPrefab;
 	Vector3 movementVector;
 
 	public override void Init()
 	{
 		base.Init();
-		daggerStabPrefab = Resources.Load<GameObject>("DaggerStab");
+		daggerStabPrefab = Resources.Load<GameObject>("RapierStab");
 		Icon = UIManager.Instance.Icons[IconIndex];
 
-		DurSpecialCost = 5; 
-		NormalCooldown = .30f;
-		SpecialCooldown = 2f;
+		SpecialDamage = 9;
+		DurSpecialCost = 5;
+		NormalCooldown = .80f;
+		SpecialCooldown = 6f;
 #if CHEAT
 		//NormalCooldown = .30f;
 		//SpecialCooldown = .5f;
@@ -35,17 +36,17 @@ public class Dagger : Weapon
 		dir.Normalize();
 
 		GameObject go = (GameObject)GameObject.Instantiate(daggerStabPrefab, firePoint, Quaternion.identity);
-		DaggerStab stab = go.GetComponent<DaggerStab>();
+		RapierStab stab = go.GetComponent<RapierStab>();
 
 		stab.Init();
 
 		List<Vector3> stabPoints = new List<Vector3>();
 
 		stabPoints.Add(stab.transform.position - firePoints[0].transform.position - dir * 2);
-		stabPoints.Add(stab.transform.position - firePoints[0].transform.position - dir);
 		stabPoints.Add(stab.transform.position - firePoints[0].transform.position);
+		stabPoints.Add(stab.transform.position - firePoints[0].transform.position + dir * 2);
 
-		SetupMeleeProjectile(stab, dir, stabPoints, new Vector2(.5f, .0f));
+		SetupMeleeProjectile(stab, dir, stabPoints, new Vector2(.25f, .0f));
 	}
 
 	public override void UseWeaponSpecial(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
@@ -54,24 +55,46 @@ public class Dagger : Weapon
 
 		Vector3 dir = hitPoint - firePoint;
 
-		float lungeVel = 45;
+		float lungeVel = 55;
 		Vector3 movementDir = dir;
-		movementDir = new Vector3(movementDir.x, 0, movementDir.z);
+		//The rapier doesn't lose the Y component so you can lunge upwards.
+		//movementDir = new Vector3(movementDir.x, 0, movementDir.z);
 		movementDir.Normalize();
 		//Debug.Log(dir + "\n" + movementDir + "\n");
 		MoveCarrier(movementDir, lungeVel, Vector3.up, 3, true);
+
+
+		dir.Normalize();
+
+		GameObject go = (GameObject)GameObject.Instantiate(daggerStabPrefab, firePoint, Quaternion.identity);
+		RapierStab stab = go.GetComponent<RapierStab>();
+
+		stab.Init();
+
+		List<Vector3> stabPoints = new List<Vector3>();
+
+		stab.lrColor = Color.red;
+		stab.ProjVel = stab.ProjVel * 4;
+		stab.rigidbody.drag -= 2;
+		stab.Damage = SpecialDamage;
+
+		stabPoints.Add(stab.transform.position - firePoints[0].transform.position - dir * 2);
+		stabPoints.Add(stab.transform.position - firePoints[0].transform.position);
+		stabPoints.Add(stab.transform.position - firePoints[0].transform.position + dir * 2);
+
+		SetupMeleeProjectile(stab, dir, stabPoints, new Vector2(.25f, .0f));
 	}
 
 	public override Vector3 AdjProjectileColliderPosition(MeleeProjectile proj)
 	{
-		return proj.projectileCollider.transform.forward * 1f;
+		return proj.projectileCollider.transform.forward * 0f;
 	}
 
 	#region Static Functions
-	public static Dagger New()
+	public static Rapier New()
 	{
-		Dagger w = ScriptableObject.CreateInstance<Dagger>();
-		w.AbilityName = Dagger.GetWeaponName();
+		Rapier w = ScriptableObject.CreateInstance<Rapier>();
+		w.AbilityName = Rapier.GetWeaponName();
 		w.Durability = Random.Range(10, 60);
 		w.NormalCooldown = 1;
 		w.SpecialCooldown = 6;
@@ -80,7 +103,7 @@ public class Dagger : Weapon
 	}
 
 	static string[] adj = { "Basic", "Bulky", "Hasty", "Deadly", "Steel", "Vampiric", "Anachronic", "Violent", "Nimble", "Strange" };
-	static string weaponName = "Dagger";
+	static string weaponName = "Rapier";
 	public static string GetWeaponName()
 	{
 		int rndA = Random.Range(0, adj.Length);

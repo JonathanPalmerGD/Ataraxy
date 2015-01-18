@@ -24,8 +24,8 @@ public class Projectile : MonoBehaviour
 		set { shooter = value; }
 	}
 
-	private int damage = 1;
-	public int Damage
+	private float damage = 1;
+	public float Damage
 	{
 		get { return damage; }
 		set { damage = value; }
@@ -53,12 +53,17 @@ public class Projectile : MonoBehaviour
 
 	public List<AbilityEffect> projectileEffects;
 
-	void Start() 
+	public virtual void Init()
 	{
 
 	}
-	
-	void Update() 
+
+	public virtual void Start() 
+	{
+
+	}
+
+	public virtual void Update() 
 	{
 		
 	}

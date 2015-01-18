@@ -109,7 +109,10 @@ public class Enemy : NPC
 	#region Enemy Behavior Functions
 	public void HandleExperience()
 	{
-		GainExperience(Time.deltaTime * xpRateOverTime);
+		if (CanSeePlayer)
+		{
+			GainExperience(Time.deltaTime * xpRateOverTime);
+		}
 
 		
 	}
