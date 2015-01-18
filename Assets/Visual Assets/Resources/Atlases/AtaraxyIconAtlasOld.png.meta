@@ -1,71 +1,71 @@
 fileFormatVersion: 2
-guid: fb432c9a0830a944aa2a29f5bd8c65a8
+guid: e7641a273ceca504f9ce963654b83465
 TextureImporter:
   fileIDToRecycleName:
-    21300000: AtaraxyIconAtlas_0
-    21300002: AtaraxyIconAtlas_1
-    21300004: AtaraxyIconAtlas_2
-    21300006: AtaraxyIconAtlas_3
-    21300008: AtaraxyIconAtlas_4
-    21300010: AtaraxyIconAtlas_5
-    21300012: AtaraxyIconAtlas_6
-    21300014: AtaraxyIconAtlas_7
-    21300016: AtaraxyIconAtlas_8
-    21300018: AtaraxyIconAtlas_9
-    21300020: AtaraxyIconAtlas_10
-    21300022: AtaraxyIconAtlas_11
-    21300024: AtaraxyIconAtlas_12
-    21300026: AtaraxyIconAtlas_13
-    21300028: AtaraxyIconAtlas_14
-    21300030: AtaraxyIconAtlas_15
-    21300032: AtaraxyIconAtlas_16
-    21300034: AtaraxyIconAtlas_17
-    21300036: AtaraxyIconAtlas_18
-    21300038: AtaraxyIconAtlas_19
-    21300040: AtaraxyIconAtlas_20
-    21300042: AtaraxyIconAtlas_21
-    21300044: AtaraxyIconAtlas_22
-    21300046: AtaraxyIconAtlas_23
-    21300048: AtaraxyIconAtlas_24
-    21300050: AtaraxyIconAtlas_25
-    21300052: AtaraxyIconAtlas_26
-    21300054: AtaraxyIconAtlas_27
-    21300056: AtaraxyIconAtlas_28
-    21300058: AtaraxyIconAtlas_29
-    21300060: AtaraxyIconAtlas_30
-    21300062: AtaraxyIconAtlas_31
-    21300064: AtaraxyIconAtlas_32
-    21300066: AtaraxyIconAtlas_33
-    21300068: AtaraxyIconAtlas_34
-    21300070: AtaraxyIconAtlas_35
-    21300072: AtaraxyIconAtlas_36
-    21300074: AtaraxyIconAtlas_37
-    21300076: AtaraxyIconAtlas_38
-    21300078: AtaraxyIconAtlas_39
-    21300080: AtaraxyIconAtlas_40
-    21300082: AtaraxyIconAtlas_41
-    21300084: AtaraxyIconAtlas_42
-    21300086: AtaraxyIconAtlas_43
-    21300088: AtaraxyIconAtlas_44
-    21300090: AtaraxyIconAtlas_45
-    21300092: AtaraxyIconAtlas_46
-    21300094: AtaraxyIconAtlas_47
-    21300096: AtaraxyIconAtlas_48
-    21300098: AtaraxyIconAtlas_49
-    21300100: AtaraxyIconAtlas_50
-    21300102: AtaraxyIconAtlas_51
-    21300104: AtaraxyIconAtlas_52
-    21300106: AtaraxyIconAtlas_53
-    21300108: AtaraxyIconAtlas_54
-    21300110: AtaraxyIconAtlas_55
-    21300112: AtaraxyIconAtlas_56
-    21300114: AtaraxyIconAtlas_57
-    21300116: AtaraxyIconAtlas_58
-    21300118: AtaraxyIconAtlas_59
-    21300120: AtaraxyIconAtlas_60
-    21300122: AtaraxyIconAtlas_61
-    21300124: AtaraxyIconAtlas_62
-    21300126: AtaraxyIconAtlas_63
+    21300000: VortexIconAtlas_0
+    21300002: VortexIconAtlas_1
+    21300004: VortexIconAtlas_2
+    21300006: VortexIconAtlas_3
+    21300008: VortexIconAtlas_4
+    21300010: VortexIconAtlas_5
+    21300012: VortexIconAtlas_6
+    21300014: VortexIconAtlas_7
+    21300016: VortexIconAtlas_8
+    21300018: VortexIconAtlas_9
+    21300020: VortexIconAtlas_10
+    21300022: VortexIconAtlas_11
+    21300024: VortexIconAtlas_12
+    21300026: VortexIconAtlas_13
+    21300028: VortexIconAtlas_14
+    21300030: VortexIconAtlas_15
+    21300032: VortexIconAtlas_16
+    21300034: VortexIconAtlas_17
+    21300036: VortexIconAtlas_18
+    21300038: VortexIconAtlas_19
+    21300040: VortexIconAtlas_20
+    21300042: VortexIconAtlas_21
+    21300044: VortexIconAtlas_22
+    21300046: VortexIconAtlas_23
+    21300048: VortexIconAtlas_24
+    21300050: VortexIconAtlas_25
+    21300052: VortexIconAtlas_26
+    21300054: VortexIconAtlas_27
+    21300056: VortexIconAtlas_28
+    21300058: VortexIconAtlas_29
+    21300060: VortexIconAtlas_30
+    21300062: VortexIconAtlas_31
+    21300064: VortexIconAtlas_32
+    21300066: VortexIconAtlas_33
+    21300068: VortexIconAtlas_34
+    21300070: VortexIconAtlas_35
+    21300072: VortexIconAtlas_36
+    21300074: VortexIconAtlas_37
+    21300076: VortexIconAtlas_38
+    21300078: VortexIconAtlas_39
+    21300080: VortexIconAtlas_40
+    21300082: VortexIconAtlas_41
+    21300084: VortexIconAtlas_42
+    21300086: VortexIconAtlas_43
+    21300088: VortexIconAtlas_44
+    21300090: VortexIconAtlas_45
+    21300092: VortexIconAtlas_46
+    21300094: VortexIconAtlas_47
+    21300096: VortexIconAtlas_48
+    21300098: VortexIconAtlas_49
+    21300100: VortexIconAtlas_50
+    21300102: VortexIconAtlas_51
+    21300104: VortexIconAtlas_52
+    21300106: VortexIconAtlas_53
+    21300108: VortexIconAtlas_54
+    21300110: VortexIconAtlas_55
+    21300112: VortexIconAtlas_56
+    21300114: VortexIconAtlas_57
+    21300116: VortexIconAtlas_58
+    21300118: VortexIconAtlas_59
+    21300120: VortexIconAtlas_60
+    21300122: VortexIconAtlas_61
+    21300124: VortexIconAtlas_62
+    21300126: VortexIconAtlas_63
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -107,7 +107,7 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: AtaraxyIconAtlas_0
+    - name: VortexIconAtlas_0
       rect:
         serializedVersion: 2
         x: 0
@@ -115,9 +115,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_1
+    - name: VortexIconAtlas_1
       rect:
         serializedVersion: 2
         x: 256
@@ -125,9 +125,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_2
+    - name: VortexIconAtlas_2
       rect:
         serializedVersion: 2
         x: 512
@@ -135,9 +135,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_3
+    - name: VortexIconAtlas_3
       rect:
         serializedVersion: 2
         x: 768
@@ -145,9 +145,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_4
+    - name: VortexIconAtlas_4
       rect:
         serializedVersion: 2
         x: 1024
@@ -155,9 +155,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_5
+    - name: VortexIconAtlas_5
       rect:
         serializedVersion: 2
         x: 1280
@@ -165,9 +165,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_6
+    - name: VortexIconAtlas_6
       rect:
         serializedVersion: 2
         x: 1536
@@ -175,9 +175,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_7
+    - name: VortexIconAtlas_7
       rect:
         serializedVersion: 2
         x: 1792
@@ -185,9 +185,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_8
+    - name: VortexIconAtlas_8
       rect:
         serializedVersion: 2
         x: 0
@@ -195,9 +195,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_9
+    - name: VortexIconAtlas_9
       rect:
         serializedVersion: 2
         x: 256
@@ -205,9 +205,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_10
+    - name: VortexIconAtlas_10
       rect:
         serializedVersion: 2
         x: 512
@@ -215,9 +215,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_11
+    - name: VortexIconAtlas_11
       rect:
         serializedVersion: 2
         x: 768
@@ -225,9 +225,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_12
+    - name: VortexIconAtlas_12
       rect:
         serializedVersion: 2
         x: 1024
@@ -235,9 +235,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_13
+    - name: VortexIconAtlas_13
       rect:
         serializedVersion: 2
         x: 1280
@@ -245,9 +245,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_14
+    - name: VortexIconAtlas_14
       rect:
         serializedVersion: 2
         x: 1536
@@ -255,9 +255,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_15
+    - name: VortexIconAtlas_15
       rect:
         serializedVersion: 2
         x: 1792
@@ -265,9 +265,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_16
+    - name: VortexIconAtlas_16
       rect:
         serializedVersion: 2
         x: 0
@@ -275,9 +275,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_17
+    - name: VortexIconAtlas_17
       rect:
         serializedVersion: 2
         x: 256
@@ -285,9 +285,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_18
+    - name: VortexIconAtlas_18
       rect:
         serializedVersion: 2
         x: 512
@@ -295,9 +295,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_19
+    - name: VortexIconAtlas_19
       rect:
         serializedVersion: 2
         x: 768
@@ -305,9 +305,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_20
+    - name: VortexIconAtlas_20
       rect:
         serializedVersion: 2
         x: 1024
@@ -315,9 +315,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_21
+    - name: VortexIconAtlas_21
       rect:
         serializedVersion: 2
         x: 1280
@@ -325,9 +325,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_22
+    - name: VortexIconAtlas_22
       rect:
         serializedVersion: 2
         x: 1536
@@ -335,9 +335,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_23
+    - name: VortexIconAtlas_23
       rect:
         serializedVersion: 2
         x: 1792
@@ -345,9 +345,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_24
+    - name: VortexIconAtlas_24
       rect:
         serializedVersion: 2
         x: 0
@@ -355,9 +355,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_25
+    - name: VortexIconAtlas_25
       rect:
         serializedVersion: 2
         x: 256
@@ -365,9 +365,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_26
+    - name: VortexIconAtlas_26
       rect:
         serializedVersion: 2
         x: 512
@@ -375,9 +375,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_27
+    - name: VortexIconAtlas_27
       rect:
         serializedVersion: 2
         x: 768
@@ -385,9 +385,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_28
+    - name: VortexIconAtlas_28
       rect:
         serializedVersion: 2
         x: 1024
@@ -395,9 +395,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_29
+    - name: VortexIconAtlas_29
       rect:
         serializedVersion: 2
         x: 1280
@@ -405,9 +405,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_30
+    - name: VortexIconAtlas_30
       rect:
         serializedVersion: 2
         x: 1536
@@ -415,9 +415,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_31
+    - name: VortexIconAtlas_31
       rect:
         serializedVersion: 2
         x: 1792
@@ -425,9 +425,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_32
+    - name: VortexIconAtlas_32
       rect:
         serializedVersion: 2
         x: 0
@@ -435,9 +435,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_33
+    - name: VortexIconAtlas_33
       rect:
         serializedVersion: 2
         x: 256
@@ -445,9 +445,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_34
+    - name: VortexIconAtlas_34
       rect:
         serializedVersion: 2
         x: 512
@@ -455,9 +455,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_35
+    - name: VortexIconAtlas_35
       rect:
         serializedVersion: 2
         x: 768
@@ -465,9 +465,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_36
+    - name: VortexIconAtlas_36
       rect:
         serializedVersion: 2
         x: 1024
@@ -475,9 +475,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_37
+    - name: VortexIconAtlas_37
       rect:
         serializedVersion: 2
         x: 1280
@@ -485,9 +485,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_38
+    - name: VortexIconAtlas_38
       rect:
         serializedVersion: 2
         x: 1536
@@ -495,9 +495,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_39
+    - name: VortexIconAtlas_39
       rect:
         serializedVersion: 2
         x: 1792
@@ -505,9 +505,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_40
+    - name: VortexIconAtlas_40
       rect:
         serializedVersion: 2
         x: 0
@@ -515,9 +515,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_41
+    - name: VortexIconAtlas_41
       rect:
         serializedVersion: 2
         x: 256
@@ -525,9 +525,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_42
+    - name: VortexIconAtlas_42
       rect:
         serializedVersion: 2
         x: 512
@@ -535,9 +535,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_43
+    - name: VortexIconAtlas_43
       rect:
         serializedVersion: 2
         x: 768
@@ -545,9 +545,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_44
+    - name: VortexIconAtlas_44
       rect:
         serializedVersion: 2
         x: 1024
@@ -555,9 +555,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_45
+    - name: VortexIconAtlas_45
       rect:
         serializedVersion: 2
         x: 1280
@@ -565,9 +565,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_46
+    - name: VortexIconAtlas_46
       rect:
         serializedVersion: 2
         x: 1536
@@ -575,9 +575,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_47
+    - name: VortexIconAtlas_47
       rect:
         serializedVersion: 2
         x: 1792
@@ -585,9 +585,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_48
+    - name: VortexIconAtlas_48
       rect:
         serializedVersion: 2
         x: 0
@@ -595,9 +595,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_49
+    - name: VortexIconAtlas_49
       rect:
         serializedVersion: 2
         x: 256
@@ -605,9 +605,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_50
+    - name: VortexIconAtlas_50
       rect:
         serializedVersion: 2
         x: 512
@@ -615,9 +615,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_51
+    - name: VortexIconAtlas_51
       rect:
         serializedVersion: 2
         x: 768
@@ -625,9 +625,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_52
+    - name: VortexIconAtlas_52
       rect:
         serializedVersion: 2
         x: 1024
@@ -635,9 +635,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_53
+    - name: VortexIconAtlas_53
       rect:
         serializedVersion: 2
         x: 1280
@@ -645,9 +645,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_54
+    - name: VortexIconAtlas_54
       rect:
         serializedVersion: 2
         x: 1536
@@ -655,9 +655,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_55
+    - name: VortexIconAtlas_55
       rect:
         serializedVersion: 2
         x: 1792
@@ -665,9 +665,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_56
+    - name: VortexIconAtlas_56
       rect:
         serializedVersion: 2
         x: 0
@@ -675,9 +675,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_57
+    - name: VortexIconAtlas_57
       rect:
         serializedVersion: 2
         x: 256
@@ -685,9 +685,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_58
+    - name: VortexIconAtlas_58
       rect:
         serializedVersion: 2
         x: 512
@@ -695,9 +695,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_59
+    - name: VortexIconAtlas_59
       rect:
         serializedVersion: 2
         x: 768
@@ -705,9 +705,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_60
+    - name: VortexIconAtlas_60
       rect:
         serializedVersion: 2
         x: 1024
@@ -715,9 +715,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_61
+    - name: VortexIconAtlas_61
       rect:
         serializedVersion: 2
         x: 1280
@@ -725,9 +725,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_62
+    - name: VortexIconAtlas_62
       rect:
         serializedVersion: 2
         x: 1536
@@ -735,9 +735,9 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: AtaraxyIconAtlas_63
+    - name: VortexIconAtlas_63
       rect:
         serializedVersion: 2
         x: 1792
@@ -745,7 +745,7 @@ TextureImporter:
         width: 256
         height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 

@@ -3,7 +3,7 @@ using System.Collections;
 
 public class ShockRifle : Weapon 
 {
-	public static int IconIndex = 13;
+	public static int IconIndex = 3;
 	public GameObject shockBallPrefab;
 
 	public override void Init()

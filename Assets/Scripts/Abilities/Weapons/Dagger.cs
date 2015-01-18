@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Dagger : Weapon 
 {
-	public static int IconIndex = 29;
+	public static int IconIndex = 44;
 	public GameObject daggerStabPrefab;
 	Vector3 movementVector;
 

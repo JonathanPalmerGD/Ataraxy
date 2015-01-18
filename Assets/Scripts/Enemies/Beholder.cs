@@ -48,7 +48,7 @@ public class Beholder : FlyingEnemy
 
 			SetupHealthUI();
 			SetupResourceUI();
-			SetNameUI();
+			SetupNameUI();
 		}
 	}
 }

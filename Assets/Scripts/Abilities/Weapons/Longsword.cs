@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Longsword : Weapon
 {
-	public static int IconIndex = 35;
+	public static int IconIndex = 39;
 	public GameObject bladeSlashPrefab;
 	Vector3 movementVector;
 

@@ -19,6 +19,7 @@ public class NPC : Entity
 		HealthSlider = UIManager.Instance.target_HP;
 		XPSlider = UIManager.Instance.target_XP;
 		NameText = UIManager.Instance.target_Name;
+		LevelText = UIManager.Instance.target_LevelText;
 		InfoHUD = UIManager.Instance.target_HUD;
 
 		Untarget();
@@ -47,7 +48,8 @@ public class NPC : Entity
 
 			SetupHealthUI();
 			SetupResourceUI();
-			SetNameUI();
+			SetupNameUI();
+			SetupXPUI();
 		}
 	}
 }

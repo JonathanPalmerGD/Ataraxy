@@ -300,7 +300,7 @@ public class Entity : MonoBehaviour
 		}
 	}
 
-	public void SetNameUI()
+	public void SetupNameUI()
 	{
 		if (nameText != null)
 		{

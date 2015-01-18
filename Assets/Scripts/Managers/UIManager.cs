@@ -12,6 +12,7 @@ public class UIManager : Singleton<UIManager>
 	public Text target_Name;
 	public Slider target_HP;
 	public Slider target_XP;
+	public Text target_LevelText;
 	public Slider target_Resource;
 	public Image damage_Indicator;
 
@@ -34,6 +35,7 @@ public class UIManager : Singleton<UIManager>
 		target_Name = GameObject.Find("Target_Name").GetComponent<Text>();
 		target_HP = GameObject.Find("Target_HP").GetComponent<Slider>();
 		target_XP = GameObject.Find("Target_XP").GetComponent<Slider>();
+		target_LevelText = GameObject.Find("Target_LevelText").GetComponent<Text>();
 		//target_Resource = GameObject.Find("Target_Resource").GetComponent<Slider>();
 		damage_Indicator = GameObject.Find("Damage_Indicator").GetComponent<Image>();
 

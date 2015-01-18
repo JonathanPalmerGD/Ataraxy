@@ -118,10 +118,10 @@ public class Player : Entity
 		SetupAbility(Longsword.New());
 		SetupAbility(Rapier.New());
 		SetupAbility(Dagger.New());
-		//SetupAbility(RocketLauncher.New());
-		//SetupAbility(ShockRifle.New());
-		SetupAbility(Weapon.New());
-		SetupAbility(Weapon.New());
+		SetupAbility(RocketLauncher.New());
+		SetupAbility(ShockRifle.New());
+		//SetupAbility(Weapon.New());
+		//SetupAbility(Weapon.New());
 		
 		//SetupAbility(Passive.New());
 		//SetupAbility(Passive.New());
@@ -144,7 +144,7 @@ public class Player : Entity
 
 		SetupHealthUI();
 		SetupResourceUI();
-		SetNameUI();
+		SetupNameUI();
 		SetupXPUI();
 
 		DamageImage = UIManager.Instance.damage_Indicator;
@@ -522,15 +522,6 @@ public class Player : Entity
 				CheckNewTarget((Enemy)e);
 
 				return e.gameObject;
-				/*
-				if (Input.GetMouseButtonDown(0))
-				{
-					e.AdjustHealth(-1);
-				}
-				if (Input.GetMouseButtonDown(1))
-				{
-					e.AdjustHealth(-5);
-				}*/
 			}
 			//This isn't necessary for right now.
 			else if (hit.collider.gameObject.tag == "WorldObject")
@@ -540,6 +531,9 @@ public class Player : Entity
 			}
 			else if (hit.collider.gameObject.tag == "Projectile")
 			{
+				Projectile p = hit.collider.gameObject.GetComponent<Projectile>();
+
+				return p.gameObject;
 			}
 			else
 			{

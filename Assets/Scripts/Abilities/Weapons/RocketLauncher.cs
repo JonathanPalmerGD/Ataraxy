@@ -3,7 +3,7 @@ using System.Collections;
 
 public class RocketLauncher : Weapon 
 {
-	public static int IconIndex = 28;
+	public static int IconIndex = 43;
 	public GameObject rocketPrefab;
 	public float homingVelocity;
 	public float fuelPerRocket;

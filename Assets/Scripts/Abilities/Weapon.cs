@@ -340,7 +340,7 @@ public class Weapon : Ability
 	}	
 
 	static string[] adj = { "Basic", "Bulky", "Hasty", "Deadly", "Steel", "Vampiric", "Anachronic", "Violent", "Nimble" };
-	static string[] noun = { "Pistol", "Grenade Launcher", "Whip", "Sniper Rifle", "Dagger", "Mace", "Tome" };
+	static string[] noun = { "Pistol", "Grenade Launcher", "Whip", "Sniper Rifle", "Mace", "Tome" };
 	public static string GetWeaponName()
 	{
 		int rndA = Random.Range(0, adj.Length);
