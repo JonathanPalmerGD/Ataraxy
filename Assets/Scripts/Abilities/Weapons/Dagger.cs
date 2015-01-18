@@ -54,8 +54,11 @@ public class Dagger : Weapon
 
 		float lungeVel = 45;
 		Vector3 movementDir = dir;
-		movementDir += Vector3.up * 15 / lungeVel;
-		MoveCarrier(dir, lungeVel, true, true);
+		movementDir = new Vector3(movementDir.x, 0, movementDir.z);
+		movementDir.Normalize();
+		//movementDir += (Vector3.up * 3 / lungeVel);
+		Debug.Log(dir + "\n" + movementDir + "\n");
+		MoveCarrier(movementDir, lungeVel, Vector3.up, 3, true);
 		
 		
 		/*Vector3 firePoint = firePoints[0].transform.position;

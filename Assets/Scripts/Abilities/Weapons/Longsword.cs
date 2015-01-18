@@ -41,10 +41,9 @@ public class Longsword : Weapon
 		slashPoints.Add(-1*(slash.transform.position - firePoints[3].transform.position));
 
 		SetupSlash(slash, dir, slashPoints);
-		float lungeVel = 25;
+		float lungeVel = 20;
 		Vector3 movementDir = Vector3.Cross(dir, Vector3.up);
-		movementDir += Vector3.up * 3 / lungeVel;
-		MoveCarrier(movementDir, lungeVel, false, true);
+		MoveCarrier(movementDir, lungeVel, Vector3.up, 3, true);
 	}
 
 	public override void UseWeaponSpecial(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
@@ -64,10 +63,9 @@ public class Longsword : Weapon
 
 		SetupSlash(slash, dir, slashPoints);
 
-		float lungeVel = 25;
+		float lungeVel = 20;
 		Vector3 movementDir = -Vector3.Cross(dir, Vector3.up);
-		movementDir += Vector3.up * 3 / lungeVel;
-		MoveCarrier(movementDir, lungeVel, false, true);
+		MoveCarrier(movementDir, lungeVel, Vector3.up, 3, true);
 	}
 
 	public void SetupSlash(BladeSlash slash, Vector3 velocityDirection, List<Vector3> slashPoints)

@@ -209,12 +209,12 @@ public class Weapon : Ability
 	/// </summary>
 	/// <param name="movementDir">The normalized direction of movement</param>
 	/// <param name="movementVel">The velocity to move at</param>
-	/// <param name="upwardBoost">Boost the character slightly to overcome ground friction</param>
+	/// <param name="secondDir">A second direction for movement, such as a slight upward boost</param>
+	/// <param name="secondVel">The velocity of the second direction for movement.</param>
 	/// <param name="additiveMovement">Whether to add the velocity to current velocity, or replace it entirely.</param>
-	public virtual void MoveCarrier(Vector3 movementDir, float movementVel, bool upwardBoost, bool additiveMovement)
+	public virtual void MoveCarrier(Vector3 movementDir, float movementVel, Vector3 secondDir, float secondVel, bool additiveMovement = false)
 	{
 		movementDir.Normalize();
-		Vector3 upBoost = upwardBoost ? Vector3.up * 2 : Vector3.zero;
 		if (WeaponBearer.tag == "Player")
 		{
 			//Get player's character controller?
@@ -223,14 +223,16 @@ public class Weapon : Ability
 			if (additiveMovement)
 			{
 				Vector3 updatedVelocity = charMotor.movement.velocity;
-				updatedVelocity += upBoost;
-				updatedVelocity += movementDir * movementVel;
+				/*Debug.Log(updatedVelocity + "\t" + 
+					movementDir + " * " + movementVel + "=" + (movementDir * movementVel) + "\n" + 
+					secondDir + "*" + secondVel+  "=" + (secondDir * secondVel) + "\t\t\t" + 
+					((movementDir * movementVel) + (secondDir * secondVel)));*/
+				updatedVelocity += (movementDir * movementVel) + (secondDir * secondVel);
 				charMotor.SetVelocity(updatedVelocity);
 			}
 			else
 			{
-				Vector3 updatedVelocity = movementDir * movementVel;
-				updatedVelocity += upBoost;
+				Vector3 updatedVelocity = (movementDir * movementVel) + (secondDir * secondVel);
 				charMotor.SetVelocity(updatedVelocity);
 			}
 		}
@@ -239,6 +241,7 @@ public class Weapon : Ability
 			//Move the enemy?
 		}
 	}
+
 
 	public virtual bool HandleDurability(bool specialAttack = false, GameObject target = null, bool lockOn = false)
 	{
