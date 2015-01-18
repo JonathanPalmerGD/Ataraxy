@@ -27,7 +27,7 @@ public class Cluster : WorldObject
 		poissonKVal = Random.Range(TerrainManager.poissonMinK, TerrainManager.poissonMaxK);
 		sizeBonus = Random.Range(0, 8);
 		tiltDeviation = Random.Range(TerrainManager.minTiltDeviation, TerrainManager.maxTiltDeviation);
-		Debug.Log(tiltDeviation);
+		//Debug.Log(tiltDeviation);
 		RandomScale = Random.Range(0, 10) < 8;
 		RandomRotation = Random.Range(0, 10) < 8;
 		RandomTexture = Random.Range(0, 10) < 8;

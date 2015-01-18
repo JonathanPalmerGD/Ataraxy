@@ -107,7 +107,6 @@ public class Weapon : Ability
 		BeamColor = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
 	}
 
-	//public virtual void UseWeapon(GameObject target = null, System.Type targType = null, Vector3 firePoint = default(Vector3), GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
 	public virtual void UseWeapon(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
 	{
 		Color[] lrColors = new Color[2];
@@ -202,6 +201,42 @@ public class Weapon : Ability
 			lr.SetPosition(0, firePoints[0].transform.position);
 			lr.SetPosition(1, hitPoint);
 			Destroy(lr, time);
+		}
+	}
+
+	/// <summary>
+	/// Used by weapon children to move the carrier in some direction
+	/// </summary>
+	/// <param name="movementDir">The normalized direction of movement</param>
+	/// <param name="movementVel">The velocity to move at</param>
+	/// <param name="upwardBoost">Boost the character slightly to overcome ground friction</param>
+	/// <param name="additiveMovement">Whether to add the velocity to current velocity, or replace it entirely.</param>
+	public virtual void MoveCarrier(Vector3 movementDir, float movementVel, bool upwardBoost, bool additiveMovement)
+	{
+		movementDir.Normalize();
+		Vector3 upBoost = upwardBoost ? Vector3.up * 2 : Vector3.zero;
+		if (WeaponBearer.tag == "Player")
+		{
+			//Get player's character controller?
+			CharacterMotor charMotor = WeaponBearer.GetComponent<CharacterMotor>();
+
+			if (additiveMovement)
+			{
+				Vector3 updatedVelocity = charMotor.movement.velocity;
+				updatedVelocity += upBoost;
+				updatedVelocity += movementDir * movementVel;
+				charMotor.SetVelocity(updatedVelocity);
+			}
+			else
+			{
+				Vector3 updatedVelocity = movementDir * movementVel;
+				updatedVelocity += upBoost;
+				charMotor.SetVelocity(updatedVelocity);
+			}
+		}
+		else
+		{
+			//Move the enemy?
 		}
 	}
 

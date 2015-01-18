@@ -115,7 +115,8 @@ public class Player : Entity
 		weapons = new List<Weapon>();
 		passives = new List<Passive>();
 
-		//SetupAbility(Longsword.New());
+		SetupAbility(Dagger.New());
+		SetupAbility(Longsword.New());
 		//SetupAbility(RocketLauncher.New());
 		//SetupAbility(ShockRifle.New());
 		SetupAbility(Weapon.New());

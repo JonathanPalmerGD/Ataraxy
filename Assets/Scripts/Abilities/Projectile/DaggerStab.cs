@@ -2,30 +2,29 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class BladeSlash : Projectile 
+public class DaggerStab : Projectile 
 {
 	public LineRenderer lr;
-	public List<Vector3> slashPoints;
+	public List<Vector3> stabPoints;
 	public float movementDecay;
 	public float visualDecay;
 	public float counter;
-	public Collider slashCollider;
-	public Color slashColor;
+	public Collider stabCollider;
+	public Color stabColor;
 
 	void Start()
 	{
-		Damage = 3;
-		ProjVel = 300;
+		Damage = 1;
+		ProjVel = 200;
 		movementDecay = 0f;
-		visualDecay = .75f;
+		visualDecay = .35f;
 		rigidbody.drag = 8;
 #if CHEAT
 		//visualDecay = 50f;
 #else
 		
 #endif
-
-		slashCollider = transform.FindChild("SlashCollider").collider;
+		stabCollider = transform.FindChild("StabCollider").collider;
 
 		if (lr == null)
 		{
@@ -47,17 +46,17 @@ public class BladeSlash : Projectile
 		{
 			counter += Time.deltaTime;
 			float per = (visualDecay - counter) / visualDecay;
-			Longsword ls = (Longsword)creator;
+			Dagger ls = (Dagger)creator;
 			if (ls != null)
 			{
 				Color origColor = ls.BeamColor;
 				//Color newColor = Color.cyan;
-				slashColor = new Color(origColor.r, origColor.b, origColor.g, origColor.a * per);
-				lr.SetColors(slashColor, slashColor);
+				stabColor = new Color(origColor.r, origColor.b, origColor.g, origColor.a * per);
+				lr.SetColors(stabColor, stabColor);
 			}
 			if (per < .3f)
 			{
-				slashCollider.enabled = false;
+				stabCollider.enabled = false;
 			}
 			if (per < 0)
 			{
@@ -65,9 +64,9 @@ public class BladeSlash : Projectile
 			}
 		}
 
-		for (int i = 0; i < slashPoints.Count; i++)
+		for (int i = 0; i < stabPoints.Count; i++)
 		{
-			lr.SetPosition(i, transform.position + slashPoints[i]);
+			lr.SetPosition(i, transform.position + stabPoints[i]);
 		}
 	}
 
