@@ -20,6 +20,19 @@ public class MainMenu : MonoBehaviour
 		}
 	}
 
+	public void LoadScene(string levelName)
+	{
+		
+		//if (Application.level)
+		//{
+		Application.LoadLevel(levelName);
+		//}
+		//else
+		//{
+		//	Debug.LogError("Invalid level load attempted.\nIndex provided: " + level);
+		//}
+	}
+
 	public void PlayGame()
 	{
 
@@ -28,7 +41,7 @@ public class MainMenu : MonoBehaviour
 
 	public void LoadMenu()
 	{
-		Application.LoadLevel(0);
+		Application.LoadLevel("MainMenu");
 	}
 
 	public void AdjustSensitivity(float change)

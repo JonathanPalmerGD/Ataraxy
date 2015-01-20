@@ -168,7 +168,6 @@ public class TerrainManager : Singleton<TerrainManager>
 			//Debug.Log("Comparing " + nextDist + " & " + nearestDist + "\n");
 			if (nextDist < nearestDist && nextDist < maxDistance)
 			{
-				Debug.Log("Replacing " + indexNearest + " with " + i + "\n");
 				nearestDist = nextDist;
 				indexNearest = i;
 			}
