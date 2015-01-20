@@ -54,5 +54,22 @@ public class Island : WorldObject
 			newFeature.transform.SetParent(transform.parent);
 			newFeature.transform.position = featurePosition;
 		}
+
+		if (Random.Range(0, 100) > 80)
+		{
+			Vector3 featurePosition = transform.position + Vector3.up * transform.localScale.y / 2;
+			float xRnd = Random.Range(-transform.localScale.x / 2, transform.localScale.x / 2);
+			float zRnd = Random.Range(-transform.localScale.z / 2, transform.localScale.z / 2);
+
+			/*xRnd = 0;
+			zRnd = 0;*/
+
+			featurePosition = new Vector3(transform.position.x + xRnd * .8f, transform.position.y + transform.localScale.y / 2 + .2f, transform.position.z + zRnd * .8f);
+
+			GameObject newFeature = (GameObject)GameObject.Instantiate(TerrainManager.Instance.enemies[Random.Range(0, TerrainManager.Instance.enemies.Count)], Vector3.zero, transform.rotation);
+
+			newFeature.transform.SetParent(transform.parent);
+			newFeature.transform.position = featurePosition;
+		}
 	}
 }

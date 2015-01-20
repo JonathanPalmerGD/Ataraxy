@@ -115,12 +115,13 @@ public class Player : Entity
 		weapons = new List<Weapon>();
 		passives = new List<Passive>();
 
-		SetupAbility(Longsword.New());
-		SetupAbility(Rapier.New());
-		SetupAbility(Dagger.New());
-		SetupAbility(RocketLauncher.New());
-		SetupAbility(ShockRifle.New());
-		//SetupAbility(Weapon.New());
+		//SetupAbility(MonkStaff.New());
+		//SetupAbility(Longsword.New());
+		//SetupAbility(Rapier.New());
+		//SetupAbility(Dagger.New());
+		//SetupAbility(RocketLauncher.New());
+		//SetupAbility(ShockRifle.New());
+		SetupAbility(Weapon.New());
 		//SetupAbility(Weapon.New());
 		
 		//SetupAbility(Passive.New());
@@ -218,7 +219,10 @@ public class Player : Entity
 		}
 		else
 		{
-			DamageImage.color = Color.Lerp(DamageImage.color, Color.clear, flashSpeed * Time.deltaTime);
+			if (DamageImage != null)
+			{
+				DamageImage.color = Color.Lerp(DamageImage.color, Color.clear, flashSpeed * Time.deltaTime);
+			}
 		}
 		#endregion
 		#region Resource System
@@ -486,6 +490,26 @@ public class Player : Entity
 		{
 			weaponIndex = 4;
 		}
+		if (Input.GetButton("Quickslot 6"))
+		{
+			weaponIndex = 5;
+		}
+		if (Input.GetButton("Quickslot 7"))
+		{
+			weaponIndex = 6;
+		}
+		if (Input.GetButton("Quickslot 8"))
+		{
+			weaponIndex = 7;
+		}
+		if (Input.GetButton("Quickslot 9"))
+		{
+			weaponIndex = 8;
+		}
+		if (Input.GetButton("Quickslot 10"))
+		{
+			weaponIndex = 9;
+		}
 		#endregion
 
 		#region Quit Section
@@ -496,6 +520,13 @@ public class Player : Entity
 		#endregion
 	}
 	#endregion
+
+	public override void KillEntity()
+	{
+		base.KillEntity();
+
+		Application.LoadLevel("GameOver");
+	}
 
 	#region Targetting and Hitscan
 	GameObject TargetScan()
@@ -532,8 +563,10 @@ public class Player : Entity
 			else if (hit.collider.gameObject.tag == "Projectile")
 			{
 				Projectile p = hit.collider.gameObject.GetComponent<Projectile>();
-
-				return p.gameObject;
+				if (p != null)
+				{
+					return p.gameObject;
+				}
 			}
 			else
 			{

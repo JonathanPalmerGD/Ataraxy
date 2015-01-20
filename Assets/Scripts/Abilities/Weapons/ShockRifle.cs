@@ -18,13 +18,13 @@ public class ShockRifle : Weapon
 		PrimaryDamage = 1;
 		SpecialDamage = 4;
 		DurSpecialCost = 2;
-		SpecialCooldown = Random.Range(3, 4);
+		SpecialCooldown = Random.Range(2, 3);
 #if CHEAT
 		NormalCooldown = .3f;
 		SpecialCooldown = 1f;
 		Durability = 100;
 #else
-		SpecialCooldown = Random.Range(4, 5);
+		//SpecialCooldown = Random.Range(4, 5);
 #endif
 		BeamColor = new Color(.75f, .14f, .77f);
 	}

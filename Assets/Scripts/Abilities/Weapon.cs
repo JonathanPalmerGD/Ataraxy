@@ -233,7 +233,12 @@ public class Weapon : Ability
 			}
 			else
 			{
+				
 				Vector3 updatedVelocity = (movementDir * movementVel) + (secondDir * secondVel);
+				Debug.Log(updatedVelocity + "\t" +
+					movementDir + " * " + movementVel + "=" + (movementDir * movementVel) + "\n" +
+					secondDir + "*" + secondVel + "=" + (secondDir * secondVel) + "\t\t\t" +
+					((movementDir * movementVel) + (secondDir * secondVel)));
 				charMotor.SetVelocity(updatedVelocity);
 			}
 		}
@@ -270,10 +275,16 @@ public class Weapon : Ability
 
 		Vector3 target = proj.transform.position + (velocityDirection * 8);
 
-		proj.projectileCollider.transform.LookAt(target, Vector3.Cross(linePoints[0], linePoints[2]));
+		AngleCollider(proj, target, Vector3.Cross(linePoints[0], linePoints[2]));
+		//proj.projectileCollider.transform.LookAt(target, Vector3.Cross(linePoints[0], linePoints[2]));
 
 		proj.projectileCollider.transform.position -= AdjProjectileColliderPosition(proj);
 		Destroy(proj.gameObject, 10f);
+	}
+
+	public virtual void AngleCollider(MeleeProjectile proj, Vector3 target, Vector3 axis)
+	{
+		proj.projectileCollider.transform.LookAt(target, axis);
 	}
 
 	public virtual Vector3 AdjProjectileColliderPosition(MeleeProjectile proj)
@@ -332,7 +343,7 @@ public class Weapon : Ability
 	{
 		Weapon w = ScriptableObject.CreateInstance<Weapon>();
 		w.AbilityName = Weapon.GetWeaponName();
-		w.Durability = Random.Range(10, 60);
+		w.Durability = Random.Range(30, 60);
 		w.NormalCooldown = 1;
 		w.SpecialCooldown = 6;
 		w.CdLeft = 0;

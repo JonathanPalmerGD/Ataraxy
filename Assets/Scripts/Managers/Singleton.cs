@@ -73,4 +73,14 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 	{
 		applicationIsQuitting = true;
 	}
+
+	public virtual void Awake()
+	{
+		DontDestroyOnLoad(gameObject);
+	}
+
+	void OnLevelWasLoaded(int level)
+	{
+		//Awake();
+	}
 }

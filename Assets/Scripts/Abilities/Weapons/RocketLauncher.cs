@@ -15,6 +15,7 @@ public class RocketLauncher : Weapon
 		Icon = UIManager.Instance.Icons[IconIndex];
 		primaryFirePointIndex = 1;
 		specialFirePointIndex = 1;
+		NormalCooldown = Random.Range(.65f, 1.4f);
 #if CHEAT
 		NormalCooldown = .7f;
 		Durability = 100;

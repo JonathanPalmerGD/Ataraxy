@@ -13,7 +13,7 @@ public class Enemy : NPC
 	/// <summary>
 	/// The value this enemy provides when slain.
 	/// </summary>
-	private float xpReward = 5;
+	public float XpReward = 5;
 
 	//private float xpRateOverTime = .5f;
 	private float xpRateOverTime = 5.5f;
@@ -67,19 +67,36 @@ public class Enemy : NPC
 		//Entity sets IsDead to true but nothing else.
 		base.KillEntity();
 
-		//Give the player experience.
-		GameManager.Instance.player.GainExperience(xpReward, Level);
+		AwardExperience();
 
-		//Drop a token.
-		GameObject newToken = (GameObject)GameObject.Instantiate(GameManager.Instance.tokenPrefab, transform.position + Vector3.up * 2, Quaternion.identity);
-		float randBound = 8000;
-		newToken.rigidbody.AddForce(newToken.rigidbody.mass * (Vector3.up * Random.Range(.8f, 1.5f) * randBound / 8) + new Vector3(Random.Range(-randBound, randBound), 0, Random.Range(-randBound, randBound)));
+		//Spawn a token
+		ThrowToken(SpawnToken());
 
 		//Give nearby enemies experience.
 
 		//And after all that, destroy ourself.
 		Destroy(gameObject);
 	}
+
+	public virtual void AwardExperience()
+	{
+		//Give the player experience.
+		GameManager.Instance.player.GainExperience(XpReward, Level);
+	}
+
+	public virtual GameObject SpawnToken()
+	{
+		//Drop a token.
+		GameObject newToken = (GameObject)GameObject.Instantiate(GameManager.Instance.tokenPrefab, transform.position + Vector3.up * 2, Quaternion.identity);
+		return newToken;	
+	}
+
+	public virtual void ThrowToken(GameObject newToken)
+	{
+		float randBound = 4000;
+		newToken.rigidbody.AddForce(newToken.rigidbody.mass * (Vector3.up * Random.Range(.8f, 1.5f) * randBound / 8) + new Vector3(Random.Range(-randBound, randBound), 0, Random.Range(-randBound, randBound)));
+	}
+
 	#endregion
 
 	#region Core Functions - Start, Update
@@ -119,7 +136,7 @@ public class Enemy : NPC
 
 	public override void GainLevel()
 	{
-		xpReward += 5;
+		XpReward += 5;
 		int randomBonuses = Random.Range(0, 3);
 		if(randomBonuses == 1)
 		{

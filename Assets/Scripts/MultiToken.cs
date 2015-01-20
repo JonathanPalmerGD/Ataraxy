@@ -48,8 +48,14 @@ public class MultiToken : MonoBehaviour
 			{
 				GameManager.Instance.player.GainExperience(xpReward);
 			}
-
-			player.GetComponent<Player>().SetupAbility(NewWeapon());
+			if (Random.Range(0, 2) == 0)
+			{
+				GameManager.Instance.player.SetupAbility(NewWeapon());
+			}
+			else
+			{
+				GameManager.Instance.player.SetupAbility(Passive.New());
+			}
 			
 
 			TerrainManager.Instance.CreateNewCluster();
@@ -74,7 +80,7 @@ public class MultiToken : MonoBehaviour
 
 	Ability NewWeapon()
 	{
-		switch(Random.Range(0, 4))
+		switch(Random.Range(0, 3))
 		{
 			case 0:
 				return RocketLauncher.New();
@@ -84,8 +90,8 @@ public class MultiToken : MonoBehaviour
 				return Longsword.New();
 			case 3:
 				return Dagger.New();
-			case 4:
-				return Dagger.New();
+			//case 4:
+			//	return Dagger.New();
 			default:
 				return Weapon.New();
 		}

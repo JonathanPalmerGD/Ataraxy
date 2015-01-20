@@ -29,8 +29,10 @@ public class UIManager : Singleton<UIManager>
 
 	public Sprite[] Icons;
 
-	void Awake()
+	public override void Awake()
 	{
+		base.Awake();
+	
 		target_HUD = GameObject.Find("Target_HUD").GetComponent<Canvas>();
 		target_Name = GameObject.Find("Target_Name").GetComponent<Text>();
 		target_HP = GameObject.Find("Target_HP").GetComponent<Slider>();

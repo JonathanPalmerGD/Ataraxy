@@ -26,17 +26,35 @@ public class TerrainManager : Singleton<TerrainManager>
 	public List<Cluster> clusters;
 	public List<Texture2D> textures;
 	public List<GameObject> terrainFeatures;
+	public List<GameObject> enemies;
+	public List<GameObject> islandPrefabs;
+	public List<GameObject> landmarkPrefabs;
 
-	void Awake()
+	public override void Awake()
 	{
+		base.Awake();
+
 		clusters = new List<Cluster>();
 		textures = Resources.LoadAll<Texture2D>("Terrain").ToList();
+		islandPrefabs = Resources.LoadAll<GameObject>("Islands").ToList();
+		landmarkPrefabs = Resources.LoadAll<GameObject>("Landmarks").ToList();
 		terrainFeatures = Resources.LoadAll<GameObject>("TerrainFeatures").ToList();
+		enemies = Resources.LoadAll<GameObject>("Enemies").ToList();
 	}
 
 	public void RegisterCluster(Cluster reportingCluster)
 	{
 		clusters.Add(reportingCluster);
+	}
+
+	public void ResetClusters()
+	{
+		clusters.Clear();
+	}
+
+	public void OnLevelWasLoaded(int level)
+	{
+		ResetClusters();
 	}
 
 	public void CreateNewCluster()

@@ -18,12 +18,15 @@ public class GameManager : Singleton<GameManager>
 								  {false,	false, false,	true,	true},
 								  };*/
 
-	
-
-	void Awake () 
+	public override void Awake () 
 	{
+		base.Awake();
+		tokenPrefab = Resources.Load<GameObject>("Token");
 		playerGO = GameObject.FindGameObjectWithTag("Player");
-		player = playerGO.GetComponent<Player>();
+		if (playerGO != null)
+		{
+			player = playerGO.GetComponent<Player>();
+		}
 	}
 
 	public void RegisterEnemy(Enemy reportingEnemy)
