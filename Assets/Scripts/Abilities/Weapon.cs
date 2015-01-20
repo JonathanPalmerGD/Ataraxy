@@ -235,10 +235,10 @@ public class Weapon : Ability
 			{
 				
 				Vector3 updatedVelocity = (movementDir * movementVel) + (secondDir * secondVel);
-				Debug.Log(updatedVelocity + "\t" +
+				/*Debug.Log(updatedVelocity + "\t" +
 					movementDir + " * " + movementVel + "=" + (movementDir * movementVel) + "\n" +
 					secondDir + "*" + secondVel + "=" + (secondDir * secondVel) + "\t\t\t" +
-					((movementDir * movementVel) + (secondDir * secondVel)));
+					((movementDir * movementVel) + (secondDir * secondVel)));*/
 				charMotor.SetVelocity(updatedVelocity);
 			}
 		}

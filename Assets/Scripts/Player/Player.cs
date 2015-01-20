@@ -115,6 +115,7 @@ public class Player : Entity
 		weapons = new List<Weapon>();
 		passives = new List<Passive>();
 
+		SetupAbility(GravityStaff.New());
 		//SetupAbility(MonkStaff.New());
 		//SetupAbility(Longsword.New());
 		//SetupAbility(Rapier.New());
