@@ -210,8 +210,24 @@ public class Player : Entity
 	#endregion
 
 	#region Update, MaintainAbilities
+	int tempIndex = 0;
 	public override void Update()
 	{
+		//Debug.DrawLine(transform.position,TerrainManager.Instance.clusters[ TerrainManager.Instance.FindNearestCluster(transform.position)].transform.position, Color.red);
+
+		/*if ((null != TerrainManager.Instance.FindNearestCluster(transform.position, 15)))
+		{
+			Debug.DrawLine(transform.position, TerrainManager.Instance.FindNearestCluster(transform.position, 15).transform.position, Color.white);
+		}*/
+
+		if (Input.GetKeyDown(KeyCode.O))
+		{
+			Debug.Log(tempIndex + "\n");
+			tempIndex++;
+		}
+
+		//Debug.DrawLine(transform.position, transform.position + TerrainManager.Instance.FindOffsetOfDir(tempIndex % 8), Color.cyan, 3f);
+
 		#region Handle Damage
 		if (Damaged)
 		{

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class Cluster : WorldObject 
 {
+	public Cluster[] neighbors = new Cluster[8];
+	public int neighborsPopulated = 0;
 	public List<Island> platforms;
 	public int poissonKVal = 20;
 	public int sizeBonus = 0;
@@ -17,6 +19,7 @@ public class Cluster : WorldObject
 
 	public override void Start()
 	{
+
 		TerrainManager.Instance.RegisterCluster(this);
 		gameObject.name = "Cluster: " + Nomenclature.GetName(Random.Range(0, 12), Random.Range(0, 12), Random.Range(0, 12), Random.Range(0, 12));
 
@@ -50,7 +53,7 @@ public class Cluster : WorldObject
 	#region Approaches
 	public void CreateIslandsPoissonApproach()
 	{
-		PoissonDiscSampler pds = new PoissonDiscSampler(100, 100, 16+(int)(sizeBonus * 1.5), poissonKVal);
+		PoissonDiscSampler pds = new PoissonDiscSampler(TerrainManager.clusterSize.x, TerrainManager.clusterSize.z, 16 + (int)(sizeBonus * 1.5), poissonKVal);
 		foreach (Vector2 sample in pds.Samples())
 		{
 			GameObject newIsland = null;
@@ -64,6 +67,7 @@ public class Cluster : WorldObject
 					TerrainManager.Instance.islandPrefabs[Random.Range(0, TerrainManager.Instance.islandPrefabs.Count)], 
 					newPosition, Quaternion.identity);
 
+				AdjustPosition(newIsland);
 				ApplyRandomScale(newIsland, true);
 				ApplyRandomRotation(newIsland);
 				ApplyRandomTexturing(newIsland);
@@ -98,6 +102,12 @@ public class Cluster : WorldObject
 		}
 	}
 	#endregion
+
+	#region Island Modification
+	public void AdjustPosition(GameObject island)
+	{
+		island.transform.position -= TerrainManager.clusterSize / 2;
+	}
 
 	public void ApplyRandomScale(GameObject island, bool poisson)
 	{
@@ -163,6 +173,7 @@ public class Cluster : WorldObject
 	{
 		island.transform.SetParent(transform);
 	}
+	#endregion
 
 	public void LocalizeNeighbors()
 	{

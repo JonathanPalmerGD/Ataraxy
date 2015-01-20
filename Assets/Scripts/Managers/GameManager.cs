@@ -27,6 +27,9 @@ public class GameManager : Singleton<GameManager>
 		{
 			player = playerGO.GetComponent<Player>();
 		}
+
+		//Screen.showCursor = false;
+		//Screen.lockCursor = true;
 	}
 
 	public void RegisterEnemy(Enemy reportingEnemy)

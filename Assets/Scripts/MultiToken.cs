@@ -56,9 +56,15 @@ public class MultiToken : MonoBehaviour
 			{
 				GameManager.Instance.player.SetupAbility(Passive.New());
 			}
-			
 
-			TerrainManager.Instance.CreateNewCluster();
+			Cluster nearest = TerrainManager.Instance.FindNearestCluster(transform.position);
+
+			if (nearest != null)
+			{
+				//Debug.DrawLine(transform.position, nearest.transform.position, Color.cyan, 8.0f);
+			}
+
+			TerrainManager.Instance.CreateNewCluster(nearest);
 
 			if (playOnPickup && acquireClip != null)
 			{
@@ -80,7 +86,7 @@ public class MultiToken : MonoBehaviour
 
 	Ability NewWeapon()
 	{
-		switch(Random.Range(0, 3))
+		switch(Random.Range(0, 5))
 		{
 			case 0:
 				return RocketLauncher.New();
@@ -90,7 +96,9 @@ public class MultiToken : MonoBehaviour
 				return Longsword.New();
 			case 3:
 				return Dagger.New();
-			//case 4:
+			case 4:
+				return Rapier.New();
+			//case 5:
 			//	return Dagger.New();
 			default:
 				return Weapon.New();

@@ -55,7 +55,8 @@ public class Projectile : MonoBehaviour
 
 	public virtual void Init()
 	{
-
+		//Debug.Log("Hit");
+		////transform.SetParent(GameManager.Instance.gameObject.transform);
 	}
 
 	public virtual void Start() 
