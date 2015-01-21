@@ -320,6 +320,7 @@ public class Player : Entity
 		#endregion
 
 		hitscanTarget = TargetScan();
+		//Debug.Log(hitscanTarget != null? hitscanTarget.name + "\n" : "\n");
 		HandleTarget();
 
 		Damaged = false;
@@ -557,6 +558,7 @@ public class Player : Entity
 
 		if (Physics.Raycast(ray, out hit))
 		{
+			//Debug.Log(hit.collider.gameObject.tag + "\n");
 			if (hit.collider.gameObject.tag == "NPC")
 			{
 				NPC n = hit.collider.gameObject.GetComponent<NPC>();
@@ -593,7 +595,7 @@ public class Player : Entity
 		}
 		else
 		{
-			
+			//Debug.Log("Targetting nothing\n");
 		}
 		return null;
 	}
@@ -613,6 +615,7 @@ public class Player : Entity
 				targetedEntity = newTarget;
 
 				//Tell em they're fabulous
+				Debug.Log("Calling " + targetedEntity.name + "'s target\n");
 				targetedEntity.Target();
 			}
 		}

@@ -1,0 +1,30 @@
+I would like to thank & credit the following:
+
+Unity
+
+game-icons.net for the icon assets
+
+Image Magick for help resizing
+
+TexturePacker - making icon atlases
+
+hc of OpenGameArt.Org for crosshairs
+
+Trello - Project management
+
+Github - Source Control
+
+Gregory Schlomoff - Poisson Disk Sampling
+
+Matthew Miner - Unity Wiki's Wander script
+
+Xadhoom - Unity forums for C# FP character scripts
+
+Individuals
+Patrick Adams
+Jeff 'Kipp' Whimbush
+Alex Kahn
+Ian Schreiber 
+Matt Dobbler
+Entropy
+Geetz

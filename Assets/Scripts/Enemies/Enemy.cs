@@ -7,7 +7,12 @@ public class Enemy : NPC
 	/// A Vector3 that tracks the muzzle to the player (for firing projectiles)
 	/// </summary>
 	private Vector3 dirToTarget;
+	#region Combat State Information
 	public bool CanSeePlayer = false;
+	public enum EnemyState { Idle, Searching, Preparing, Attacking };
+	public EnemyState state;
+	public float stateTimer = 0;
+	#endregion
 
 	#region Experience Values
 	/// <summary>
@@ -104,6 +109,11 @@ public class Enemy : NPC
 	{
 		base.Start();
 		gameObject.tag = "Enemy";
+		FindFiringPositions();
+	}
+
+	public virtual void FindFiringPositions()
+	{
 		gunMuzzle = transform.FindChild("Gun Muzzle").gameObject;
 		FiringCooldown = 6;
 	}
@@ -168,13 +178,16 @@ public class Enemy : NPC
 	/// <summary>
 	/// A method for handling if the enemy can see the player.
 	/// </summary>
-	public void HandleKnowledge()
+	public virtual void HandleKnowledge()
 	{
 		//Set the direction to the player, can be updated to lead the player's movement.
 		dirToTarget = (GameManager.Instance.player.transform.position - gunMuzzle.transform.position);// +charMotor.movement.velocity * percentagePlayerVelLeading;
 
 		dirToTarget.Normalize();
+	}
 
+	public virtual void HandleAggression()
+	{
 		if (Vector3.Distance(transform.position, GameManager.Instance.player.transform.position) < 50)
 		{
 			CanSeePlayer = true;
@@ -185,10 +198,7 @@ public class Enemy : NPC
 		}
 
 		firing = CanSeePlayer;
-	}
 
-	public void HandleAggression()
-	{
 		if (firing)
 		{
 			//Raycast to the player, if it is a clear shot, fire in that direction.
