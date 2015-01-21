@@ -5,17 +5,18 @@ using System.Collections.Generic;
 
 public class TerrainManager : Singleton<TerrainManager>
 {
+	public static float minSizeHor = 40;
 	public static Vector3 minDistance = new Vector3(10, -12, 10);
 	public static Vector3 maxDistance = new Vector3(50, 5, 50);
 	public static Vector3 minScale = new Vector3(3, 2, 3);
 	public static Vector3 maxScale = new Vector3(45, 15, 45);
 	public static Vector3 poissonMinScale = new Vector3(10, 1, 10);
 	public static Vector3 poissonMaxScale = new Vector3(18, 12, 18);
-	public static Vector3 clusterSize = new Vector3(100, 20, 100);
-	public static int poissonMinK = 13;
+	public static Vector3 clusterSize = new Vector3(90, 20, 90);
+	public static int poissonMinK = 20;
 	public static int poissonMaxK = 30;
 	public static float minTiltDeviation = 2;
-	public static float maxTiltDeviation = 60;
+	public static float maxTiltDeviation = 40;
 	public static float minTilt = -8;
 	public static float maxTilt = 8;
 	public static int minCountInCluster = 5;
@@ -86,27 +87,34 @@ public class TerrainManager : Singleton<TerrainManager>
 				}
 			}
 
-			//Loop through all the potential neighbors.
-			for (int i = 0; i < c.neighbors.Length; i++)
+			if (c.neighbors != null)
 			{
-				//Try to find a cluster there.
-				Cluster neighborC = FindNearestCluster(c.transform.position + FindOffsetOfDir(i), 10);
-
-				//If we find one
-				if (neighborC != null)
+				//Loop through all the potential neighbors.
+				for (int i = 0; i < c.neighbors.Length; i++)
 				{
-					//Debug.DrawLine(c.transform.position, neighborC.transform.position + Vector3.up * i, Color.green, 36.0f);
+					//Try to find a cluster there.
+					Cluster neighborC = FindNearestCluster(c.transform.position + FindOffsetOfDir(i), 10);
 
-					//Register ourselves with it. Use the opposite index of ourselves.
-					neighborC.neighbors[FindOppositeDirIndex(i)] = c;
+					//If we find one
+					if (neighborC != null)
+					{
+						//Debug.DrawLine(c.transform.position, neighborC.transform.position + Vector3.up * i, Color.green, 36.0f);
 
-					//Set our neighbor as the newly found cluster.
-					c.neighbors[i] = c;
+						//Register ourselves with it. Use the opposite index of ourselves.
+						neighborC.neighbors[FindOppositeDirIndex(i)] = c;
 
-					//Increase both's neighborCount.
-					c.neighborsPopulated++;
-					neighborC.neighborsPopulated++;
+						//Set our neighbor as the newly found cluster.
+						c.neighbors[i] = c;
+
+						//Increase both's neighborCount.
+						c.neighborsPopulated++;
+						neighborC.neighborsPopulated++;
+					}
 				}
+			}
+			else
+			{
+				Debug.LogError("Error with cluster neighbor generation\n");
 			}
 		}
 	}

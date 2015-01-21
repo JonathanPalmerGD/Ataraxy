@@ -204,7 +204,6 @@ public class Entity : MonoBehaviour
 		{
 			damaged = true;
 		}
-
 		if (Health + amount >= MaxHealth)
 		{
 			Health = MaxHealth;

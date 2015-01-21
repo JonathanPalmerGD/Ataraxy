@@ -7,6 +7,7 @@ public class Checkpoint : MonoBehaviour
 	//Player is private because we're automatically populating it with the player.
 	private GameObject player;
 	private ParticleSystem partSys;
+	private TeleTarget playerTarg;
 
 	private float collisionRadius = 3.0f;
 	//Don't forget to face the checkpoint
@@ -15,12 +16,14 @@ public class Checkpoint : MonoBehaviour
 	void Start () 
 	{
 		//Get the player, put it in our private 'player' shoebox.
-		player = GameObject.FindGameObjectWithTag("Player");
+		player = GameManager.Instance.playerGO;
 
 		if (player.GetComponent<TeleTarget>() == null)
 		{
 			player.AddComponent<TeleTarget>();
 		}
+
+		playerTarg = player.GetComponent<TeleTarget>();
 
 		//Turn off the particle system. We'll turn it back on when the player collides with it.
 		partSys = GetComponent<ParticleSystem>();
@@ -41,11 +44,27 @@ public class Checkpoint : MonoBehaviour
 					partSys.enableEmission = true;
 				}
 
-				Checkpoint c = player.GetComponent<TeleTarget>().teleTarget.GetComponent<Checkpoint>();
+				if (playerTarg == null)
+				{
+					Debug.LogError("Player's TeleTarget script is null.\n");
+				}
+				else
+				{
+					if (playerTarg.teleTarget == null)
+					{
 
-				c.Deactivate();
+					}
+					else
+					{
+						Checkpoint c = playerTarg.teleTarget.GetComponent<Checkpoint>();
 
-				player.GetComponent<TeleTarget>().teleTarget = gameObject;
+						if (c != null)
+						{
+							c.Deactivate();
+						}
+					}
+					player.GetComponent<TeleTarget>().teleTarget = gameObject;
+				}
 			}
 		}
 	}

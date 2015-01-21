@@ -8,7 +8,7 @@ public class Cluster : WorldObject
 	public int neighborsPopulated = 0;
 	public List<Island> platforms;
 	public int poissonKVal = 20;
-	public int sizeBonus = 0;
+	public float sizeBonus = 0;
 
 	public float tiltDeviation;
 
@@ -19,18 +19,20 @@ public class Cluster : WorldObject
 
 	public override void Start()
 	{
-
+		transform.FindChild("Cylinder").gameObject.renderer.enabled = false;
 		TerrainManager.Instance.RegisterCluster(this);
 		gameObject.name = "Cluster: " + Nomenclature.GetName(Random.Range(0, 12), Random.Range(0, 12), Random.Range(0, 12), Random.Range(0, 12));
 
 		poissonKVal = Random.Range(TerrainManager.poissonMinK, TerrainManager.poissonMaxK);
-		sizeBonus = Random.Range(0, 8);
+		sizeBonus = Random.Range(0, TerrainManager.minSizeHor);
 		tiltDeviation = Random.Range(TerrainManager.minTiltDeviation, TerrainManager.maxTiltDeviation);
 		//Debug.Log(tiltDeviation);
-		RandomScale = Random.Range(0, 10) < 8;
+
+		//This is to help ensure that clusters with large islands will always have random scale applied to avoid sparse terrain
+		RandomScale = Random.Range(0, 10) - sizeBonus / 10 < 7.5f;
 		RandomRotation = Random.Range(0, 10) < 8;
 		RandomTexture = Random.Range(0, 10) < 8;
-		RandomLandmarks = Random.Range(0, 10) > 8;
+		RandomLandmarks = Random.Range(0, 10) > 7;
 
 		CreateIslandsPoissonApproach();
 		if (RandomLandmarks)
@@ -53,7 +55,7 @@ public class Cluster : WorldObject
 	#region Approaches
 	public void CreateIslandsPoissonApproach()
 	{
-		PoissonDiscSampler pds = new PoissonDiscSampler(TerrainManager.clusterSize.x, TerrainManager.clusterSize.z, 16 + (int)(sizeBonus * 1.5), poissonKVal);
+		PoissonDiscSampler pds = new PoissonDiscSampler(TerrainManager.clusterSize.x, TerrainManager.clusterSize.z, 16 + (sizeBonus * 1.2f), poissonKVal);
 		foreach (Vector2 sample in pds.Samples())
 		{
 			GameObject newIsland = null;
@@ -90,7 +92,7 @@ public class Cluster : WorldObject
 
 				Vector3 newPosition = new Vector3(sample.x + transform.position.x, transform.position.y + yOffset, sample.y + transform.position.z);
 				newLandmark = (GameObject)GameObject.Instantiate(
-					TerrainManager.Instance.islandPrefabs[Random.Range(0, TerrainManager.Instance.islandPrefabs.Count)], 
+					TerrainManager.Instance.landmarkPrefabs[Random.Range(0, TerrainManager.Instance.landmarkPrefabs.Count)], 
 					newPosition, Quaternion.identity);
 
 				//ApplyRandomScale(newLandmark, true);
@@ -119,7 +121,7 @@ public class Cluster : WorldObject
 			{
 				scale = new Vector3(
 							Random.Range(TerrainManager.poissonMinScale.x + sizeBonus, TerrainManager.poissonMaxScale.x + sizeBonus),
-							Random.Range(TerrainManager.poissonMinScale.y + sizeBonus, TerrainManager.poissonMaxScale.y + (sizeBonus / 2)),
+							Random.Range(TerrainManager.poissonMinScale.y + sizeBonus, TerrainManager.poissonMaxScale.y),
 							Random.Range(TerrainManager.poissonMinScale.z + sizeBonus, TerrainManager.poissonMaxScale.z + sizeBonus));
 			}
 			else

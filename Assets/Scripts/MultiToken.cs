@@ -48,7 +48,7 @@ public class MultiToken : MonoBehaviour
 			{
 				GameManager.Instance.player.GainExperience(xpReward);
 			}
-			if (Random.Range(0, 2) == 0)
+			if (Random.Range(0, 4) != 0)
 			{
 				GameManager.Instance.player.SetupAbility(NewWeapon());
 			}
@@ -84,9 +84,9 @@ public class MultiToken : MonoBehaviour
 		}
 	}
 
-	Ability NewWeapon()
+	public static Ability NewWeapon()
 	{
-		switch(Random.Range(0, 6))
+		switch(Random.Range(0, 8))
 		{
 			case 0:
 				return RocketLauncher.New();
@@ -99,6 +99,8 @@ public class MultiToken : MonoBehaviour
 			case 4:
 				return Rapier.New();
 			case 5:
+				return GravityStaff.New();
+			case 6:
 				return GravityStaff.New();
 			//case 5:
 			//	return Dagger.New();

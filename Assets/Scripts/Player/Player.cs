@@ -115,14 +115,15 @@ public class Player : Entity
 		weapons = new List<Weapon>();
 		passives = new List<Passive>();
 
-		SetupAbility(GravityStaff.New());
 		//SetupAbility(MonkStaff.New());
 		//SetupAbility(Longsword.New());
 		//SetupAbility(Rapier.New());
 		//SetupAbility(Dagger.New());
 		//SetupAbility(RocketLauncher.New());
 		//SetupAbility(ShockRifle.New());
-		SetupAbility(Weapon.New());
+		//SetupAbility(Weapon.New());
+		//SetupAbility(MultiToken.NewWeapon());
+		SetupAbility(GravityStaff.New());
 		//SetupAbility(Weapon.New());
 		
 		//SetupAbility(Passive.New());
@@ -412,6 +413,7 @@ public class Player : Entity
 		#endregion
 
 		#region Testing Zone
+#if UNITY_EDITOR
 		if (Input.GetKeyDown(KeyCode.T))
 		{
 			CharacterMotor charMotor = gameObject.GetComponent<CharacterMotor>();
@@ -444,9 +446,11 @@ public class Player : Entity
 			newVel *= 100;
 			charMotor.SetVelocity(newVel);
 		}
+#endif
 		#endregion
 
 		#region Health & Resources
+#if UNITY_EDITOR
 		if (Input.GetKeyDown(KeyCode.R))
 		{
 			AdjustHealth(-1);
@@ -460,6 +464,7 @@ public class Player : Entity
 		{
 			AdjustResource(3);
 		}
+#endif
 		#endregion
 
 		#region Scroll Wheel
@@ -615,7 +620,6 @@ public class Player : Entity
 				targetedEntity = newTarget;
 
 				//Tell em they're fabulous
-				Debug.Log("Calling " + targetedEntity.name + "'s target\n");
 				targetedEntity.Target();
 			}
 		}

@@ -162,7 +162,7 @@ public class Enemy : NPC
 		else
 		{
 			Health += 5;
-			AdjustHealth(MaxHealth);
+			AdjustHealth(5);
 		}
 		base.GainLevel();
 	}

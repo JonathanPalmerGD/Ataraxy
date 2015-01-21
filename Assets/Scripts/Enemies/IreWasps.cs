@@ -46,11 +46,11 @@ public class IreWasps : FlyingEnemy
 
 	public override void Untarget()
 	{
-		Debug.Log("\n\n");
 		if (InfoHUD != null)
 		{
 			InfoHUD.enabled = false;
 			renderer.enabled = false;
+			particleSystem.startSpeed = .7f;
 			//renderer.material.shader = normalShader;
 		}
 	}
@@ -180,7 +180,6 @@ public class IreWasps : FlyingEnemy
 			#region Can't See Player
 			else
 			{
-				Debug.Log("Can't see player. Heading home.\n");
 				if(Vector3.Distance(transform.position, home) > 3)
 				{
 					Vector3 dirToHome = (home - transform.position);
@@ -235,12 +234,11 @@ public class IreWasps : FlyingEnemy
 
 	public override void Target()
 	{
-		Debug.Log("Target!\n");
 		if (InfoHUD != null)
 		{
-			Debug.Log("InfoHUD!\n");
 			InfoHUD.enabled = true;
-			renderer.enabled = true;
+			particleSystem.startSpeed = 1.3f;
+			//renderer.enabled = true;
 			//renderer.material.shader = outlineOnly;
 
 			SetupHealthUI();

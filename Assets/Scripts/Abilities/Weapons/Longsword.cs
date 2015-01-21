@@ -15,6 +15,7 @@ public class Longsword : Weapon
 		Icon = UIManager.Instance.Icons[IconIndex];
 
 		DurSpecialCost = 1;
+		SpecialCooldown = NormalCooldown;
 #if CHEAT
 		NormalCooldown = .5f;
 		SpecialCooldown = .5f;
