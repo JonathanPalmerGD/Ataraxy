@@ -15,7 +15,7 @@ public class ShockRifle : Weapon
 		primaryFirePointIndex = 1;
 		specialFirePointIndex = 1;
 
-		PrimaryDamage = 1;
+		PrimaryDamage = .4f;
 		SpecialDamage = 4;
 		DurSpecialCost = 2;
 		SpecialCooldown = Random.Range(2, 3);
@@ -97,10 +97,12 @@ public class ShockRifle : Weapon
 	{
 		ShockRifle w = ScriptableObject.CreateInstance<ShockRifle>();
 		w.AbilityName = ShockRifle.GetWeaponName();
-		w.Durability = Random.Range(10, 60);
-		w.NormalCooldown = 1;
+		w.Durability = Random.Range(80, 95);
+		w.NormalCooldown = .4f;
 		w.SpecialCooldown = 6;
 		w.CdLeft = 0;
+		w.PrimaryDesc = "A fast firing shocking laser.\nWarning: Laser discharge explodes static orbs.";
+		w.SecondaryDesc = "An growing orb of static.";
 		return w;
 	}
 
@@ -110,7 +112,7 @@ public class ShockRifle : Weapon
 	{
 		int rndA = Random.Range(0, adj.Length);
 
-		return (adj[rndA] + " " + weaponName);
+		return (/*adj[rndA] + " " + */weaponName);
 	}
 	#endregion
 }

@@ -76,6 +76,8 @@ public class Dagger : Weapon
 		w.NormalCooldown = 1;
 		w.SpecialCooldown = 6;
 		w.CdLeft = 0;
+		w.PrimaryDesc = "A quick stab.\nBackstabs coming soon!";
+		w.SecondaryDesc = "A quick dash forward.\nUseful for getaways or crossing length gaps.";
 		return w;
 	}
 
@@ -85,7 +87,7 @@ public class Dagger : Weapon
 	{
 		int rndA = Random.Range(0, adj.Length);
 
-		return (adj[rndA] + " " + weaponName);
+		return (/*adj[rndA] + " " + */weaponName);
 	}
 	#endregion
 }

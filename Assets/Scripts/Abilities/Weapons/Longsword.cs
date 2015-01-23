@@ -86,6 +86,8 @@ public class Longsword : Weapon
 		w.NormalCooldown = 1;
 		w.SpecialCooldown = 6;
 		w.CdLeft = 0;
+		w.PrimaryDesc = "A left-to-right slash.";
+		w.SecondaryDesc = "A right-to-left slash.\nStrangely similar to the primary fire...";
 		return w;
 	}
 
@@ -95,7 +97,7 @@ public class Longsword : Weapon
 	{
 		int rndA = Random.Range(0, adj.Length);
 
-		return (adj[rndA] + " " + weaponName);
+		return (/*adj[rndA] + " " + */weaponName);
 	}
 	#endregion
 }

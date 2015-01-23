@@ -212,122 +212,122 @@ public class Player : Entity
 	#endregion
 
 	#region Update, MaintainAbilities
-	int tempIndex = 0;
 	public override void Update()
 	{
-		//Debug.DrawLine(transform.position,TerrainManager.Instance.clusters[ TerrainManager.Instance.FindNearestCluster(transform.position)].transform.position, Color.red);
-
-		/*if ((null != TerrainManager.Instance.FindNearestCluster(transform.position, 15)))
+		GetInput();
+		if (!UIManager.Instance.paused)
 		{
-			Debug.DrawLine(transform.position, TerrainManager.Instance.FindNearestCluster(transform.position, 15).transform.position, Color.white);
-		}*/
+			//Debug.DrawLine(transform.position,TerrainManager.Instance.clusters[ TerrainManager.Instance.FindNearestCluster(transform.position)].transform.position, Color.red);
 
-		if (Input.GetKeyDown(KeyCode.O))
-		{
-			Debug.Log(tempIndex + "\n");
-			tempIndex++;
-		}
-
-		//Debug.DrawLine(transform.position, transform.position + TerrainManager.Instance.FindOffsetOfDir(tempIndex % 8), Color.cyan, 3f);
-
-		#region Handle Damage
-		if (Damaged)
-		{
-			DamageImage.color = flashColor;
-		}
-		else
-		{
-			if (DamageImage != null)
+			/*if ((null != TerrainManager.Instance.FindNearestCluster(transform.position, 15)))
 			{
-				DamageImage.color = Color.Lerp(DamageImage.color, Color.clear, flashSpeed * Time.deltaTime);
+				Debug.DrawLine(transform.position, TerrainManager.Instance.FindNearestCluster(transform.position, 15).transform.position, Color.white);
+			}*/
+			//Debug.DrawLine(transform.position, transform.position + TerrainManager.Instance.FindOffsetOfDir(tempIndex % 8), Color.cyan, 3f);
+
+			#region Handle Damage
+			if (Damaged)
+			{
+				DamageImage.color = flashColor;
 			}
-		}
-		#endregion
-		#region Resource System
-		ManageResourceSystem();
-		#endregion
-		bool dirtyAbilityBar = false;
-		#region Update Passive Durations & Check Removal
-		for (int i = 0; i < passives.Count; i++)
-		{
-			if (passives[i] != null)
+			else
 			{
-				passives[i].UpdatePassive(Time.deltaTime);
-				if (passives[i].CheckAbility())
+				if (DamageImage != null)
 				{
-					passives.RemoveAt(i);
-					i--;
-					dirtyAbilityBar = true;
+					DamageImage.color = Color.Lerp(DamageImage.color, Color.clear, flashSpeed * Time.deltaTime);
 				}
 			}
-		}
-		#endregion
-		#region Check Weapons for Removal
-		
-		for (int i = 0; i < weapons.Count; i++)
-		{
-			if (weapons[i] != null)
+			#endregion
+			#region Resource System
+			ManageResourceSystem();
+			#endregion
+			bool dirtyAbilityBar = false;
+			#region Update Passive Durations & Check Removal
+			for (int i = 0; i < passives.Count; i++)
 			{
-				if (weaponIndex == i)
+				if (passives[i] != null)
 				{
-					WeaponText.text = weapons[i].AbilityName;
-					if (weapons[i].CdLeft > 0)
+					passives[i].UpdatePassive(Time.deltaTime);
+					if (passives[i].CheckAbility())
 					{
-						SelectorUI.type = Image.Type.Filled;
-						SelectorUI.fillCenter = true;
-						float startCooldownAmt = 0;
-						if (weapons[i].UseSpecialCooldown)
+						passives.RemoveAt(i);
+						i--;
+						dirtyAbilityBar = true;
+					}
+				}
+			}
+			#endregion
+			#region Check Weapons for Removal
+
+			for (int i = 0; i < weapons.Count; i++)
+			{
+				if (weapons[i] != null)
+				{
+					if (weaponIndex == i)
+					{
+						WeaponText.text = weapons[i].AbilityName;
+						if (weapons[i].CdLeft > 0)
 						{
-							startCooldownAmt = weapons[i].SpecialCooldown;
+							SelectorUI.type = Image.Type.Filled;
+							SelectorUI.fillCenter = true;
+							float startCooldownAmt = 0;
+							if (weapons[i].UseSpecialCooldown)
+							{
+								startCooldownAmt = weapons[i].SpecialCooldown;
+							}
+							else
+							{
+								startCooldownAmt = weapons[i].NormalCooldown;
+							}
+							SelectorUI.fillAmount = 1 - (weapons[i].CdLeft / startCooldownAmt);
 						}
 						else
 						{
-							startCooldownAmt = weapons[i].NormalCooldown;
+							//SelectorUI.fillAmount = 1;
+							SelectorUI.type = Image.Type.Sliced;
+							SelectorUI.fillCenter = false;
 						}
-						SelectorUI.fillAmount = 1 - (weapons[i].CdLeft / startCooldownAmt);
 					}
-					else
+					weapons[i].UpdateWeapon(Time.deltaTime);
+					if (weapons[i].CheckAbility())
 					{
-						//SelectorUI.fillAmount = 1;
-						SelectorUI.type = Image.Type.Sliced;
-						SelectorUI.fillCenter = false;
+						weapons[i].CleanUp();
+						weapons.RemoveAt(i);
+						i--;
+						dirtyAbilityBar = true;
 					}
-				}
-				weapons[i].UpdateWeapon(Time.deltaTime);
-				if (weapons[i].CheckAbility())
-				{
-					weapons[i].CleanUp();
-					weapons.RemoveAt(i);
-					i--;
-					dirtyAbilityBar = true;
 				}
 			}
+
+			if (weaponIndex > weapons.Count - 1)
+			{
+				weaponIndex = weapons.Count - 1;
+			}
+
+			if (dirtyAbilityBar)
+			{
+				MaintainAbilities();
+			}
+			#endregion
+			#region Handle Selector Location
+			SelectorUI.rectTransform.position = new Vector3((1 + WeaponIndex) * 67 - 32, 35);
+			int index = SelectorUI.transform.GetSiblingIndex();
+			SelectorUI.transform.SetSiblingIndex(index + 1);
+			#endregion
+
+
+			UIManager.Instance.item_NameText.text = weapons[weaponIndex].AbilityName;
+			UIManager.Instance.item_PrimaryText.text = weapons[weaponIndex].PrimaryDesc;
+			UIManager.Instance.item_SecondaryText.text = weapons[weaponIndex].SecondaryDesc;
+
+			hitscanTarget = TargetScan();
+			//Debug.Log(hitscanTarget != null? hitscanTarget.name + "\n" : "\n");
+			HandleTarget();
+
+			Damaged = false;
+
+			base.Update();
 		}
-
-		if (weaponIndex > weapons.Count - 1)
-		{
-			weaponIndex = weapons.Count - 1;
-		}
-		
-		if (dirtyAbilityBar)
-		{
-			MaintainAbilities();
-		}
-		#endregion
-		#region Handle Selector Location
-		SelectorUI.rectTransform.position = new Vector3((1 + WeaponIndex)* 67 - 32, 35);
-		int index = SelectorUI.transform.GetSiblingIndex();
-		SelectorUI.transform.SetSiblingIndex(index + 1);
-		#endregion
-
-		hitscanTarget = TargetScan();
-		//Debug.Log(hitscanTarget != null? hitscanTarget.name + "\n" : "\n");
-		HandleTarget();
-
-		Damaged = false;
-
-		GetInput();
-		base.Update();
 	}
 
 	public void MaintainAbilities()
@@ -348,199 +348,235 @@ public class Player : Entity
 
 	void GetInput()
 	{
-		#region Mouse Buttons 1
-		if (Input.GetButtonDown("Fire1"))
+		if (!UIManager.Instance.paused)
 		{
-			//Debug.Log("Firing\n");
-		}
-		if (Input.GetButton("Fire1"))
-		{
-			//If we have a weapon
-			if (weapons.Count > 0)
+			#region Mouse Buttons 1
+			if (Input.GetButtonDown("Fire1"))
 			{
-				//If the weapon has ammo and is off cooldown, DO IT.
-				if (weapons[weaponIndex].HandleDurability(false))
+				//Debug.Log("Firing\n");
+			}
+			if (Input.GetButton("Fire1"))
+			{
+				//If we have a weapon
+				if (weapons.Count > 0)
 				{
-					//If we have the same target this frame as our HUD
-					if (targetedEntity != null && hitscanTarget != null && hitscanTarget == targetedEntity.gameObject)
+					//If the weapon has ammo and is off cooldown, DO IT.
+					if (weapons[weaponIndex].HandleDurability(false))
 					{
-						weapons[weaponIndex].UseWeapon(targetedEntity.gameObject, targetedEntity.GetType(), FirePoints, hitPoint, true);
+						//If we have the same target this frame as our HUD
+						if (targetedEntity != null && hitscanTarget != null && hitscanTarget == targetedEntity.gameObject)
+						{
+							weapons[weaponIndex].UseWeapon(targetedEntity.gameObject, targetedEntity.GetType(), FirePoints, hitPoint, true);
+						}
+						else
+						{
+							weapons[weaponIndex].UseWeapon(hitscanTarget, null, FirePoints, hitPoint, true);
+						}
 					}
-					else
-					{
-						weapons[weaponIndex].UseWeapon(hitscanTarget, null, FirePoints, hitPoint, true);
-					}
-				}
-				
-			}
-		}
-		if (Input.GetButtonUp("Fire1"))
-		{
-			//Debug.Log("Fire Ceased\n");
-		}
-		#endregion
 
-		#region Mouse Buttons 2
-		if (Input.GetButtonDown("Fire2"))
-		{
-			//Debug.Log("Firing\n");
-		}
-		if (Input.GetButton("Fire2"))
-		{
-			//If we have a weapon
-			if (weapons.Count > 0)
+				}
+			}
+			if (Input.GetButtonUp("Fire1"))
 			{
-				//If the weapon has ammo and is off cooldown, DO IT.
-				if (weapons[weaponIndex].HandleDurability(true))
+				//Debug.Log("Fire Ceased\n");
+			}
+			#endregion
+
+			#region Mouse Buttons 2
+			if (Input.GetButtonDown("Fire2"))
+			{
+				//Debug.Log("Firing\n");
+			}
+			if (Input.GetButton("Fire2"))
+			{
+				//If we have a weapon
+				if (weapons.Count > 0)
 				{
-					//If we have the same target this frame as our HUD
-					if (targetedEntity != null && hitscanTarget != null && hitscanTarget == targetedEntity.gameObject)
+					//If the weapon has ammo and is off cooldown, DO IT.
+					if (weapons[weaponIndex].HandleDurability(true))
 					{
-						weapons[weaponIndex].UseWeaponSpecial(targetedEntity.gameObject, targetedEntity.GetType(), FirePoints, hitPoint, true);
+						//If we have the same target this frame as our HUD
+						if (targetedEntity != null && hitscanTarget != null && hitscanTarget == targetedEntity.gameObject)
+						{
+							weapons[weaponIndex].UseWeaponSpecial(targetedEntity.gameObject, targetedEntity.GetType(), FirePoints, hitPoint, true);
+						}
+						else
+						{
+							weapons[weaponIndex].UseWeaponSpecial(hitscanTarget, null, FirePoints, hitPoint, true);
+						}
 					}
-					else
-					{
-						weapons[weaponIndex].UseWeaponSpecial(hitscanTarget, null, FirePoints, hitPoint, true);
-					}
+
 				}
-
 			}
-		}
-		if (Input.GetButtonUp("Fire2"))
-		{
-			//Debug.Log("Fire Ceased\n");
-		}
-		#endregion
-
-		#region Testing Zone
-#if UNITY_EDITOR
-		if (Input.GetKeyDown(KeyCode.T))
-		{
-			CharacterMotor charMotor = gameObject.GetComponent<CharacterMotor>();
-			Vector3 newVel = new Vector3(0.0f, 1, 0.0f);
-			newVel.Normalize();
-			newVel *= 30;
-			charMotor.SetVelocity(newVel);
-		}
-		if (Input.GetKeyDown(KeyCode.G))
-		{
-			CharacterMotor charMotor = gameObject.GetComponent<CharacterMotor>();
-			Vector3 newVel = new Vector3(0.0f, -1, 0.0f);
-			newVel.Normalize();
-			newVel *= 50;
-			charMotor.SetVelocity(newVel);
-		}
-		if (Input.GetKeyDown(KeyCode.LeftShift))
-		{
-			CharacterMotor charMotor = gameObject.GetComponent<CharacterMotor>();
-			Vector3 newVel = new Vector3(transform.forward.x * 20.0f, 1, transform.forward.z * 20.0f);
-			newVel.Normalize();
-			newVel *= 120;
-			charMotor.SetVelocity(newVel);
-		}
-		if (Input.GetKeyDown(KeyCode.LeftControl))
-		{
-			CharacterMotor charMotor = gameObject.GetComponent<CharacterMotor>();
-			Vector3 newVel = new Vector3(0, 100, 0);
-			newVel.Normalize();
-			newVel *= 100;
-			charMotor.SetVelocity(newVel);
-		}
-#endif
-		#endregion
-
-		#region Health & Resources
-#if UNITY_EDITOR
-		if (Input.GetKeyDown(KeyCode.R))
-		{
-			AdjustHealth(-1);
-		}
-
-		if (Input.GetKeyDown(KeyCode.Y))
-		{
-			AdjustResource(-3);
-		}
-		if (Input.GetKeyDown(KeyCode.H))
-		{
-			AdjustResource(3);
-		}
-#endif
-		#endregion
-
-		#region Scroll Wheel
-		if (Input.GetAxis("Mouse ScrollWheel") > 0 || Input.GetButtonDown("Previous Weapon"))
-		{
-			if (weaponIndex == 0)
+			if (Input.GetButtonUp("Fire2"))
 			{
-				weaponIndex = weapons.Count - 1;
+				//Debug.Log("Fire Ceased\n");
 			}
-			else
+			#endregion
+
+			#region Testing Zone
+#if UNITY_EDITOR
+			if (Input.GetKeyDown(KeyCode.T))
 			{
-				weaponIndex -= 1;
+				CharacterMotor charMotor = gameObject.GetComponent<CharacterMotor>();
+				Vector3 newVel = new Vector3(0.0f, 1, 0.0f);
+				newVel.Normalize();
+				newVel *= 30;
+				charMotor.SetVelocity(newVel);
 			}
-		}
-		else if (Input.GetAxis("Mouse ScrollWheel") < 0 || Input.GetButtonDown("Next Weapon"))
-		{
-			if (weaponIndex == weapons.Count - 1)
+			if (Input.GetKeyDown(KeyCode.G))
+			{
+				CharacterMotor charMotor = gameObject.GetComponent<CharacterMotor>();
+				Vector3 newVel = new Vector3(0.0f, -1, 0.0f);
+				newVel.Normalize();
+				newVel *= 50;
+				charMotor.SetVelocity(newVel);
+			}
+			if (Input.GetKeyDown(KeyCode.LeftShift))
+			{
+				CharacterMotor charMotor = gameObject.GetComponent<CharacterMotor>();
+				Vector3 newVel = new Vector3(transform.forward.x * 20.0f, 1, transform.forward.z * 20.0f);
+				newVel.Normalize();
+				newVel *= 120;
+				charMotor.SetVelocity(newVel);
+			}
+			if (Input.GetKeyDown(KeyCode.LeftControl))
+			{
+				CharacterMotor charMotor = gameObject.GetComponent<CharacterMotor>();
+				Vector3 newVel = new Vector3(0, 100, 0);
+				newVel.Normalize();
+				newVel *= 100;
+				charMotor.SetVelocity(newVel);
+			}
+#endif
+			#endregion
+
+			#region Health & Resources
+#if UNITY_EDITOR
+			if (Input.GetKeyDown(KeyCode.R))
+			{
+				AdjustHealth(-1);
+			}
+
+			if (Input.GetKeyDown(KeyCode.Y))
+			{
+				AdjustResource(-3);
+			}
+			if (Input.GetKeyDown(KeyCode.H))
+			{
+				AdjustResource(3);
+			}
+#endif
+			#endregion
+
+			//These are controllable while paused.
+			#region Scroll Wheel
+			if (Input.GetAxis("Mouse ScrollWheel") > 0 || Input.GetButtonDown("Previous Weapon"))
+			{
+				if (weaponIndex == 0)
+				{
+					weaponIndex = weapons.Count - 1;
+				}
+				else
+				{
+					weaponIndex -= 1;
+				}
+			}
+			else if (Input.GetAxis("Mouse ScrollWheel") < 0 || Input.GetButtonDown("Next Weapon"))
+			{
+				if (weaponIndex == weapons.Count - 1)
+				{
+					weaponIndex = 0;
+				}
+				else
+				{
+					weaponIndex += 1;
+				}
+			}
+			#endregion
+
+			#region Number Checking
+			if (Input.GetButton("Quickslot 1"))
 			{
 				weaponIndex = 0;
 			}
-			else
+			if (Input.GetButton("Quickslot 2"))
 			{
-				weaponIndex += 1;
+				weaponIndex = 1;
+			}
+			if (Input.GetButton("Quickslot 3"))
+			{
+				weaponIndex = 2;
+			}
+			if (Input.GetButton("Quickslot 4"))
+			{
+				weaponIndex = 3;
+			}
+			if (Input.GetButton("Quickslot 5"))
+			{
+				weaponIndex = 4;
+			}
+			if (Input.GetButton("Quickslot 6"))
+			{
+				weaponIndex = 5;
+			}
+			if (Input.GetButton("Quickslot 7"))
+			{
+				weaponIndex = 6;
+			}
+			if (Input.GetButton("Quickslot 8"))
+			{
+				weaponIndex = 7;
+			}
+			if (Input.GetButton("Quickslot 9"))
+			{
+				weaponIndex = 8;
+			}
+			if (Input.GetButton("Quickslot 10"))
+			{
+				weaponIndex = 9;
+			}
+			#endregion
+
+			#region Cheat Weapons
+			if (Input.GetKeyDown(KeyCode.M))
+			{
+				//SetupAbility(MonkStaff.New());
+				SetupAbility(Longsword.New());
+				SetupAbility(Rapier.New());
+				SetupAbility(Dagger.New());
+				SetupAbility(RocketLauncher.New());
+				SetupAbility(ShockRifle.New());
+				SetupAbility(GravityStaff.New());
+				SetupAbility(GravityStaff.New());
+			}
+			#endregion
+
+			if (Input.GetKeyDown(KeyCode.LeftBracket))
+			{
+				MouseLook look = gameObject.GetComponent<MouseLook>();
+
+				look.sensitivityX--;
+				look.sensitivityY--;
+
+				MouseLook yLook = GameObject.Find("Main Camera").GetComponent<MouseLook>();
+
+				yLook.sensitivityX--;
+				yLook.sensitivityY--;
+			}
+			if (Input.GetKeyDown(KeyCode.RightBracket))
+			{
+				MouseLook look = gameObject.GetComponent<MouseLook>();
+
+				look.sensitivityX++;
+				look.sensitivityY++;
+
+				MouseLook yLook = GameObject.Find("Main Camera").GetComponent<MouseLook>();
+
+				yLook.sensitivityX++;
+				yLook.sensitivityY++;
 			}
 		}
-		#endregion
-
-		#region Number Checking
-		if (Input.GetButton("Quickslot 1"))
-		{
-			weaponIndex = 0;
-		}
-		if (Input.GetButton("Quickslot 2"))
-		{
-			weaponIndex = 1;
-		}
-		if (Input.GetButton("Quickslot 3"))
-		{
-			weaponIndex = 2;
-		}
-		if (Input.GetButton("Quickslot 4"))
-		{
-			weaponIndex = 3;
-		}
-		if (Input.GetButton("Quickslot 5"))
-		{
-			weaponIndex = 4;
-		}
-		if (Input.GetButton("Quickslot 6"))
-		{
-			weaponIndex = 5;
-		}
-		if (Input.GetButton("Quickslot 7"))
-		{
-			weaponIndex = 6;
-		}
-		if (Input.GetButton("Quickslot 8"))
-		{
-			weaponIndex = 7;
-		}
-		if (Input.GetButton("Quickslot 9"))
-		{
-			weaponIndex = 8;
-		}
-		if (Input.GetButton("Quickslot 10"))
-		{
-			weaponIndex = 9;
-		}
-		#endregion
-
-		#region Quit Section
-		if (Input.GetButton("Quit"))
-		{
-			AppHelper.Quit();
-		}
-		#endregion
 	}
 	#endregion
 

@@ -10,8 +10,6 @@ public class Rotate : MonoBehaviour
 
 	void Update()
 	{
-		
 		transform.Rotate(rotationAxis, rotationSpeed);
-		
 	}
 }

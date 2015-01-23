@@ -40,26 +40,28 @@ public class Floatation : MonoBehaviour
 
 	void Update()
 	{
-		distFromHome = Vector3.Distance(transform.position, homeRegion);
-		yFromHome = transform.position.y - homeRegion.y;
-
-		Vector3 homeDir = transform.position - homeRegion;
-
-		//Debug.Log(vertPush + " " + yChange + " ");
-		if (verticalWander)
+		if (!UIManager.Instance.paused)
 		{
-			rigidbody.AddForce(Vector3.up * vertPush * yChange * rigidbody.mass);
-		}
-		
-		if (yFromHome < yWanderBound && yFromHome > -yWanderBound)
-		{
-			Debug.DrawLine(transform.position, homeRegion, Color.green);
-		}
-		else
-		{
-			Debug.DrawLine(transform.position, homeRegion, Color.red);
-		}
+			distFromHome = Vector3.Distance(transform.position, homeRegion);
+			yFromHome = transform.position.y - homeRegion.y;
 
+			Vector3 homeDir = transform.position - homeRegion;
+
+			//Debug.Log(vertPush + " " + yChange + " ");
+			if (verticalWander)
+			{
+				rigidbody.AddForce(Vector3.up * vertPush * yChange * rigidbody.mass);
+			}
+
+			if (yFromHome < yWanderBound && yFromHome > -yWanderBound)
+			{
+				Debug.DrawLine(transform.position, homeRegion, Color.green);
+			}
+			else
+			{
+				Debug.DrawLine(transform.position, homeRegion, Color.red);
+			}
+		}
 	}
 
 	/// <summary>

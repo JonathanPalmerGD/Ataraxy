@@ -86,6 +86,20 @@ public class Weapon : Ability
 	}
 
 	#endregion
+	#region Description
+	private string primaryDesc = "A weak laser";
+	public string PrimaryDesc
+	{
+		get { return primaryDesc; }
+		set { primaryDesc = value; }
+	}
+	private string secondaryDesc = "A strong laser";
+	public string SecondaryDesc
+	{
+		get { return secondaryDesc; }
+		set { secondaryDesc = value; }
+	}
+	#endregion
 
 	public void UpdateWeapon(float time)
 	{
@@ -357,7 +371,7 @@ public class Weapon : Ability
 		int rndA = Random.Range(0, adj.Length);
 		int rndB = Random.Range(0, noun.Length);
 
-		return (adj[rndA] + " " + noun[rndB]);
+		return (/*adj[rndA] + " " + */noun[rndB]);
 	}
 	#endregion
 }

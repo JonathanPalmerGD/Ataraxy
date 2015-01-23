@@ -27,12 +27,22 @@ public class UIManager : Singleton<UIManager>
 	public Text player_WeaponText;
 	public Slider player_Resource;
 
+	public Text item_NameText;
+	public Text item_PrimaryText;
+	public Text item_SecondaryText;
+
+	public Canvas pause_Menu;
+
 	public Sprite[] Icons;
+
+	public bool paused;
 
 	public override void Awake()
 	{
 		base.Awake();
 	
+		pause_Menu = GameObject.Find("Pause Menu").GetComponent<Canvas>();
+
 		target_HUD = GameObject.Find("Target_HUD").GetComponent<Canvas>();
 		target_Name = GameObject.Find("Target_Name").GetComponent<Text>();
 		target_HP = GameObject.Find("Target_HP").GetComponent<Slider>();
@@ -50,16 +60,77 @@ public class UIManager : Singleton<UIManager>
 		//player_Resource = GameObject.Find("player_Resource").GetComponent<Slider>();
 		player_Name = GameObject.Find("Player_Name").GetComponent<Text>();
 		player_WeaponText = GameObject.Find("WeaponText").GetComponent<Text>();
+
+		item_NameText = GameObject.Find("Item Name Text").GetComponent<Text>();
+		item_PrimaryText = GameObject.Find("Item Primary Text").GetComponent<Text>();
+		item_SecondaryText = GameObject.Find("Item Secondary Text").GetComponent<Text>();
+
 		Icons = new Sprite[1];
-		Icons = Resources.LoadAll<Sprite>("Atlases/AtaraxyIconAtlas");	
+		Icons = Resources.LoadAll<Sprite>("Atlases/AtaraxyIconAtlas");
 	}
 
 	void Start()
 	{
+		if (pause_Menu != null)
+		{
+			pause_Menu.gameObject.SetActive(false);
+			UnpauseGame();
+		}
 	}
 	
 	void Update()
 	{
-	
+		#region Quit Section
+		if (Input.GetButtonDown("Quit"))
+		{
+			//AppHelper.Quit();
+			if (UIManager.Instance.paused)
+			{
+				UIManager.Instance.UnpauseGame();
+			}
+			else
+			{
+				UIManager.Instance.PauseGame();
+			}
+		}
+		#endregion
+
+		if (pause_Menu != null)
+		{
+			//Set the item name text
+			//Set the primary fire description
+			
+			
+			/*if (Screen.lockCursor && !paused)
+			{
+				PauseGame();
+			}
+			if (paused)
+			{
+
+			}*/
+		}
+	}
+
+	public void PauseGame()
+	{
+		paused = true;
+		Time.timeScale = 0f;
+		pause_Menu.gameObject.SetActive(paused);
+
+		//Bring in the elements for the pause menu
+		//Unlock the mouse
+		Screen.lockCursor = false;
+		Screen.showCursor = true;
+	}
+
+	public void UnpauseGame()
+	{
+		paused = false;
+		Time.timeScale = 1.0f;
+		pause_Menu.gameObject.SetActive(paused);
+		//Lock the mouse
+		Screen.lockCursor = true;
+		Screen.showCursor = false;
 	}
 }

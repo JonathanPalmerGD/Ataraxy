@@ -99,6 +99,8 @@ public class Rapier : Weapon
 		w.NormalCooldown = 1;
 		w.SpecialCooldown = 6;
 		w.CdLeft = 0;
+		w.PrimaryDesc = "A thin but powerful melee stab.";
+		w.SecondaryDesc = "A dashing lunge combined with a powerful stab!";
 		return w;
 	}
 
@@ -108,7 +110,7 @@ public class Rapier : Weapon
 	{
 		int rndA = Random.Range(0, adj.Length);
 
-		return (adj[rndA] + " " + weaponName);
+		return (/*adj[rndA] + " " + */weaponName);
 	}
 	#endregion
 }

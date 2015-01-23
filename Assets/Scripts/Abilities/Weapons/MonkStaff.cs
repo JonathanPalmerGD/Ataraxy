@@ -132,7 +132,7 @@ public class MonkStaff : Weapon
 	{
 		int rndA = Random.Range(0, adj.Length);
 
-		return (adj[rndA] + " " + weaponName);
+		return (/*adj[rndA] + " " + */weaponName);
 	}
 	#endregion
 }

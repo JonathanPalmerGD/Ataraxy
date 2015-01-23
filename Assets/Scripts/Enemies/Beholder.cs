@@ -16,15 +16,18 @@ public class Beholder : FlyingEnemy
 	
 	public override void Update() 
 	{
-		base.Update();
+		if (!UIManager.Instance.paused)
+		{
+			base.Update();
 
-		if (CanSeePlayer)
-		{
-			transform.LookAt(GameManager.Instance.playerGO.transform);
-		}
-		else
-		{
-			transform.Rotate(Vector3.up, Random.Range(.3f, .7f));
+			if (CanSeePlayer)
+			{
+				transform.LookAt(GameManager.Instance.playerGO.transform);
+			}
+			else
+			{
+				transform.Rotate(Vector3.up, Random.Range(.3f, .7f));
+			}
 		}
 	}
 

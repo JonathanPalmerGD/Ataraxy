@@ -56,6 +56,8 @@ public class GravityStaff : Weapon
 		gs.NormalCooldown = 1;
 		gs.SpecialCooldown = .08f;
 		gs.CdLeft = 0;
+		gs.PrimaryDesc = "A weak laser as a last resort.";
+		gs.SecondaryDesc = "Hold: Dampen gravity effects on you.\nUseful for long or high jumps.";
 		return gs;
 	}
 
@@ -65,7 +67,7 @@ public class GravityStaff : Weapon
 	{
 		int rndA = Random.Range(0, adj.Length);
 
-		return (adj[rndA] + " " + weaponName);
+		return (/*adj[rndA] + " " + */weaponName);
 	}
 	#endregion
 }

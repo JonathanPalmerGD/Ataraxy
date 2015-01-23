@@ -120,16 +120,19 @@ public class Enemy : NPC
 
 	public override void Update()
 	{
-		firingTimer -= Time.deltaTime;
-		//If we know where the player is, update them as the target.
+		if (!UIManager.Instance.paused)
+		{
+			firingTimer -= Time.deltaTime;
+			//If we know where the player is, update them as the target.
 
-		HandleExperience();
+			HandleExperience();
 
-		HandleKnowledge();
+			HandleKnowledge();
 
-		HandleAggression();
+			HandleAggression();
 
-		base.Update();
+			base.Update();
+		}
 	}
 	#endregion
 

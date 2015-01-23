@@ -95,6 +95,8 @@ public class RocketLauncher : Weapon
 		w.NormalCooldown = 1;
 		w.SpecialCooldown = 6;
 		w.CdLeft = 0;
+		w.PrimaryDesc = "An explosive rocket. Homing if you fire when targetting an enemy.";
+		w.SecondaryDesc = "Not yet implemented!";
 		return w;
 	}
 
@@ -104,7 +106,7 @@ public class RocketLauncher : Weapon
 	{
 		int rndA = Random.Range(0, adj.Length);
 
-		return (adj[rndA] + " " + weaponName);
+		return (/*adj[rndA] + " " +*/ weaponName);
 	}
 	#endregion
 }

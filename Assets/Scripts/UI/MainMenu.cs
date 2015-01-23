@@ -37,11 +37,16 @@ public class MainMenu : MonoBehaviour
 	{
 
 		Application.LoadLevel("Gameplay Test");
-	}
+}	
 
 	public void LoadMenu()
 	{
 		Application.LoadLevel("MainMenu");
+	}
+
+	public void Quit()
+	{
+		AppHelper.Quit();
 	}
 
 	public void AdjustSensitivity(float change)
