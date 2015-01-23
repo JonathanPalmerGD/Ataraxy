@@ -18,7 +18,7 @@ public class ShockRifle : Weapon
 		PrimaryDamage = .4f;
 		SpecialDamage = 4;
 		DurSpecialCost = 2;
-		SpecialCooldown = Random.Range(2, 3);
+		SpecialCooldown = Random.Range(1.4f, 1.7f);
 #if CHEAT
 		NormalCooldown = .3f;
 		SpecialCooldown = 1f;

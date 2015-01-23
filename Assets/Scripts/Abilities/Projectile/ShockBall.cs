@@ -15,7 +15,7 @@ public class ShockBall : Projectile
 		ProjVel = 1;
 		explosiveDamage = 3;
 		blastRadius = 5;
-		explosive = transform.FindChild("Detonator-Tiny").GetComponent<Detonator>();
+		explosive = transform.FindChild("Detonator-Shock").GetComponent<Detonator>();
 	}
 
 	void Update()

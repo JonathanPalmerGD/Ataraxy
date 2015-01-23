@@ -1,7 +1,7 @@
-﻿using UnityEngine;
+﻿﻿using UnityEngine;
 using System.Collections;
 
-public class Homing : Projectile 
+public class Homing : Projectile
 {
 	public GameObject target;
 
@@ -23,10 +23,10 @@ public class Homing : Projectile
 		explosiveDamage = 1;
 		fuelRemaining = 5f;
 		body = transform.FindChild("Rocket Body").gameObject;
-		explosive = transform.FindChild("Detonator-Base").GetComponent<Detonator>();
+		explosive = transform.FindChild("Detonator-Rocket").GetComponent<Detonator>();
 	}
-	
-	void Update() 
+
+	void Update()
 	{
 		if (fuelRemaining > 0)
 		{
@@ -81,7 +81,7 @@ public class Homing : Projectile
 
 			hitColliders[i].gameObject.SendMessage("AdjustHealth", parameterForMessage, SendMessageOptions.DontRequireReceiver);
 			i++;
-		} 
+		}
 		Destroy(gameObject, 3.0f);
 	}
 }

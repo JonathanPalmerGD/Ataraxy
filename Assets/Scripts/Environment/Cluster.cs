@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class Cluster : WorldObject 
 {
-	public Cluster[] neighbors = new Cluster[8];
+	public Cluster[] neighborClusters = new Cluster[8];
 	public int neighborsPopulated = 0;
 	public List<Island> platforms;
 	public int poissonKVal = 20;
@@ -12,6 +13,7 @@ public class Cluster : WorldObject
 
 	public float tiltDeviation;
 
+	public bool LargeIsland = true;
 	public bool RandomScale = true;
 	public bool RandomRotation = true;
 	public bool RandomTexture = true;
@@ -30,6 +32,8 @@ public class Cluster : WorldObject
 
 		//This is to help ensure that clusters with large islands will always have random scale applied to avoid sparse terrain
 		RandomScale = Random.Range(0, 10) - sizeBonus / 10 < 7.5f;
+		//LargeIsland = Random.Range(0, 10) < 7;
+		LargeIsland = false;
 		RandomRotation = Random.Range(0, 10) < 8;
 		RandomTexture = Random.Range(0, 10) < 8;
 		RandomLandmarks = Random.Range(0, 10) > 7;
@@ -42,6 +46,8 @@ public class Cluster : WorldObject
 			CreateLandmarksPoissonApproach();
 			//}
 		}
+
+		ConfigureIslands();
 		
 		base.Start();
 		gameObject.tag = "Cluster";
@@ -51,6 +57,58 @@ public class Cluster : WorldObject
 	{
 		base.Update();
 	}
+
+	#region Island Path Nodes
+	/// <summary>
+	/// Determines island neighbors for all existing islands.
+	/// </summary>
+	public void ConfigureIslands()
+	{
+		for (int i = 0; i < platforms.Count; i++)
+		{
+			ConfigureIsland(platforms[i]);
+		}
+	}
+
+	/// <summary>
+	/// Perform Physics Overlap Spheres to determine an island's neighbors.
+	/// Then register the relationship with both islands.
+	/// </summary>
+	/// <param name="island"></param>
+	public void ConfigureIsland(Island island)
+	{
+		island.CreatePathNodes();
+
+		float dist = Mathf.Max(island.transform.localScale.x, island.transform.localScale.z) + TerrainManager.IslandNeighborDist;
+		//Debug.Log("Distance from island: " + island.name + "\n" + (int)dist + " units.\n");
+		Collider[] c = Physics.OverlapSphere(island.transform.position, dist);
+
+		//For each collider
+		for (int i = 0; i < c.Length; i++)
+		{
+			if (c[i].gameObject != null && c[i].gameObject.tag == "Island")
+			{
+				Island foundNeighbor = c[i].GetComponent<Island>();
+				//If we don't have that island registered
+				if(!island.nearIslands.Contains(foundNeighbor))
+				{
+					//I don't think we need to check if they have us registered, since neighbors always register both involved islands.
+
+					//Add us to both
+					island.nearIslands.Add(foundNeighbor);
+					foundNeighbor.nearIslands.Add(island);
+
+					//Debug.DrawLine(island.transform.position, foundNeighbor.transform.position, Color.blue, 36.0f);
+				}
+			}
+		}
+
+		//Debug.Log("Finished Island (" + island.name + ") Configuration.\nI have " + island.nearIslands.Count + " neighbors\n");
+
+		island.PlaceRandomEnemy();
+		island.PlaceRandomObject();
+	}
+	#endregion
 
 	#region Approaches
 	public void CreateIslandsPoissonApproach()
@@ -65,19 +123,26 @@ public class Cluster : WorldObject
 				float yOffset = Random.Range(TerrainManager.minDistance.y, TerrainManager.maxDistance.y);
 
 				Vector3 newPosition = new Vector3(sample.x + transform.position.x, transform.position.y + yOffset, sample.y + transform.position.z);
+				newPosition -= TerrainManager.clusterSize / 2;
+
 				newIsland = (GameObject)GameObject.Instantiate(
 					TerrainManager.Instance.islandPrefabs[Random.Range(0, TerrainManager.Instance.islandPrefabs.Count)], 
 					newPosition, Quaternion.identity);
 
-				AdjustPosition(newIsland);
+				newIsland.GetComponent<Island>().Init();
+
 				ApplyRandomScale(newIsland, true);
-				ApplyRandomRotation(newIsland);
 				ApplyRandomTexturing(newIsland);
 				ApplyIslandParent(newIsland);
+
+				//newIsland.GetComponent<Island>().CreatePathNodes();
+				//ApplyRandomRotation(newIsland);
 
 				platforms.Add(newIsland.GetComponent<Island>());
 			}
 		}
+
+		CreateLargeIsland();
 	}
 
 	public void CreateLandmarksPoissonApproach()
@@ -91,6 +156,8 @@ public class Cluster : WorldObject
 				float yOffset = Random.Range(TerrainManager.minDistance.y, TerrainManager.maxDistance.y);
 
 				Vector3 newPosition = new Vector3(sample.x + transform.position.x, transform.position.y + yOffset, sample.y + transform.position.z);
+				newPosition -= TerrainManager.clusterSize / 2;
+				
 				newLandmark = (GameObject)GameObject.Instantiate(
 					TerrainManager.Instance.landmarkPrefabs[Random.Range(0, TerrainManager.Instance.landmarkPrefabs.Count)], 
 					newPosition, Quaternion.identity);
@@ -106,11 +173,6 @@ public class Cluster : WorldObject
 	#endregion
 
 	#region Island Modification
-	public void AdjustPosition(GameObject island)
-	{
-		island.transform.position -= TerrainManager.clusterSize / 2;
-	}
-
 	public void ApplyRandomScale(GameObject island, bool poisson)
 	{
 		if (RandomScale)
@@ -174,6 +236,65 @@ public class Cluster : WorldObject
 	public void ApplyIslandParent(GameObject island)
 	{
 		island.transform.SetParent(transform);
+	}
+
+	public void CreateLargeIsland()
+	{
+		if (LargeIsland)
+		{
+			Debug.Log("Creating Large Island\n");
+			float xPos = transform.position.x - Random.Range(-TerrainManager.clusterSize.x/2, TerrainManager.clusterSize.x/2);
+			float zPos = transform.position.z - Random.Range(-TerrainManager.clusterSize.z/2, TerrainManager.clusterSize.z/2);
+
+			Vector3 megaIslandPosition = new Vector3(xPos, transform.position.y, zPos);
+
+			Vector3 randomIslandPoint = megaIslandPosition;
+			
+			Vector3 scale = Vector3.zero;
+
+			scale = new Vector3(Random.Range(60, 75), Random.Range(5, 10), Random.Range(60, 75));
+
+			float dist = Mathf.Min(scale.x, scale.z);
+
+			Collider[] c = Physics.OverlapSphere(randomIslandPoint, dist);
+			for (int i = 0; i < c.Length; i++)
+			{
+				if (c[i].gameObject.tag == "Island")
+				{
+					platforms.Remove(c[i].GetComponent<Island>());
+					Destroy(c[i].gameObject);
+				}
+			}
+
+			
+			GameObject newIsland = (GameObject)GameObject.Instantiate(
+				TerrainManager.Instance.islandPrefabs[Random.Range(0, TerrainManager.Instance.islandPrefabs.Count)],
+				megaIslandPosition, Quaternion.identity);
+
+			newIsland.GetComponent<Island>().Init();
+
+
+			
+			newIsland.transform.localScale = scale;
+
+			ApplyRandomTexturing(newIsland);
+
+			ApplyIslandParent(newIsland);
+
+			newIsland.GetComponent<Island>().CreatePathNodes();
+			ApplyRandomRotation(newIsland);
+
+			platforms.Add(newIsland.GetComponent<Island>());
+
+			//Pick a random point within the area.
+			//Do a spherecast of that point
+			//Make an island slightly larger than that point (very flat)
+			//Delete all islands that touched that point.
+
+			//float dist = Mathf.Max(island.transform.localScale.x, island.transform.localScale.z) + TerrainManager.IslandNeighborDist;
+			//Debug.Log("Distance from island: " + island.name + "\n" + (int)dist + " units.\n");
+			//Collider[] c = Physics.OverlapSphere(island.transform.position, dist);
+		}
 	}
 	#endregion
 

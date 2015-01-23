@@ -12,7 +12,7 @@ public class TerrainManager : Singleton<TerrainManager>
 	public static Vector3 maxScale = new Vector3(45, 15, 45);
 	public static Vector3 poissonMinScale = new Vector3(10, 1, 10);
 	public static Vector3 poissonMaxScale = new Vector3(18, 12, 18);
-	public static Vector3 clusterSize = new Vector3(90, 20, 90);
+	public static Vector3 clusterSize = new Vector3(100, 20, 100);
 	public static int poissonMinK = 20;
 	public static int poissonMaxK = 30;
 	public static float minTiltDeviation = 2;
@@ -21,8 +21,10 @@ public class TerrainManager : Singleton<TerrainManager>
 	public static float maxTilt = 8;
 	public static int minCountInCluster = 5;
 	public static int maxCountInCluster = 9;
+	public static float IslandNeighborDist = 35;
 
 	public GameObject clusterPrefab;
+	public GameObject pathNodePrefab;
 
 	public List<Cluster> clusters;
 	public List<Texture2D> textures;
@@ -37,6 +39,7 @@ public class TerrainManager : Singleton<TerrainManager>
 
 		clusters = new List<Cluster>();
 		clusterPrefab = Resources.Load<GameObject>("Cluster");
+		pathNodePrefab = Resources.Load<GameObject>("PathNode");
 		textures = Resources.LoadAll<Texture2D>("Terrain").ToList();
 		islandPrefabs = Resources.LoadAll<GameObject>("Islands").ToList();
 		landmarkPrefabs = Resources.LoadAll<GameObject>("Landmarks").ToList();
@@ -72,9 +75,9 @@ public class TerrainManager : Singleton<TerrainManager>
 			{
 				tries++;
 
-				int direction = Random.Range(0, center.neighbors.Length);
+				int direction = Random.Range(0, center.neighborClusters.Length);
 
-				if(center.neighbors[direction] == null)
+				if(center.neighborClusters[direction] == null)
 				{
 					c = ((GameObject)GameObject.Instantiate(clusterPrefab, center.transform.position, Quaternion.identity)).GetComponent<Cluster>();
 
@@ -87,10 +90,10 @@ public class TerrainManager : Singleton<TerrainManager>
 				}
 			}
 
-			if (c.neighbors != null)
+			if (c.neighborClusters != null)
 			{
 				//Loop through all the potential neighbors.
-				for (int i = 0; i < c.neighbors.Length; i++)
+				for (int i = 0; i < c.neighborClusters.Length; i++)
 				{
 					//Try to find a cluster there.
 					Cluster neighborC = FindNearestCluster(c.transform.position + FindOffsetOfDir(i), 10);
@@ -101,10 +104,10 @@ public class TerrainManager : Singleton<TerrainManager>
 						//Debug.DrawLine(c.transform.position, neighborC.transform.position + Vector3.up * i, Color.green, 36.0f);
 
 						//Register ourselves with it. Use the opposite index of ourselves.
-						neighborC.neighbors[FindOppositeDirIndex(i)] = c;
+						neighborC.neighborClusters[FindOppositeDirIndex(i)] = c;
 
 						//Set our neighbor as the newly found cluster.
-						c.neighbors[i] = c;
+						c.neighborClusters[i] = c;
 
 						//Increase both's neighborCount.
 						c.neighborsPopulated++;
