@@ -12,6 +12,8 @@ public class EdgeWander : MonoBehaviour
 
 	public static bool expensiveWallCheck = true;
 
+	public bool rightValid = true;
+	public bool leftValid = true;
 	public bool turnRight = true;
 	public bool turnLeft = true;
 
@@ -52,7 +54,7 @@ public class EdgeWander : MonoBehaviour
 		{
 			//Is there a ledge ahead of us?
 			//Is there a wall ahead of us.
-			if(CheckWall())
+			if(CheckWall() || CheckEdge())
 			{
 				navState = GroundState.Turning;
 				if (!haveNewHeading)
@@ -75,6 +77,7 @@ public class EdgeWander : MonoBehaviour
 
 	public void ApplyMovement()
 	{
+
 		counter += Time.deltaTime;
 		if (counter > turnTime)
 		{
@@ -97,13 +100,28 @@ public class EdgeWander : MonoBehaviour
 		}
 		else if (navState == GroundState.Falling)
 		{
+			rigidbody.AddForce(-transform.up * forceAmt * rigidbody.mass);
 			//Do nothing
 		}
 		else if( navState == GroundState.Turning)
 		{
-			//rigidbody.AddForce(-desiredDirection * 3 * forceAmt * rigidbody.mass);
+			//If we're turning right. Desired direction
 
-			transform.eulerAngles = Vector3.Slerp(oldRotation, targetRotation, (counter / turnTime));
+			desiredDirection = -transform.forward;
+
+			if (turnRight)
+			{
+				desiredDirection += transform.right;
+			}
+			if (turnLeft)
+			{
+				desiredDirection -= transform.right;
+			}
+			//Debug.DrawLine(transform.position, transform.position + desiredDirection * 15, Color.blue, 3.0f);
+
+			rigidbody.AddForce(desiredDirection * 3 *  forceAmt * rigidbody.mass);
+
+			transform.eulerAngles = Vector3.Lerp(oldRotation, targetRotation, (counter / turnTime));
 			
 
 			//transform.eulerAngles = targetRotation;
@@ -192,34 +210,53 @@ public class EdgeWander : MonoBehaviour
 		#endregion
 	}
 
-	public void CheckGroundState()
+	void TurnNewHeading()
 	{
-		if (CheckFloor())
+		float rotAmt = 15;
+		switch (Random.Range(0, 1))
 		{
-			if (CheckWall())
-			{
-				navState = GroundState.Turning;
-			}
-			else if(navState == GroundState.Turning)
-			{
-				haveNewHeading = false;
-				navState = GroundState.OnGround;
-			}
-			
-			if (CheckEdge())
-			{
-				navState = GroundState.NearEdge;
-			}
-			else
-			{
-				navState = GroundState.OnGround;
-			}
+			case 0:
+				if (turnLeft)
+				{
+					//heading -= Random.Range(3, rotAmt); 
+					heading -= 35;
+				}
+				else if (turnRight)
+				{
+					//heading += Random.Range(3, rotAmt);
+					heading += 35;
+				}
+				else
+				{
+					RandomNewHeading();
+				}
+				break;
+			case 1:
+				if (turnRight)
+				{
+					//heading += Random.Range(3, rotAmt);
+					heading += 35;
+				}
+				else if (turnLeft)
+				{
+					//heading -= Random.Range(3, rotAmt);
+					heading -= 35;
+				}
+				else
+				{
+					RandomNewHeading();
+				}
+				break;
 		}
-		else
-		{
-			navState = GroundState.Falling;
-		}
+
+		oldRotation = transform.eulerAngles;
+
+		targetRotation = new Vector3(0, heading, 0);
+		counter = turnTime - .2f;
+		haveNewHeading = true;
 	}
+
+	
 
 	public bool CheckWall()
 	{
@@ -228,7 +265,7 @@ public class EdgeWander : MonoBehaviour
 			#region Left & Right Turn Checkers
 			RaycastHit hit;
 
-			Vector3 start = transform.position + transform.right * (transform.localScale.y / 2 + .5f);
+			Vector3 start = transform.position - transform.up * (transform.localScale.y / 5) + transform.right * (transform.localScale.y / 2 + .5f);
 			Vector3 dir = transform.forward * (transform.localScale.y / 2 + 2);
 			Ray r = new Ray(start, dir);
 			Debug.DrawRay(start, dir, Color.cyan);
@@ -248,7 +285,7 @@ public class EdgeWander : MonoBehaviour
 				turnRight = true;
 			}
 
-			start = transform.position - transform.right * (transform.localScale.y / 2 + .5f);
+			start = transform.position - transform.up * (transform.localScale.y / 5) - transform.right * (transform.localScale.y / 2 + .5f);
 			dir = transform.forward * (transform.localScale.y / 2 + 2);
 			r = new Ray(start, dir);
 			Debug.DrawRay(start, dir, Color.cyan);
@@ -273,8 +310,6 @@ public class EdgeWander : MonoBehaviour
 			{
 				return true;
 			}
-
-			
 		}
 		else
 		{
@@ -332,25 +367,94 @@ public class EdgeWander : MonoBehaviour
 
 	public bool CheckEdge()
 	{
-		RaycastHit[] hits;
+		RaycastHit hit;
 
-		Vector3 start = transform.position + transform.forward * checkDist;
-		Vector3 dir = -transform.up * (transform.localScale.y / 2 + checkHeight);
-		Ray r = new Ray(start, dir);
-		//Debug.DrawRay(start, dir, Color.green);
-		hits = Physics.RaycastAll(start, dir, (transform.localScale.y / 2 + checkHeight));
-		for(int i = 0; i < hits.Length; i++)
+		if (expensiveWallCheck)
 		{
-			//Debug.Log(hits[i].collider.gameObject.tag);
-			if (hits[i].collider.gameObject.tag == "Island")
+			Ray r;
+
+			Vector3 start = transform.position + transform.forward * checkDist + transform.right * (transform.localScale.y / 2 + .5f);
+			Vector3 dir = -transform.up * (transform.localScale.y / 2 + checkHeight);
+			r = new Ray(start, dir);
+			Debug.DrawRay(start, dir, Color.green);
+			if (Physics.Raycast(start, dir, out hit, (transform.localScale.y / 2 + checkHeight)))
 			{
-				//Debug.Log("Floor ahead");
+				rightValid = true;
+			}
+			else
+			{
+				rightValid = false;
+			}
+
+			start = transform.position + transform.forward * checkDist - transform.right * (transform.localScale.y / 2 + .5f);
+			r = new Ray(start, dir);
+			Debug.DrawRay(start, dir, Color.green);
+			if (Physics.Raycast(start, dir, out hit, (transform.localScale.y / 2 + checkHeight)))
+			{
+				leftValid = true;
+			}
+			else
+			{
+				leftValid = false;
+			}
+
+			if (rightValid && leftValid)
+			{
 				return false;
 			}
 		}
-		//Perform a check to see if we're on a platform?
+		else
+		{
+			#region Old Edge
+			RaycastHit[] hits;
 
+			Vector3 start = transform.position + transform.forward * checkDist;
+			Vector3 dir = -transform.up * (transform.localScale.y / 2 + checkHeight);
+			Ray r = new Ray(start, dir);
+			//Debug.DrawRay(start, dir, Color.green);
+			hits = Physics.RaycastAll(start, dir, (transform.localScale.y / 2 + checkHeight));
+			for (int i = 0; i < hits.Length; i++)
+			{
+				//Debug.Log(hits[i].collider.gameObject.tag);
+				if (hits[i].collider.gameObject.tag == "Island")
+				{
+					//Debug.Log("Floor ahead");
+					return false;
+				}
+			}
+			//Perform a check to see if we're on a platform?
+			#endregion
+		}
 		return true;
+	}
+
+	public void CheckGroundState()
+	{
+		if (CheckFloor())
+		{
+			if (CheckWall())
+			{
+				navState = GroundState.Turning;
+			}
+			else if (navState == GroundState.Turning)
+			{
+				haveNewHeading = false;
+				navState = GroundState.OnGround;
+			}
+			Debug.Log("test");
+			if (CheckEdge())
+			{
+				navState = GroundState.NearEdge;
+			}
+			else
+			{
+				navState = GroundState.OnGround;
+			}
+		}
+		else
+		{
+			navState = GroundState.Falling;
+		}
 	}
 
 	void RandomNewHeading()
@@ -374,52 +478,6 @@ public class EdgeWander : MonoBehaviour
 		//Debug.Log("Heading: " + heading + "\tOpposite Direction: " + newFloor + "\n");
 		targetRotation = new Vector3(0, heading, 0);
 		counter = 0;
-		haveNewHeading = true;
-	}
-
-	void TurnNewHeading()
-	{
-		float rotAmt = 15;
-		switch (Random.Range(0, 1))
-		{
-			case 0:
-				if (turnLeft)
-				{
-					//heading -= Random.Range(3, rotAmt); 
-					heading -= 35;
-				}
-				else if (turnRight)
-				{
-					//heading += Random.Range(3, rotAmt);
-					heading += 35;
-				}
-				else
-				{
-					RandomNewHeading();
-				}
-				break;
-			case 1:
-				if (turnRight)
-				{
-					//heading += Random.Range(3, rotAmt);
-					heading += 35;
-				}
-				else if (turnLeft)
-				{
-					//heading -= Random.Range(3, rotAmt);
-					heading -= 35;
-				}
-				else
-				{
-					RandomNewHeading();
-				}
-				break;
-		}
-
-		oldRotation = transform.eulerAngles;
-
-		targetRotation = new Vector3(0, heading, 0);
-		counter = turnTime - .2f;
 		haveNewHeading = true;
 	}
 }
