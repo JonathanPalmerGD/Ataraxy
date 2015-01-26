@@ -7,12 +7,14 @@ using System.Collections;
 [RequireComponent(typeof(Rigidbody))]
 public class EdgeWander : MonoBehaviour
 {
-	public enum GroundState { Falling, OnGround, NearEdge, NearWall };
+	public enum GroundState { Falling, OnGround, NearEdge, NearWall, Turning };
 	public GroundState navState;
 
 	public static bool expensiveWallCheck = true;
 
-	public float speed = 5;
+	public bool turnRight = true;
+	public bool turnLeft = true;
+
 	public float maxSpeed = 5;
 	public float directionChangeInterval = 1;
 	public float maxHeadingChange = 30;
@@ -43,12 +45,92 @@ public class EdgeWander : MonoBehaviour
 		//StartCoroutine(NewHeading());
 	}
 
+	public void CheckEnvironment()
+	{
+		//Are we on the floor
+		if (CheckFloor())
+		{
+			//Is there a ledge ahead of us?
+			//Is there a wall ahead of us.
+			if(CheckWall())
+			{
+				navState = GroundState.Turning;
+				if (!haveNewHeading)
+				{
+					//Say to get one based on the edges in front of us.
+					TurnNewHeading();
+				}
+			}
+			else
+			{
+				navState = GroundState.OnGround;
+			}
+
+		}
+		else
+		{
+			navState = GroundState.Falling;
+		}
+	}
+
+	public void ApplyMovement()
+	{
+		counter += Time.deltaTime;
+		if (counter > turnTime)
+		{
+			haveNewHeading = false;
+		}
+
+		CurrentVelocity = rigidbody.velocity;
+		Vector3 desiredDirection = transform.forward;
+		float forceAmt = maxSpeed - rigidbody.velocity.magnitude;
+
+		if (navState == GroundState.OnGround)
+		{
+			//If we don't have our new heading yet
+			if (!haveNewHeading)
+			{
+				//Move forward
+				rigidbody.AddForce(desiredDirection * forceAmt * rigidbody.mass);
+			}
+			
+		}
+		else if (navState == GroundState.Falling)
+		{
+			//Do nothing
+		}
+		else if( navState == GroundState.Turning)
+		{
+			//rigidbody.AddForce(-desiredDirection * 3 * forceAmt * rigidbody.mass);
+
+			transform.eulerAngles = Vector3.Slerp(oldRotation, targetRotation, (counter / turnTime));
+			
+
+			//transform.eulerAngles = targetRotation;
+			//haveNewHeading = false;
+		}
+	}
+
 	void FixedUpdate()
 	{
+
+		CheckEnvironment();
+
+		ApplyMovement();
+		
+		
+		/*
 		Direction = Vector3.zero;
 
 		CheckGroundState();
 
+		if (navState == GroundState.Turning)
+		{
+			Debug.Log("Turning");
+			TurnNewHeading();
+			transform.eulerAngles = targetRotation;
+			
+		}
 		if (haveNewHeading)
 		{
 			counter += Time.deltaTime;
@@ -60,24 +142,14 @@ public class EdgeWander : MonoBehaviour
 			}
 		}
 
-		//Debug.DrawLine(transform.position, transform.position + transform.forward * 8, Color.red, 15);
-		//Vector3 velocityHeading = new Vector3(0, rigidbody.velocity.y, 0);
-		//transform.eulerAngles = velocityHeading;
-
 		CurrentVelocity = rigidbody.velocity;
 		Vector3 desiredDirection = transform.forward;
-		//Vector3 desiredDirection = CurrentVelocity.normalized - transform.forward;
-
-		//Debug.DrawLine(transform.position, transform.position + CurrentVelocity, Color.cyan, 15.0f);
 		float forceAmt = maxSpeed - rigidbody.velocity.magnitude;
 
-		//output += CurrentVelocity + "\t\t" + forceAmt + "\n";
-		//If we are at an edge
 
 		//get new heading?
 		if (navState == GroundState.NearEdge)
 		{
-			//Debug.Log("Near Edge\n");
 			if (!haveNewHeading)
 			{
 				rigidbody.velocity = Vector3.zero;
@@ -87,7 +159,6 @@ public class EdgeWander : MonoBehaviour
 		}
 		else if (navState == GroundState.OnGround)
 		{
-			//Debug.Log("Ground\n");
 			if (!haveNewHeading)
 			{
 				rigidbody.AddForce(desiredDirection * forceAmt * rigidbody.mass);
@@ -95,11 +166,13 @@ public class EdgeWander : MonoBehaviour
 		}
 		else if(navState == GroundState.Falling)
 		{
-			//Debug.Log("Falling\n");
-			//Panic?
+		}
+		else if (navState == GroundState.Turning)
+		{
+
 		}
 
-		Direction.Normalize();
+		Direction.Normalize();*/
 
 		#region Comments
 		//Check if edge detection
@@ -123,7 +196,17 @@ public class EdgeWander : MonoBehaviour
 	{
 		if (CheckFloor())
 		{
-			if (CheckWall() || CheckEdge())
+			if (CheckWall())
+			{
+				navState = GroundState.Turning;
+			}
+			else if(navState == GroundState.Turning)
+			{
+				haveNewHeading = false;
+				navState = GroundState.OnGround;
+			}
+			
+			if (CheckEdge())
 			{
 				navState = GroundState.NearEdge;
 			}
@@ -142,9 +225,10 @@ public class EdgeWander : MonoBehaviour
 	{
 		if (expensiveWallCheck)
 		{
+			#region Left & Right Turn Checkers
 			RaycastHit hit;
 
-			Vector3 start = transform.position + transform.right * transform.localScale.y / 2;
+			Vector3 start = transform.position + transform.right * (transform.localScale.y / 2 + .5f);
 			Vector3 dir = transform.forward * (transform.localScale.y / 2 + 2);
 			Ray r = new Ray(start, dir);
 			Debug.DrawRay(start, dir, Color.cyan);
@@ -152,20 +236,19 @@ public class EdgeWander : MonoBehaviour
 			{
 				if (hit.collider.gameObject != gameObject)
 				{
-					if (hit.collider.gameObject.tag == "Island")
-					{
-						return true;
-					}
-					else
-					{
-						//Debug.Log("Raycasted something besides island.\n");
-						return true;
-					}
+					turnRight = false;
+				}
+				else
+				{
+					turnRight = true;
 				}
 			}
+			else
+			{
+				turnRight = true;
+			}
 
-
-			start = transform.position - transform.right * transform.localScale.y / 2;
+			start = transform.position - transform.right * (transform.localScale.y / 2 + .5f);
 			dir = transform.forward * (transform.localScale.y / 2 + 2);
 			r = new Ray(start, dir);
 			Debug.DrawRay(start, dir, Color.cyan);
@@ -173,20 +256,29 @@ public class EdgeWander : MonoBehaviour
 			{
 				if (hit.collider.gameObject != gameObject)
 				{
-					if (hit.collider.gameObject.tag == "Island")
-					{
-						return true;
-					}
-					else
-					{
-						//Debug.Log("Raycasted something besides island.\n");
-						return true;
-					}
+					turnLeft = false;
+				}
+				else
+				{
+					turnLeft = true;
 				}
 			}
+			else
+			{
+				turnLeft = true;
+			}
+			#endregion
+
+			if (!turnRight || !turnLeft)
+			{
+				return true;
+			}
+
+			
 		}
 		else
 		{
+			#region Old Wall Check
 			RaycastHit hit;
 
 			Vector3 start = transform.position;
@@ -208,7 +300,7 @@ public class EdgeWander : MonoBehaviour
 					}
 				}
 			}
-
+			#endregion
 		}
 
 
@@ -222,7 +314,7 @@ public class EdgeWander : MonoBehaviour
 		Vector3 start = transform.position;
 		Vector3 dir = -transform.up * (transform.localScale.y / 2 + .5f);
 		Ray r = new Ray(start, dir);
-		//Debug.DrawRay(start, dir, Color.magenta, .1f);
+		Debug.DrawRay(start, dir, Color.magenta, .1f);
 		if (Physics.Raycast(start, dir, out hit, (transform.localScale.y / 2 + .5f)))
 		{
 			if (hit.collider.gameObject.tag == "Island")
@@ -245,7 +337,7 @@ public class EdgeWander : MonoBehaviour
 		Vector3 start = transform.position + transform.forward * checkDist;
 		Vector3 dir = -transform.up * (transform.localScale.y / 2 + checkHeight);
 		Ray r = new Ray(start, dir);
-		Debug.DrawRay(start, dir, Color.green);
+		//Debug.DrawRay(start, dir, Color.green);
 		hits = Physics.RaycastAll(start, dir, (transform.localScale.y / 2 + checkHeight));
 		for(int i = 0; i < hits.Length; i++)
 		{
@@ -285,28 +377,49 @@ public class EdgeWander : MonoBehaviour
 		haveNewHeading = true;
 	}
 
-	/// <summary>
-	/// Repeatedly calculates a new direction to move towards.
-	/// Use this instead of MonoBehaviour.InvokeRepeating so that the interval can be changed at runtime.
-	/// </summary>
-	IEnumerator NewHeading()
+	void TurnNewHeading()
 	{
-		while (true)
+		float rotAmt = 15;
+		switch (Random.Range(0, 1))
 		{
-			NewHeadingRoutine();
-			yield return new WaitForSeconds(directionChangeInterval);
+			case 0:
+				if (turnLeft)
+				{
+					//heading -= Random.Range(3, rotAmt); 
+					heading -= 35;
+				}
+				else if (turnRight)
+				{
+					//heading += Random.Range(3, rotAmt);
+					heading += 35;
+				}
+				else
+				{
+					RandomNewHeading();
+				}
+				break;
+			case 1:
+				if (turnRight)
+				{
+					//heading += Random.Range(3, rotAmt);
+					heading += 35;
+				}
+				else if (turnLeft)
+				{
+					//heading -= Random.Range(3, rotAmt);
+					heading -= 35;
+				}
+				else
+				{
+					RandomNewHeading();
+				}
+				break;
 		}
-	}
 
-	/// <summary>
-	/// Calculates a new direction to move towards.
-	/// </summary>
-	void NewHeadingRoutine()
-	{
-		var floor = Mathf.Clamp(heading - maxHeadingChange, 0, 360);
-		var ceil = Mathf.Clamp(heading + maxHeadingChange, 0, 360);
-		heading = Random.Range(floor, ceil);
+		oldRotation = transform.eulerAngles;
+
 		targetRotation = new Vector3(0, heading, 0);
+		counter = turnTime - .2f;
+		haveNewHeading = true;
 	}
-
 }
