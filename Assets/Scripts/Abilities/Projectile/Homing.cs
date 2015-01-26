@@ -65,9 +65,12 @@ public class Homing : Projectile
 	public override void Collide()
 	{
 		rigidbody.drag += 2;
+		Detonator det;
 		if (explosive != null)
 		{
-			explosive.Explode();
+			det = (Detonator)GameObject.Instantiate(explosive, transform.position, Quaternion.identity);
+
+			det.Explode();
 		}
 		gameObject.particleSystem.enableEmission = false;
 		gameObject.collider.enabled = false;
@@ -75,11 +78,11 @@ public class Homing : Projectile
 		enabled = false;
 		body.SetActive(false);
 
-		Collider[] hitColliders = Physics.OverlapSphere(explosive.transform.position, blastRadius);
+		Collider[] hitColliders = Physics.OverlapSphere(transform.position, blastRadius);
 		int i = 0;
 		while (i < hitColliders.Length)
 		{
-			float distFromBlast = Vector3.Distance(hitColliders[i].transform.position, explosive.transform.position);
+			float distFromBlast = Vector3.Distance(hitColliders[i].transform.position, transform.position);
 			float parameterForMessage = -(explosiveDamage * blastRadius / distFromBlast);
 
 			hitColliders[i].gameObject.SendMessage("AdjustHealth", parameterForMessage, SendMessageOptions.DontRequireReceiver);

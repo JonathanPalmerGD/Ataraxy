@@ -15,7 +15,7 @@ public class ShockBall : Projectile
 		ProjVel = 1;
 		explosiveDamage = 3;
 		blastRadius = 5;
-		explosive = transform.FindChild("Detonator-Shock").GetComponent<Detonator>();
+		//explosive = transform.FindChild("Detonator-Shock").GetComponent<Detonator>();
 	}
 
 	void Update()
@@ -36,17 +36,23 @@ public class ShockBall : Projectile
 	public void Shocked()
 	{
 		//DO THE THING!
-		explosive.Explode();
+		Detonator det;
+		if (explosive != null)
+		{
+			det = (Detonator)GameObject.Instantiate(explosive, transform.position, Quaternion.identity);
+
+			det.Explode();
+		}
 		gameObject.particleSystem.enableEmission = false;
 		gameObject.collider.enabled = false;
 		Destroy(rigidbody);
 		enabled = false;
 
-		Collider[] hitColliders = Physics.OverlapSphere(explosive.transform.position, blastRadius);
+		Collider[] hitColliders = Physics.OverlapSphere(transform.position, blastRadius);
 		int i = 0;
 		while (i < hitColliders.Length)
 		{
-			float distFromBlast = Vector3.Distance(hitColliders[i].transform.position, explosive.transform.position);
+			float distFromBlast = Vector3.Distance(hitColliders[i].transform.position, transform.position);
 			float parameterForMessage = -(explosiveDamage * blastRadius / distFromBlast);
 
 			hitColliders[i].gameObject.SendMessage("AdjustHealth", parameterForMessage, SendMessageOptions.DontRequireReceiver);
