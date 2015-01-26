@@ -83,7 +83,6 @@ public class UIManager : Singleton<UIManager>
 		#region Quit Section
 		if (Input.GetButtonDown("Quit"))
 		{
-			//AppHelper.Quit();
 			if (UIManager.Instance.paused)
 			{
 				UIManager.Instance.UnpauseGame();
@@ -129,8 +128,11 @@ public class UIManager : Singleton<UIManager>
 		paused = false;
 		Time.timeScale = 1.0f;
 		pause_Menu.gameObject.SetActive(paused);
+		
+#if !UNITY_EDITOR
 		//Lock the mouse
 		Screen.lockCursor = true;
 		Screen.showCursor = false;
+#endif
 	}
 }

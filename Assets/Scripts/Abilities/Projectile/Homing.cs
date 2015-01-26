@@ -23,7 +23,7 @@ public class Homing : Projectile
 		explosiveDamage = 1;
 		fuelRemaining = 5f;
 		body = transform.FindChild("Rocket Body").gameObject;
-		explosive = transform.FindChild("Detonator-Rocket").GetComponent<Detonator>();
+		//explosive = transform.FindChild("Detonator-Rocket").GetComponent<Detonator>();
 	}
 
 	void Update()
@@ -65,7 +65,10 @@ public class Homing : Projectile
 	public override void Collide()
 	{
 		rigidbody.drag += 2;
-		explosive.Explode();
+		if (explosive != null)
+		{
+			explosive.Explode();
+		}
 		gameObject.particleSystem.enableEmission = false;
 		gameObject.collider.enabled = false;
 		body.renderer.enabled = false;
