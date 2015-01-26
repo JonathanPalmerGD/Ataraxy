@@ -348,12 +348,6 @@ public class Player : Entity
 
 	void GetInput()
 	{
-		if (Input.GetKeyDown(KeyCode.Period))
-		{
-			Debug.LogError(Shader.Find("Particles/Alpha Blended").ToString() + "\n");
-			Debug.LogError(new Material(Shader.Find("Particles/Alpha Blended")).ToString() + "\n");
-			//Debug.LogError(new Material(Shader.Find("Particles/Alpha Blended")).ToString() + "\n");
-		}
 		if (!UIManager.Instance.paused)
 		{
 			#region Mouse Buttons 1
