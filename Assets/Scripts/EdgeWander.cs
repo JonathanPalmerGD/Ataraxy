@@ -7,6 +7,11 @@ using System.Collections;
 [RequireComponent(typeof(Rigidbody))]
 public class EdgeWander : MonoBehaviour
 {
+	public enum GroundState { Falling, OnGround, NearEdge, NearWall };
+	public GroundState navState;
+
+	public static bool expensiveWallCheck = true;
+
 	public float speed = 5;
 	public float maxSpeed = 5;
 	public float directionChangeInterval = 1;
@@ -42,6 +47,8 @@ public class EdgeWander : MonoBehaviour
 	{
 		Direction = Vector3.zero;
 
+		CheckGroundState();
+
 		if (haveNewHeading)
 		{
 			counter += Time.deltaTime;
@@ -68,8 +75,9 @@ public class EdgeWander : MonoBehaviour
 		//If we are at an edge
 
 		//get new heading?
-		if (CheckEdge())
+		if (navState == GroundState.NearEdge)
 		{
+			//Debug.Log("Near Edge\n");
 			if (!haveNewHeading)
 			{
 				rigidbody.velocity = Vector3.zero;
@@ -77,12 +85,18 @@ public class EdgeWander : MonoBehaviour
 				RandomNewHeading();
 			}
 		}
-		else
+		else if (navState == GroundState.OnGround)
 		{
+			//Debug.Log("Ground\n");
 			if (!haveNewHeading)
 			{
 				rigidbody.AddForce(desiredDirection * forceAmt * rigidbody.mass);
 			}
+		}
+		else if(navState == GroundState.Falling)
+		{
+			//Debug.Log("Falling\n");
+			//Panic?
 		}
 
 		Direction.Normalize();
@@ -105,6 +119,125 @@ public class EdgeWander : MonoBehaviour
 		#endregion
 	}
 
+	public void CheckGroundState()
+	{
+		if (CheckFloor())
+		{
+			if (CheckWall() || CheckEdge())
+			{
+				navState = GroundState.NearEdge;
+			}
+			else
+			{
+				navState = GroundState.OnGround;
+			}
+		}
+		else
+		{
+			navState = GroundState.Falling;
+		}
+	}
+
+	public bool CheckWall()
+	{
+		if (expensiveWallCheck)
+		{
+			RaycastHit hit;
+
+			Vector3 start = transform.position + transform.right * transform.localScale.y / 2;
+			Vector3 dir = transform.forward * (transform.localScale.y / 2 + 2);
+			Ray r = new Ray(start, dir);
+			Debug.DrawRay(start, dir, Color.cyan);
+			if (Physics.Raycast(start, dir, out hit, (transform.localScale.y / 2 + 2)))
+			{
+				if (hit.collider.gameObject != gameObject)
+				{
+					if (hit.collider.gameObject.tag == "Island")
+					{
+						return true;
+					}
+					else
+					{
+						//Debug.Log("Raycasted something besides island.\n");
+						return true;
+					}
+				}
+			}
+
+
+			start = transform.position - transform.right * transform.localScale.y / 2;
+			dir = transform.forward * (transform.localScale.y / 2 + 2);
+			r = new Ray(start, dir);
+			Debug.DrawRay(start, dir, Color.cyan);
+			if (Physics.Raycast(start, dir, out hit, (transform.localScale.y / 2 + 2)))
+			{
+				if (hit.collider.gameObject != gameObject)
+				{
+					if (hit.collider.gameObject.tag == "Island")
+					{
+						return true;
+					}
+					else
+					{
+						//Debug.Log("Raycasted something besides island.\n");
+						return true;
+					}
+				}
+			}
+		}
+		else
+		{
+			RaycastHit hit;
+
+			Vector3 start = transform.position;
+			Vector3 dir = transform.forward * (transform.localScale.y / 2 + 5);
+			Ray r = new Ray(start, dir);
+			Debug.DrawRay(start, dir, Color.cyan, .1f);
+			if (Physics.Raycast(start, dir, out hit, (transform.localScale.y / 2 + 5)))
+			{
+				if (hit.collider.gameObject != gameObject)
+				{
+					if (hit.collider.gameObject.tag == "Island")
+					{
+						return true;
+					}
+					else
+					{
+						//Debug.Log("Raycasted something besides island.\n");
+						return true;
+					}
+				}
+			}
+
+		}
+
+
+		return false;
+	}
+
+	public bool CheckFloor()
+	{
+		RaycastHit hit;
+
+		Vector3 start = transform.position;
+		Vector3 dir = -transform.up * (transform.localScale.y / 2 + .5f);
+		Ray r = new Ray(start, dir);
+		//Debug.DrawRay(start, dir, Color.magenta, .1f);
+		if (Physics.Raycast(start, dir, out hit, (transform.localScale.y / 2 + .5f)))
+		{
+			if (hit.collider.gameObject.tag == "Island")
+			{
+				return true;
+			}
+			else
+			{
+				Debug.Log("Raycasted something besides island.\n");
+			}
+		}
+
+		return false;
+	}
+
 	public bool CheckEdge()
 	{
 		RaycastHit[] hits;
@@ -113,7 +246,7 @@ public class EdgeWander : MonoBehaviour
 		Vector3 dir = -transform.up * (transform.localScale.y / 2 + checkHeight);
 		Ray r = new Ray(start, dir);
 		Debug.DrawRay(start, dir, Color.green);
-		hits = Physics.RaycastAll(start, dir, (transform.localScale.y / 2 + 1));
+		hits = Physics.RaycastAll(start, dir, (transform.localScale.y / 2 + checkHeight));
 		for(int i = 0; i < hits.Length; i++)
 		{
 			//Debug.Log(hits[i].collider.gameObject.tag);
