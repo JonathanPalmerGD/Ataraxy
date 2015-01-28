@@ -4,87 +4,83 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public class Steering : MonoBehaviour
+public class Steering : Object
 {
 	//movement variables - exposed in inspector panel
 	//maximum speed of vehicle
-	public float maxSpeed = 15.0f;
+	//public float maxSpeed = 15.0f;
 	// maximum force allowed
-	public float maxForce = 10.0f;
+	//public float maxForce = 10.0f;
 	
 	//movement variables - updated by this component
 	//current speed of vehicle
-	private float speed = 0.0f;
+	//private float speed = 0.0f;
 	//change in position per second
-	private Vector3 velocity;
+	//private Vector3 velocity;
 	
-	public Vector3 Velocity {
-		get { return velocity; }
-		set { velocity = value;}
-	}
+	//public Vector3 Velocity {
+	//	get { return velocity; }
+	//	set { velocity = value;}
+	//}
 		
-	public float Speed {
-		get { return speed; }
-		set { speed = Mathf.Clamp (value, 0, maxSpeed); }
-	}
+	//public float Speed {
+	//	get { return speed; }
+	//	set { speed = Mathf.Clamp (value, 0, maxSpeed); }
+	//}
 	
-	public void Start ()
-	{
-		Velocity = Vector3.zero;
-	}
 	
 	// improve this so we only do it once
-	public float Radius {
-		get {
-			float x = renderer.bounds.extents.x;
-			float z = renderer.bounds.extents.z;
-			return Mathf.Sqrt (x * x + z * z);
-		}
-	}
+	//public float Radius {
+	//	get {
+	//		float x = renderer.bounds.extents.x;
+	//		float z = renderer.bounds.extents.z;
+	//		return Mathf.Sqrt (x * x + z * z);
+	//	}
+	//}
 
-	public Vector3 Seek (Vector3 pos)
+	public static Vector3 Seek (Transform self, Vector3 pos, float speed = 0.0f, float maxSpeed = 15.0f)
 	{
 		// find dv, the desired velocity
-		Vector3 dv = pos - transform.position;
+		Vector3 dv = pos - self.position;
 		dv.y = 0; //only steer in the x/z plane
 		dv = dv.normalized * maxSpeed;//scale by maxSpeed
-		dv -= transform.forward * speed;//subtract velocity to get vector in that direction
+		dv -= self.forward * speed;//subtract velocity to get vector in that direction
 		return dv;
 	}
 	
 	// same as seek pos above, but parameter is game object
-	public Vector3 Seek (GameObject gO)
+	public static Vector3 Seek(Transform self, GameObject gO, float speed = 0.0f, float maxSpeed = 15.0f)
 	{
-		return Seek(gO.transform.position);
+		return Seek(self, gO.transform.position, speed, maxSpeed);
 	}
 
-	public Vector3 Flee (Vector3 pos)
+	public static Vector3 Flee(Transform self, Vector3 pos, float speed = 0.0f, float maxSpeed = 15.0f)
 	{
-		Vector3 dv = transform.position - pos;//opposite direction from seek 
+		Vector3 dv = self.position - pos;//opposite direction from seek 
 		dv.y = 0;
 		dv = dv.normalized * maxSpeed;
-		dv -= transform.forward * speed;
+		dv -= self.forward * speed;
 		return dv;
 	}
-	
-	public Vector3 Flee (GameObject go)
+
+	public static Vector3 Flee(Transform self, GameObject go, float speed = 0.0f, float maxSpeed = 15.0f)
 	{
 		Vector3 targetPos = go.transform.position;
-		targetPos.y = transform.position.y;
-		Vector3 dv = transform.position - targetPos;
+		targetPos.y = self.position.y;
+		Vector3 dv = self.position - targetPos;
 		dv = dv.normalized * maxSpeed;
-		return dv - transform.forward * speed;
+		return dv - self.forward * speed;
 	}
 
-	public Vector3 AlignTo (Vector3 direction)
+	public static Vector3 AlignTo(Transform self, Vector3 direction, float speed = 0.0f, float maxSpeed = 15.0f)
 	{
 		// useful for aligning with flock direction
 		Vector3 dv = direction.normalized;
-		return dv * maxSpeed - transform.forward * speed;
+		return dv * maxSpeed - self.forward * speed;
 		
 	}
 
-	public Vector3 Arrival()
+	public static Vector3 Arrival()
 	{
 		Vector3 dv = Vector3.zero;
 			//vector3direction.normalized;
@@ -152,41 +148,41 @@ public class Steering : MonoBehaviour
 	//Assumtions:
 	// we can access radius of obstacle
 	// we have CharacterController component
-	public Vector3 AvoidObstacle (GameObject obst, float safeDistance)
+	public static Vector3 AvoidObstacle(Transform self, GameObject obst, float safeDistance, float speed = 0.0f, float maxSpeed = 15.0f, float radius = 1.0f)
 	{
 		Vector3 dv = Vector3.zero;
 		//compute a vector from charactor to center of obstacle
-		Vector3 vecToCenter = obst.transform.position - transform.position;
+		Vector3 vecToCenter = obst.transform.position - self.position;
 		//eliminate y component so we have a 2D vector in the x, z plane
 		vecToCenter.y = 0;
 		float dist = vecToCenter.magnitude;
 		
 		//return zero vector if too far to worry about
-		if (dist > safeDistance + obst.GetComponent<Dimensions> ().Radius + GetComponent<Dimensions> ().Radius)
+		if (dist > safeDistance + obst.GetComponent<Dimensions> ().Radius + radius)
 			return dv;
 		
 		//return zero vector if behind us
-		if (Vector3.Dot (vecToCenter, transform.forward) < 0)
+		if (Vector3.Dot (vecToCenter, self.forward) < 0)
 			return dv;
 		
 		//return zero vector if we can pass safely
-		float rightDotVTC = Vector3.Dot (vecToCenter, transform.right);
-		if (Mathf.Abs (rightDotVTC) > obst.GetComponent<Dimensions> ().Radius + Radius)
+		float rightDotVTC = Vector3.Dot (vecToCenter, self.right);
+		if (Mathf.Abs (rightDotVTC) > obst.GetComponent<Dimensions> ().Radius + radius)
 			return dv;
 		
 		//obstacle on right so we steer to left
 		if (rightDotVTC > 0)
-			dv = transform.right * -maxSpeed * safeDistance / dist;
+			dv = self.right * -maxSpeed * safeDistance / dist;
 		else
 		//obstacle on left so we steer to right
-			dv = transform.right * maxSpeed * safeDistance / dist;
+			dv = self.right * maxSpeed * safeDistance / dist;
 		
 		//stay in x/z plane
 		dv.y = 0;
 		
 		//compute the force
-		dv -= transform.forward * speed;
-		renderer.material.color = Color.yellow;
+		dv -= self.forward * speed;
+		//renderer.material.color = Color.yellow;
 		return dv;
 	}
 }

@@ -55,7 +55,7 @@ public class Rapier : Weapon
 
 		Vector3 dir = hitPoint - firePoint;
 
-		float lungeVel = 55;
+		float lungeVel = 25;
 		Vector3 movementDir = dir;
 		//The rapier doesn't lose the Y component so you can lunge upwards.
 		//movementDir = new Vector3(movementDir.x, 0, movementDir.z);

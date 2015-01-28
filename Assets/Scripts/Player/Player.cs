@@ -418,11 +418,10 @@ public class Player : Entity
 #if UNITY_EDITOR
 			if (Input.GetKeyDown(KeyCode.T))
 			{
-				CharacterMotor charMotor = gameObject.GetComponent<CharacterMotor>();
 				Vector3 newVel = new Vector3(0.0f, 1, 0.0f);
 				newVel.Normalize();
 				newVel *= 30;
-				charMotor.SetVelocity(newVel);
+				rigidbody.AddForce(newVel * rigidbody.mass * 100);
 			}
 			if (Input.GetKeyDown(KeyCode.G))
 			{
@@ -430,7 +429,7 @@ public class Player : Entity
 				Vector3 newVel = new Vector3(0.0f, -1, 0.0f);
 				newVel.Normalize();
 				newVel *= 50;
-				charMotor.SetVelocity(newVel);
+				rigidbody.AddForce(newVel * rigidbody.mass * 10);
 			}
 			if (Input.GetKeyDown(KeyCode.LeftShift))
 			{
@@ -438,7 +437,7 @@ public class Player : Entity
 				Vector3 newVel = new Vector3(transform.forward.x * 20.0f, 1, transform.forward.z * 20.0f);
 				newVel.Normalize();
 				newVel *= 120;
-				charMotor.SetVelocity(newVel);
+				//rigidbody.AddForce(newVel * rigidbody.mass * 10);
 			}
 			if (Input.GetKeyDown(KeyCode.LeftControl))
 			{
@@ -446,7 +445,7 @@ public class Player : Entity
 				Vector3 newVel = new Vector3(0, 100, 0);
 				newVel.Normalize();
 				newVel *= 100;
-				charMotor.SetVelocity(newVel);
+				rigidbody.AddForce(newVel * rigidbody.mass * 10);
 			}
 #endif
 			#endregion

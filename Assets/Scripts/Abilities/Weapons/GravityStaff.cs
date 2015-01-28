@@ -37,9 +37,10 @@ public class GravityStaff : Weapon
 		//float float = 45;
 		Vector3 movementDir = dir;
 		movementDir = new Vector3(movementDir.x, 0, movementDir.z);
-		
+
 		//Debug.Log(dir + "\n" + movementDir + "\n");
-		MoveCarrier(movementDir, 0, Vector3.up, 1.5f, true);
+		//MoveCarrier(movementDir, 0, Vector3.up, 1.5f, true);
+		MoveCarrier(movementDir, 0, Vector3.up, 0.6f, true);
 	}
 
 	public override Vector3 AdjProjectileColliderPosition(MeleeProjectile proj)

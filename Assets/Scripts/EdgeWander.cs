@@ -16,7 +16,8 @@ public class EdgeWander : MonoBehaviour
 	public bool leftValid = true;
 	public bool turnRight = true;
 	public bool turnLeft = true;
-
+	
+	public float speed = 5;
 	public float maxSpeed = 5;
 	public float directionChangeInterval = 1;
 	public float maxHeadingChange = 30;
@@ -25,7 +26,8 @@ public class EdgeWander : MonoBehaviour
 	public float checkHeight;
 	public float checkDist;
 
-	public Vector3 Direction;
+	public Vector3 direction;
+	public Vector3 steeringForce;
 	public Vector3 CurrentVelocity;
 	
 	public bool haveNewHeading = false;
@@ -127,6 +129,42 @@ public class EdgeWander : MonoBehaviour
 			//transform.eulerAngles = targetRotation;
 			//haveNewHeading = false;
 		}
+	}
+
+	private void CalcSteeringForce()
+	{
+		Vector3 steeringForce = Vector3.zero;
+		//Avoid the obstacles?
+
+		
+		//If our distance from our target is greater than 27
+		//steeringForce += seekWt * steering.Seek(target.transform.position);
+	}
+
+	void PotentialUpdate()
+	{
+		CalcSteeringForce ();
+		//ClampSteering ();
+		
+		direction = transform.forward * speed;
+		// movedirection equals velocity
+		//add acceleration
+		direction += steeringForce * Time.deltaTime;
+		//modified for dt
+		//update speed
+		speed = direction.magnitude;
+		if (speed != direction.magnitude) {
+			direction = direction.normalized * speed;
+		}
+		//orient transform
+		if (direction != Vector3.zero)
+			transform.forward = direction;
+		
+		// Apply gravity
+		//direction.y -= gravity;
+		
+		// the CharacterController moves us subject to physical constraints
+		//characterController.Move (direction * Time.deltaTime);
 	}
 
 	void FixedUpdate()
@@ -255,8 +293,6 @@ public class EdgeWander : MonoBehaviour
 		counter = turnTime - .2f;
 		haveNewHeading = true;
 	}
-
-	
 
 	public bool CheckWall()
 	{

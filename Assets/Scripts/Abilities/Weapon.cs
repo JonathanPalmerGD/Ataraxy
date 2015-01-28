@@ -230,18 +230,52 @@ public class Weapon : Ability
 	public virtual void MoveCarrier(Vector3 movementDir, float movementVel, Vector3 secondDir, float secondVel, bool additiveMovement = false)
 	{
 		movementDir.Normalize();
+
 		if (WeaponBearer.tag == "Player")
 		{
 			//Get player's character controller?
-			CharacterMotor charMotor = WeaponBearer.GetComponent<CharacterMotor>();
+			//CharacterMotor charMotor = WeaponBearer.GetComponent<CharacterMotor>();
 
 			if (additiveMovement)
 			{
-				Vector3 updatedVelocity = charMotor.movement.velocity;
+				//Vector3 updatedVelocity = charMotor.movement.velocity;
+				Vector3 updatedVelocity = weaponBearer.rigidbody.velocity;
+				
 				/*Debug.Log(updatedVelocity + "\t" + 
 					movementDir + " * " + movementVel + "=" + (movementDir * movementVel) + "\n" + 
 					secondDir + "*" + secondVel+  "=" + (secondDir * secondVel) + "\t\t\t" + 
 					((movementDir * movementVel) + (secondDir * secondVel)));*/
+				updatedVelocity += (movementDir * movementVel) + (secondDir * secondVel);
+				weaponBearer.rigidbody.velocity = updatedVelocity;
+			}
+			else
+			{
+				Vector3 updatedVelocity = (movementDir * movementVel) + (secondDir * secondVel);
+				/*Debug.Log(updatedVelocity + "\t" +
+					movementDir + " * " + movementVel + "=" + (movementDir * movementVel) + "\n" +
+					secondDir + "*" + secondVel + "=" + (secondDir * secondVel) + "\t\t\t" +
+					((movementDir * movementVel) + (secondDir * secondVel)));*/
+				weaponBearer.rigidbody.velocity = updatedVelocity;
+			}
+		}
+		else
+		{
+			//Move the enemy?
+		}
+		#region [OLD] CharacterMotor Player
+		/*if (WeaponBearer.tag == "Player")
+		{
+			//Get player's character controller?
+			CharacterMotor charMotor = WeaponBearer.GetComponent<CharacterMotor>();
+
+
+			if (additiveMovement)
+			{
+				Vector3 updatedVelocity = charMotor.movement.velocity;
+				Debug.Log(updatedVelocity + "\t" + 
+					movementDir + " * " + movementVel + "=" + (movementDir * movementVel) + "\n" + 
+					secondDir + "*" + secondVel+  "=" + (secondDir * secondVel) + "\t\t\t" + 
+					((movementDir * movementVel) + (secondDir * secondVel)));
 				updatedVelocity += (movementDir * movementVel) + (secondDir * secondVel);
 				charMotor.SetVelocity(updatedVelocity);
 			}
@@ -249,35 +283,50 @@ public class Weapon : Ability
 			{
 				
 				Vector3 updatedVelocity = (movementDir * movementVel) + (secondDir * secondVel);
-				/*Debug.Log(updatedVelocity + "\t" +
+				Debug.Log(updatedVelocity + "\t" +
 					movementDir + " * " + movementVel + "=" + (movementDir * movementVel) + "\n" +
 					secondDir + "*" + secondVel + "=" + (secondDir * secondVel) + "\t\t\t" +
-					((movementDir * movementVel) + (secondDir * secondVel)));*/
+					((movementDir * movementVel) + (secondDir * secondVel)));
 				charMotor.SetVelocity(updatedVelocity);
 			}
 		}
 		else
 		{
 			//Move the enemy?
-		}
+		}*/
+		#endregion
 	}
 
+	/// <summary>
+	/// Initializes the Melee Projectile within the world space.
+	/// </summary>
+	/// <param name="proj">Reference to the already instantiated melee projectile.</param>
+	/// <param name="velocityDirection">The direction that the projectile will move with it's Projectile.ProjVel</param>
+	/// <param name="linePoints">The points that the LineRenderer should display.</param>
+	/// <param name="lineWidth">The thickness of the line (x = start, y = end)</param>
+	/// <param name="specialVelocity">For when a projectile needs a separate velocity for special attacks.</param>
 	public virtual void SetupMeleeProjectile(MeleeProjectile proj, Vector3 velocityDirection, List<Vector3> linePoints, Vector2 lineWidth, float specialVelocity = 0)
 	{
 		proj.lr.material = new Material(Shader.Find("Particles/Additive"));
 
+		//This could be changed to take linePoints.Count.
 		proj.lr.SetVertexCount(3);
+		//Beam Color is a characteristic of a weapon, as the weapon doesn't usually change color.
 		proj.lrColor = BeamColor;
 		proj.lr.SetWidth(lineWidth.x, lineWidth.y);
 
-		proj.lrPoints = new System.Collections.Generic.List<Vector3>();
-
+		proj.lrPoints = new List<Vector3>();
 		for (int i = 0; i < linePoints.Count; i++)
 		{
 			proj.lrPoints.Add(linePoints[i]);
 		}
+
+		//Friendly fire stub for determining who should and shouldn't be affected.
 		proj.Faction = Faction;
+		//My Weapon's are Scriptable Objects. Some projectiles might influence their parent weapon by refunding health or ammo.
 		proj.creator = this;
+		
+		//Give the projectile velocity. Melee projectiles generally have drag to slow them down quickly.
 		if (specialVelocity != 0)
 		{
 			proj.rigidbody.AddForce(velocityDirection * specialVelocity * proj.rigidbody.mass);
@@ -287,20 +336,35 @@ public class Weapon : Ability
 			proj.rigidbody.AddForce(velocityDirection * proj.ProjVel * proj.rigidbody.mass);
 		}
 
+		//Target is ahead of the projectile (the 8 hard coded value is just enough to always be in front of the projectile
 		Vector3 target = proj.transform.position + (velocityDirection * 8);
 
+		//Orients the collider to align with the two end points while facing the target.
 		AngleCollider(proj, target, Vector3.Cross(linePoints[0], linePoints[2]));
-		//proj.projectileCollider.transform.LookAt(target, Vector3.Cross(linePoints[0], linePoints[2]));
 
+		//Repositions the collider. AdjProjColliderPos is overloaded differently by different weapons.
 		proj.projectileCollider.transform.position -= AdjProjectileColliderPosition(proj);
+
+		//Fallback setup destruction. Most projectiles handle their own removal. This would ideally be changed to a pooling projectile pattern.
 		Destroy(proj.gameObject, 10f);
 	}
 
+	/// <summary>
+	/// Tilts the collider to orient with the upward axis, generally through the use of cross product on the end points.
+	/// </summary>
+	/// <param name="target">The direction the projectile will face</param>
+	/// <param name="axis">The direction that will be considered as 'Up'</param>
 	public virtual void AngleCollider(MeleeProjectile proj, Vector3 target, Vector3 axis)
 	{
 		proj.projectileCollider.transform.LookAt(target, axis);
 	}
 
+	/// <summary>
+	/// Moves the collider forward or backward slightly to align with an individual weapon.
+	/// Overloaded by each child as necessary. Should be replaced as a characteristic of the weapon.
+	/// </summary>
+	/// <param name="proj"></param>
+	/// <returns></returns>
 	public virtual Vector3 AdjProjectileColliderPosition(MeleeProjectile proj)
 	{
 		return proj.projectileCollider.transform.forward * .4f;
