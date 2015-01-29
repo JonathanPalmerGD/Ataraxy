@@ -2,10 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class GravityStaff : Weapon 
+public class WingedSandals : Weapon 
 {
-	public static int IconIndex = 13;
-	//public GameObject daggerStabPrefab;
+	public static int IconIndex = 60;
 	Vector3 movementVector;
 
 	public override void Init()
@@ -14,10 +13,10 @@ public class GravityStaff : Weapon
 		//daggerStabPrefab = Resources.Load<GameObject>("DaggerStab");
 		Icon = UIManager.Instance.Icons[IconIndex];
 
-		DurCost = 6;
-		DurSpecialCost = 1;
-		NormalCooldown = .9f;
-		SpecialCooldown = .08f;
+		DurCost = 1;
+		DurSpecialCost = 6;
+		NormalCooldown = .5f;
+		SpecialCooldown = 12f;
 #if CHEAT
 		//NormalCooldown = .30f;
 		//SpecialCooldown = .5f;
@@ -28,19 +27,28 @@ public class GravityStaff : Weapon
 		BeamColor = Color.white;
 	}
 
+	public override void UseWeapon(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
+	{
+		Vector3 firePoint = firePoints[0].transform.position;
+
+		Vector3 dir = hitPoint - firePoint;
+
+		float lungeVel = 2.4f;
+		Vector3 movementDir = dir;
+		movementDir.Normalize();
+		MoveCarrier(movementDir, lungeVel, Vector3.up, 3.5f, false);
+	}
+
 	public override void UseWeaponSpecial(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
 	{
 		Vector3 firePoint = firePoints[0].transform.position;
 
 		Vector3 dir = hitPoint - firePoint;
 
-		//float float = 45;
 		Vector3 movementDir = dir;
 		movementDir = new Vector3(movementDir.x, 0, movementDir.z);
 
-		//Debug.Log(dir + "\n" + movementDir + "\n");
-		//MoveCarrier(movementDir, 0, Vector3.up, 1.5f, true);
-		MoveCarrier(movementDir, 0, Vector3.up, 0.40f, true);
+		MoveCarrier(Vector3.zero, 0, Vector3.up, 14f, false);
 	}
 
 	public override Vector3 AdjProjectileColliderPosition(MeleeProjectile proj)
@@ -49,21 +57,21 @@ public class GravityStaff : Weapon
 	}
 
 	#region Static Functions
-	public static GravityStaff New()
+	public static WingedSandals New()
 	{
-		GravityStaff gs = ScriptableObject.CreateInstance<GravityStaff>();
-		gs.AbilityName = GravityStaff.GetWeaponName();
-		gs.Durability = Random.Range(140, 200);
-		gs.NormalCooldown = 1;
-		gs.SpecialCooldown = .08f;
-		gs.CdLeft = 0;
-		gs.PrimaryDesc = "A weak laser as a last resort.";
-		gs.SecondaryDesc = "Hold: Dampen gravity effects on you.\nUseful for long or high jumps.";
-		return gs;
+		WingedSandals ws = ScriptableObject.CreateInstance<WingedSandals>();
+		ws.AbilityName = WingedSandals.GetWeaponName();
+		ws.Durability = Random.Range(25, 40);
+		ws.NormalCooldown = .5f;
+		ws.SpecialCooldown = 12f;
+		ws.CdLeft = 0;
+		ws.PrimaryDesc = "A small flap of the sandal's tiny wings for flying short distances.";
+		ws.SecondaryDesc = "A powerful ascending gust.";
+		return ws;
 	}
 
 	static string[] adj = { "Basic", "Bulky", "Hasty", "Deadly", "Steel", "Vampiric", "Anachronic", "Violent", "Nimble", "Strange" };
-	static string weaponName = "Gravity Staff";
+	static string weaponName = "Winged Sandals";
 	public static string GetWeaponName()
 	{
 		int rndA = Random.Range(0, adj.Length);

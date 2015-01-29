@@ -54,7 +54,7 @@ public class Dagger : Weapon
 
 		Vector3 dir = hitPoint - firePoint;
 
-		float lungeVel = 25;
+		float lungeVel = 15;
 		Vector3 movementDir = dir;
 		movementDir = new Vector3(movementDir.x, 0, movementDir.z);
 		movementDir.Normalize();

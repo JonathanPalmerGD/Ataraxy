@@ -101,7 +101,7 @@ public class MultiToken : MonoBehaviour
 			case 5:
 				return GravityStaff.New();
 			case 6:
-				return GravityStaff.New();
+				return WingedSandals.New();
 			//case 5:
 			//	return Dagger.New();
 			default:

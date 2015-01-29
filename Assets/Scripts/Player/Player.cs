@@ -547,7 +547,7 @@ public class Player : Entity
 				SetupAbility(RocketLauncher.New());
 				SetupAbility(ShockRifle.New());
 				SetupAbility(GravityStaff.New());
-				SetupAbility(GravityStaff.New());
+				SetupAbility(WingedSandals.New());
 			}
 			#endregion
 
