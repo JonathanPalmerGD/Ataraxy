@@ -16,9 +16,10 @@ public class EdgeWander : MonoBehaviour
 	public bool leftValid = true;
 	public bool turnRight = true;
 	public bool turnLeft = true;
-	
+
 	public float speed = 5;
 	public float maxSpeed = 5;
+	public float maxForce = 25;
 	public float directionChangeInterval = 1;
 	public float maxHeadingChange = 30;
 
@@ -35,6 +36,8 @@ public class EdgeWander : MonoBehaviour
 	public float counter = 0;
 	public float turnTime = 1;
 
+	public GameObject target;
+
 	float heading;
 	Vector3 targetRotation;
 	Vector3 oldRotation;
@@ -47,6 +50,7 @@ public class EdgeWander : MonoBehaviour
 		oldRotation = transform.eulerAngles;
 
 		//StartCoroutine(NewHeading());
+		target = GameManager.Instance.playerGO;
 	}
 
 	public void CheckEnvironment()
@@ -136,26 +140,42 @@ public class EdgeWander : MonoBehaviour
 		Vector3 steeringForce = Vector3.zero;
 		//Avoid the obstacles?
 
-		
 		//If our distance from our target is greater than 27
-		//steeringForce += seekWt * steering.Seek(target.transform.position);
+		//steeringForce += 15 * Steering.Seek(transform, GameManager.Instance.playerGO.transform.position, speed, maxSpeed);
+
+		Vector3 curVel = rigidbody.velocity;
+		Debug.DrawLine(transform.position, transform.position + curVel, Color.white);
+		Vector3 futurePos = (transform.position + (curVel * Time.deltaTime));
+		Debug.DrawLine(futurePos, futurePos + Vector3.up * 15, Color.red);
+		Vector3 desired = target.transform.position - futurePos;// *Time.deltaTime;
+		Debug.DrawLine(futurePos, futurePos + desired, Color.blue);
+		direction = desired;
+	}
+
+	private void ClampSteering()
+	{
+		if (steeringForce.magnitude > maxForce)
+		{
+			steeringForce.Normalize();
+			steeringForce *= maxForce;
+		}
 	}
 
 	void PotentialUpdate()
 	{
 		CalcSteeringForce ();
-		//ClampSteering ();
+		ClampSteering ();
 		
 		direction = transform.forward * speed;
-		// movedirection equals velocity
-		//add acceleration
 		direction += steeringForce * Time.deltaTime;
-		//modified for dt
-		//update speed
+
 		speed = direction.magnitude;
-		if (speed != direction.magnitude) {
+
+		if (speed != direction.magnitude) 
+		{
 			direction = direction.normalized * speed;
 		}
+
 		//orient transform
 		if (direction != Vector3.zero)
 			transform.forward = direction;
@@ -164,15 +184,21 @@ public class EdgeWander : MonoBehaviour
 		//direction.y -= gravity;
 		
 		// the CharacterController moves us subject to physical constraints
+		rigidbody.AddForce(direction * speed/ 4 * rigidbody.mass);
+
+		Debug.DrawLine(transform.position, transform.position + 10 * rigidbody.velocity, Color.white);
 		//characterController.Move (direction * Time.deltaTime);
+		
+		
+
 	}
 
 	void FixedUpdate()
 	{
+		PotentialUpdate();
+		//CheckEnvironment();
 
-		CheckEnvironment();
-
-		ApplyMovement();
+		//ApplyMovement();
 		
 		
 		/*

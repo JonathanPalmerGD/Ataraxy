@@ -227,7 +227,7 @@ public class Weapon : Ability
 	/// <param name="secondDir">A second direction for movement, such as a slight upward boost</param>
 	/// <param name="secondVel">The velocity of the second direction for movement.</param>
 	/// <param name="additiveMovement">Whether to add the velocity to current velocity, or replace it entirely.</param>
-	public virtual void MoveCarrier(Vector3 movementDir, float movementVel, Vector3 secondDir, float secondVel, bool additiveMovement = false)
+	public virtual void MoveCarrier(Vector3 movementDir, float movementVel, Vector3 secondDir, float secondVel, bool additiveMovement = false, bool dampenVertical = true)
 	{
 		movementDir.Normalize();
 
@@ -240,21 +240,15 @@ public class Weapon : Ability
 			{
 				//Vector3 updatedVelocity = charMotor.movement.velocity;
 				Vector3 updatedVelocity = weaponBearer.rigidbody.velocity;
-				
-				/*Debug.Log(updatedVelocity + "\t" + 
-					movementDir + " * " + movementVel + "=" + (movementDir * movementVel) + "\n" + 
-					secondDir + "*" + secondVel+  "=" + (secondDir * secondVel) + "\t\t\t" + 
-					((movementDir * movementVel) + (secondDir * secondVel)));*/
-				updatedVelocity += (movementDir * movementVel) + (secondDir * secondVel);
+				Vector3 gainedVelocity = (movementDir * movementVel) + (secondDir * secondVel);
+				updatedVelocity += gainedVelocity;// new Vector3(gainedVelocity.x, gainedVelocity.y / 2, gainedVelocity.z);
 				weaponBearer.rigidbody.velocity = updatedVelocity;
 			}
 			else
 			{
-				Vector3 updatedVelocity = (movementDir * movementVel) + (secondDir * secondVel);
-				/*Debug.Log(updatedVelocity + "\t" +
-					movementDir + " * " + movementVel + "=" + (movementDir * movementVel) + "\n" +
-					secondDir + "*" + secondVel + "=" + (secondDir * secondVel) + "\t\t\t" +
-					((movementDir * movementVel) + (secondDir * secondVel)));*/
+				Vector3 updatedVelocity = Vector3.zero;
+				Vector3 gainedVelocity = (movementDir * movementVel) + (secondDir * secondVel);
+				updatedVelocity += gainedVelocity;// new Vector3(gainedVelocity.x, gainedVelocity.y / 2, gainedVelocity.z);
 				weaponBearer.rigidbody.velocity = updatedVelocity;
 			}
 		}

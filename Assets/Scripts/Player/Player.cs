@@ -421,7 +421,7 @@ public class Player : Entity
 				Vector3 newVel = new Vector3(0.0f, 1, 0.0f);
 				newVel.Normalize();
 				newVel *= 30;
-				rigidbody.AddForce(newVel * rigidbody.mass * 100);
+				rigidbody.AddForce(newVel * rigidbody.mass * 60);
 			}
 			if (Input.GetKeyDown(KeyCode.G))
 			{
@@ -429,7 +429,7 @@ public class Player : Entity
 				Vector3 newVel = new Vector3(0.0f, -1, 0.0f);
 				newVel.Normalize();
 				newVel *= 50;
-				rigidbody.AddForce(newVel * rigidbody.mass * 10);
+				rigidbody.AddForce(newVel * rigidbody.mass * 40);
 			}
 			if (Input.GetKeyDown(KeyCode.LeftShift))
 			{

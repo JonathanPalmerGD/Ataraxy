@@ -88,17 +88,25 @@ public class Cluster : WorldObject
 		{
 			if (c[i].gameObject != null && c[i].gameObject.tag == "Island")
 			{
-				Island foundNeighbor = c[i].GetComponent<Island>();
-				//If we don't have that island registered
-				if(!island.nearIslands.Contains(foundNeighbor))
+				if (island.gameObject != c[i].gameObject)
 				{
-					//I don't think we need to check if they have us registered, since neighbors always register both involved islands.
+					Island foundNeighbor = c[i].GetComponent<Island>();
+					//If we don't have that island registered
+					if (!island.nearIslands.Contains(foundNeighbor))
+					{
+						//I don't think we need to check if they have us registered, since neighbors always register both involved islands.
 
-					//Add us to both
-					island.nearIslands.Add(foundNeighbor);
-					foundNeighbor.nearIslands.Add(island);
+						//Add us to both
+						island.nearIslands.Add(foundNeighbor);
+						foundNeighbor.nearIslands.Add(island);
 
-					//Debug.DrawLine(island.transform.position, foundNeighbor.transform.position, Color.blue, 36.0f);
+						//Debug.DrawLine(island.transform.position, foundNeighbor.transform.position, Color.blue, 36.0f);
+					}
+				}
+				else
+				{
+					//To make sure we are dodging illegal neighbors.
+					//Debug.Log(c[i].gameObject.name + "\nMy Name: " + island.name);
 				}
 			}
 		}

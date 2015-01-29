@@ -40,7 +40,7 @@ public class GravityStaff : Weapon
 
 		//Debug.Log(dir + "\n" + movementDir + "\n");
 		//MoveCarrier(movementDir, 0, Vector3.up, 1.5f, true);
-		MoveCarrier(movementDir, 0, Vector3.up, 0.6f, true);
+		MoveCarrier(movementDir, 0, Vector3.up, 0.75f, true);
 	}
 
 	public override Vector3 AdjProjectileColliderPosition(MeleeProjectile proj)

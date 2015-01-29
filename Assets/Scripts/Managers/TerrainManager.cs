@@ -51,6 +51,8 @@ public class TerrainManager : Singleton<TerrainManager>
 	{
 		clusters.Add(reportingCluster);
 
+		SetupNeighborClusters(reportingCluster);
+
 		reportingCluster.transform.SetParent(GameObject.Find("World").transform);
 	}
 
@@ -90,7 +92,10 @@ public class TerrainManager : Singleton<TerrainManager>
 				}
 			}
 
-			if (c.neighborClusters != null)
+			SetupNeighborClusters(c);
+
+			#region Setup Neighbor Clusters (Was exported)
+			/*if (c.neighborClusters != null)
 			{
 				//Loop through all the potential neighbors.
 				for (int i = 0; i < c.neighborClusters.Length; i++)
@@ -118,11 +123,47 @@ public class TerrainManager : Singleton<TerrainManager>
 			else
 			{
 				Debug.LogError("Error with cluster neighbor generation\n");
-			}
+			}*/
+			#endregion
 		}
 	}
 
-	//
+	private void SetupNeighborClusters(Cluster center)
+	{
+		if (center.neighborClusters != null)
+		{
+			//Loop through all the potential neighbors.
+			for (int i = 0; i < center.neighborClusters.Length; i++)
+			{
+				Debug.DrawLine(center.transform.position, center.transform.position + FindOffsetOfDir(i) + Vector3.up * 220, Color.red, 10f);
+
+
+				//Try to find a cluster there.
+				Cluster neighborC = FindNearestCluster(center.transform.position + FindOffsetOfDir(i), 10);
+
+				//If we find one
+				if (neighborC != null && neighborC.gameObject != center.gameObject)
+				{
+					//Debug.DrawLine(c.transform.position, neighborC.transform.position + Vector3.up * i, Color.green, 36.0f);
+
+					//Register ourselves with it. Use the opposite index of ourselves.
+					neighborC.neighborClusters[FindOppositeDirIndex(i)] = center;
+
+					//Set our neighbor as the newly found cluster.
+					center.neighborClusters[i] = neighborC;
+
+					//Increase both's neighborCount.
+					center.neighborsPopulated++;
+					neighborC.neighborsPopulated++;
+				}
+			}
+		}
+		else
+		{
+			Debug.LogError("Error with cluster neighbor generation\n");
+		}
+	}
+
 	/// <summary>
 	/// Provide a directional index (0 being positive X axis) to get the opposite side index.
 	/// </summary>
@@ -196,7 +237,6 @@ public class TerrainManager : Singleton<TerrainManager>
 			return null;
 		}
 		return clusters[index];
-		
 	}
 
 	void Update()
