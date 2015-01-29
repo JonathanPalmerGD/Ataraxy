@@ -5,6 +5,9 @@ using System.Collections.Generic;
 
 public class TerrainManager : Singleton<TerrainManager>
 {
+#if UNITY_EDITOR
+	public static bool drawDebug = false;
+#endif
 	public static float minSizeHor = 40;
 	public static Vector3 minDistance = new Vector3(10, -12, 10);
 	public static Vector3 maxDistance = new Vector3(50, 5, 50);
@@ -135,8 +138,12 @@ public class TerrainManager : Singleton<TerrainManager>
 			//Loop through all the potential neighbors.
 			for (int i = 0; i < center.neighborClusters.Length; i++)
 			{
-				Debug.DrawLine(center.transform.position, center.transform.position + FindOffsetOfDir(i) + Vector3.up * 220, Color.red, 10f);
-
+#if UNITY_EDITOR
+				if (drawDebug)
+				{
+					Debug.DrawLine(center.transform.position, center.transform.position + FindOffsetOfDir(i) + Vector3.up * 220, Color.red, 10f);
+				}
+#endif
 
 				//Try to find a cluster there.
 				Cluster neighborC = FindNearestCluster(center.transform.position + FindOffsetOfDir(i), 10);
