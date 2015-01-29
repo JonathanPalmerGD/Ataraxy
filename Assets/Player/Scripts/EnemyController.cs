@@ -14,9 +14,10 @@
  * Jump();
 
 */
-public class EnemyController : MonoBehaviour 
+public class EnemyController : MonoBehaviour
 {
 	public GameObject target;
+	public Vector3 targetPosition;
 
 	public bool controllerAble = true;
 	public Transform camera;    //The root object that contains the camera
@@ -81,6 +82,11 @@ public class EnemyController : MonoBehaviour
 	public enum GroundState { Falling, OnGround, NearEdge, NearWall, Turning };
 	public GroundState navState;
 	public bool haveNewHeading = false;
+	#endregion
+
+	#region Player Knowledge
+	[Header("Edge & Entity Detection")]
+	public float trackingStrength = .5f;
 	#endregion
 
 	#region Private variables
@@ -346,23 +352,10 @@ public class EnemyController : MonoBehaviour
 		#endregion
 
 		#region Rotation of Enemy
-		Vector3 xz = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z);
-		transform.LookAt(xz, transform.up);
+		FaceTarget(target.transform.position);		
 		#endregion
-
-		Debug.DrawLine(transform.position, transform.position + transform.forward * 50, Color.white, .5f);
-		//Vector3 targLoc = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z);
-		//Vector3 myLoc = new Vector3(transform.position.x, transform.position.y, transform.position.z);
-
-		//Debug.DrawLine(myLoc, targLoc, Color.white, 1 / checksPerSecond);
-
-		//Vector3 input = (target.transform.position - transform.position).normalized;
-		//Debug.DrawLine(myLoc, myLoc + input * 3, Color.red, 1 / checksPerSecond);
 		
-		
-		
-		
-		Vector3 input = new Vector3(Input.GetAxisRaw("Horizontal"), 0f, Input.GetAxisRaw("Vertical"));
+		Vector3 input = Vector3.zero;
 		Vector3 targetVelocity = input;
 		targetVelocity = transform.TransformDirection(targetVelocity.normalized) * speed;
 		velocityChange = (targetVelocity - myRB.velocity);
@@ -371,21 +364,17 @@ public class EnemyController : MonoBehaviour
 		velocityChange.y = 0f;
 
 		/*
-		Vector3 targ = target.transform.position;
-		Vector3 sel = transform.position;
+		Vector3 input = new Vector3(Input.GetAxisRaw("Horizontal"), 0f, Input.GetAxisRaw("Vertical"));
+		Vector3 input = Vector3.zero;
+		Vector3 targetVelocity = input;
+		targetVelocity = transform.TransformDirection(targetVelocity.normalized) * speed;
+		velocityChange = (targetVelocity - myRB.velocity);
+		velocityChange.x = Mathf.Clamp(velocityChange.x, -acceleration, acceleration);
+		velocityChange.z = Mathf.Clamp(velocityChange.z, -acceleration, acceleration);
+		velocityChange.y = 0f;
+		*/
 
-		Debug.DrawLine(transform.position, sel, Color.blue, 1 / checksPerSecond);
-		Debug.DrawLine(transform.position, targ, Color.blue, 1 / checksPerSecond);
-
-		Vector3 partial = Vector3.Normalize(targ - sel);
-		Vector3 rotAxis = Vector3.Cross(transform.forward, partial);
-
-		Debug.DrawLine(transform.position, transform.position + rotAxis * 10, Color.white, 1 / checksPerSecond);*/
-		
-		
-		//transform.eulerAngles = new Vector3(0, transform.rotation.y, 0);
-		//transform.eulerAngles = Vector3.Lerp(oldRotation, targetRotation, );
-
+		#region Controllable
 		if (controllerAble)
 		{
 			#region Speed limit for diagonal walking
@@ -419,11 +408,25 @@ public class EnemyController : MonoBehaviour
 			targetVelocity = Vector3.zero;
 			myRB.velocity = new Vector3(0, myRB.velocity.y, 0);
 		}
+		#endregion
 	}
 
-	void FaceTarget()
+	void FaceTarget(Vector3 targetToFace)
 	{
+		if (navState != GroundState.Falling)
+		{
+			//Create a vector3 that represents the target on our plane.
+			Vector3 xzPosition = new Vector3(targetToFace.x, transform.position.y, targetToFace.z);
 
+			//Get the destination rotation
+			Quaternion targRotation = Quaternion.LookRotation(xzPosition - transform.position);
+
+			//Find a small value to turn about
+			float turnAmount = Mathf.Min(trackingStrength * 1 / checksPerSecond, 1);
+
+			//Set our rotation partially towards our goal.
+			transform.rotation = Quaternion.Lerp(transform.rotation, targRotation, turnAmount);
+		}
 	}
 
 	#region Environment Checking
