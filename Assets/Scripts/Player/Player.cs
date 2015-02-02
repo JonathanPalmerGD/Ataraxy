@@ -34,7 +34,7 @@ public class Player : Entity
 	#endregion
 
 	#region Weapon Variables
-	private float counter = 0.0f;
+	private float targetFadeCounter = 0.0f;
 
 	private int weaponIndex = 0;
 	public int WeaponIndex
@@ -99,6 +99,7 @@ public class Player : Entity
 	{
 		NameInGame = "Vant";
 
+		//Collect our firing points. These are used by weapons to pick start points for projectiles.
 		List<GameObject> fPoints = new List<GameObject>();
 		fPoints.Add(transform.FindChild("Main Camera").transform.FindChild("Front Firing Point").gameObject);
 		fPoints.Add(transform.FindChild("Main Camera").transform.FindChild("RightShoulder Firing Point").gameObject);
@@ -108,13 +109,16 @@ public class Player : Entity
 
 		FirePoints = fPoints.ToArray();
 
+		//Get UI elements
 		SelectorUI.gameObject.SetActive(true);
 		SelectorUI.fillMethod = Image.FillMethod.Radial360;
 		SelectorUI.fillClockwise = true;
 
+		//Keeping a list of weapons and passives that affect ourself.
 		weapons = new List<Weapon>();
 		passives = new List<Passive>();
 
+		//Give the player a default thing
 		//SetupAbility(MonkStaff.New());
 		//SetupAbility(Longsword.New());
 		//SetupAbility(Rapier.New());
@@ -131,10 +135,13 @@ public class Player : Entity
 		//SetupAbility(Passive.New());
 		//SetupAbility(Passive.New());
 
+		//Stub method currently. For if we add mana/other things
 		SetupResourceSystem();
+
 		Level = 1;
 		XPNeeded = 30;
 
+		//Assign UI elements.
 		HealthSlider = UIManager.Instance.player_HP;
 		HealthText = UIManager.Instance.player_HPText;
 		XPSlider = UIManager.Instance.player_XP;
@@ -145,6 +152,7 @@ public class Player : Entity
 		ResourceText = UIManager.Instance.player_ResourceText;
 		WeaponText = UIManager.Instance.player_WeaponText;
 
+		//Set the values for all the different UI elements.
 		SetupHealthUI();
 		SetupResourceUI();
 		SetupNameUI();
@@ -315,18 +323,21 @@ public class Player : Entity
 			SelectorUI.transform.SetSiblingIndex(index + 1);
 			#endregion
 
-
-			UIManager.Instance.item_NameText.text = weapons[weaponIndex].AbilityName;
-			UIManager.Instance.item_PrimaryText.text = weapons[weaponIndex].PrimaryDesc;
-			UIManager.Instance.item_SecondaryText.text = weapons[weaponIndex].SecondaryDesc;
-
+			//Try to find if our cursor is targetting something
 			hitscanTarget = TargetScan();
-			//Debug.Log(hitscanTarget != null? hitscanTarget.name + "\n" : "\n");
-			HandleTarget();
+
+			HandleLoseTarget();
 
 			Damaged = false;
 
 			base.Update();
+		}
+		else
+		{
+			//This would ideally only be set when the player pauses. Not an important optimization.
+			UIManager.Instance.item_NameText.text = weapons[weaponIndex].AbilityName;
+			UIManager.Instance.item_PrimaryText.text = weapons[weaponIndex].PrimaryDesc;
+			UIManager.Instance.item_SecondaryText.text = weapons[weaponIndex].SecondaryDesc;
 		}
 	}
 
@@ -413,62 +424,7 @@ public class Player : Entity
 				//Debug.Log("Fire Ceased\n");
 			}
 			#endregion
-
-			#region Testing Zone
-#if UNITY_EDITOR
-			if (Input.GetKeyDown(KeyCode.T))
-			{
-				Vector3 newVel = new Vector3(0.0f, 1, 0.0f);
-				newVel.Normalize();
-				newVel *= 30;
-				rigidbody.AddForce(newVel * rigidbody.mass * 60);
-			}
-			if (Input.GetKeyDown(KeyCode.G))
-			{
-				CharacterMotor charMotor = gameObject.GetComponent<CharacterMotor>();
-				Vector3 newVel = new Vector3(0.0f, -1, 0.0f);
-				newVel.Normalize();
-				newVel *= 50;
-				rigidbody.AddForce(newVel * rigidbody.mass * 40);
-			}
-			if (Input.GetKeyDown(KeyCode.LeftShift))
-			{
-				CharacterMotor charMotor = gameObject.GetComponent<CharacterMotor>();
-				Vector3 newVel = new Vector3(transform.forward.x * 20.0f, 1, transform.forward.z * 20.0f);
-				newVel.Normalize();
-				newVel *= 120;
-				//rigidbody.AddForce(newVel * rigidbody.mass * 10);
-			}
-			if (Input.GetKeyDown(KeyCode.LeftControl))
-			{
-				CharacterMotor charMotor = gameObject.GetComponent<CharacterMotor>();
-				Vector3 newVel = new Vector3(0, 100, 0);
-				newVel.Normalize();
-				newVel *= 100;
-				rigidbody.AddForce(newVel * rigidbody.mass * 10);
-			}
-#endif
-			#endregion
-
-			#region Health & Resources
-#if UNITY_EDITOR
-			if (Input.GetKeyDown(KeyCode.R))
-			{
-				AdjustHealth(-1);
-			}
-
-			if (Input.GetKeyDown(KeyCode.Y))
-			{
-				AdjustResource(-3);
-			}
-			if (Input.GetKeyDown(KeyCode.H))
-			{
-				AdjustResource(3);
-			}
-#endif
-			#endregion
-
-			//These are controllable while paused.
+		
 			#region Scroll Wheel
 			if (Input.GetAxis("Mouse ScrollWheel") > 0 || Input.GetButtonDown("Previous Weapon"))
 			{
@@ -537,8 +493,61 @@ public class Player : Entity
 			}
 			#endregion
 
+			#region Uniy Editor Only
+			#if UNITY_EDITOR || CHEAT
+
+			#region Dev Movement Buttons
+			//Go up
+			if (Input.GetKeyDown(KeyCode.T))
+			{
+				Vector3 newVel = new Vector3(0.0f, 1, 0.0f);
+				newVel.Normalize();
+				newVel *= 20;
+				rigidbody.velocity = Vector3.zero;
+				rigidbody.AddForce(newVel, ForceMode.VelocityChange);
+			}
+			//Go down
+			if (Input.GetKeyDown(KeyCode.G))
+			{
+				Vector3 newVel = new Vector3(0.0f, -1, 0.0f);
+				newVel.Normalize();
+				newVel *= 20;
+				rigidbody.velocity = Vector3.zero;
+				rigidbody.AddForce(newVel, ForceMode.VelocityChange);
+			}
+			//Go Forward
+			if (Input.GetKeyDown(KeyCode.LeftShift))
+			{
+				Vector3 newVel = new Vector3(transform.forward.x * 20.0f, 1, transform.forward.z * 20.0f);
+				newVel.Normalize();
+				newVel *= 40;
+				rigidbody.velocity = Vector3.zero;
+				rigidbody.AddForce(newVel, ForceMode.VelocityChange);
+			}
+			//Stops all player movement.
+			if (Input.GetKeyDown(KeyCode.LeftControl))
+			{
+				rigidbody.velocity = Vector3.zero;
+			}
+			//Float while holding left control down.
+			if (Input.GetKey(KeyCode.LeftControl))
+			{
+				rigidbody.useGravity = false;
+			}
+			else
+			{
+				rigidbody.useGravity = true;
+			}
+			#endregion
+
+			#region Health & Resources
+			if (Input.GetKeyDown(KeyCode.R))
+			{
+				AdjustHealth(-1);
+			}
+			#endregion
+
 			#region Cheat Weapons
-#if UNITY_EDITOR
 			if (Input.GetKeyDown(KeyCode.M))
 			{
 				//SetupAbility(MonkStaff.New());
@@ -556,9 +565,11 @@ public class Player : Entity
 				SetupAbility(WingedSandals.New());
 				SetupAbility(WingedSandals.New());
 			}
-#endif
+			#endregion
+			#endif
 			#endregion
 
+			#region Sensitivity Controls
 			if (Input.GetKeyDown(KeyCode.LeftBracket))
 			{
 				MouseLook look = gameObject.GetComponent<MouseLook>();
@@ -583,6 +594,7 @@ public class Player : Entity
 				yLook.sensitivityX++;
 				yLook.sensitivityY++;
 			}
+			#endregion
 		}
 	}
 	#endregion
@@ -597,6 +609,7 @@ public class Player : Entity
 	#region Targetting and Hitscan
 	GameObject TargetScan()
 	{
+		//Where the mouse is currently targeting.
 		Ray ray = mainCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
 		RaycastHit hit;
 		//Debug.DrawLine(transform.position, (transform.position + ray) * 100, Color.green);
@@ -604,8 +617,11 @@ public class Player : Entity
 		//If we fire, set hitPoint to someplace arbitrarily far away in the shooting. Even if we hit something, we want to target wherever the cursor pointed.
 		hitPoint = transform.position + (ray.direction * 500);
 
+		//If we hit something
 		if (Physics.Raycast(ray, out hit))
 		{
+			//Handle cases for what we hit.
+
 			//Debug.Log(hit.collider.gameObject.tag + "\n");
 			if (hit.collider.gameObject.tag == "NPC")
 			{
@@ -621,7 +637,7 @@ public class Player : Entity
 
 				return e.gameObject;
 			}
-			//This isn't necessary for right now.
+			//This is outdated. You used to be able to target terrain.
 			else if (hit.collider.gameObject.tag == "WorldObject")
 			{
 				//Island e = hit.collider.gameObject.GetComponent<Island>();
@@ -637,12 +653,14 @@ public class Player : Entity
 			}
 			else
 			{
+				//Catch all case.
 				return hit.collider.gameObject;
 			}
 			//Debug.Log(hit.collider.gameObject.name + "\n");
 		}
 		else
 		{
+			//We didn't hit anything. We're about to return null as the default.
 			//Debug.Log("Targetting nothing\n");
 		}
 		return null;
@@ -675,15 +693,18 @@ public class Player : Entity
 			//Tell em they're fabulous
 			targetedEntity.Target();
 		}
-		counter = Constants.targetFade;
+		targetFadeCounter = Constants.targetFade;
 	}
 
-	void HandleTarget()
+	/// <summary>
+	/// Drops target if we haven't looked at them for several seconds (whatever counter is set to)
+	/// </summary>
+	void HandleLoseTarget()
 	{
 		if (targetedEntity != null)
 		{
-			counter -= Time.deltaTime;
-			if (counter <= 0)
+			targetFadeCounter -= Time.deltaTime;
+			if (targetFadeCounter <= 0)
 			{
 				targetedEntity.Untarget();
 				targetedEntity = null;
@@ -693,31 +714,6 @@ public class Player : Entity
 	#endregion
 
 	#region Unneeded Code
-	void OnGUI()
-	{
-		//float rectWidth = 250;
-		//float rectHeight = 125;
-
-		//GUI.Box(new Rect(Screen.width / 2 - rectWidth / 2, Screen.height - rectHeight, rectWidth, rectHeight), TextPrint());
-	}
-
-	string TextPrint()
-	{
-		string output = "Weapon Selected: " + weaponIndex + "  " + (float)((int)(weapons[WeaponIndex].CdLeft * 10))/10 + "\n";
-		foreach (Weapon w in weapons)
-		{
-			output += "" + w.GetInfo() + "\n";
-		}
-
-		output += "\n";
-
-		foreach (Passive p in passives)
-		{
-			output += p.GetInfo() + "\n";
-		}
-		return output;
-	}
-
 	public void MoveInHierarchy(int delta)
 	{
 		int index = transform.GetSiblingIndex();
