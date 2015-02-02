@@ -28,6 +28,7 @@ public class Cluster : WorldObject
 
 	public override void Start()
 	{
+		clusterContents = transform.FindChild("Contents").gameObject;
 		start = clusterContents.transform.position;
 
 		transform.FindChild("Cylinder").gameObject.renderer.enabled = false;

@@ -99,6 +99,7 @@ public class Player : Entity
 	{
 		NameInGame = "Vant";
 
+		#region Firing Points
 		//Collect our firing points. These are used by weapons to pick start points for projectiles.
 		List<GameObject> fPoints = new List<GameObject>();
 		fPoints.Add(transform.FindChild("Main Camera").transform.FindChild("Front Firing Point").gameObject);
@@ -108,7 +109,9 @@ public class Player : Entity
 		fPoints.Add(transform.FindChild("Main Camera").transform.FindChild("LeftHip Firing Point").gameObject);
 
 		FirePoints = fPoints.ToArray();
+		#endregion
 
+		#region Gather UI Elements
 		//Assign UI elements.
 		HealthSlider = UIManager.Instance.player_HP;
 		HealthText = UIManager.Instance.player_HPText;
@@ -127,12 +130,14 @@ public class Player : Entity
 		SelectorUI.gameObject.SetActive(true);
 		SelectorUI.fillMethod = Image.FillMethod.Radial360;
 		SelectorUI.fillClockwise = true;
+		#endregion
 
 		//Keeping a list of weapons and passives that affect ourself.
 		weapons = new List<Weapon>();
 		passives = new List<Passive>();
 
 		//Give the player a default thing
+		#region Player Starting Items
 		//SetupAbility(MonkStaff.New());
 		//SetupAbility(Longsword.New());
 		//SetupAbility(Rapier.New());
@@ -148,6 +153,7 @@ public class Player : Entity
 		//SetupAbility(Passive.New());
 		//SetupAbility(Passive.New());
 		//SetupAbility(Passive.New());
+		#endregion
 
 		//Stub method currently. For if we add mana/other things
 		SetupResourceSystem();
