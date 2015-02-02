@@ -215,6 +215,7 @@ public class Entity : MonoBehaviour
 
 		if (HealthSlider != null)
 		{
+			HealthSlider.maxValue = MaxHealth;
 			HealthSlider.value = Health;
 		}
 		if (HealthText != null)
