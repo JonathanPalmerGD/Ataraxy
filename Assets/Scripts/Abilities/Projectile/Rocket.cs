@@ -34,7 +34,7 @@ public class Rocket : Projectile
 
 			if (homing)
 			{
-				if (target == null)
+				if (target == null || !target.activeInHierarchy)
 				{
 					fuelRemaining = 0;
 				}

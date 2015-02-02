@@ -307,7 +307,6 @@ public class Controller : MonoBehaviour {
 		Vector3 targetVelocity = input;
 		targetVelocity = transform.TransformDirection(targetVelocity.normalized) * speed;
 
-		Debug.DrawLine(transform.position, transform.position + targetVelocity * 10, Color.green, .1f);
 		velocityChange = (targetVelocity - myRB.velocity);
 		velocityChange.x = Mathf.Clamp(velocityChange.x, -acceleration, acceleration);
 		velocityChange.z = Mathf.Clamp(velocityChange.z, -acceleration, acceleration);

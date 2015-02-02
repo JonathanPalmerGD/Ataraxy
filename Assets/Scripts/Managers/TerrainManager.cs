@@ -85,10 +85,11 @@ public class TerrainManager : Singleton<TerrainManager>
 
 				if(center.neighborClusters[direction] == null)
 				{
+					//We want to create a new cluster near an existing one. We use center.GetFinalPosition to avoid an incorrect target height.
 					c = ((GameObject)GameObject.Instantiate(clusterPrefab, center.transform.position, Quaternion.identity)).GetComponent<Cluster>();
 
 					c.transform.position += FindOffsetOfDir(direction);
-					c.transform.position -= Vector3.up * underworldYOffset;
+					c.clusterContents.transform.position -= Vector3.up * underworldYOffset;
 
 					c.RandomLandmarks = true;
 					

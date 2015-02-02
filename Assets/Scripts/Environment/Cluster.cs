@@ -10,6 +10,7 @@ public class Cluster : WorldObject
 	public List<Island> platforms;
 	public int poissonKVal = 20;
 	public float sizeBonus = 0;
+	public GameObject clusterContents;
 
 	private Vector3 start;
 	public bool inPlace = false;
@@ -27,7 +28,7 @@ public class Cluster : WorldObject
 
 	public override void Start()
 	{
-		start = transform.position;
+		start = clusterContents.transform.position;
 
 		transform.FindChild("Cylinder").gameObject.renderer.enabled = false;
 		TerrainManager.Instance.RegisterCluster(this);
@@ -67,7 +68,7 @@ public class Cluster : WorldObject
 		{
 			riseCounter += Time.deltaTime;
 
-			transform.position = Vector3.Lerp(start, start + Vector3.up * TerrainManager.underworldYOffset, riseCounter / riseDuration);
+			clusterContents.transform.position = Vector3.Lerp(start, start + Vector3.up * TerrainManager.underworldYOffset, riseCounter / riseDuration);
 
 			if (riseCounter > riseDuration)
 			{
@@ -266,7 +267,7 @@ public class Cluster : WorldObject
 
 	public void ApplyIslandParent(GameObject island)
 	{
-		island.transform.SetParent(transform);
+		island.transform.SetParent(clusterContents.transform);
 	}
 
 	public void CreateLargeIsland()

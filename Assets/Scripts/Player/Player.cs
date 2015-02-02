@@ -109,6 +109,20 @@ public class Player : Entity
 
 		FirePoints = fPoints.ToArray();
 
+		//Assign UI elements.
+		HealthSlider = UIManager.Instance.player_HP;
+		HealthText = UIManager.Instance.player_HPText;
+		XPSlider = UIManager.Instance.player_XP;
+		XPText = UIManager.Instance.player_XPText;
+		LevelText = UIManager.Instance.player_LevelText;
+		NameText = UIManager.Instance.player_Name;
+		ResourceSlider = UIManager.Instance.player_Resource;
+		ResourceText = UIManager.Instance.player_ResourceText;
+		WeaponText = UIManager.Instance.player_WeaponText;
+		SelectorUI = UIManager.Instance.player_Selector;
+		WeaponUI = UIManager.Instance.player_WeaponFolder;
+		PassiveUI = UIManager.Instance.player_PassiveFolder;
+
 		//Get UI elements
 		SelectorUI.gameObject.SetActive(true);
 		SelectorUI.fillMethod = Image.FillMethod.Radial360;
@@ -140,17 +154,6 @@ public class Player : Entity
 
 		Level = 1;
 		XPNeeded = 30;
-
-		//Assign UI elements.
-		HealthSlider = UIManager.Instance.player_HP;
-		HealthText = UIManager.Instance.player_HPText;
-		XPSlider = UIManager.Instance.player_XP;
-		XPText = UIManager.Instance.player_XPText;
-		LevelText = UIManager.Instance.player_LevelText;
-		NameText = UIManager.Instance.player_Name;
-		ResourceSlider = UIManager.Instance.player_Resource;
-		ResourceText = UIManager.Instance.player_ResourceText;
-		WeaponText = UIManager.Instance.player_WeaponText;
 
 		//Set the values for all the different UI elements.
 		SetupHealthUI();
