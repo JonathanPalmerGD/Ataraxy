@@ -50,13 +50,15 @@ public class TelePlane : MonoBehaviour
 				player.transform.rotation = player.GetComponent<TeleTarget>().teleTarget.transform.rotation;
 
 				//Stop their movement
-				player.GetComponent<CharacterMotor>().SetVelocity(new Vector3(0, 0, 0));
+				player.rigidbody.velocity = Vector3.zero;
+				//player.GetComponent<CharacterMotor>().SetVelocity(new Vector3(0, 0, 0));
 			}
 			else
 			{
 				player.transform.position = startPos;
-				player.transform.rotation = startRot; 
-				player.GetComponent<CharacterMotor>().SetVelocity(new Vector3(0, 0, 0));
+				player.transform.rotation = startRot;
+				player.rigidbody.velocity = Vector3.zero;
+				//player.GetComponent<CharacterMotor>().SetVelocity(new Vector3(0, 0, 0));
 			}
 		}
 	}

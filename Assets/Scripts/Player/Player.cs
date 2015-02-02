@@ -538,6 +538,7 @@ public class Player : Entity
 			#endregion
 
 			#region Cheat Weapons
+#if UNITY_EDITOR
 			if (Input.GetKeyDown(KeyCode.M))
 			{
 				//SetupAbility(MonkStaff.New());
@@ -546,9 +547,16 @@ public class Player : Entity
 				SetupAbility(Dagger.New());
 				SetupAbility(RocketLauncher.New());
 				SetupAbility(ShockRifle.New());
+			}
+			if (Input.GetKeyDown(KeyCode.H))
+			{
+				SetupAbility(GravityStaff.New());
 				SetupAbility(GravityStaff.New());
 				SetupAbility(WingedSandals.New());
+				SetupAbility(WingedSandals.New());
+				SetupAbility(WingedSandals.New());
 			}
+#endif
 			#endregion
 
 			if (Input.GetKeyDown(KeyCode.LeftBracket))

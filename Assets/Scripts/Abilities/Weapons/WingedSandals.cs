@@ -30,12 +30,14 @@ public class WingedSandals : Weapon
 	public override void UseWeapon(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
 	{
 		Vector3 firePoint = firePoints[0].transform.position;
-
+	
 		Vector3 dir = hitPoint - firePoint;
 
-		float lungeVel = 2.4f;
+		float lungeVel = 2.2f;
 		Vector3 movementDir = dir;
+		movementDir = new Vector3(movementDir.x, 0, movementDir.z);
 		movementDir.Normalize();
+
 		MoveCarrier(movementDir, lungeVel, Vector3.up, 3.5f, false);
 	}
 

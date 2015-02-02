@@ -248,7 +248,7 @@ public class Weapon : Ability
 			{
 				Vector3 updatedVelocity = Vector3.zero;
 				Vector3 gainedVelocity = (movementDir * movementVel) + (secondDir * secondVel);
-				updatedVelocity += gainedVelocity;// new Vector3(gainedVelocity.x, gainedVelocity.y / 2, gainedVelocity.z);
+				updatedVelocity += gainedVelocity;
 				weaponBearer.rigidbody.velocity = updatedVelocity;
 			}
 		}
