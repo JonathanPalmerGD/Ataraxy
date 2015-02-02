@@ -25,6 +25,7 @@ public class TerrainManager : Singleton<TerrainManager>
 	public static int minCountInCluster = 5;
 	public static int maxCountInCluster = 9;
 	public static float IslandNeighborDist = 35;
+	public static int underworldYOffset = 80;
 
 	public GameObject clusterPrefab;
 	public GameObject pathNodePrefab;
@@ -87,6 +88,7 @@ public class TerrainManager : Singleton<TerrainManager>
 					c = ((GameObject)GameObject.Instantiate(clusterPrefab, center.transform.position, Quaternion.identity)).GetComponent<Cluster>();
 
 					c.transform.position += FindOffsetOfDir(direction);
+					c.transform.position -= Vector3.up * underworldYOffset;
 
 					c.RandomLandmarks = true;
 					

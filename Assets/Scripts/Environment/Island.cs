@@ -110,6 +110,8 @@ public class Island : WorldObject
 			GameObject newFeature = (GameObject)GameObject.Instantiate(TerrainManager.Instance.terrainFeatures[Random.Range(0, TerrainManager.Instance.terrainFeatures.Count)], Vector3.zero, transform.rotation);
 
 			newFeature.transform.position = featurePosition;
+
+			newFeature.transform.SetParent(transform.parent);
 		}
 	}
 

@@ -17,7 +17,7 @@ public class IreWasps : FlyingEnemy
 	public override void Start() 
 	{
 		base.Start();
-		home = transform.position;
+		home = transform.position + Vector3.up * (1 * TerrainManager.underworldYOffset);
 		attackDamage = .01f;
 		name = "Ire Wasps";
 		FiringTimer = Random.Range(0, FiringCooldown);

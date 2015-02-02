@@ -11,6 +11,12 @@ public class Cluster : WorldObject
 	public int poissonKVal = 20;
 	public float sizeBonus = 0;
 
+	private Vector3 start;
+	public bool inPlace = false;
+
+	public float riseCounter = 0;
+	private float riseDuration = 6.0f;
+
 	public float tiltDeviation;
 
 	public bool LargeIsland = true;
@@ -21,6 +27,8 @@ public class Cluster : WorldObject
 
 	public override void Start()
 	{
+		start = transform.position;
+
 		transform.FindChild("Cylinder").gameObject.renderer.enabled = false;
 		TerrainManager.Instance.RegisterCluster(this);
 		gameObject.name = "Cluster: " + Nomenclature.GetName(Random.Range(0, 12), Random.Range(0, 12), Random.Range(0, 12), Random.Range(0, 12));
@@ -55,6 +63,17 @@ public class Cluster : WorldObject
 	
 	public override void Update() 
 	{
+		if (!inPlace)
+		{
+			riseCounter += Time.deltaTime;
+
+			transform.position = Vector3.Lerp(start, start + Vector3.up * TerrainManager.underworldYOffset, riseCounter / riseDuration);
+
+			if (riseCounter > riseDuration)
+			{
+				inPlace = true;
+			}
+		}
 		base.Update();
 	}
 
