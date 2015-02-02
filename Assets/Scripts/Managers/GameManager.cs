@@ -9,6 +9,7 @@ public class GameManager : Singleton<GameManager>
 	public GameObject playerGO;
 	public Player player;
 	public GameObject tokenPrefab;
+	public GameObject xpHomePrefab;
 	public List<Enemy> enemies;
 									//Pl	//Neu	//Env	//En	//Dr
 	/*public bool[][] FactionHatred = {{false,	false, false,	true,	true},
@@ -22,6 +23,7 @@ public class GameManager : Singleton<GameManager>
 	{
 		base.Awake();
 		tokenPrefab = Resources.Load<GameObject>("Token");
+		xpHomePrefab = Resources.Load<GameObject>("HomingDeathAlert");
 		playerGO = GameObject.FindGameObjectWithTag("Player");
 		if (playerGO != null)
 		{
@@ -30,6 +32,17 @@ public class GameManager : Singleton<GameManager>
 
 		//Screen.showCursor = false;
 		//Screen.lockCursor = true;
+	}
+
+	public HomingDeathAlert CreateTransferParticle(Enemy dyingEnemy, GameObject target, string message = "")
+	{
+		HomingDeathAlert homingSphere = ((GameObject)GameObject.Instantiate(xpHomePrefab, dyingEnemy.transform.position, Quaternion.identity)).GetComponent<HomingDeathAlert>();
+
+		homingSphere.target = target;
+		homingSphere.message = message;
+		homingSphere.messageParameter = dyingEnemy;
+
+		return homingSphere;
 	}
 
 	public void RegisterEnemy(Enemy reportingEnemy)

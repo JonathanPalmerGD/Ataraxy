@@ -248,6 +248,26 @@ public class Entity : MonoBehaviour
 		return false;
 	}
 
+	public virtual void NearbyEntityDied(Entity deceased)
+	{
+		if (deceased.gameObject.tag == "Enemy")
+		{
+			//Debug.Log(name + " heard of " + deceased.name + "'s death\n");
+			
+			Enemy e = (Enemy)deceased;
+
+			//Gain experience
+			GainExperience(e.XpReward * e.MentorModifier);
+
+			//Get alerted of the perceived player's location
+			
+
+			//Gain relevant death effects
+			//For each e.DeathEffect
+				//Do something
+		}
+	}
+
 	public void GainExperience(float xpValue, int level = 1)
 	{
 		if (xpValue < 0)

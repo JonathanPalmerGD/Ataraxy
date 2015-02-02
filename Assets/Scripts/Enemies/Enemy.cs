@@ -27,6 +27,14 @@ public class Enemy : NPC
 	private float xpGainWhenHit = .5f;
 
 	private float expGainPerShot = 5;
+
+	private float alertRadius = 50;
+	private float mentorModifier = 15.0f;
+	public float MentorModifier
+	{
+		get { return mentorModifier; }
+		set { mentorModifier = value; } 
+	}
 	#endregion
 
 	#region Projectile Attack Variables
@@ -77,10 +85,42 @@ public class Enemy : NPC
 		//Spawn a token
 		ThrowToken(SpawnToken());
 
-		//Give nearby enemies experience.
+		//Give a death alert to nearby entities
+		AlertAlliesOfDeath();
+		//Debug.Log(alertRadius);
+
+		gameObject.SetActive(false);
 
 		//And after all that, destroy ourself.
-		Destroy(gameObject);
+		Destroy(gameObject, 4.0f);
+	}
+
+	/// <summary>
+	/// Tells nearby entities that this enemy died.
+	/// </summary>
+	public virtual void AlertAlliesOfDeath()
+	{
+		//We make a sphere with the alert radius.
+		Collider[] hitColliders = Physics.OverlapSphere(transform.position, alertRadius);
+		int i = 0;
+		while (i < hitColliders.Length)
+		{
+			//Debug.Log(hitColliders[i].name + " heard of " + name + "'s death\n");
+			//Debug.DrawLine(transform.position, hitColliders[i].transform.position, Color.red, 7.0f);
+
+			//Don't send the message to the player or myself
+			if (hitColliders[i].gameObject.tag == "Enemy" && hitColliders[i].gameObject != gameObject)
+			{
+				GameManager.Instance.CreateTransferParticle(this, hitColliders[i].gameObject, "NearbyEntityDied");
+
+				//hitColliders[i].gameObject.SendMessage("NearbyEntityDied", this, SendMessageOptions.DontRequireReceiver);
+
+				//Send some particles in the direction of that entity.
+			}
+
+			//Increment the counter to escape the while loop
+			i++;
+		}
 	}
 
 	public virtual void AwardExperience()

@@ -1,7 +1,7 @@
 ﻿﻿using UnityEngine;
 using System.Collections;
 
-public class Homing : Projectile
+public class Rocket : Projectile
 {
 	public GameObject target;
 

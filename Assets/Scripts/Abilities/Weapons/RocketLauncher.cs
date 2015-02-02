@@ -37,21 +37,21 @@ public class RocketLauncher : Weapon
 				if (e.Faction != Faction)
 				{
 					GameObject go = (GameObject)GameObject.Instantiate(rocketPrefab, firePoint, Quaternion.identity);
-					Homing homing = go.GetComponent<Homing>();
+					Rocket rocket = go.GetComponent<Rocket>();
 
-					homing.Faction = Faction;
+					rocket.Faction = Faction;
 
 					if (lockOn)
 					{
-						homing.target = target;
-						homing.homing = true;
+						rocket.target = target;
+						rocket.homing = true;
 					}
 					else
 					{
-						homing.target = null;
-						homing.homing = false;
+						rocket.target = null;
+						rocket.homing = false;
 
-						homing.rigidbody.AddForce((hitPoint - firePoint) * homing.ProjVel * homing.rigidbody.mass);
+						rocket.rigidbody.AddForce((hitPoint - firePoint) * rocket.ProjVel * rocket.rigidbody.mass);
 					}
 				}
 			}
@@ -68,21 +68,21 @@ public class RocketLauncher : Weapon
 			//Do something like play a 'bullet hitting metal wall' audio.
 
 			GameObject go = (GameObject)GameObject.Instantiate(rocketPrefab, firePoint, Quaternion.identity);
-			Homing homing = go.GetComponent<Homing>();
+			Rocket rocket = go.GetComponent<Rocket>();
 
-			homing.Faction = Faction;
+			rocket.Faction = Faction;
 
-			homing.rigidbody.drag = 0;
-			homing.target = null;
-			homing.homing = false;
+			rocket.rigidbody.drag = 0;
+			rocket.target = null;
+			rocket.homing = false;
 
 			//Debug.DrawLine(firePoint, hitPoint, Color.red, 5.0f);
 			Vector3 dir = hitPoint - firePoint;
 			dir.Normalize();
 
-			homing.rigidbody.AddForce((dir * homing.ProjVel * homing.rigidbody.mass));
+			rocket.rigidbody.AddForce((dir * rocket.ProjVel * rocket.rigidbody.mass));
 
-			Destroy(homing, fuelPerRocket + 8);
+			Destroy(rocket, fuelPerRocket + 8);
 		}
 	}
 
