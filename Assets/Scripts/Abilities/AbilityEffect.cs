@@ -1,17 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AbilityEffect : Ability 
+public class AbilityEffect : Passive 
 {
-	private float duration;
-	public float Duration
-	{
-		get { return duration; }
-		set { duration = value; }
-	}
 
-	public override void Init()
+
+	public override void UpdatePassive(float time)
 	{
-		base.Init();
+		base.UpdatePassive(time);
 	}
 }

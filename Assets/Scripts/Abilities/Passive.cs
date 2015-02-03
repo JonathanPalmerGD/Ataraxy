@@ -11,19 +11,32 @@ public class Passive : Ability
 	}
 	private bool timed;
 
-	public void UpdatePassive(float time)
+	public override void HandleVisuals()
 	{
-		durationRemaining -= time;
 		Remainder.text = ((int)durationRemaining).ToString();
+		base.HandleVisuals();
+	}
+
+	public virtual void UpdatePassive(float time)
+	{
+		if (timed)
+		{
+			durationRemaining -= time;
+		}
+		HandleVisuals();
 	}
 
 	public override bool CheckAbility()
 	{
-		if (durationRemaining <= 0)
+		if (timed)
 		{
-			return true;
+			if (durationRemaining <= 0)
+			{
+				return true;
+			}
+			return false;
 		}
-		return false;
+		return true;
 	}
 
 	public override string GetInfo()
@@ -37,6 +50,7 @@ public class Passive : Ability
 		Passive p = ScriptableObject.CreateInstance<Passive>();
 		p.AbilityName = Passive.GetPassiveName();
 		p.durationRemaining = Random.Range(30.0f, 99.0f);
+		p.timed = true;
 		return p;
 	}
 

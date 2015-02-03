@@ -6,12 +6,12 @@ public class Weapon : Ability
 {
 	#region Weapon's Faction & Bearer
 	public Allegiance Faction;
-	private GameObject weaponBearer;
+	/*private GameObject weaponBearer;
 	public GameObject WeaponBearer
 	{
 		get { return weaponBearer; }
 		set { weaponBearer = value; }
-	}
+	}*/
 	private Color beamColor;
 	public Color BeamColor
 	{
@@ -202,10 +202,10 @@ public class Weapon : Ability
 	{
 		if (hitPoint != default(Vector3) && firePoints.Length > 0)
 		{
-			LineRenderer lr = WeaponBearer.GetComponent<LineRenderer>();
+			LineRenderer lr = Carrier.gameObject.GetComponent<LineRenderer>();
 			if (lr == null)
 			{
-				lr = WeaponBearer.AddComponent<LineRenderer>();
+				lr = Carrier.gameObject.AddComponent<LineRenderer>();
 			}
 
 			lr.material = new Material(Shader.Find("Particles/Additive"));
@@ -231,7 +231,7 @@ public class Weapon : Ability
 	{
 		movementDir.Normalize();
 
-		if (WeaponBearer.tag == "Player")
+		if (Carrier.gameObject.tag == "Player")
 		{
 			//Get player's character controller?
 			//CharacterMotor charMotor = WeaponBearer.GetComponent<CharacterMotor>();
@@ -239,17 +239,17 @@ public class Weapon : Ability
 			if (additiveMovement)
 			{
 				//Vector3 updatedVelocity = charMotor.movement.velocity;
-				Vector3 updatedVelocity = weaponBearer.rigidbody.velocity;
+				Vector3 updatedVelocity = Carrier.gameObject.rigidbody.velocity;
 				Vector3 gainedVelocity = (movementDir * movementVel) + (secondDir * secondVel);
 				updatedVelocity += gainedVelocity;// new Vector3(gainedVelocity.x, gainedVelocity.y / 2, gainedVelocity.z);
-				weaponBearer.rigidbody.velocity = updatedVelocity;
+				Carrier.gameObject.rigidbody.velocity = updatedVelocity;
 			}
 			else
 			{
 				Vector3 updatedVelocity = Vector3.zero;
 				Vector3 gainedVelocity = (movementDir * movementVel) + (secondDir * secondVel);
 				updatedVelocity += gainedVelocity;
-				weaponBearer.rigidbody.velocity = updatedVelocity;
+				Carrier.gameObject.rigidbody.velocity = updatedVelocity;
 			}
 		}
 		else

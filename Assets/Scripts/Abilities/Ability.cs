@@ -34,9 +34,20 @@ public class Ability : ScriptableObject
 		get { return timesGained; }
 		set { timesGained = value; }
 	}
+	private Entity carrier;
+	public Entity Carrier
+	{
+		get { return carrier; }
+		set { carrier = value; }
+	}
 
 	public virtual void Init()
 	{
+	}
+
+	public virtual void HandleVisuals()
+	{
+
 	}
 
 	public virtual void CleanUp()
