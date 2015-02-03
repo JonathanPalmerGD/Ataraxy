@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
 public class Island : WorldObject
 {
-	public List<Island> neighbors;
 	private Cluster family;
 	public Cluster Family
 	{
@@ -23,6 +23,7 @@ public class Island : WorldObject
 	}
 	public List<Island> nearIslands;
 	public List<PathNode> nodes;
+	public bool createNodes = false;
 
 	public new void Start()
 	{
@@ -34,15 +35,74 @@ public class Island : WorldObject
 		PlaceRandomObject();
 
 		CreatePathNodes();*/
+
+		//For special case platforms.
+		if (createNodes)
+		{
+			Init();
+		}
+	}
+
+	public PathNode GetRandomNode(PathNode nearest, bool thisIsland = true)
+	{
+		List<PathNode> remainingOptions = nodes.ToList();
+
+		if (!thisIsland)
+		{
+			//Add nearby islands.
+			for (int i = 0; i < nearIslands.Count; i++)
+			{
+				remainingOptions.AddRange(nearIslands[i].nodes);
+			}
+		}
+		
+		//remainingOptions.Add(nearIslands.
+
+		remainingOptions.Remove(nearest);
+
+		return remainingOptions[Random.Range(0, remainingOptions.Count)];
+	}
+
+	public PathNode NearestNode(Vector3 pos)
+	{
+		PathNode pn = null;
+		float shortestDist = float.MaxValue;
+
+		//For each path node
+		for (int i = 0; i < nodes.Count; i++)
+		{
+			//Flatten our Vector3s. Height won't ever matter dealing with a flat plane. Easier to debug for now.
+			Vector2 posFlat = new Vector2(pos.x, pos.z);
+			Vector2 nodePosFlat = new Vector2(nodes[i].gameObject.transform.position.x, nodes[i].gameObject.transform.position.z);
+			
+			//Find distance to the position.
+			float thisDist = Vector2.Distance(posFlat, nodePosFlat);
+
+			if (thisDist < shortestDist)
+			{
+				shortestDist = thisDist;
+				pn = nodes[i];
+			}
+		}
+		return pn;
 	}
 
 	public void Init()
 	{
-		nearIslands = new List<Island>();
+		if (!createNodes)
+		{
+			nearIslands = new List<Island>();
+		}
 		gameObject.name = "Island: " + Nomenclature.GetName(Random.Range(0, 12), Random.Range(0, 12), Random.Range(0, 12), Random.Range(0, 12));
 
 		gameObject.tag = "Island";
 		//PlaceRandomObject();
+
+		//Used by special case debug platforms.
+		if (createNodes)
+		{
+			CreatePathNodes();
+		}
 	}
 
 	public void CreatePathNodes()
@@ -55,19 +115,19 @@ public class Island : WorldObject
 		nodes.Add(CreateNewNode(distAbovePlatform, adjustment));
 
 		//Forward Right
-		adjustment = Vector3.right * (transform.localScale.x / 2 * .95f) + Vector3.forward * (transform.localScale.z / 2 * .95f);
+		adjustment = Vector3.right * (transform.localScale.x / 2 * .90f) + Vector3.forward * (transform.localScale.z / 2 * .90f);
 		nodes.Add(CreateNewNode(distAbovePlatform, adjustment));
 
 		//Backward Right
-		adjustment = Vector3.right * (transform.localScale.x / 2 * .95f) - Vector3.forward * (transform.localScale.z / 2 * .95f);
+		adjustment = Vector3.right * (transform.localScale.x / 2 * .90f) - Vector3.forward * (transform.localScale.z / 2 * .90f);
 		nodes.Add(CreateNewNode(distAbovePlatform, adjustment));
 
 		//Backward Left
-		adjustment = -Vector3.right * (transform.localScale.x / 2 * .95f) - Vector3.forward * (transform.localScale.z / 2 * .95f);
+		adjustment = -Vector3.right * (transform.localScale.x / 2 * .90f) - Vector3.forward * (transform.localScale.z / 2 * .90f);
 		nodes.Add(CreateNewNode(distAbovePlatform, adjustment));
 
 		//Forward Left
-		adjustment = -Vector3.right * (transform.localScale.x / 2 * .95f) + Vector3.forward * (transform.localScale.z / 2 * .95f);
+		adjustment = -Vector3.right * (transform.localScale.x / 2 * .90f) + Vector3.forward * (transform.localScale.z / 2 * .90f);
 		nodes.Add(CreateNewNode(distAbovePlatform, adjustment));
 
 	}

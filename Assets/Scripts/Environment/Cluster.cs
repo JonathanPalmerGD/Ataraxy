@@ -78,7 +78,7 @@ public class Cluster : WorldObject
 		}
 		base.Update();
 	}
-
+	
 	#region Island Path Nodes
 	/// <summary>
 	/// Determines island neighbors for all existing islands.

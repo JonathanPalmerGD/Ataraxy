@@ -304,6 +304,7 @@ public class Controller : MonoBehaviour {
 		}
 
 		Vector3 input = new Vector3(Input.GetAxisRaw("Horizontal"), 0f, Input.GetAxisRaw("Vertical"));
+		//Debug.Log(input + "\n");
 		Vector3 targetVelocity = input;
 		targetVelocity = transform.TransformDirection(targetVelocity.normalized) * speed;
 

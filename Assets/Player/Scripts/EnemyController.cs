@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 [AddComponentMenu("Character/Controller")]
 [RequireComponent(typeof(Rigidbody))]
@@ -18,6 +19,7 @@ public class EnemyController : MonoBehaviour
 {
 	public GameObject target;
 	public Vector3 targetPosition;
+	public Island curLocation;
 
 	public bool controllerAble = true;
 	public Transform camera;    //The root object that contains the camera
@@ -79,7 +81,7 @@ public class EnemyController : MonoBehaviour
 	private Vector3 checkDistance;
 	public float checkHeight;
 	public float checkDist;
-	public enum GroundState { Falling, OnGround, NearEdge, NearWall, Turning };
+	public enum GroundState { Falling, OnGround, Turning, Jumping };
 	public GroundState navState;
 	public bool haveNewHeading = false;
 	#endregion
@@ -115,23 +117,7 @@ public class EnemyController : MonoBehaviour
 	public float speedMultiplier = 1f;
 	#endregion
 
-	void Start ()
-	{
-		target = GameManager.Instance.playerGO;
-		//croucher = GetComponent<Croucher>();
-		capsule = GetComponent<CapsuleCollider>();
-		
-		myRB = GetComponent<Rigidbody>();
-		myRB.freezeRotation = true;
-
-		maxStamina = stamina;
-
-		grounded = IsGrounded();
-		lastGrounded = grounded;
-
-		//If this is networked, make sure that the rigidbody is kinematic is true for the
-		//people with a !networkView.isMine (myRB.isKinematic = true;)
-	}
+	#region Movement Methods
 	public void Jump()
 	{
 		if(!canJump)
@@ -158,6 +144,52 @@ public class EnemyController : MonoBehaviour
 				myRB.velocity = new Vector3(myRB.velocity.x, CalculateJumpVerticalSpeed(), myRB.velocity.z);
 			}
 		}
+	}
+	float CalculateJumpVerticalSpeed()
+	{
+		return Mathf.Sqrt(jumpHeight * 20f);
+	}
+	public void Footstep()
+	{
+		//networkView.RPC("Step", RPCMode.All);
+		Step();
+	}
+	[RPC]
+	void Step()
+	{
+		if(audioSource && footstepSound)
+		{
+			audioSource.pitch = Random.Range(0.9f, 1.1f);
+			audioSource.volume = 0.8f;
+			audioSource.maxDistance = 15f;
+			audioSource.PlayOneShot(footstepSound);
+		}
+	}
+	[RPC]
+	void CrouchState(bool newCrouch)
+	{
+		//croucher.crouching = newCrouch;
+	}
+	#endregion
+
+	#region Start, Update and FixedUpdate
+	void Start()
+	{
+		//target = GameManager.Instance.playerGO;
+		GetNewDestination();
+		//croucher = GetComponent<Croucher>();
+		capsule = GetComponent<CapsuleCollider>();
+
+		myRB = GetComponent<Rigidbody>();
+		myRB.freezeRotation = true;
+
+		maxStamina = stamina;
+
+		grounded = IsGrounded();
+		lastGrounded = grounded;
+
+		//If this is networked, make sure that the rigidbody is kinematic is true for the
+		//people with a !networkView.isMine (myRB.isKinematic = true;)
 	}
 	void Update()
 	{
@@ -215,7 +247,7 @@ public class EnemyController : MonoBehaviour
 		#region Minor Jump Checking Cleanup
 		if (!grounded)
 		{
-			if(transform.position.y > lastAiredPos)
+			if (transform.position.y > lastAiredPos)
 			{
 				lastAiredPos = transform.position.y;
 			}
@@ -249,27 +281,18 @@ public class EnemyController : MonoBehaviour
 			//Jump();
 		}
 		#endregion
-	}
-	public void Footstep()
-	{
-		//networkView.RPC("Step", RPCMode.All);
-		Step();
-	}
-	[RPC]
-	void Step()
-	{
-		if(audioSource && footstepSound)
+		#region Pathing Dev Keys
+		#if UNITY_EDITOR
+		if (Input.GetKeyDown(KeyCode.I))
 		{
-			audioSource.pitch = Random.Range(0.9f, 1.1f);
-			audioSource.volume = 0.8f;
-			audioSource.maxDistance = 15f;
-			audioSource.PlayOneShot(footstepSound);
+			GetNewDestination();
 		}
-	}
-	[RPC]
-	void CrouchState(bool newCrouch)
-	{
-		//croucher.crouching = newCrouch;
+		if (Input.GetKeyDown(KeyCode.K))
+		{
+			target = GameManager.Instance.playerGO;
+		}
+		#endif
+		#endregion
 	}
 	void FixedUpdate ()
 	{
@@ -286,7 +309,7 @@ public class EnemyController : MonoBehaviour
 		}
 		#endregion
 		#region Crouching Input
-		if (Input.GetKey(KeyCode.LeftControl) || !canStand)
+		/*if (Input.GetKey(KeyCode.LeftControl) || !canStand)
 		{
 			if (grounded)
 			{
@@ -294,7 +317,7 @@ public class EnemyController : MonoBehaviour
 			}
 
 			crouching = true;
-		}
+		}*/
 		#endregion
 		#region Running Input
 		else if (Input.GetKey(KeyCode.LeftShift) && canStand && stamina > 0 && ableToRun)
@@ -352,27 +375,32 @@ public class EnemyController : MonoBehaviour
 		#endregion
 
 		#region Rotation of Enemy
-		FaceTarget(target.transform.position);		
+		if (target != null)
+		{
+			FaceTarget(target.transform.position);
+		}
+		else
+		{
+			GetNewDestination();
+		}
 		#endregion
-		
-		Vector3 input = Vector3.zero;
-		Vector3 targetVelocity = input;
-		targetVelocity = transform.TransformDirection(targetVelocity.normalized) * speed;
-		velocityChange = (targetVelocity - myRB.velocity);
-		velocityChange.x = Mathf.Clamp(velocityChange.x, -acceleration, acceleration);
-		velocityChange.z = Mathf.Clamp(velocityChange.z, -acceleration, acceleration);
-		velocityChange.y = 0f;
 
-		/*
-		Vector3 input = new Vector3(Input.GetAxisRaw("Horizontal"), 0f, Input.GetAxisRaw("Vertical"));
-		Vector3 input = Vector3.zero;
+		Vector3 input = CalcSteering();
+		//Vector3 input = Vector3.right + Vector3.forward;
+		//Debug.DrawLine(transform.position, (transform.position + transform.forward * 10), Color.green);
 		Vector3 targetVelocity = input;
-		targetVelocity = transform.TransformDirection(targetVelocity.normalized) * speed;
+		targetVelocity = transform.TransformDirection(targetVelocity) * speed;
+
+		velocityChange = targetVelocity;
 		velocityChange = (targetVelocity - myRB.velocity);
 		velocityChange.x = Mathf.Clamp(velocityChange.x, -acceleration, acceleration);
 		velocityChange.z = Mathf.Clamp(velocityChange.z, -acceleration, acceleration);
 		velocityChange.y = 0f;
-		*/
+		//Debug.DrawLine(transform.position + Vector3.up * 2, (transform.position + targetVelocity * 10) + Vector3.up * 2, Color.blue);
+
+		CheckDestination();
+		DisplayNearestNode();
+		DisplayDestinationNode();
 
 		#region Controllable
 		if (controllerAble)
@@ -410,6 +438,57 @@ public class EnemyController : MonoBehaviour
 		}
 		#endregion
 	}
+	#endregion
+
+	#region Pathing
+	Vector3 CalcSteering()
+	{
+		Vector3 steering = Vector3.forward;
+		if (navState == GroundState.OnGround || navState == GroundState.Jumping)
+		{
+			float distFromDest = CheckDestinationDistance();
+			
+			steering = Vector3.forward;
+
+			//Check distance to destination. If less distance, dampen this
+			if (distFromDest < walkSpeed * .75f )
+			{
+				//Debug.DrawLine(transform.position, transform.position + Vector3.up * 15, Color.blue, 3.0f);
+				steering += Vector3.back * 0.7f;
+				//acceleration = .2f;
+			}
+
+			if (navState == GroundState.Jumping)
+			{
+				//JUMP!
+				Jump();
+			}
+			
+		}
+		else if (navState == GroundState.Falling)
+		{
+			return Vector3.zero;
+		}
+		else if (navState == GroundState.Turning)
+		{
+			if (leftValid && !rightValid)
+			{
+				steering += Vector3.left * 2; 
+			}
+			if (rightValid && !leftValid)
+			{
+				steering += Vector3.right * 2;
+			}
+			if (!rightValid && !leftValid)
+			{
+				steering += Vector3.back * 2;
+			}
+		}
+
+
+		return steering.normalized;
+	}
+
 
 	void FaceTarget(Vector3 targetToFace)
 	{
@@ -429,15 +508,72 @@ public class EnemyController : MonoBehaviour
 		}
 	}
 
+	float CheckDestinationDistance()
+	{
+		if (target != null)
+		{
+			Vector2 posFlat = new Vector2(transform.position.x, transform.position.z);
+			Vector2 nodePosFlat = new Vector2(target.transform.position.x, target.transform.position.z);
+
+			//Find distance to the position.
+			return Vector2.Distance(posFlat, nodePosFlat);
+		}
+		return float.MaxValue;
+	}
+
+	void CheckDestination()
+	{
+		if (CheckDestinationDistance() < 5)
+		{
+			GetNewDestination();
+		}
+	}
+
+	void GetNewDestination()
+	{
+		if(curLocation != null)
+		{
+			PathNode n = curLocation.GetRandomNode(curLocation.NearestNode(transform.position), true);
+			target = n.gameObject;
+		}
+	}
+
+	/// <summary>
+	/// Use this to display the node we are pathing to next
+	/// </summary>
+	void DisplayDestinationNode()
+	{
+		if (target != null)
+		{
+			Debug.DrawLine(transform.position + Vector3.up * 3, target.transform.position + Vector3.up * 3, Color.magenta, 1 / checksPerSecond);
+		}
+	}
+
+	/// <summary>
+	/// Use this to display the node we are closest to.
+	/// </summary>
+	void DisplayNearestNode()
+	{
+		if (curLocation != null)
+		{
+			PathNode n = curLocation.NearestNode(transform.position);
+
+			Debug.DrawLine(transform.position, n.transform.position, Color.white, 1 / checksPerSecond);
+		}
+	}
+	#endregion
+
 	#region Environment Checking
 	public void CheckEnvironment()
 	{
-		//Are we on the floor
-		if (CheckFloor())
+		//Are we on the floor. CheckFloor sets our CurLocation island as well
+		if (grounded)
 		{
 			//Is there a ledge ahead of us?
 			//Is there a wall ahead of us.
-			if (CheckWall() || CheckEdge())
+			bool wall = CheckWall();
+			bool edge = CheckEdge();
+			if (wall)
 			{
 				navState = GroundState.Turning;
 				if (!haveNewHeading)
@@ -446,8 +582,57 @@ public class EnemyController : MonoBehaviour
 					//TurnNewHeading();
 				}
 			}
+			else if(edge)
+			{
+				//That way we can easily fail out to just turning around.
+				bool goingToJump = false;
+
+				if (target == null)
+				{
+					GetNewDestination();
+				}
+
+				//If our target isn't on our island
+				if (target.tag == "PathNode")
+				{
+					PathNode pn = target.GetComponent<PathNode>();
+					if (pn.island != curLocation)
+					{
+						//Check if our target is in the direction we're facing.
+						
+						Vector3 forward = transform.TransformDirection(Vector3.forward);
+						Vector3 toOther = target.transform.position - transform.position;
+
+						float dotProduct = Vector3.Dot(forward, toOther);
+
+						Debug.Log("Dot Product: " + dotProduct + "\n");
+
+						Debug.DrawLine(transform.position, transform.position + transform.forward * 10, Color.blue, 8.0f);
+
+						if (dotProduct > 5f)
+						{
+							goingToJump = true;
+						}
+					}
+				}
+
+				if (goingToJump)
+				{
+					navState = GroundState.Jumping;
+				}
+				else
+				{
+					navState = GroundState.Turning;
+					if (!haveNewHeading)
+					{
+						//Say to get one based on the edges in front of us.
+						//TurnNewHeading();
+					}
+				}
+			}
 			else
 			{
+				//In this state, we will navigate towards the target.
 				navState = GroundState.OnGround;
 			}
 
@@ -510,29 +695,6 @@ public class EnemyController : MonoBehaviour
 
 		return false;
 	}
-	public bool CheckFloor()
-	{
-		RaycastHit hit;
-
-		Vector3 start = transform.position;
-		Vector3 dir = -transform.up * (capsule.height + 2.2f);
-		Ray r = new Ray(start, dir);
-		Debug.DrawRay(start, dir, Color.magenta, 1/checksPerSecond);
-		if (Physics.Raycast(start, dir, out hit, (capsule.height + 2.2f)))
-		{
-			if (hit.collider.gameObject.tag == "Island")
-			{
-				return true;
-			}
-			else
-			{
-				return true;
-				//Debug.Log("Raycasted something besides island.\n");
-			}
-		}
-
-		return false;
-	}
 	public bool CheckEdge()
 	{
 		RaycastHit hit;	
@@ -588,12 +750,12 @@ public class EnemyController : MonoBehaviour
 		//Vector3 centerCast = new Vector3(transform.position.x, croucher.globalYPosition, transform.position.z);
 		
 		//return !Physics.Raycast(centerCast, transform.up, castDistance);
-		return false;
+		return true;
 	}
 	public bool IsGrounded()
 	{
 		float castRadius = capsule.radius-0.1f;
-		float castDistance = capsule.height/2f+0.2f;
+		float castDistance = capsule.height/2f+1.8f;
 
 		//1 cast in the middle, and 4 more casts on the edges of the collider
 		Vector3 leftCast = new Vector3(transform.position.x-castRadius, transform.position.y, transform.position.z);
@@ -602,16 +764,34 @@ public class EnemyController : MonoBehaviour
 		Vector3 backCast = new Vector3(transform.position.x, transform.position.y, transform.position.z-castRadius);
 		Vector3 centerCast = transform.position;
 
-		return (Physics.Raycast(leftCast, -transform.up, castDistance) || Physics.Raycast(rightCast, -transform.up, castDistance) || 
+		List<Vector3> casts = new List<Vector3>();
+		casts.Add(centerCast);
+		casts.Add(frontCast);
+		casts.Add(backCast);
+		casts.Add(leftCast);
+		casts.Add(rightCast);
+
+		RaycastHit hit;
+		for(int i = 0; i < casts.Count; i++)
+		{
+			if(Physics.Raycast(casts[i], -transform.up, out hit, castDistance))
+			{
+				if(hit.collider.gameObject.tag == "Island")
+				{
+					curLocation = hit.collider.gameObject.GetComponent<Island>();
+					return true;
+				}
+			}
+		}
+		/* (Physics.Raycast(leftCast, -transform.up, castDistance) || Physics.Raycast(rightCast, -transform.up, castDistance) || 
 			Physics.Raycast(frontCast, -transform.up, castDistance) || Physics.Raycast(backCast, -transform.up, castDistance) || 
-				Physics.Raycast(centerCast, -transform.up, castDistance));
+				Physics.Raycast(centerCast, -transform.up, castDistance));*/
+
+		return false;
 	}
 	#endregion
 
-	float CalculateJumpVerticalSpeed ()
-	{
-		return Mathf.Sqrt(jumpHeight * 20f);
-	}
+	#region Collisions and Triggers
 	void OnTriggerStay(Collider what)
 	{
 		if(what.name == "Ladder")
@@ -644,4 +824,39 @@ public class EnemyController : MonoBehaviour
 			jumpedYPos = what.transform.position.y;
 		}
 	}
+	#endregion
+
+
+	#region Dead Code
+	/// <summary>
+	/// This is now obsolete. IsGrounded does this better.
+	/// </summary>
+	/// <returns></returns>
+	public bool CheckFloor()
+	{
+		RaycastHit hit;
+
+		Vector3 start = transform.position;
+		Vector3 dir = -transform.up * (capsule.height + 2.2f);
+		Ray r = new Ray(start, dir);
+		Debug.DrawRay(start, dir, Color.magenta, 1 / checksPerSecond);
+		if (Physics.Raycast(start, dir, out hit, (capsule.height + 2.2f)))
+		{
+			if (hit.collider.gameObject.tag == "Island")
+			{
+				curLocation = hit.collider.gameObject.GetComponent<Island>();
+				return true;
+			}
+			else
+			{
+				curLocation = null;
+				return true;
+				//Debug.Log("Raycasted something besides island.\n");
+			}
+		}
+
+		return false;
+	}
+
+	#endregion
 }

@@ -194,7 +194,7 @@ public class Player : Entity
 			w.Remainder = panel.transform.FindChild("Remainder").GetComponent<Text>();
 			
 			w.Remainder.text = w.Durability.ToString();
-			w.WeaponBearer = gameObject;
+			w.Carrier = this;
 			
 			panel.sprite = w.Icon;
 			w.IconUI = panel;
@@ -506,6 +506,11 @@ public class Player : Entity
 			#if UNITY_EDITOR || CHEAT
 
 			#region Dev Movement Buttons
+			if (Input.GetKeyDown(KeyCode.PageUp))
+			{
+				Application.LoadLevel(Application.loadedLevel);
+			}
+			
 			//Go up
 			if (Input.GetKeyDown(KeyCode.T))
 			{
