@@ -263,6 +263,210 @@ public class TerrainManager : Singleton<TerrainManager>
 	}
 }
 
+public class DestinationConnection
+{
+	//The key for getting this object from the dictionary, in case it needs to be modified.
+	public Island startIsl;
+
+	//The location the entity is trying to go to
+	public Island targetIsl;
+
+	//A list in increasing order of ways to get from the start island to the target island.
+	public List<NodeConnection> connections;
+
+	//Constructor
+	public DestinationConnection(Island start, Island finish)
+	{
+		startIsl = start;
+		targetIsl = finish;
+		connections = new List<NodeConnection>();
+	}
+
+	public void AddConnection(NodeConnection newNC)
+	{
+		connections.Add(newNC);
+	}
+
+	public NodeConnection FindShortestConnectorFromStart(PathNode start)
+	{
+		NodeConnection nc = null;
+		float shortestDist = float.MaxValue;
+
+		//Look through all connections
+		for (int i = 0; i < connections.Count; i++)
+		{
+			//If it begins at start
+			if (connections[i].startNode == start)
+			{
+				//If it is shorter than the fastest.
+				if (connections[i].distance < shortestDist)
+				{
+					//Replace
+					shortestDist = connections[i].distance;
+					nc = connections[i];
+				}
+			}
+		}
+		//Return the shortest route.
+		return nc;
+	}
+
+	public NodeConnection FindShortestConnectorToFinish(PathNode finish)
+	{
+		NodeConnection nc = null;
+		float shortestDist = float.MaxValue;
+
+		//Look through all connections
+		for (int i = 0; i < connections.Count; i++)
+		{
+			//If it ends at where we want to go
+			if (connections[i].finishNode == finish)
+			{
+				//If it is shorter than the fastest.
+				if (connections[i].distance < shortestDist)
+				{
+					//Replace
+					shortestDist = connections[i].distance;
+					nc = connections[i];
+				}
+			}
+		}
+		//Return the shortest route.
+		return nc;
+	}
+
+	public NodeConnection FindShortestConnectorFromStartToIsland(PathNode start, Island destination)
+	{
+		NodeConnection nc = null;
+		float shortestDist = float.MaxValue;
+
+		//Look through all connections
+		for (int i = 0; i < connections.Count; i++)
+		{
+			//If it begins at start AND is on the island we want
+			if (connections[i].startNode == start && connections[i].finishNode.island == destination)
+			{
+				//If it is shorter than the fastest.
+				if (connections[i].distance < shortestDist)
+				{
+					//Replace
+					shortestDist = connections[i].distance;
+					nc = connections[i];
+				}
+			}
+		}
+		//Return the shortest route.
+		return nc;
+	}
+
+	/// <summary>
+	/// This is used to draw lines representing the relationships of this Destination Connection.
+	/// </summary>
+	public void DisplayConnections()
+	{
+		if (connections != null && connections.Count > 0)
+		{
+			DrawIslandConnections();
+			DrawNthOrderConnections(0);
+			//DrawLastOrderConnection();
+		}
+	}
+
+	/// <summary>
+	/// [Cyan Lines] This shows the island positions related to each other.
+	/// </summary>
+	public void DrawIslandConnections()
+	{
+		Vector3 sPos = startIsl.transform.position;
+		Vector3 tPos = targetIsl.transform.position;
+
+		Debug.DrawLine(sPos + Vector3.up * 1, tPos + Vector3.up * 1, Color.cyan, 35.0f);
+	}
+
+	/// <summary>
+	/// [Defaults to Gold Lines] This draws the Nth best node connection to the destination island
+	/// </summary>
+	/// <param name="n"></param>
+	public void DrawNthOrderConnections(int n = 0, Color drawColor = default(Color))
+	{
+		if(drawColor == default(Color))
+		{
+			drawColor = Color.yellow;
+		}
+		NodeConnection nc = GetConnectionOrderOfN(n);
+
+		Vector3 sPos = nc.startNode.transform.position;
+		Vector3 tPos = nc.finishNode.transform.position;
+
+		Debug.DrawLine(sPos + Vector3.up * 0, tPos + Vector3.up * 0, drawColor, 35.0f);
+	}
+
+	/// <summary>
+	/// [Red Lines] This draws the worst node connection to the destination island.
+	/// </summary>
+	public void DrawLastOrderConnection()
+	{
+		DrawNthOrderConnections(connections.Count - 1, Color.red);
+	}
+
+	/// <summary>
+	/// This gets the Nth best connection from the start island to the target
+	/// </summary>
+	/// <param name="n">Make sure this is less than the number of connections.</param>
+	/// <returns>Returns a connection if any. Check for null values.</returns>
+	public NodeConnection GetConnectionOrderOfN(int n = 0)
+	{
+		if (connections != null && connections.Count > n)
+		{
+			//Return the shortest one (the smallest connection)
+			return connections[n];
+		}
+		return null;
+	}
+
+	/// <summary>
+	/// Reorders the connections to put the shortest connections at the front of the list. Uses LINQ sorting by element.distance.
+	/// </summary>
+	public void SortConnections()
+	{
+		//string output = "";
+
+		/*for (int i = 0; i < connections.Count; i++)
+		{
+			output += connections[i].distance + "\t";
+		}*/
+
+		var ordered = from element in connections
+					  orderby element.distance
+					  select element;
+
+		//output += "\n";
+		connections = ordered.ToList();
+
+		/*for (int i = 0; i < connections.Count; i++)
+		{
+			output += connections[i].distance + "\t";
+		}*/
+
+		//connections = connections.Sort((n1, n2) => x.distance).ToList();
+		//Debug.Log(output);
+		DisplayConnections();
+	}
+}
+
+public class NodeConnection
+{
+	public NodeConnection(PathNode start, PathNode finish, float dist)
+	{
+		distance = dist;
+		startNode = start;
+		finishNode = finish;
+	}
+	public float distance;
+	public PathNode startNode;
+	public PathNode finishNode;
+}
+
 public class Nomenclature
 {
 	//12 values

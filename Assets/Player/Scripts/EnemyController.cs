@@ -488,7 +488,8 @@ public class EnemyController : MonoBehaviour
 			if (target != null)
 			{
 				float distFromDest = CheckDestinationDistance();
-				float newDistFromDest = CheckXYDistance(transform.position + rigidbody.velocity.normalized, target.transform.position);
+				//Going to move this to function extensions later.
+				float newDistFromDest = Constants.CheckXZDistance(transform.position + rigidbody.velocity.normalized, target.transform.position);
 				
 				
 				//Debug.Log(distFromDest + "\t\t\t" + newDistFromDest + "\n");
@@ -548,15 +549,6 @@ public class EnemyController : MonoBehaviour
 			return Vector2.Distance(posFlat, nodePosFlat);
 		}
 		return float.MaxValue;
-	}
-
-	float CheckXYDistance(Vector3 firstPos, Vector3 secondPos)
-	{
-		Vector2 posFlat = new Vector2(firstPos.x, firstPos.z);
-		Vector2 nodePosFlat = new Vector2(secondPos.x, secondPos.z);
-
-		//Find distance to the position.
-		return Vector2.Distance(posFlat, nodePosFlat);
 	}
 
 	void GetNewDestination()
@@ -654,14 +646,13 @@ public class EnemyController : MonoBehaviour
 						}
 						float dotProduct = Vector3.Dot(forward.normalized, toOther.normalized);
 						Debug.DrawLine(transform.position, transform.position + transform.forward * 10, Color.blue, 8.0f);
-						
 
 						//We want to check that we are facing in the right direction and that we're moving forward.
 						float velocityDotProduct = Vector3.Dot(rigidbody.velocity.normalized, toOther.normalized);
 
 						if (dotProduct > .97f && velocityDotProduct > .5f)
 						{
-							Debug.Log("Dot Product: " + dotProduct + "\nVelocity Dot Product: " + velocityDotProduct);
+							//Debug.Log("Dot Product: " + dotProduct + "\nVelocity Dot Product: " + velocityDotProduct);
 							goingToJump = true;
 						}
 					}

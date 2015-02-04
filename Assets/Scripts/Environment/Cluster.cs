@@ -138,6 +138,8 @@ public class Cluster : WorldObject
 
 		//Debug.Log("Finished Island (" + island.name + ") Configuration.\nI have " + island.nearIslands.Count + " neighbors\n");
 
+		island.ConfigureNodes();
+
 		island.PlaceRandomEnemy();
 		island.PlaceRandomObject();
 	}
