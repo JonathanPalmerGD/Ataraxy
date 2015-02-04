@@ -81,9 +81,12 @@ public class EnemyController : MonoBehaviour
 	private Vector3 checkDistance;
 	public float checkHeight;
 	public float checkDist;
+	public float destDistance = 5;
 	public enum GroundState { Falling, OnGround, Turning, Jumping };
 	public GroundState navState;
 	public bool haveNewHeading = false;
+
+	public bool ignoreJumpHeight;
 	#endregion
 
 	#region Player Knowledge
@@ -93,6 +96,7 @@ public class EnemyController : MonoBehaviour
 
 	#region Private variables
 	bool grounded;
+	bool nearDestination;
 	float nextCheck;
 	bool canStand;
 	float speed;
@@ -200,6 +204,7 @@ public class EnemyController : MonoBehaviour
 			grounded = IsGrounded();
 			moving = IsMoving();
 			canStand = CanStand();
+			nearDestination = isNearDestination();
 			CheckEnvironment();
 		}
 		#endregion
@@ -398,7 +403,10 @@ public class EnemyController : MonoBehaviour
 		velocityChange.y = 0f;
 		//Debug.DrawLine(transform.position + Vector3.up * 2, (transform.position + targetVelocity * 10) + Vector3.up * 2, Color.blue);
 
-		CheckDestination();
+		if (nearDestination && navState != GroundState.Falling)
+		{
+			GetNewDestination();
+		}
 		DisplayNearestNode();
 		DisplayDestinationNode();
 
@@ -423,11 +431,18 @@ public class EnemyController : MonoBehaviour
 			}
 			else
 			{
-				//If in mid air then only change movement speed if actually trying to move
-				if (input.x != 0 || input.z != 0)
+				//If we're near our destination, let the character move normally?
+				if (nearDestination)
+				{
+					//Debug.Log("Near Destintaion Slow." + velocityChange + " \n");
+					myRB.AddForce(velocityChange, ForceMode.VelocityChange);
+				}
+					//If in mid air then only change movement speed if actually trying to move
+				else if (input.x != 0 || input.z != 0)
 				{
 					myRB.AddForce(velocityChange * 15f, ForceMode.Acceleration);
 				}
+				
 			}
 		}
 		else
@@ -443,6 +458,7 @@ public class EnemyController : MonoBehaviour
 	#region Pathing
 	Vector3 CalcSteering()
 	{
+		//Debug.Log
 		Vector3 steering = Vector3.forward;
 		if (navState == GroundState.OnGround || navState == GroundState.Jumping)
 		{
@@ -454,12 +470,13 @@ public class EnemyController : MonoBehaviour
 			if (distFromDest < walkSpeed * .75f )
 			{
 				//Debug.DrawLine(transform.position, transform.position + Vector3.up * 15, Color.blue, 3.0f);
-				steering += Vector3.back * 0.7f;
-				//acceleration = .2f;
+				steering += Vector3.back * 0.3f;
+				return steering;
 			}
 
 			if (navState == GroundState.Jumping)
 			{
+				//If our velocity is forward, jump
 				//JUMP!
 				Jump();
 			}
@@ -467,7 +484,20 @@ public class EnemyController : MonoBehaviour
 		}
 		else if (navState == GroundState.Falling)
 		{
-			return Vector3.zero;
+			//If we have a target
+			if (target != null)
+			{
+				float distFromDest = CheckDestinationDistance();
+				float newDistFromDest = CheckXYDistance(transform.position + rigidbody.velocity.normalized, target.transform.position);
+				
+				
+				//Debug.Log(distFromDest + "\t\t\t" + newDistFromDest + "\n");
+				if (distFromDest < newDistFromDest)
+				{
+					steering = Vector3.zero;
+					return steering;
+				}
+			}
 		}
 		else if (navState == GroundState.Turning)
 		{
@@ -488,7 +518,6 @@ public class EnemyController : MonoBehaviour
 
 		return steering.normalized;
 	}
-
 
 	void FaceTarget(Vector3 targetToFace)
 	{
@@ -521,20 +550,23 @@ public class EnemyController : MonoBehaviour
 		return float.MaxValue;
 	}
 
-	void CheckDestination()
+	float CheckXYDistance(Vector3 firstPos, Vector3 secondPos)
 	{
-		if (CheckDestinationDistance() < 5)
-		{
-			GetNewDestination();
-		}
+		Vector2 posFlat = new Vector2(firstPos.x, firstPos.z);
+		Vector2 nodePosFlat = new Vector2(secondPos.x, secondPos.z);
+
+		//Find distance to the position.
+		return Vector2.Distance(posFlat, nodePosFlat);
 	}
 
 	void GetNewDestination()
 	{
 		if(curLocation != null)
 		{
-			PathNode n = curLocation.GetRandomNode(curLocation.NearestNode(transform.position), true);
+			PathNode n = curLocation.GetRandomNode(curLocation.NearestNode(transform.position));
 			target = n.gameObject;
+
+			nearDestination = false;
 		}
 	}
 
@@ -566,6 +598,18 @@ public class EnemyController : MonoBehaviour
 	#region Environment Checking
 	public void CheckEnvironment()
 	{
+		/*if (target != null)
+		{
+			Vector3 forward = transform.TransformDirection(Vector3.forward);
+			Vector3 toOther = target.transform.position - transform.position;
+
+			float dotProduct = Vector3.Dot(forward.normalized, toOther.normalized);
+
+			Debug.Log("Forward: " + forward.normalized + "\t\t\t" + toOther.normalized + "\nDot Product: " + dotProduct + "\n");
+
+			//Debug.DrawLine(transform.position, transform.position + transform.forward * 10, Color.blue, 8.0f);
+		}*/
+
 		//Are we on the floor. CheckFloor sets our CurLocation island as well
 		if (grounded)
 		{
@@ -602,15 +646,22 @@ public class EnemyController : MonoBehaviour
 						
 						Vector3 forward = transform.TransformDirection(Vector3.forward);
 						Vector3 toOther = target.transform.position - transform.position;
-
-						float dotProduct = Vector3.Dot(forward, toOther);
-
-						Debug.Log("Dot Product: " + dotProduct + "\n");
-
-						Debug.DrawLine(transform.position, transform.position + transform.forward * 10, Color.blue, 8.0f);
-
-						if (dotProduct > 5f)
+						if (ignoreJumpHeight)
 						{
+							Vector3 targetHeightless = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z);
+
+							toOther = targetHeightless - transform.position;
+						}
+						float dotProduct = Vector3.Dot(forward.normalized, toOther.normalized);
+						Debug.DrawLine(transform.position, transform.position + transform.forward * 10, Color.blue, 8.0f);
+						
+
+						//We want to check that we are facing in the right direction and that we're moving forward.
+						float velocityDotProduct = Vector3.Dot(rigidbody.velocity.normalized, toOther.normalized);
+
+						if (dotProduct > .97f && velocityDotProduct > .5f)
+						{
+							Debug.Log("Dot Product: " + dotProduct + "\nVelocity Dot Product: " + velocityDotProduct);
 							goingToJump = true;
 						}
 					}
@@ -731,6 +782,14 @@ public class EnemyController : MonoBehaviour
 		}
 	
 		return true;
+	}
+	public bool isNearDestination()
+	{
+		if (CheckDestinationDistance() < destDistance)
+		{
+			return true;
+		}
+		return false;
 	}
 	#endregion
 

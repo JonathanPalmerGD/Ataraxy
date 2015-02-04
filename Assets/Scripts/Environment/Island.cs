@@ -43,16 +43,18 @@ public class Island : WorldObject
 		}
 	}
 
-	public PathNode GetRandomNode(PathNode nearest, bool thisIsland = true)
+	public PathNode GetRandomNode(PathNode nearest, bool thisIsland = false)
 	{
 		List<PathNode> remainingOptions = nodes.ToList();
 
 		if (!thisIsland)
 		{
-			//Add nearby islands.
+			//Consider nearby islands. For each nearby island. Find the closest pathnode.
 			for (int i = 0; i < nearIslands.Count; i++)
 			{
-				remainingOptions.AddRange(nearIslands[i].nodes);
+				remainingOptions.Add(nearIslands[i].NearestNode(nearest.transform.position));
+				
+				//remainingOptions.AddRange(nearIslands[i].nodes);
 			}
 		}
 		

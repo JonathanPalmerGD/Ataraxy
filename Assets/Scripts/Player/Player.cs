@@ -544,13 +544,9 @@ public class Player : Entity
 				rigidbody.velocity = Vector3.zero;
 			}
 			//Float while holding left control down.
-			if (Input.GetKey(KeyCode.LeftControl))
+			if (Input.GetKeyDown(KeyCode.LeftControl))
 			{
-				rigidbody.useGravity = false;
-			}
-			else
-			{
-				rigidbody.useGravity = true;
+				rigidbody.useGravity = !rigidbody.useGravity;
 			}
 			#endregion
 
