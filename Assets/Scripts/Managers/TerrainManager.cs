@@ -240,7 +240,7 @@ public class TerrainManager : Singleton<TerrainManager>
 
 	public Cluster FindNearestCluster(Vector3 location, float maxDistance = -1)
 	{
-		Debug.DrawLine(location, location + Vector3.up * 100, Color.black, 8.0f);
+		//Debug.DrawLine(location, location + Vector3.up * 100, Color.black, 8.0f);
 		int index = FindNearestClusterIndex(location, maxDistance);
 		if(index == -1)
 		{
@@ -366,7 +366,7 @@ public class DestinationConnection
 	{
 		if (connections != null && connections.Count > 0)
 		{
-			DrawIslandConnections();
+			//DrawIslandConnections();
 			DrawNthOrderConnections(0);
 			//DrawLastOrderConnection();
 		}
@@ -392,11 +392,17 @@ public class DestinationConnection
 		if(drawColor == default(Color))
 		{
 			drawColor = Color.yellow;
+
 		}
 		NodeConnection nc = GetConnectionOrderOfN(n);
 
 		Vector3 sPos = nc.startNode.transform.position;
 		Vector3 tPos = nc.finishNode.transform.position;
+
+		if (nc.distance > 20)
+		{
+			drawColor = Color.black;
+		}
 
 		Debug.DrawLine(sPos + Vector3.up * 0, tPos + Vector3.up * 0, drawColor, 35.0f);
 	}
