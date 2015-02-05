@@ -61,21 +61,24 @@ public class Cluster : WorldObject
 		
 		base.Start();
 		gameObject.tag = "Cluster";
+		iTween.MoveBy(clusterContents, iTween.Hash("y", TerrainManager.underworldYOffset, "easeType", "easeOutCirc", "speed", 35, "loopType", "none", "delay", .1));
+		//iTween.MoveBy(clusterContents, iTween.Hash("y", TerrainManager.underworldYOffset, "easeType", "easeOutBounce", "speed", 50, "loopType", "none", "delay", .1));
 	}
 	
 	public override void Update() 
 	{
-		if (!inPlace)
+		//Replced by the iTween call.
+		/*if (!inPlace)
 		{
 			riseCounter += Time.deltaTime;
 
-			clusterContents.transform.position = Vector3.Lerp(start, start + Vector3.up * TerrainManager.underworldYOffset, riseCounter / riseDuration);
+			//clusterContents.transform.position = Vector3.Lerp(start, start + Vector3.up * TerrainManager.underworldYOffset, riseCounter / riseDuration);
 
 			if (riseCounter > riseDuration)
 			{
 				inPlace = true;
 			}
-		}
+		}*/
 		base.Update();
 	}
 	
