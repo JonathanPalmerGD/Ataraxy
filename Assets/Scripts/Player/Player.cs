@@ -308,6 +308,10 @@ public class Player : Entity
 					weapons[i].UpdateWeapon(Time.deltaTime);
 					if (weapons[i].CheckAbility())
 					{
+						if (weapons.Count == 0)
+						{
+							WeaponText.text = "Unarmed!";
+						}
 						weapons[i].CleanUp();
 						weapons.RemoveAt(i);
 						i--;

@@ -17,8 +17,9 @@ public class ShockRifle : Weapon
 
 		PrimaryDamage = .4f;
 		SpecialDamage = 4;
-		DurSpecialCost = 2;
-		SpecialCooldown = Random.Range(1.4f, 1.7f);
+		DurSpecialCost = 3;
+		NormalCooldown = .3f;
+		SpecialCooldown = Random.Range(1.1f, 1.3f);
 #if CHEAT
 		NormalCooldown = .3f;
 		SpecialCooldown = 1f;
@@ -99,7 +100,7 @@ public class ShockRifle : Weapon
 		w.AbilityName = ShockRifle.GetWeaponName();
 		w.Durability = Random.Range(80, 95);
 		w.NormalCooldown = .4f;
-		w.SpecialCooldown = 6;
+		w.SpecialCooldown = 4;
 		w.CdLeft = 0;
 		w.PrimaryDesc = "A fast firing shocking laser.\nWarning: Laser discharge explodes static orbs.";
 		w.SecondaryDesc = "An growing orb of static.";

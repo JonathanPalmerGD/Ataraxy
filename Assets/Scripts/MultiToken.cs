@@ -48,7 +48,7 @@ public class MultiToken : MonoBehaviour
 			{
 				GameManager.Instance.player.GainExperience(xpReward);
 			}
-			if (Random.Range(0, 4) != 0)
+			if (GameManager.Instance.player.weapons.Count == 0 || Random.Range(0, 4) != 0)
 			{
 				GameManager.Instance.player.SetupAbility(NewWeapon());
 			}
