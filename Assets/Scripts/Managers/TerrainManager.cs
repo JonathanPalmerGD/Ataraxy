@@ -25,6 +25,7 @@ public class TerrainManager : Singleton<TerrainManager>
 	public static int minCountInCluster = 5;
 	public static int maxCountInCluster = 9;
 	public static float IslandNeighborDist = 35;
+	public static bool RaycastToNodeChecking = true;
 	public static int underworldYOffset = 80;
 
 	public GameObject clusterPrefab;
@@ -368,6 +369,9 @@ public class DestinationConnection
 		{
 			//DrawIslandConnections();
 			DrawNthOrderConnections(0);
+			DrawNthOrderConnections(1);
+			//DrawNthOrderConnections(2);
+			//DrawNthOrderConnections(3);
 			//DrawLastOrderConnection();
 		}
 	}
@@ -396,15 +400,19 @@ public class DestinationConnection
 		}
 		NodeConnection nc = GetConnectionOrderOfN(n);
 
-		Vector3 sPos = nc.startNode.transform.position;
-		Vector3 tPos = nc.finishNode.transform.position;
-
-		if (nc.distance > 20)
+		if (nc != null)
 		{
-			drawColor = Color.black;
-		}
+			Vector3 sPos = nc.startNode.transform.position;
+			Vector3 tPos = nc.finishNode.transform.position;
 
-		Debug.DrawLine(sPos + Vector3.up * 0, tPos + Vector3.up * 0, drawColor, 35.0f);
+			if (nc.distance > 20)
+			{
+				float darken = nc.distance / 90;
+				drawColor = new Color(drawColor.r - darken, drawColor.g - darken, drawColor.b - darken);
+			}
+
+			Debug.DrawLine(sPos + Vector3.up * 0, tPos + Vector3.up * 0, drawColor, 35.0f);
+		}
 	}
 
 	/// <summary>
@@ -435,7 +443,7 @@ public class DestinationConnection
 	/// </summary>
 	public void SortConnections()
 	{
-		//string output = "";
+		//string output = startIsl + "  to  " + targetIsl + "\n";
 
 		/*for (int i = 0; i < connections.Count; i++)
 		{
@@ -462,13 +470,14 @@ public class DestinationConnection
 
 public class NodeConnection
 {
-	public NodeConnection(PathNode start, PathNode finish, float dist)
+	public NodeConnection(PathNode start, PathNode finish, float dist, float height = -767)
 	{
 		distance = dist;
 		startNode = start;
 		finishNode = finish;
 	}
 	public float distance;
+	public float heightDifference;
 	public PathNode startNode;
 	public PathNode finishNode;
 }

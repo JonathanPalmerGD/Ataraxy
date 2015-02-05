@@ -28,6 +28,10 @@ public class Island : WorldObject
 	public float connectionsInDictionary = 0;
 	public bool editorCreateNodes = false;
 
+	//This variable shouldnt get changed in the inspector.
+	[HideInInspector]
+	public bool nodesInitialized = false;
+
 	public new void Start()
 	{
 		/*nearIslands = new List<Island>();
@@ -49,95 +53,100 @@ public class Island : WorldObject
 	public void ConfigureNodes()
 	{
 		string output = "";
-		islandConnections = new Dictionary<Island, DestinationConnection>();
+		if(islandConnections == null)
+		{
+			islandConnections = new Dictionary<Island,DestinationConnection>();
+		}
 
 		//For every neighbor island
 		foreach (Island neighbor in nearIslands)
 		{
-			DestinationConnection newDC = new DestinationConnection(this, neighbor);
-			
-			//Find all of the ways that we can REACH the island.
-			foreach (PathNode myNode in nodes)
+			//If our island connections contains our neighbor, they have already set up this connection.
+			if (islandConnections.ContainsKey(neighbor))
 			{
-				int i = 0;
-				foreach (PathNode neighborNode in neighbor.nodes)
-				{
-					i++;
-					//Find the distance between them
-					float dist = Constants.CheckXZDistance(myNode.transform.position, neighborNode.transform.position);
-					//Add the connection
-					NodeConnection newNC = new NodeConnection(myNode, neighborNode, dist);
+				//We can just move onto the next neighbor.
+			}
+			else
+			{
+				//Set up the new connection from ourself to our neighbor.
+				DestinationConnection selfToNeighborDC = new DestinationConnection(this, neighbor);
+				//And from our neighbor to us.
+				DestinationConnection neighborToSelfDC = new DestinationConnection(neighbor, this);
 
-					if (newDC != null)
+				#region Neighbor Safety Initialization Checking
+				//We call this because inside it checks if the nodes are initialized already.
+				//If they are already set up, it does nothing.
+				neighbor.CreatePathNodes();
+				
+				//If the neighbor isn't set up at all, give them a hand.
+				if (neighbor.islandConnections == null)
+				{
+					neighbor.islandConnections = new Dictionary<Island, DestinationConnection>();
+				}
+				#endregion
+
+				#region Handle Node Relations
+				//Find all of the nodes we can start at.
+				foreach (PathNode myNode in nodes)
+				{
+					//Find all of the nodes we can go to.
+					foreach (PathNode neighborNode in neighbor.nodes)
 					{
-						newDC.AddConnection(newNC);
-						connectionsInDictionary++;
+						bool validRay = true;
+						#region Raycast Handling
+						if(TerrainManager.RaycastToNodeChecking)
+						{
+							RaycastHit hit;
+							Ray ray = new Ray(myNode.transform.position, neighborNode.transform.position - myNode.transform.position);
+
+							//If we hit something with the raycast, it is not a valid ray.
+							validRay = ! Physics.Raycast(ray, out hit, Vector3.Distance(myNode.transform.position, neighborNode.transform.position));
+						}
+						#endregion
+						
+						//Start at the path node. Fire to the other path node.
+						if (validRay)
+						{
+							#region NodeConnection Creation
+							//Find the distance between them
+							float dist = Constants.CheckXZDistance(myNode.transform.position, neighborNode.transform.position);
+							float height = myNode.transform.position.y - neighborNode.transform.position.y;
+
+							//Create a connection & a mirror connection
+							NodeConnection newNC = new NodeConnection(myNode, neighborNode, dist, height);
+							NodeConnection mirrowNewNC = new NodeConnection(neighborNode, myNode, dist, height);
+
+							//We need to add the new node connection to both or destination grid
+							selfToNeighborDC.AddConnection(newNC);
+							//And to our target.
+							neighborToSelfDC.AddConnection(mirrowNewNC);
+							#endregion
+						}
+						else
+						{
+							//Debug.DrawRay(myNode.transform.position, neighborNode.transform.position - myNode.transform.position, Color.magenta, 5.0f);
+						}
 					}
 				}
-			}
+				#endregion
 
-			newDC.SortConnections();
-			output += "Completed New Destination Connection between\t\t" + this.name + " and " + neighbor.name + "\nConnection Count: " + newDC.connections.Count + "\n\n";
+				#region Connection Adding
+				//Debug.Log("NC: " + nodes.Count + "\tNN: " + neighbor.nodes.Count + "\tNI: " + nearIslands.Count + "\n" + selfToNeighborDC.connections.Count + "\t\t" + neighborToSelfDC.connections.Count + "\n");
+				islandConnections.Add(neighbor, selfToNeighborDC);
+				neighbor.islandConnections.Add(this, neighborToSelfDC);
+
+				selfToNeighborDC.SortConnections();
+				neighborToSelfDC.SortConnections();
+				//output += "Completed New Destination Connection between\t\t" + this.name + " and " + neighbor.name + "\nConnection Count: " + selfToNeighborDC.connections.Count + "\n\n";
+				#endregion
+
+			}
 		}
 
 		//Debug.Log(output);
+		//Debug.Log(islandConnections.Count + "\n");
 	}
 
-	/*
-	public void ConfigureNodes()
-	{
-		for (int i = 0; i < nodes.Count; i++)
-		{
-			ConfigurePathNode(nodes[i]);
-		}
-	}
-
-	public void ConfigurePathNode(PathNode node)
-	{
-		node.nearNodes = new Dictionary<Island, PathNode>();
-		node.nearIslandIndex = new List<Island>();
-		node.nearNodeIndex = new List<PathNode>();
-
-		//For each neighbor island
-		foreach (Island curIsland in nearIslands)
-		{
-			PathNode nearestNode = null;
-			float nearestDist = float.MaxValue;
-
-			//Go through that islands nodes and find the closest one to the node we are configuring.
-			foreach (PathNode curNode in curIsland.nodes)
-			{
-				//This checks the XZ since Y is a separate factor.
-				//Can make a vertical check to make illegal  if it is too far a distance.
-				float curDist = Constants.CheckXZDistance(node.transform.position, curNode.transform.position);
-				if (curDist < nearestDist)
-				{
-					nearestNode = curNode;
-				}
-			}
-			//If we found a node
-			if (nearestNode != null)
-			{
-				if (!node.nearNodes.ContainsKey(curIsland))
-				{
-					//Add it to the current node's neighbors.
-					node.nearNodes.Add(curIsland, nearestNode);
-					node.nearIslandIndex.Add(curIsland);
-					node.nearNodeIndex.Add(nearestNode);
-				}
-				if (!nearestNode.nearNodes.ContainsKey(this))
-				{
-					nearestNode.nearNodes.Add(this, node);
-					nearestNode.nearIslandIndex.Add(this);
-					nearestNode.nearNodeIndex.Add(node);
-				}
-				Debug.DrawLine(transform.position, node.transform.position, Color.green, 3.0f);
-				Debug.DrawLine(node.transform.position, nearestNode.transform.position + Vector3.up * 4, Color.green, 3.0f);
-			}
-		}
-		//Add relations to the path node for the shortest node to that island.
-	}
-	*/
 	public PathNode GetRandomNode(PathNode nearest, bool thisIsland = false)
 	{
 		List<PathNode> remainingOptions = nodes.ToList();
@@ -211,31 +220,40 @@ public class Island : WorldObject
 		}
 	}
 
+	/// <summary>
+	/// Creates the appropriate path nodes on an island.
+	/// Will not create nodes if the bool nodes initialized is true.
+	/// </summary>
 	public void CreatePathNodes()
 	{
-		//Create 5 islands, 1 at each corner, 1 in the center.
+		if (!nodesInitialized)
+		{
+			//Create 5 islands, 1 at each corner, 1 in the center.
 
-		float distAbovePlatform = transform.localScale.y / 2 + 2;
-		Vector3 adjustment = Vector3.zero;
+			float distAbovePlatform = transform.localScale.y / 2 + 2;
+			Vector3 adjustment = Vector3.zero;
 
-		nodes.Add(CreateNewNode(distAbovePlatform, adjustment));
+			nodes.Add(CreateNewNode(distAbovePlatform, adjustment));
 
-		//Forward Right
-		adjustment = Vector3.right * (transform.localScale.x / 2 * .90f) + Vector3.forward * (transform.localScale.z / 2 * .90f);
-		nodes.Add(CreateNewNode(distAbovePlatform, adjustment));
+			//Forward Right
+			adjustment = Vector3.right * (transform.localScale.x / 2 * .90f) + Vector3.forward * (transform.localScale.z / 2 * .90f);
+			nodes.Add(CreateNewNode(distAbovePlatform, adjustment));
 
-		//Backward Right
-		adjustment = Vector3.right * (transform.localScale.x / 2 * .90f) - Vector3.forward * (transform.localScale.z / 2 * .90f);
-		nodes.Add(CreateNewNode(distAbovePlatform, adjustment));
+			//Backward Right
+			adjustment = Vector3.right * (transform.localScale.x / 2 * .90f) - Vector3.forward * (transform.localScale.z / 2 * .90f);
+			nodes.Add(CreateNewNode(distAbovePlatform, adjustment));
 
-		//Backward Left
-		adjustment = -Vector3.right * (transform.localScale.x / 2 * .90f) - Vector3.forward * (transform.localScale.z / 2 * .90f);
-		nodes.Add(CreateNewNode(distAbovePlatform, adjustment));
+			//Backward Left
+			adjustment = -Vector3.right * (transform.localScale.x / 2 * .90f) - Vector3.forward * (transform.localScale.z / 2 * .90f);
+			nodes.Add(CreateNewNode(distAbovePlatform, adjustment));
 
-		//Forward Left
-		adjustment = -Vector3.right * (transform.localScale.x / 2 * .90f) + Vector3.forward * (transform.localScale.z / 2 * .90f);
-		nodes.Add(CreateNewNode(distAbovePlatform, adjustment));
+			//Forward Left
+			adjustment = -Vector3.right * (transform.localScale.x / 2 * .90f) + Vector3.forward * (transform.localScale.z / 2 * .90f);
+			nodes.Add(CreateNewNode(distAbovePlatform, adjustment));
 
+			//We have set up our nodes
+			nodesInitialized = true;
+		}
 	}
 
 	private PathNode CreateNewNode(float distAbovePlatform, Vector3 adjustment)
