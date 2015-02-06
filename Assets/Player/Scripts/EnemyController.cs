@@ -19,7 +19,11 @@ public class EnemyController : MonoBehaviour
 {
 	public GameObject target;
 	public Vector3 targetPosition;
-	public Island curLocation;
+	public Island lastLocation;
+
+
+	public Stack<PathNode> curPath;
+	public PathNode nextNode;
 
 	public bool controllerAble = true;
 	public Transform camera;    //The root object that contains the camera
@@ -183,6 +187,7 @@ public class EnemyController : MonoBehaviour
 		GetNewDestination();
 		//croucher = GetComponent<Croucher>();
 		capsule = GetComponent<CapsuleCollider>();
+		curPath = new Stack<PathNode>();
 
 		myRB = GetComponent<Rigidbody>();
 		myRB.freezeRotation = true;
@@ -298,6 +303,12 @@ public class EnemyController : MonoBehaviour
 		}
 		#endif
 		#endregion
+		//Island targNearIsland = TerrainManager.Instance.FindIslandNearTarget(target);
+		/*
+		if (targNearIsland != null)
+		{
+			Debug.DrawLine(target.transform.position, targNearIsland.transform.position);
+		}*/
 	}
 	void FixedUpdate ()
 	{
@@ -425,6 +436,7 @@ public class EnemyController : MonoBehaviour
 				myRB.velocity = new Vector3(myRB.velocity.x, -maxFallSpeed, myRB.velocity.z);
 			}
 			#endregion
+			#region Add Force to Rigidbody
 			if (grounded)
 			{
 				myRB.AddForce(velocityChange, ForceMode.VelocityChange);
@@ -442,8 +454,9 @@ public class EnemyController : MonoBehaviour
 				{
 					myRB.AddForce(velocityChange * 15f, ForceMode.Acceleration);
 				}
-				
+
 			}
+			#endregion
 		}
 		else
 		{
@@ -551,15 +564,45 @@ public class EnemyController : MonoBehaviour
 		return float.MaxValue;
 	}
 
+	void UpdateTarget()
+	{
+		if (curPath.Count <= 0)
+		{
+			if (GameManager.Instance.player.GetComponent<Controller>().lastLocation != null)
+			{
+				Stack<PathNode> newPath = TerrainManager.Instance.FindPathToIsland(lastLocation.NearestNode(transform.position), GameManager.Instance.player.GetComponent<Controller>().lastLocation, 30);
+
+				Debug.Log("New Path Acquired: " + newPath.Count + "\n");
+			}
+			//Get a new path to the target.
+		}
+		
+		//Set our nextNode destination to the top of the stack.
+		//nextNode = curPath.Pop();
+
+		//Say we aren't near a node anymore.
+		//nearDestination = false;
+	}
+
 	void GetNewDestination()
 	{
-		if(curLocation != null)
+		if(lastLocation != null)
 		{
-			PathNode n = curLocation.GetRandomNode(curLocation.NearestNode(transform.position));
-			target = n.gameObject;
+			
+			
+			
+			
+			/*PathNode n = lastLocation.GetRandomNode(lastLocation.NearestNode(transform.position));
+			target = n.gameObject;*/
 
 			nearDestination = false;
 		}
+	}
+
+	void GetNewPath()
+	{
+		//Get a random adjacent island.
+		//Ask TerrainManager for a path to that island?
 	}
 
 	/// <summary>
@@ -578,9 +621,9 @@ public class EnemyController : MonoBehaviour
 	/// </summary>
 	void DisplayNearestNode()
 	{
-		if (curLocation != null)
+		if (lastLocation != null)
 		{
-			PathNode n = curLocation.NearestNode(transform.position);
+			PathNode n = lastLocation.NearestNode(transform.position);
 
 			Debug.DrawLine(transform.position, n.transform.position, Color.white, 1 / checksPerSecond);
 		}
@@ -632,7 +675,7 @@ public class EnemyController : MonoBehaviour
 				if (target.tag == "PathNode")
 				{
 					PathNode pn = target.GetComponent<PathNode>();
-					if (pn.island != curLocation)
+					if (pn.island != lastLocation)
 					{
 						//Check if our target is in the direction we're facing.
 						
@@ -828,9 +871,9 @@ public class EnemyController : MonoBehaviour
 			{
 				if(hit.collider.gameObject.tag == "Island")
 				{
-					curLocation = hit.collider.gameObject.GetComponent<Island>();
-					return true;
+					lastLocation = hit.collider.gameObject.GetComponent<Island>();
 				}
+				return true;
 			}
 		}
 		/* (Physics.Raycast(leftCast, -transform.up, castDistance) || Physics.Raycast(rightCast, -transform.up, castDistance) || 
@@ -876,7 +919,6 @@ public class EnemyController : MonoBehaviour
 	}
 	#endregion
 
-
 	#region Dead Code
 	/// <summary>
 	/// This is now obsolete. IsGrounded does this better.
@@ -894,12 +936,12 @@ public class EnemyController : MonoBehaviour
 		{
 			if (hit.collider.gameObject.tag == "Island")
 			{
-				curLocation = hit.collider.gameObject.GetComponent<Island>();
+				lastLocation = hit.collider.gameObject.GetComponent<Island>();
 				return true;
 			}
 			else
 			{
-				curLocation = null;
+				lastLocation = null;
 				return true;
 				//Debug.Log("Raycasted something besides island.\n");
 			}

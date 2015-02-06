@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 public class TerrainManager : Singleton<TerrainManager>
 {
+	#region Terrain Manager Static Variables
 #if UNITY_EDITOR
 	public static bool drawDebug = false;
 #endif
@@ -24,19 +25,21 @@ public class TerrainManager : Singleton<TerrainManager>
 	public static float maxTilt = 8;
 	public static int minCountInCluster = 5;
 	public static int maxCountInCluster = 9;
-	public static float IslandNeighborDist = 35;
+	public static float IslandNeighborDist = 30;
 	public static bool RaycastToNodeChecking = true;
 	public static int underworldYOffset = 80;
+	#endregion
 
+	#region Prefabs & Lists of Prefabs
 	public GameObject clusterPrefab;
 	public GameObject pathNodePrefab;
-
 	public List<Cluster> clusters;
 	public List<Texture2D> textures;
 	public List<GameObject> terrainFeatures;
 	public List<GameObject> enemies;
 	public List<GameObject> islandPrefabs;
 	public List<GameObject> landmarkPrefabs;
+	#endregion
 
 	public override void Awake()
 	{
@@ -51,7 +54,7 @@ public class TerrainManager : Singleton<TerrainManager>
 		terrainFeatures = Resources.LoadAll<GameObject>("TerrainFeatures").ToList();
 		enemies = Resources.LoadAll<GameObject>("Enemies").ToList();
 	}
-
+	#region Cluster Setup
 	public void RegisterCluster(Cluster reportingCluster)
 	{
 		clusters.Add(reportingCluster);
@@ -207,7 +210,9 @@ public class TerrainManager : Singleton<TerrainManager>
 
 		return offset;
 	}
+	#endregion
 
+	#region Pathfinding
 	private int FindNearestClusterIndex(Vector3 location, float maxDistance)
 	{
 		if (maxDistance == -1)
@@ -250,6 +255,231 @@ public class TerrainManager : Singleton<TerrainManager>
 		return clusters[index];
 	}
 
+	public Stack<PathNode> FindPathToRandomNeighborIsland(Island start, PathNode nearest)
+	{
+		Stack<PathNode> newPath = new Stack<PathNode>();
+		//If we have neighbors
+		if (start.nearIslands.Count > 0)
+		{
+			//Select a random neighbor of the current island.
+			Island randomNeighbor = start.nearIslands[Random.Range(0, start.nearIslands.Count)];
+
+			//If we have log data
+			if (start.islandConnections.ContainsKey(randomNeighbor))
+			{
+				//If we have a connection that reaches them
+				if(start.islandConnections[randomNeighbor].connections.Count > 0)
+				{
+					//This currently doesn't find OUR shortest connector. It finds our island's shortest connector. This is good for if we want to path to the easiest jump. Suggestible option would be to find the most adequate jump but that will be more expensive.
+					NodeConnection shortestConnection = start.islandConnections[randomNeighbor].connections[0];
+					//Add the destination island's center node.
+					newPath.Push(randomNeighbor.nodes[0]);
+
+					//Add the connector's end node (located on destination island)
+					newPath.Push(shortestConnection.finishNode);
+
+					//Add the connector's start node (located on my island)
+					newPath.Push(shortestConnection.startNode);
+
+					//If the nearest node isn't the start node)
+					if(nearest != shortestConnection.startNode)
+					{
+						//The best approach would be to check if the nearest node is on the way to the jump begin node... but we don't have the pathing entity's position, so this is fine for now.
+						newPath.Push(nearest);
+
+						//float nearestNodeDistanceToPath = Constants.CheckXZDistance(nearest.transform.position, shortestConnection.startNode.transform.position);
+						//float nearestNodeDistanceToPath = Constants.CheckXZDistance(nearest.transform.position, );
+						
+						//Add the nearest node if it is closer than we are.
+					}
+				}
+				else
+				{
+					Debug.LogError("We have no connection that reaches our neighbor.\nThis is likely a problem of an obstacle or being located inside another piece of terrain.");
+				}
+			}
+			else
+			{
+				Debug.LogError("We didn't know about a neighbor island.\nError in World Generation or Island neighbor layout.");
+			}
+		}
+		return newPath;
+	}
+
+
+
+	public Stack<PathNode> FindPathToIsland(PathNode start, Island destination, float distanceThreshold)
+	{
+		Stack<PathNode> path = new Stack<PathNode>();
+		Island curIsland = destination;
+		//I don't want the best path. I just want a close path.
+
+		//If the island we are evaluating has the target node's island, this is our first priority
+		if (curIsland.islandConnections.ContainsKey(start.island))
+		{
+			//We want to use that island to island connection to find the best nodes to push.
+			DestinationConnection dc = curIsland.islandConnections[start.island];
+
+			//If we can get a connector that is valid and short enough
+			if (true) //Placeholder if statement
+			{
+				//We want to check if the island has a way to MAKE that connection.
+				path.Push(dc.FindShortestConnectorToFinish(start).startNode);
+				path.Push(start);
+
+				Debug.Log("Finished path with shortest connector.\n");
+				return path;
+			}
+		}
+		List<Island> neighborRanking = RankNeighborsByDistanceFromGoal(curIsland, start.transform.position, distanceThreshold);
+		
+		//Recursively call this method.
+		//If the return has content in it.
+		//Add it to our current path.
+		//Otherwise, continue searching.
+
+		return path;
+	}
+
+	public List<Island> RankNeighborsByDistanceFromGoal(Island start, Vector3 target, float distanceThreshold)
+	{
+		List<Island> rankings = new List<Island>();
+
+		//We use distances to compare for adding the future neighbors to the rankings.
+		List<float> distances = new List<float>();
+		//Loop through the neighbors of the current island.
+		for (int i = 0; i < start.nearIslands.Count; i++)
+		{
+			//Get the distance they are to the goal.
+			float curDistance = Constants.CheckXZDistance(target, start.nearIslands[i].transform.position);
+
+			//If distance is less than the threshold
+			if (curDistance < distanceThreshold)
+			{
+				//If we don't have any rankings yet, add one.
+				if (rankings.Count == 0)
+				{
+					rankings.Add(start.nearIslands[i]);
+					distances.Add(curDistance);
+				}
+				else
+				{
+					//Look through the rankings. Add new entries in between the right points.
+					for (int k = 0; k < rankings.Count; k++)
+					{
+						//If our distance is less than the current one
+						if (curDistance < distances[k])
+						{
+							//Add the distance and ranking at that spot.
+							distances.Insert(k, curDistance);
+							rankings.Insert(k, start.nearIslands[i]);
+
+							//Set this so we only add once.
+							k = rankings.Count;
+						}
+					}
+				}
+			}
+		}
+
+		return rankings;
+	}
+
+	public List<Island> RankNeighborsByDistanceFromSelf(Island start, float distanceThreshold)
+	{
+		List<Island> rankings = new List<Island>();
+
+		//We use distances to compare for adding the future neighbors to the rankings.
+		List<float> distances = new List<float>();
+		//Loop through the neighbors of the current island
+		for (int i = 0; i < start.nearIslands.Count; i++)
+		{
+			float curDistance = Constants.CheckXZDistance(start.transform.position, start.nearIslands[i].transform.position);
+
+			//If distance to current island is less than the threshold
+			if (curDistance < distanceThreshold)
+			{
+				//If we don't have any rankings yet, add one.
+				if (rankings.Count == 0)
+				{
+					rankings.Add(start.nearIslands[i]);
+					distances.Add(curDistance);
+				}
+				else
+				{
+					//Look through the rankings. Add new entries in between the right points.
+					for (int k = 0; k < rankings.Count; k++)
+					{
+						//If our distance is less than the current one
+						if (curDistance < distances[k])
+						{
+							//Add the distance and ranking at that spot.
+							distances.Insert(k, curDistance);
+							rankings.Insert(k, start.nearIslands[i]);
+
+							//Set this so we only add once.
+							k = rankings.Count;
+						}
+					}
+				}
+			}
+		}
+
+		return rankings;
+	}
+
+	public bool AreTwoIslandsConnected(Island start, Island destination)
+	{
+		if (start.islandConnections.ContainsKey(destination))
+		{
+			return true;
+		}
+		return false;
+	}
+
+	public bool IsIslandConnectedToNode(Island start, PathNode destination)
+	{
+		//Are the two islands connected
+		if (AreTwoIslandsConnected(start, destination.island))
+		{
+			//Are any of the connections
+
+		}
+
+		return false;
+	}
+
+	public Island FindIslandNearTarget(Entity target)
+	{
+		Island nearestIsland = null;
+		//Use the terrain manager to find the nearest cluster.
+		//Cluster nearCluster = FindNearestCluster(target.transform.position, TerrainManager.clusterSize.x / 2);
+
+		RaycastHit hit;
+
+		if (target != null)
+		{
+			if( target.tag == "Player")
+			{
+				return target.GetComponent<Controller>().lastLocation;
+			}
+			else
+			{
+				bool result = Physics.Raycast(target.transform.position, Vector3.up, out hit, 15);
+
+				if (result)
+				{
+
+				}
+			}
+		}
+
+
+		return nearestIsland;
+	}
+	#endregion
+
+	#region Update
 	void Update()
 	{
 		if (Input.GetKeyDown(KeyCode.P))
@@ -262,6 +492,7 @@ public class TerrainManager : Singleton<TerrainManager>
 			Debug.Log("There are currently " + islandCount + " islands.\n");
 		}
 	}
+	#endregion
 }
 
 public class DestinationConnection

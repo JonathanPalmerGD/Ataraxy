@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 [AddComponentMenu("Character/Controller")]
 [RequireComponent(typeof(CapsuleCollider))]
@@ -60,6 +61,10 @@ public class Controller : MonoBehaviour {
 	public float groundAccelerator = 1.5f;
 
 	//Private variables
+	#region Player Location
+	//[HideInInspector]
+	public Island lastLocation;
+	#endregion
 	bool grounded;
 	float nextCheck;
 	bool canStand;
@@ -364,7 +369,7 @@ public class Controller : MonoBehaviour {
 	public bool IsGrounded()
 	{
 		float castRadius = capsule.radius-0.1f;
-		float castDistance = capsule.height/2f+0.2f;
+		float castDistance = capsule.height/2f+0.5f;
 
 		//1 cast in the middle, and 4 more casts on the edges of the collider
 		Vector3 leftCast = new Vector3(transform.position.x-castRadius, transform.position.y, transform.position.z);
@@ -373,9 +378,31 @@ public class Controller : MonoBehaviour {
 		Vector3 backCast = new Vector3(transform.position.x, transform.position.y, transform.position.z-castRadius);
 		Vector3 centerCast = transform.position;
 
-		return (Physics.Raycast(leftCast, -transform.up, castDistance) || Physics.Raycast(rightCast, -transform.up, castDistance) || 
+		List<Vector3> casts = new List<Vector3>();
+		casts.Add(centerCast);
+		casts.Add(frontCast);
+		casts.Add(backCast);
+		casts.Add(leftCast);
+		casts.Add(rightCast);
+
+		RaycastHit hit;
+		for (int i = 0; i < casts.Count; i++)
+		{
+			if (Physics.Raycast(casts[i], -transform.up, out hit, castDistance))
+			{
+				if (hit.collider.gameObject.tag == "Island")
+				{
+					lastLocation = hit.collider.gameObject.GetComponent<Island>();
+				}
+				return true;
+			}
+		}
+
+		return false;
+
+		/*return (Physics.Raycast(leftCast, -transform.up, castDistance) || Physics.Raycast(rightCast, -transform.up, castDistance) || 
 			Physics.Raycast(frontCast, -transform.up, castDistance) || Physics.Raycast(backCast, -transform.up, castDistance) || 
-				Physics.Raycast(centerCast, -transform.up, castDistance));
+				Physics.Raycast(centerCast, -transform.up, castDistance));*/
 	}
 	float CalculateJumpVerticalSpeed ()
 	{
