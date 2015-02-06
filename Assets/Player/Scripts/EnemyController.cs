@@ -17,13 +17,13 @@ using System.Collections.Generic;
 */
 public class EnemyController : MonoBehaviour
 {
-	public GameObject target;
+	//public GameObject target;
 	public Vector3 targetPosition;
 	public Island lastLocation;
 
-
 	public Stack<PathNode> curPath;
 	public PathNode nextNode;
+	public PathNode lastNode;
 
 	public bool controllerAble = true;
 	public Transform camera;    //The root object that contains the camera
@@ -39,6 +39,7 @@ public class EnemyController : MonoBehaviour
 	//Croucher croucher;
 	public CapsuleCollider capsule;
 
+	#region [Mega Region] Footsteps, Speed, Running & Jumping Variables
 	#region Footsteps
 	[Header("Footsteps")]
 	public AudioSource audioSource;
@@ -75,6 +76,7 @@ public class EnemyController : MonoBehaviour
 	public float airAccelerator = 0.5f;
 	public float groundAccelerator = 1.5f;
 	#endregion
+	#endregion
 
 	#region Edge & Entity Detection
 	[Header("Edge & Entity Detection")]
@@ -86,7 +88,7 @@ public class EnemyController : MonoBehaviour
 	public float checkHeight;
 	public float checkDist;
 	public float destDistance = 5;
-	public enum GroundState { Falling, OnGround, Turning, Jumping };
+	public enum GroundState { Falling, OnGround, Turning, Jumping, Stopped };
 	public GroundState navState;
 	public bool haveNewHeading = false;
 
@@ -211,6 +213,7 @@ public class EnemyController : MonoBehaviour
 			canStand = CanStand();
 			nearDestination = isNearDestination();
 			CheckEnvironment();
+			CheckInvalidPath();
 		}
 		#endregion
 		#region Landing or leaving ground
@@ -299,7 +302,7 @@ public class EnemyController : MonoBehaviour
 		}
 		if (Input.GetKeyDown(KeyCode.K))
 		{
-			target = GameManager.Instance.playerGO;
+			//target = GameManager.Instance.playerGO;
 		}
 		#endif
 		#endregion
@@ -391,9 +394,9 @@ public class EnemyController : MonoBehaviour
 		#endregion
 
 		#region Rotation of Enemy
-		if (target != null)
+		if (nextNode != null)
 		{
-			FaceTarget(target.transform.position);
+			FaceTarget(nextNode.transform.position);
 		}
 		else
 		{
@@ -401,6 +404,7 @@ public class EnemyController : MonoBehaviour
 		}
 		#endregion
 
+		#region Calculate Steering Force
 		Vector3 input = CalcSteering();
 		//Vector3 input = Vector3.right + Vector3.forward;
 		//Debug.DrawLine(transform.position, (transform.position + transform.forward * 10), Color.green);
@@ -412,14 +416,21 @@ public class EnemyController : MonoBehaviour
 		velocityChange.x = Mathf.Clamp(velocityChange.x, -acceleration, acceleration);
 		velocityChange.z = Mathf.Clamp(velocityChange.z, -acceleration, acceleration);
 		velocityChange.y = 0f;
-		//Debug.DrawLine(transform.position + Vector3.up * 2, (transform.position + targetVelocity * 10) + Vector3.up * 2, Color.blue);
 
+		//Debug.DrawLine(transform.position + Vector3.up * 2, (transform.position + targetVelocity * 10) + Vector3.up * 2, Color.blue);
+		#endregion
+
+		#region Arrival Condition - Get new Destination?
 		if (nearDestination && navState != GroundState.Falling)
 		{
 			GetNewDestination();
 		}
+		#endregion
+
+		#region Debug Display Path
 		DisplayNearestNode();
 		DisplayDestinationNode();
+		#endregion
 
 		#region Controllable
 		if (controllerAble)
@@ -498,11 +509,11 @@ public class EnemyController : MonoBehaviour
 		else if (navState == GroundState.Falling)
 		{
 			//If we have a target
-			if (target != null)
+			if (nextNode != null)
 			{
 				float distFromDest = CheckDestinationDistance();
 				//Going to move this to function extensions later.
-				float newDistFromDest = Constants.CheckXZDistance(transform.position + rigidbody.velocity.normalized, target.transform.position);
+				float newDistFromDest = Constants.CheckXZDistance(transform.position + rigidbody.velocity.normalized, nextNode.transform.position);
 				
 				
 				//Debug.Log(distFromDest + "\t\t\t" + newDistFromDest + "\n");
@@ -517,7 +528,7 @@ public class EnemyController : MonoBehaviour
 		{
 			if (leftValid && !rightValid)
 			{
-				steering += Vector3.left * 2; 
+				steering += Vector3.left * 2;
 			}
 			if (rightValid && !leftValid)
 			{
@@ -527,6 +538,10 @@ public class EnemyController : MonoBehaviour
 			{
 				steering += Vector3.back * 2;
 			}
+		}
+		else if(navState == GroundState.Stopped)
+		{
+			steering = Vector3.zero;
 		}
 
 
@@ -551,12 +566,27 @@ public class EnemyController : MonoBehaviour
 		}
 	}
 
+	void CheckInvalidPath()
+	{
+		if (lastNode != null && lastLocation != null && nextNode != null)
+		{
+			//If our previous path appears invalid	
+			if (lastNode.island != lastLocation && nextNode.island != lastLocation)
+			{
+				Debug.Log("Forcing new path\n");
+				//Force us to find a new one?
+				curPath = new Stack<PathNode>();
+				GetNewDestination();
+			}
+		}
+	}
+
 	float CheckDestinationDistance()
 	{
-		if (target != null)
+		if (nextNode != null)
 		{
 			Vector2 posFlat = new Vector2(transform.position.x, transform.position.z);
-			Vector2 nodePosFlat = new Vector2(target.transform.position.x, target.transform.position.z);
+			Vector2 nodePosFlat = new Vector2(nextNode.transform.position.x, nextNode.transform.position.z);
 
 			//Find distance to the position.
 			return Vector2.Distance(posFlat, nodePosFlat);
@@ -566,36 +596,41 @@ public class EnemyController : MonoBehaviour
 
 	void UpdateTarget()
 	{
-		if (curPath.Count <= 0)
+		if (curPath.Count < 1)
 		{
+			curPath = TerrainManager.Instance.FindPathToRandomNeighborIsland(lastLocation, lastLocation.NearestNode(transform.position));
+			/*
 			if (GameManager.Instance.player.GetComponent<Controller>().lastLocation != null)
 			{
 				Stack<PathNode> newPath = TerrainManager.Instance.FindPathToIsland(lastLocation.NearestNode(transform.position), GameManager.Instance.player.GetComponent<Controller>().lastLocation, 30);
 
 				Debug.Log("New Path Acquired: " + newPath.Count + "\n");
-			}
+			}*/
 			//Get a new path to the target.
 		}
-		
-		//Set our nextNode destination to the top of the stack.
-		//nextNode = curPath.Pop();
 
-		//Say we aren't near a node anymore.
-		//nearDestination = false;
+		if (curPath.Count > 0)
+		{
+			//Update the last node we were at.
+			lastNode = nextNode;
+
+			//Set our nextNode destination to the top of the stack.
+			nextNode = curPath.Pop();
+
+			//Say we aren't near a node anymore.
+			nearDestination = false;
+		}
+		else
+		{
+			nextNode = null;
+		}
 	}
 
 	void GetNewDestination()
 	{
 		if(lastLocation != null)
 		{
-			
-			
-			
-			
-			/*PathNode n = lastLocation.GetRandomNode(lastLocation.NearestNode(transform.position));
-			target = n.gameObject;*/
-
-			nearDestination = false;
+			UpdateTarget();
 		}
 	}
 
@@ -610,9 +645,9 @@ public class EnemyController : MonoBehaviour
 	/// </summary>
 	void DisplayDestinationNode()
 	{
-		if (target != null)
+		if (nextNode != null)
 		{
-			Debug.DrawLine(transform.position + Vector3.up * 3, target.transform.position + Vector3.up * 3, Color.magenta, 1 / checksPerSecond);
+			Debug.DrawLine(transform.position + Vector3.up * 3, nextNode.transform.position + Vector3.up * 3, Color.magenta, 1 / checksPerSecond);
 		}
 	}
 
@@ -633,6 +668,7 @@ public class EnemyController : MonoBehaviour
 	#region Environment Checking
 	public void CheckEnvironment()
 	{
+		#region [Debug Code] Dot Product Checking
 		/*if (target != null)
 		{
 			Vector3 forward = transform.TransformDirection(Vector3.forward);
@@ -644,33 +680,80 @@ public class EnemyController : MonoBehaviour
 
 			//Debug.DrawLine(transform.position, transform.position + transform.forward * 10, Color.blue, 8.0f);
 		}*/
+		#endregion
 
-		//Are we on the floor. CheckFloor sets our CurLocation island as well
-		if (grounded)
+		//If we have a next node we're going to
+		if (nextNode != null)
 		{
-			//Is there a ledge ahead of us?
-			//Is there a wall ahead of us.
-			bool wall = CheckWall();
-			bool edge = CheckEdge();
-			if (wall)
+			//Are we on the floor. CheckFloor sets our CurLocation island as well
+			if (grounded)
 			{
-				navState = GroundState.Turning;
-				if (!haveNewHeading)
+				//Is there a ledge ahead of us?
+				//Is there a wall ahead of us.
+				bool wall = CheckWall();
+				bool edge = CheckEdge();
+				#region Wall Check
+				if (wall)
 				{
-					//Say to get one based on the edges in front of us.
-					//TurnNewHeading();
+					navState = GroundState.Turning;
+					if (!haveNewHeading)
+					{
+						//Say to get one based on the edges in front of us.
+						//TurnNewHeading();
+					}
 				}
-			}
-			else if(edge)
-			{
-				//That way we can easily fail out to just turning around.
-				bool goingToJump = false;
-
-				if (target == null)
+				#endregion
+				#region Edge Check
+				else if (edge)
 				{
-					GetNewDestination();
-				}
+					//That way we can easily fail out to just turning around.
+					bool goingToJump = false;
 
+					#region NextNode Pathing Setup
+
+					if (nextNode.island != lastLocation)
+					{
+						//Check if our target is in the direction we're facing.
+
+						Vector3 forward = transform.TransformDirection(Vector3.forward);
+						Vector3 toOther = nextNode.transform.position - transform.position;
+						if (ignoreJumpHeight)
+						{
+							Vector3 targetHeightless = new Vector3(nextNode.transform.position.x, transform.position.y, nextNode.transform.position.z);
+
+							toOther = targetHeightless - transform.position;
+						}
+						float dotProduct = Vector3.Dot(forward.normalized, toOther.normalized);
+						Debug.DrawLine(transform.position, transform.position + transform.forward * 10, Color.blue, 8.0f);
+
+						//We want to check that we are facing in the right direction and that we're moving forward.
+						float velocityDotProduct = Vector3.Dot(rigidbody.velocity.normalized, toOther.normalized);
+
+						if (dotProduct > .97f && velocityDotProduct > .5f)
+						{
+							//Debug.Log("Dot Product: " + dotProduct + "\nVelocity Dot Product: " + velocityDotProduct);
+							goingToJump = true;
+						}
+					}
+					if (goingToJump)
+					{
+						navState = GroundState.Jumping;
+					}
+					else
+					{
+						navState = GroundState.Turning;
+						if (!haveNewHeading)
+						{
+							//Say to get one based on the edges in front of us.
+							//TurnNewHeading();
+						}
+					}
+
+					#endregion
+
+
+					#region [Old Code] Single Path Node Setup
+					/*
 				//If our target isn't on our island
 				if (target.tag == "PathNode")
 				{
@@ -699,33 +782,33 @@ public class EnemyController : MonoBehaviour
 							goingToJump = true;
 						}
 					}
+				}*/
+					#endregion
 				}
-
-				if (goingToJump)
-				{
-					navState = GroundState.Jumping;
-				}
+				#endregion
+				#region No Wall? No Edge? To the Ground State
 				else
 				{
-					navState = GroundState.Turning;
-					if (!haveNewHeading)
-					{
-						//Say to get one based on the edges in front of us.
-						//TurnNewHeading();
-					}
+					//In this state, we will navigate towards the target.
+					navState = GroundState.OnGround;
 				}
+				#endregion
 			}
+			#region Not Grounded? To the Falling State with you
 			else
 			{
-				//In this state, we will navigate towards the target.
-				navState = GroundState.OnGround;
+				navState = GroundState.Falling;
 			}
-
+			#endregion
 		}
+		#region If nextNode == Null - Enter Stopped GroundState
 		else
 		{
-			navState = GroundState.Falling;
+			//Try to acquire new destination?
+			//GetNewDestination();
+			navState = GroundState.Stopped;
 		}
+		#endregion
 	}
 	public bool CheckWall()
 	{

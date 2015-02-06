@@ -53,7 +53,7 @@ public class Cluster : WorldObject
 		{
 			//if (Random.Range(0, 100) > 90)
 			//{
-			CreateLandmarksPoissonApproach();
+			//CreateLandmarksPoissonApproach();
 			//}
 		}
 
