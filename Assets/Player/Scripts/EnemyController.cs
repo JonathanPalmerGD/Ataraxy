@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 [AddComponentMenu("Character/Controller")]
 [RequireComponent(typeof(Rigidbody))]
@@ -139,6 +140,7 @@ public class EnemyController : MonoBehaviour
 			//Normal jumping if the player can stand
 			if(canStand)
 			{
+				//Debug.Log("Jump\n");
 				jumpsDone = 0;
 				lastAiredPos = transform.position.y;
 				myRB.velocity = new Vector3(myRB.velocity.x, CalculateJumpVerticalSpeed(), myRB.velocity.z);
@@ -146,12 +148,15 @@ public class EnemyController : MonoBehaviour
 		}
 		else
 		{
-			//Double jumping in mid air if possible
+			//If we have jumps left AND we're falling
 			if(jumpsDone < maxJumps-1)
 			{
-				jumpsDone++;
-				lastAiredPos = transform.position.y;
-				myRB.velocity = new Vector3(myRB.velocity.x, CalculateJumpVerticalSpeed(), myRB.velocity.z);
+				if (!nearDestination && myRB.velocity.y < -10)
+				{
+					jumpsDone++;
+					lastAiredPos = transform.position.y;
+					myRB.velocity = new Vector3(myRB.velocity.x, CalculateJumpVerticalSpeed(), myRB.velocity.z);
+				}
 			}
 		}
 	}
@@ -204,6 +209,10 @@ public class EnemyController : MonoBehaviour
 	}
 	void Update()
 	{
+		if (Input.GetKeyDown(KeyCode.Insert))
+		{
+			toggleView = !toggleView;
+		}
 		#region When to Check
 		if (Time.time > nextCheck)
 		{
@@ -430,6 +439,7 @@ public class EnemyController : MonoBehaviour
 		#region Debug Display Path
 		DisplayNearestNode();
 		DisplayDestinationNode();
+		DisplayPath(curPath);
 		#endregion
 
 		#region Controllable
@@ -511,6 +521,8 @@ public class EnemyController : MonoBehaviour
 			//If we have a target
 			if (nextNode != null)
 			{
+				Jump();
+
 				float distFromDest = CheckDestinationDistance();
 				//Going to move this to function extensions later.
 				float newDistFromDest = Constants.CheckXZDistance(transform.position + rigidbody.velocity.normalized, nextNode.transform.position);
@@ -550,8 +562,8 @@ public class EnemyController : MonoBehaviour
 
 	void FaceTarget(Vector3 targetToFace)
 	{
-		if (navState != GroundState.Falling)
-		{
+		//if (navState != GroundState.Falling)
+		//{
 			//Create a vector3 that represents the target on our plane.
 			Vector3 xzPosition = new Vector3(targetToFace.x, transform.position.y, targetToFace.z);
 
@@ -563,7 +575,7 @@ public class EnemyController : MonoBehaviour
 
 			//Set our rotation partially towards our goal.
 			transform.rotation = Quaternion.Lerp(transform.rotation, targRotation, turnAmount);
-		}
+		//}
 	}
 
 	void CheckInvalidPath()
@@ -594,23 +606,49 @@ public class EnemyController : MonoBehaviour
 		return float.MaxValue;
 	}
 
+	bool toggleView = false;
 	void UpdateTarget()
 	{
-		if (curPath.Count < 1)
+		if (toggleView)
 		{
-			curPath = TerrainManager.Instance.FindPathToRandomNeighborIsland(lastLocation, lastLocation.NearestNode(transform.position));
-			/*
-			if (GameManager.Instance.player.GetComponent<Controller>().lastLocation != null)
+			if (curPath.Count < 1)
 			{
-				Stack<PathNode> newPath = TerrainManager.Instance.FindPathToIsland(lastLocation.NearestNode(transform.position), GameManager.Instance.player.GetComponent<Controller>().lastLocation, 30);
+				//curPath = TerrainManager.Instance.FindPathToRandomNeighborIsland(lastLocation, lastLocation.NearestNode(transform.position));
 
-				Debug.Log("New Path Acquired: " + newPath.Count + "\n");
-			}*/
-			//Get a new path to the target.
+				if (GameManager.Instance.player.GetComponent<Controller>().lastLocation != null)
+				{
+					//Debug.Log(GameManager.Instance.player.GetComponent<Controller>().lastLocation + "\n" + lastLocation);
+					if (GameManager.Instance.player.GetComponent<Controller>().lastLocation != lastLocation)
+					{
+						//Find our nearest node.
+						PathNode pathStartLocation = lastLocation.NearestNode(transform.position);
+
+						//Find a path from current location to the target.
+						Stack<PathNode> newPath = TerrainManager.Instance.PathToIsland(lastLocation, GameManager.Instance.player.GetComponent<Controller>().lastLocation, 120);
+
+						//Stack<PathNode> newPath = TerrainManager.Instance.FindPathToIsland(pathStartLocation, GameManager.Instance.player.GetComponent<Controller>().lastLocation, 90);
+
+						/*List<PathNode> newPathReverse = newPath.ToList();
+						newPath = new Stack<PathNode>();
+						for (int i = 0; i < newPathReverse.Count; i++)
+						{
+							newPath.Push(newPathReverse[i]);
+						}*/
+
+						
+						if (newPath.Count > 0)
+						{
+							Debug.Log("New Path Acquired: " + newPath.Count + "\n");
+						}
+						curPath = newPath;
+					}
+				}
+				//Get a new path to the target.
+			}
 		}
-
 		if (curPath.Count > 0)
 		{
+			
 			//Update the last node we were at.
 			lastNode = nextNode;
 
@@ -638,6 +676,26 @@ public class EnemyController : MonoBehaviour
 	{
 		//Get a random adjacent island.
 		//Ask TerrainManager for a path to that island?
+	}
+
+	void DisplayPath(Stack<PathNode> p)
+	{
+		if (p != null && p.Count > 0)
+		{
+			List<PathNode> pnList = p.ToList();
+
+			//Debug.DrawLine(transform.position, pnList[0].transform.position + Vector3.up, Color.black, 0.2f);
+
+			for (int i = 1; i < pnList.Count; i++)
+			{
+				Vector3 firstPos = pnList[i - 1].transform.position;
+				Vector3 secondPos = pnList[i].transform.position;
+				//Debug.DrawLine(pnList[i - 1].transform.position + Vector3.up * i * 2, pnList[i].transform.position + Vector3.up * i * 2, Color.green, 15.0f);
+				Debug.DrawLine(firstPos + Vector3.up * i * 2, secondPos + Vector3.up * i * 2, Color.green, 3f);
+				Debug.DrawLine(firstPos + Vector3.up * i * 2, firstPos + Vector3.up * (i-1) * 2, Color.red, 3f);
+				
+			}
+		}
 	}
 
 	/// <summary>
@@ -724,12 +782,12 @@ public class EnemyController : MonoBehaviour
 							toOther = targetHeightless - transform.position;
 						}
 						float dotProduct = Vector3.Dot(forward.normalized, toOther.normalized);
-						Debug.DrawLine(transform.position, transform.position + transform.forward * 10, Color.blue, 8.0f);
+						//Debug.DrawLine(transform.position, transform.position + transform.forward * 10, Color.blue, 8.0f);
 
 						//We want to check that we are facing in the right direction and that we're moving forward.
 						float velocityDotProduct = Vector3.Dot(rigidbody.velocity.normalized, toOther.normalized);
 
-						if (dotProduct > .97f && velocityDotProduct > .5f)
+						if (dotProduct > .99f && velocityDotProduct > .7f)
 						{
 							//Debug.Log("Dot Product: " + dotProduct + "\nVelocity Dot Product: " + velocityDotProduct);
 							goingToJump = true;
