@@ -22,7 +22,7 @@ public class IreWasps : FlyingEnemy
 		name = "Ire Wasps";
 		FiringTimer = Random.Range(0, FiringCooldown);
 		//GetComponent<Floatation>().homeRegion = transform.position + Vector3.up * 20;
-		projectilePrefab = Resources.Load<GameObject>("Projectile");
+		projectilePrefab = Resources.Load<GameObject>("Projectiles/Projectile");
 	}
 
 	public override void FindFiringPositions()

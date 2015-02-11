@@ -11,7 +11,7 @@ public class Dagger : Weapon
 	public override void Init()
 	{
 		base.Init();
-		daggerStabPrefab = Resources.Load<GameObject>("DaggerStab");
+		daggerStabPrefab = Resources.Load<GameObject>("Projectiles/DaggerStab");
 		Icon = UIManager.Instance.Icons[IconIndex];
 
 		DurSpecialCost = 5; 

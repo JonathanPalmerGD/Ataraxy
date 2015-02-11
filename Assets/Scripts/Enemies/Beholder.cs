@@ -11,7 +11,7 @@ public class Beholder : FlyingEnemy
 		name = "Beholder";
 		FiringTimer = Random.Range(0, FiringCooldown);
 		GetComponent<Floatation>().homeRegion = transform.position + Vector3.up * (20 + TerrainManager.underworldYOffset);
-		projectilePrefab = Resources.Load<GameObject>("Projectile");
+		projectilePrefab = Resources.Load<GameObject>("Projectiles/Projectile");
 	}
 	
 	public override void Update() 

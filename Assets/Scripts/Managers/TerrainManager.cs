@@ -318,6 +318,10 @@ public class TerrainManager : Singleton<TerrainManager>
 
 			if (dc != null)
 			{
+				//Compare the two shortest connectors to that island
+				//NodeConnection shortest = dc.connections[0];
+				//NodeConnection second = dc.connections[1];
+
 				//Take the shortest connector to that island.
 				NodeConnection nc = dc.connections[0];
 
@@ -404,9 +408,6 @@ public class TerrainManager : Singleton<TerrainManager>
 		return new Stack<PathNode>();
 	}
 
-
-
-
 	public Stack<PathNode> CanReachDestination(PathNode targetNode, PathNode currentNode)
 	{
 		Stack<PathNode> wayToNode = new Stack<PathNode>();
@@ -451,178 +452,7 @@ public class TerrainManager : Singleton<TerrainManager>
 
 		return wayToNode;
 	}
-
-	
-	/// <summary>
-	/// This is a recursive method. We call it repeatedly handing in closer and closer islands until we have a stack of islands.
-	/// </summary>
-	/// <param name="start"></param>
-	/// <param name="destination"></param>
-	/// <param name="distanceThreshold"></param>
-	/// <returns></returns>
-	public Stack<PathNode> FindPathToIsland(PathNode start, Island destination, float distanceThreshold, int depth = 0)
-	{
-		depth++;
-		Debug.Log(depth + "\tCalling FindPathToIsland\nCurrent " + destination.name + " backtracking to node on " + start.island.name + "\n\n");
-
 		
-
-		Stack<PathNode> path = new Stack<PathNode>();
-		Island curIsland = destination;
-		
-		#region [Old] Reached Destination?
-		/*//If the island we are evaluating has the target node's island, this is our first priority
-		if (curIsland.islandConnections.ContainsKey(start.island))
-		{
-			//We want to use that island to island connection to find the best nodes to push.
-			DestinationConnection dc = curIsland.islandConnections[start.island];
-
-			//If we can get a connector that is valid and short enough
-			if (dc != null) //Placeholder if statement
-			{
-				NodeConnection nc = dc.FindShortestConnectorToFinish(start);
-				Debug.DrawLine(nc.startNode.transform.position, start.transform.position, Color.cyan, 10.0f);
-
-				//We want to check if the island has a way to MAKE that connection.
-				path.Push(nc.startNode);
-				path.Push(start);
-
-				//Debug.Log("Finished path with shortest connector.\n");
-				return path;
-			}
-		}*/
-		#endregion
-		#region Have Reached Destination
-		//If we can reach destination from the current island
-		Stack<PathNode> destPath = CanReachDestination(start, curIsland.nodes[0]);
-		bool reachedDestination = false;
-		if (destPath != null && destPath.Count > 0)
-		{
-			//Add it to our current path.
-			List<PathNode> destPathList = destPath.ToList();
-			//for (int k = 0; k < destPathList.Count; k++)
-			for (int k = 0; k < destPathList.Count; k++)
-			{
-				//path.Push(destPathList[k]);
-				Debug.DrawLine(destPath.Peek().transform.position + Vector3.left * .5f, destPath.Peek().transform.position + Vector3.left * .5f + Vector3.up * 3, Color.cyan, 35f);
-				path.Push(destPath.Pop());
-			}
-		}
-		#endregion
-		#region Checking Neighbor for Path to Start
-		else
-		{
-			List<Island> neighborRanking = RankNeighborsByDistanceFromGoal(curIsland, start.transform.position, distanceThreshold);
-
-			//Debug.Log("Case B: Neighbor Ranking.\n" + neighborRanking.Count);
-
-			//Look through all the ranked neighbors
-			for (int i = 0; i < neighborRanking.Count; i++)
-			{
-				//Debug.Log("Inside Neighbor Ranking.\n");
-				//Call this function on those neighbors
-				Stack<PathNode> foundPath = FindPathToIsland(start, neighborRanking[i], distanceThreshold, depth);
-
-				//If the return has content in it.
-				if (foundPath != null)
-				{
-					//Add it to our current path.
-					List<PathNode> foundPathList = foundPath.ToList();
-					for (int k = 0; k < foundPathList.Count; k++)
-					{
-						Debug.Log(depth + "\tAdding " + foundPathList[k].island.name + " to the path\n");
-						path.Push(foundPath.Pop());
-						//path.Push(foundPathList[k]);
-					}
-
-					//Debug.Log(depth + "\t[Adding Neighbor]" + curIsland.name + " to " + neighborRanking[i] + "\n");
-					NodeConnection nc = curIsland.islandConnections[neighborRanking[i]].connections[0];
-
-
-					List<PathNode> destCheck = foundPath.ToList();
-
-
-					//Push the destination island edge node
-					path.Push(nc.finishNode);
-					Debug.DrawLine(nc.finishNode.transform.position, nc.finishNode.transform.position + Vector3.up * 3, Color.yellow, 35f);
-
-					//Push current island edge node
-					path.Push(nc.startNode);
-					Debug.DrawLine(nc.startNode.transform.position + Vector3.right * .5f, nc.startNode.transform.position + Vector3.right * .5f + Vector3.up * 3, Color.blue, 35f);
-
-					//Push the destination island center node.
-					//path.Push(neighborRanking[i].nodes[0]);
-
-
-
-					
-					
-
-
-					return path;
-
-					#region Works for 1 off neighbor
-					/*Debug.Log(depth + "\t[Adding Neighbor]" + curIsland.name + " to " + neighborRanking[i] + "\n");
-					NodeConnection nc = curIsland.islandConnections[neighborRanking[i]].connections[0];
-
-					//Push current island edge node
-					path.Push(nc.startNode);
-
-					//Push the destination island edge node
-					path.Push(nc.finishNode);
-
-					//Push the destination island center node.
-					path.Push(neighborRanking[i].nodes[0]);
-
-					//Add it to our current path.
-					List<PathNode> foundPathList = foundPath.ToList();
-					for (int k = 0; k < foundPathList.Count; k++)
-					{
-						path.Push(foundPathList[k]);
-					}
-
-					return path;*/
-					#endregion
-				}
-				//Otherwise, continue searching.
-			}
-		}
-		#endregion
-
-		if(reachedDestination)
-		{
-			
-		}
-
-		#region Return Case
-		//If the last element on the foundPath is the start, return.
-		if (path.Count > 0 && path.Peek() != null)
-		{
-			string pathStr = "";
-
-			List<PathNode> pnList = path.ToList();
-			for (int k = 0; k < pnList.Count; k++)
-			{
-				pathStr += pnList[k].island.name + "\t" + "\n";
-			}
-
-			Debug.Log(depth + "\t" +  pathStr);
-			//Debug.Log("Path Count: " + path.Count + "\nPath.Peek()'s Island: " + path.Peek().island.name);
-			//if (path.Peek() == start)
-			//{
-				return path;
-			//}
-		}
-		else
-		{
-			Debug.Log("Path Count: " + path.Count + "\n");
-		}
-		#endregion
-
-		//This is if we didn't find a route there.
-		return new Stack<PathNode>();
-	}
-
 	public List<Island> RankNeighborsByDistanceFromGoal(Island start, Vector3 target, float distanceThreshold, bool addAll = false)
 	{
 		string output = "";

@@ -5,13 +5,11 @@ using System.Collections.Generic;
 public class GravityStaff : Weapon 
 {
 	public static int IconIndex = 13;
-	//public GameObject daggerStabPrefab;
 	Vector3 movementVector;
 
 	public override void Init()
 	{
 		base.Init();
-		//daggerStabPrefab = Resources.Load<GameObject>("DaggerStab");
 		Icon = UIManager.Instance.Icons[IconIndex];
 
 		DurCost = 6;

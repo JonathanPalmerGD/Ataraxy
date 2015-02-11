@@ -11,7 +11,7 @@ public class Rapier : Weapon
 	public override void Init()
 	{
 		base.Init();
-		daggerStabPrefab = Resources.Load<GameObject>("RapierStab");
+		daggerStabPrefab = Resources.Load<GameObject>("Projectiles/RapierStab");
 		Icon = UIManager.Instance.Icons[IconIndex];
 
 		SpecialDamage = 9;

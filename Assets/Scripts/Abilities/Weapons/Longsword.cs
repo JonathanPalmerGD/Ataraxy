@@ -11,7 +11,7 @@ public class Longsword : Weapon
 	public override void Init()
 	{
 		base.Init();
-		bladeSlashPrefab = Resources.Load<GameObject>("BladeSlash");
+		bladeSlashPrefab = Resources.Load<GameObject>("Projectiles/BladeSlash");
 		Icon = UIManager.Instance.Icons[IconIndex];
 
 		DurSpecialCost = 1;

@@ -98,9 +98,15 @@ public class Island : WorldObject
 						{
 							RaycastHit hit;
 							Ray ray = new Ray(myNode.transform.position, neighborNode.transform.position - myNode.transform.position);
+							Ray revRay = new Ray(myNode.transform.position, myNode.transform.position - neighborNode.transform.position);
 
 							//If we hit something with the raycast, it is not a valid ray.
-							validRay = ! Physics.Raycast(ray, out hit, Vector3.Distance(myNode.transform.position, neighborNode.transform.position));
+							bool forRayCheck = !Physics.Raycast(ray, out hit, Vector3.Distance(myNode.transform.position, neighborNode.transform.position));
+
+							//If we hit something with the raycast, it is not a valid ray.
+							bool revRayCheck = !Physics.Raycast(revRay, out hit, Vector3.Distance(myNode.transform.position, neighborNode.transform.position));
+
+							validRay = forRayCheck && revRayCheck;
 						}
 						#endregion
 						
@@ -273,6 +279,12 @@ public class Island : WorldObject
 #endif
 
 		return newNode.GetComponent<PathNode>();
+	}
+
+	public void SetupLocalConnections()
+	{
+		//For each node on this island, determine if it validly connects to other nondes.
+
 	}
 
 	public void DisplayConnections()

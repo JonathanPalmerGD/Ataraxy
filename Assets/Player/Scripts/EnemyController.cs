@@ -140,10 +140,15 @@ public class EnemyController : MonoBehaviour
 			//Normal jumping if the player can stand
 			if(canStand)
 			{
-				//Debug.Log("Jump\n");
-				jumpsDone = 0;
-				lastAiredPos = transform.position.y;
-				myRB.velocity = new Vector3(myRB.velocity.x, CalculateJumpVerticalSpeed(), myRB.velocity.z);
+				if (nextNode.transform.position.y - 3 > transform.position.y)
+				{
+					Debug.Log("Vertical Jump\n");
+					ApplyJump(true);
+				}
+				else
+				{
+					ApplyJump(false);
+				}
 			}
 		}
 		else
@@ -151,18 +156,32 @@ public class EnemyController : MonoBehaviour
 			//If we have jumps left AND we're falling
 			if(jumpsDone < maxJumps-1)
 			{
-				if (!nearDestination && myRB.velocity.y < -10)
+				bool jumpedYet = false;
+
+				//Jump to Ascend
+				if (!jumpedYet && nextNode.transform.position.y - 3 > transform.position.y && myRB.velocity.y < 0)
 				{
-					jumpsDone++;
-					lastAiredPos = transform.position.y;
-					myRB.velocity = new Vector3(myRB.velocity.x, CalculateJumpVerticalSpeed(), myRB.velocity.z);
+					Debug.Log("Vertical Jump\n");
+					ApplyJump(true);
+					jumpedYet = true;
+				}
+				//If it is far away.
+				if (!jumpedYet && !nearDestination && myRB.velocity.y < -10)
+				{
+					ApplyJump(false);
 				}
 			}
 		}
 	}
-	float CalculateJumpVerticalSpeed()
+	void ApplyJump(bool vertical = false)
 	{
-		return Mathf.Sqrt(jumpHeight * 20f);
+		jumpsDone++;
+		lastAiredPos = transform.position.y;
+		myRB.velocity = new Vector3(myRB.velocity.x * (vertical ? 0.15f : 1), CalculateJumpVerticalSpeed(vertical), myRB.velocity.z * (vertical ? 0.15f : 1));
+	}
+	float CalculateJumpVerticalSpeed(bool vertical)
+	{
+		return Mathf.Sqrt(jumpHeight * 20f * (vertical ? 1.5f : 1));
 	}
 	public void Footstep()
 	{
@@ -606,7 +625,7 @@ public class EnemyController : MonoBehaviour
 		return float.MaxValue;
 	}
 
-	bool toggleView = false;
+	bool toggleView = true;
 	void UpdateTarget()
 	{
 		if (toggleView)
@@ -682,17 +701,25 @@ public class EnemyController : MonoBehaviour
 	{
 		if (p != null && p.Count > 0)
 		{
-			List<PathNode> pnList = p.ToList();
+			List<PathNode> pnList = new List<PathNode>();
+
+			if (lastNode != null)
+			{
+				pnList.Add(lastNode);
+			}
+			pnList.Add(nextNode);
+			pnList.AddRange(p.ToList());
 
 			//Debug.DrawLine(transform.position, pnList[0].transform.position + Vector3.up, Color.black, 0.2f);
+
 
 			for (int i = 1; i < pnList.Count; i++)
 			{
 				Vector3 firstPos = pnList[i - 1].transform.position;
 				Vector3 secondPos = pnList[i].transform.position;
 				//Debug.DrawLine(pnList[i - 1].transform.position + Vector3.up * i * 2, pnList[i].transform.position + Vector3.up * i * 2, Color.green, 15.0f);
-				Debug.DrawLine(firstPos + Vector3.up * i * 2, secondPos + Vector3.up * i * 2, Color.green, 3f);
-				Debug.DrawLine(firstPos + Vector3.up * i * 2, firstPos + Vector3.up * (i-1) * 2, Color.red, 3f);
+				Debug.DrawLine(firstPos + Vector3.up * i * 2, secondPos + Vector3.up * i * 2, Color.green);
+				Debug.DrawLine(firstPos + Vector3.up * i * 2, firstPos + Vector3.up * (i-1) * 2, Color.red);
 				
 			}
 		}
@@ -705,7 +732,7 @@ public class EnemyController : MonoBehaviour
 	{
 		if (nextNode != null)
 		{
-			Debug.DrawLine(transform.position + Vector3.up * 3, nextNode.transform.position + Vector3.up * 3, Color.magenta, 1 / checksPerSecond);
+			Debug.DrawLine(transform.position + Vector3.up * 3, nextNode.transform.position + Vector3.up * 3, Color.magenta);
 		}
 	}
 
@@ -718,7 +745,7 @@ public class EnemyController : MonoBehaviour
 		{
 			PathNode n = lastLocation.NearestNode(transform.position);
 
-			Debug.DrawLine(transform.position, n.transform.position, Color.white, 1 / checksPerSecond);
+			Debug.DrawLine(transform.position, n.transform.position, Color.white);
 		}
 	}
 	#endregion

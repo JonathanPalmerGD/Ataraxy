@@ -9,7 +9,7 @@ public class ShockRifle : Weapon
 	public override void Init()
 	{
 		base.Init();
-		shockBallPrefab = Resources.Load<GameObject>("ShockBall");
+		shockBallPrefab = Resources.Load<GameObject>("Projectiles/ShockBall");
 		Icon = UIManager.Instance.Icons[IconIndex];
 
 		primaryFirePointIndex = 1;

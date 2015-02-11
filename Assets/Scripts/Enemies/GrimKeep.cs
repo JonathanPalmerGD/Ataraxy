@@ -11,7 +11,7 @@ public class GrimKeep : Enemy
 		name = "GrimKeep";
 		FiringCooldown = 4;
 		FiringTimer = Random.Range(0, FiringCooldown);
-		projectilePrefab = Resources.Load<GameObject>("Projectile");
+		projectilePrefab = Resources.Load<GameObject>("Projectiles/Projectile");
 
 		foreach (GameObject go in Blocks)
 		{

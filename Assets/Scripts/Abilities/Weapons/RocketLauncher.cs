@@ -11,7 +11,7 @@ public class RocketLauncher : Weapon
 	public override void Init()
 	{
 		base.Init();
-		rocketPrefab = Resources.Load<GameObject>("Rocket");
+		rocketPrefab = Resources.Load<GameObject>("Projectiles/Rocket");
 		Icon = UIManager.Instance.Icons[IconIndex];
 		primaryFirePointIndex = 1;
 		specialFirePointIndex = 1;

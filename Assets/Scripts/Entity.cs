@@ -229,6 +229,14 @@ public class Entity : MonoBehaviour
 		}
 	}
 
+	public virtual void ExternalMove(Vector3 direction, float force, ForceMode fMode = ForceMode.Force)
+	{
+		if (rigidbody != null)
+		{
+			rigidbody.AddForce(direction * force, fMode);
+		}
+	}
+
 	public bool AdjustResource(float amount)
 	{
 		if (Resource + amount <= MaxResource && Resource + amount >= 0)

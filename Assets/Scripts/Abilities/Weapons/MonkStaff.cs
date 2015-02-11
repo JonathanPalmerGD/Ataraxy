@@ -11,7 +11,7 @@ public class MonkStaff : Weapon
 	public override void Init()
 	{
 		base.Init();
-		bladeSlashPrefab = Resources.Load<GameObject>("StaffThwack");
+		bladeSlashPrefab = Resources.Load<GameObject>("Projectiles/StaffThwack");
 		Icon = UIManager.Instance.Icons[IconIndex];
 
 		DurSpecialCost = 1;
