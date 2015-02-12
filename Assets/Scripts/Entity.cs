@@ -277,26 +277,29 @@ public class Entity : MonoBehaviour
 		}
 	}
 
-	public void GainExperience(float xpValue, int level = 1)
+	public void GainExperience(float xpValue, int xpMultiplier = 1)
 	{
 		if (xpValue < 0)
 		{
 			Debug.LogError("Negative Experience value (" + xpValue + ")  provided to : " + gameObject.name + "\n");
 		}
-		XP += xpValue * level;
+		if(Level < GameManager.Instance.player.Level + 4)
+		{
+			XP += xpValue * xpMultiplier;
 
-		if (XPSlider != null)
-		{
-			XPSlider.value = XP;
-		}
-		if (XPText != null)
-		{
-			XPText.text = XP.ToString();
-		}
+			if (XPSlider != null)
+			{
+				XPSlider.value = XP;
+			}
+			if (XPText != null)
+			{
+				XPText.text = XP.ToString();
+			}
 
-		if (XP > XPNeeded)
-		{
-			GainLevel();
+			if (XP > XPNeeded)
+			{
+				GainLevel();
+			}
 		}
 	}
 
