@@ -228,7 +228,7 @@ public class Entity : MonoBehaviour
 			KillEntity();
 		}
 	}
-
+	
 	public virtual void ExternalMove(Vector3 direction, float force, ForceMode fMode = ForceMode.Force)
 	{
 		if (rigidbody != null)

@@ -160,7 +160,7 @@ public class EnemyController : MonoBehaviour
 				//Jump to Ascend
 				if (!jumpedYet && nextNode.transform.position.y - 3 > transform.position.y && myRB.velocity.y < 0)
 				{
-					Debug.Log("Vertical Jump\n");
+					//Debug.Log("Vertical Jump\n");
 					ApplyJump(true);
 					jumpedYet = true;
 				}

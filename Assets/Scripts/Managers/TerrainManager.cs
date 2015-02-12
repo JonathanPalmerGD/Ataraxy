@@ -345,6 +345,10 @@ public class TerrainManager : Singleton<TerrainManager>
 	public Stack<PathNode> PathToIsland(Island start, Island destination, float distanceThreshold, int depth = 0)
 	{
 		depth++;
+		if (depth > 10)
+		{
+			return new Stack<PathNode>();
+		}
 		//Debug.Log(depth + "\tCalling FindPathToIsland\nCurrent " + destination.name + " backtracking to node on " + start.island.name + "\n\n");
 
 		Stack<PathNode> path = new Stack<PathNode>();

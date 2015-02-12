@@ -5,8 +5,10 @@ public class GrapplingHook : Weapon
 {
 	public static int IconIndex = 23;
 	public GameObject hookPrefab;
+	public GrapplingHookProj currentProjectile;
 	public float pullVelocity;
-	public float fuelPerRocket;
+	public enum GrapplingHookWeaponState { Ready, Busy }
+	public GrapplingHookWeaponState weaponState = GrapplingHookWeaponState.Ready;
 	
 	public override void Init()
 	{
@@ -30,17 +32,32 @@ public class GrapplingHook : Weapon
 		Vector3 firePoint = firePoints[primaryFirePointIndex].transform.position;
 
 		GameObject go = (GameObject)GameObject.Instantiate(hookPrefab, firePoint, Quaternion.identity);
-		GrapplingHookProj hook = go.GetComponent<GrapplingHookProj>();
+		currentProjectile = go.GetComponent<GrapplingHookProj>();
 
 		Vector3 dir = hitPoint - firePoint;
 		dir.Normalize();
 
-		hook.creator = this;
-		hook.rigidbody.AddForce((dir * hook.ProjVel * hook.rigidbody.mass));
-		
-		hook.Faction = Faction;
+		currentProjectile.creator = this;
+		currentProjectile.rigidbody.AddForce((dir * currentProjectile.ProjVel * currentProjectile.rigidbody.mass));
+
+		currentProjectile.Faction = Faction;
+
+		weaponState = GrapplingHookWeaponState.Busy;
 
 		Destroy(go, 15);
+	}
+
+	public void RemoveProjectile()
+	{
+		//If we're busy
+		if (weaponState == GrapplingHookWeaponState.Busy)
+		{
+			Carrier.rigidbody.useGravity = true;
+			//Clean up our weapon
+			Destroy(currentProjectile.gameObject, .5f);
+			//Set us to ready.
+			weaponState = GrapplingHookWeaponState.Ready;
+		}
 	}
 	
 	#region Static Functions
