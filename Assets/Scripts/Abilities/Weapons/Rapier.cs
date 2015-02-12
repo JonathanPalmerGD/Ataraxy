@@ -23,9 +23,10 @@ public class Rapier : Weapon
 		//SpecialCooldown = .5f;
 		Durability = 100;
 #else
-		
+
 #endif
 		BeamColor = Color.white;
+		//BeamColor = new Color(1f, .85f, .65f);
 	}
 
 	public override void UseWeapon(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)

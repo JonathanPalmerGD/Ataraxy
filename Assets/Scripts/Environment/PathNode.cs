@@ -10,7 +10,7 @@ public class PathNode : MonoBehaviour
 
 	void Start() 
 	{
-		
+		renderer.enabled = false;
 	}
 	
 	void Update() 

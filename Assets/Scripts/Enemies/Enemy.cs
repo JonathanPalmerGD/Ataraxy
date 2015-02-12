@@ -250,6 +250,13 @@ public class Enemy : NPC
 				//Fire at the player
 				AttackPlayer();
 
+#if UNITY_EDITOR
+				firingTimer = 10;
+#else
+				//Set ourselves on cooldown
+				firingTimer = FiringCooldown;
+#endif
+
 				//Set ourselves on cooldown
 				firingTimer = FiringCooldown;
 
