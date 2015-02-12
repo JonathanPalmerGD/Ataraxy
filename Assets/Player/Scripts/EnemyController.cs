@@ -142,7 +142,6 @@ public class EnemyController : MonoBehaviour
 			{
 				if (nextNode.transform.position.y - 3 > transform.position.y)
 				{
-					Debug.Log("Vertical Jump\n");
 					ApplyJump(true);
 				}
 				else

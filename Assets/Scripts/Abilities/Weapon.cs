@@ -26,8 +26,6 @@ public class Weapon : Ability
 		get { return cdLeft; }
 		set { cdLeft = value; }
 	}
-	
-
 	private bool useSpecialCooldown = false;
 	public bool UseSpecialCooldown
 	{

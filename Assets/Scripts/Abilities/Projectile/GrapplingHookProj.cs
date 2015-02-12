@@ -4,15 +4,14 @@ using System.Collections.Generic;
 
 public class GrapplingHookProj : Projectile 
 {
-	//Grappling state - Moving, Attached, Pulling
+	//Grappling state - Moving, Attached (to environment), Pulling (enemy to you)
 	public enum GrapplingState { Firing, Attached, Pulling };
 	private GrapplingState hookState = GrapplingState.Firing;
 	private Entity pullingEntity = null;
 
 	public virtual void Init()
 	{
-		//Debug.Log("Hit");
-		////transform.SetParent(GameManager.Instance.gameObject.transform);
+
 	}
 
 	public virtual void Start() 
@@ -35,22 +34,19 @@ public class GrapplingHookProj : Projectile
 		}
 		else if (hookState == GrapplingState.Attached)
 		{
-			Vector3 pullDir = creator.Carrier.transform.position - transform.position;
+			Vector3 pullDir = transform.position - creator.Carrier.transform.position;
+			pullDir.Normalize();
 			//Pull the creator
-			creator.Carrier.ExternalMove(pullDir, 50, ForceMode.Force);
+			creator.Carrier.ExternalMove(pullDir, 1, ForceMode.VelocityChange);
 		}
 		else if (hookState == GrapplingState.Pulling)
 		{
-			//Return to the creator.
-			Vector3 pullDir = creator.Carrier.transform.position - transform.position;
-			
-			//Move in the direction of the creator
-			rigidbody.velocity = pullDir * 3;
-
-			//Pull whatever we're attached to if able.
 			if (pullingEntity != null)
 			{
-				pullingEntity.ExternalMove(pullDir, 50, ForceMode.Force);
+				Vector3 pullDir = creator.Carrier.transform.position - transform.position;
+				pullDir.Normalize();
+				//Pull the creator
+				pullingEntity.ExternalMove(pullDir, 15f, ForceMode.VelocityChange);
 			}
 		}
 	}
@@ -63,10 +59,10 @@ public class GrapplingHookProj : Projectile
 			string cTag = collider.gameObject.tag;
 			if (cTag == "Enemy" || cTag == "Player")// || cTag == "Entity" || cTag == "Island")
 			{
-				Entity atObj = collider.gameObject.GetComponent<Entity>();
-				if (atObj != null)
+				Entity collidedEntity = collider.gameObject.GetComponent<Entity>();
+				if (collidedEntity != null)
 				{
-					if (atObj.Faction == Faction)
+					if (collidedEntity.Faction == Faction)
 					{
 						Debug.LogWarning("Projectile collided with same Faction as firing source.\n");
 						return;
@@ -75,19 +71,27 @@ public class GrapplingHookProj : Projectile
 					{
 						//Debug.Log("F" + Faction + " " + atObj.Faction + "\n");
 						//If the projectile is from the Player
-						if (Faction == Allegiance.Player && atObj.Faction == Allegiance.Enemy)
+						if (Faction == Allegiance.Player && collidedEntity.Faction == Allegiance.Enemy)
 						{
 							//Deal damage to the enemy
-							atObj.GetComponent<Enemy>().AdjustHealth(-Damage);
+							collidedEntity.GetComponent<Enemy>().AdjustHealth(-Damage);
+
+							//Make ourself a child.
+							//gameObject.transform.SetParent(collidedEntity.transform);
+
+							rigidbody.velocity = Vector3.zero;
+
+							hookState = GrapplingState.Pulling;
+							pullingEntity = collidedEntity;
 
 							//Apply AbilityEffect to the target.
 							for (int i = 0; i < projectileEffects.Count; i++)
 							{
-								atObj.GetComponent<Enemy>().ApplyAbilityEffect(projectileEffects[i]);
+								collidedEntity.GetComponent<Enemy>().ApplyAbilityEffect(projectileEffects[i]);
 							}
 						}
 						//Else if it is from an Enemy
-						else if (Faction == Allegiance.Enemy && atObj.Faction == Allegiance.Player)
+						else if (Faction == Allegiance.Enemy && collidedEntity.Faction == Allegiance.Player)
 						{
 							//Deal damage to the enemy
 							GameManager.Instance.player.AdjustHealth(-Damage);
@@ -107,6 +111,18 @@ public class GrapplingHookProj : Projectile
 					}
 				}
 			}
+
+			else if(cTag == "Projectile")
+			{
+				//Destroy ourself
+				enabled = false;
+			}
+			else
+			{
+				rigidbody.velocity = Vector3.zero;
+				hookState = GrapplingState.Attached;
+			}
+
 
 			//Clean up the bullet. This should be updated to add it to an object pool
 			Collide();

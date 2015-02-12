@@ -147,6 +147,7 @@ public class Player : Entity
 		//SetupAbility(Weapon.New());
 		//SetupAbility(MultiToken.NewWeapon());
 		SetupAbility(GravityStaff.New());
+		SetupAbility(GrapplingHook.New());
 		//SetupAbility(Weapon.New());
 		
 		//SetupAbility(Passive.New());
