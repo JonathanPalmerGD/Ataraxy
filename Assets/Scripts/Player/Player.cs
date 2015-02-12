@@ -150,7 +150,7 @@ public class Player : Entity
 		SetupAbility(GrapplingHook.New());
 		//SetupAbility(Weapon.New());
 		
-		//SetupAbility(Passive.New());
+		SetupAbility(Passive.New());
 		//SetupAbility(Passive.New());
 		//SetupAbility(Passive.New());
 		//SetupAbility(Passive.New());
@@ -204,7 +204,6 @@ public class Player : Entity
 		}
 		else if (ToAdd is Passive)
 		{
-
 			Passive p = (Passive)ToAdd;
 
 			Image panel = ((GameObject)GameObject.Instantiate(iconPrefab)).GetComponent<Image>();

@@ -23,7 +23,7 @@ public class GameManager : Singleton<GameManager>
 	{
 		base.Awake();
 		tokenPrefab = Resources.Load<GameObject>("Token");
-		xpHomePrefab = Resources.Load<GameObject>("HomingDeathAlert");
+		xpHomePrefab = Resources.Load<GameObject>("Projectiles/HomingDeathAlert");
 		playerGO = GameObject.FindGameObjectWithTag("Player");
 		if (playerGO != null)
 		{

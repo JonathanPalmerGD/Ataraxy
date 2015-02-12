@@ -23,6 +23,7 @@ public class NPC : Entity
 		InfoHUD = UIManager.Instance.target_HUD;
 
 		Untarget();
+		SetupXPUI();
 	}
 
 	public override void Update() 
