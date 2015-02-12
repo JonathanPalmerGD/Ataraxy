@@ -23,7 +23,7 @@ public class GrapplingHookProj : Projectile
 
 		lr.SetVertexCount(2);
 		lr.SetColors(creator.BeamColor, creator.BeamColor);
-		lr.SetWidth(.4f, .4f);
+		lr.SetWidth(.2f, .2f);
 		DrawChain();
 	}
 
