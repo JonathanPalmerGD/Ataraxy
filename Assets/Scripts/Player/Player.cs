@@ -506,7 +506,7 @@ public class Player : Entity
 			}
 			#endregion
 
-			#region Uniy Editor Only
+			#region Unity Editor Only
 			#if UNITY_EDITOR || CHEAT
 
 			#region Dev Movement Buttons
@@ -574,9 +574,7 @@ public class Player : Entity
 			if (Input.GetKeyDown(KeyCode.H))
 			{
 				SetupAbility(GravityStaff.New());
-				SetupAbility(GravityStaff.New());
-				SetupAbility(WingedSandals.New());
-				SetupAbility(WingedSandals.New());
+				SetupAbility(GrapplingHook.New());
 				SetupAbility(WingedSandals.New());
 			}
 			#endregion

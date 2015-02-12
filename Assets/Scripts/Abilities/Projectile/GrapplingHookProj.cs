@@ -10,6 +10,7 @@ public class GrapplingHookProj : Projectile
 	private Entity pullingEntity = null;
 	private bool collidedYet = false;
 	private LineRenderer lr;
+	public float timeRemaining = 5;
 
 	public override void Init()
 	{
@@ -44,6 +45,13 @@ public class GrapplingHookProj : Projectile
 
 	public virtual void Update() 
 	{
+		timeRemaining -= Time.deltaTime;
+
+		if (timeRemaining < 0)
+		{
+			((GrapplingHook)creator).RemoveProjectile();
+		}
+
 		//Draw line to the creator.
 		DrawChain();
 
@@ -172,6 +180,7 @@ public class GrapplingHookProj : Projectile
 			hookState = GrapplingState.Pulling;
 			pullingEntity = collidedEntity;
 			collidedYet = true;
+			timeRemaining += 5;
 		}
 	}
 
@@ -183,6 +192,7 @@ public class GrapplingHookProj : Projectile
 			rigidbody.velocity = Vector3.zero;
 			hookState = GrapplingState.Attached;
 			collidedYet = true;
+			timeRemaining += 5;
 		}
 	}
 
@@ -204,7 +214,8 @@ public class GrapplingHookProj : Projectile
 				//Pull the creator
 				pullingEntity.ExternalMove(pullDir, -2f, ForceMode.VelocityChange);
 			}
-		}
+		} 
+		timeRemaining = 0;
 	}
 
 	public virtual void Collide()

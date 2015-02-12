@@ -44,6 +44,18 @@ public class GrapplingHook : Weapon
 		base.UpdateWeapon(time);
 	}
 
+	public override bool CheckAbility()
+	{
+		if (weaponState == GrapplingHookWeaponState.Busy)
+		{
+			return false;
+		}
+		else
+		{
+			return base.CheckAbility();
+		}
+	}
+
 	public override void UseWeapon(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
 	{
 		Vector3 firePoint = firePoints[primaryFirePointIndex].transform.position;
@@ -61,12 +73,9 @@ public class GrapplingHook : Weapon
 
 		currentProjectile.Faction = Faction;
 
+		currentProjectile.timeRemaining = 5;
+
 		weaponState = GrapplingHookWeaponState.Busy;
-
-		//Color[] color = { BeamColor, BeamColor};
-		//SetupLineRenderer(color, .5f, float.MaxValue,
-
-		Destroy(go, 10);
 	}
 
 	public override void UseWeaponSpecial(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)

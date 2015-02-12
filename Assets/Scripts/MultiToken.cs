@@ -86,7 +86,7 @@ public class MultiToken : MonoBehaviour
 
 	public static Ability NewWeapon()
 	{
-		switch(Random.Range(0, 8))
+		switch(Random.Range(0, 9))
 		{
 			case 0:
 				return RocketLauncher.New();
@@ -102,6 +102,8 @@ public class MultiToken : MonoBehaviour
 				return GravityStaff.New();
 			case 6:
 				return WingedSandals.New();
+			case 7:
+				return GrapplingHook.New();
 			//case 5:
 			//	return Dagger.New();
 			default:
