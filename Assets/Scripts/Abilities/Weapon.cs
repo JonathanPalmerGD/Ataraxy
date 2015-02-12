@@ -99,7 +99,7 @@ public class Weapon : Ability
 	}
 	#endregion
 
-	public void UpdateWeapon(float time)
+	public virtual void UpdateWeapon(float time)
 	{
 		if (CdLeft > time)
 		{

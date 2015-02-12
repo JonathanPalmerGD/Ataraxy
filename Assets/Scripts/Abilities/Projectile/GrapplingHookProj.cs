@@ -9,26 +9,44 @@ public class GrapplingHookProj : Projectile
 	private GrapplingState hookState = GrapplingState.Firing;
 	private Entity pullingEntity = null;
 	private bool collidedYet = false;
+	private LineRenderer lr;
 
-	public virtual void Init()
+	public override void Init()
 	{
+		lr = gameObject.GetComponent<LineRenderer>();
+		if (lr == null)
+		{
+			lr = gameObject.AddComponent<LineRenderer>();
+		}
 
+		//lr.material = new Material(Shader.Find("Particles/Additive"));
+
+		lr.SetVertexCount(2);
+		lr.SetColors(creator.BeamColor, creator.BeamColor);
+		lr.SetWidth(.4f, .4f);
+		DrawChain();
+	}
+
+	public virtual void DrawChain()
+	{
+		Vector3 firstPos = ((Player)creator.Carrier).FirePoints[0].transform.position;
+		lr.SetPosition(0, firstPos);
+		lr.SetPosition(1, transform.position);
+		lr.material.mainTextureScale = new Vector2(Vector3.Distance(firstPos, transform.position), 1);
 	}
 
 	public virtual void Start() 
 	{
-		//ColliderName = "StabCollider";
-		base.Init();
+		Init();
 
-		Damage = 1;
-		//ProjVel = 1200;
-		//movementDecay = 0f;
-		//visualDecay = .35f;
-		//rigidbody.drag = 8;
+		ProjVel = 1200;
 	}
 
 	public virtual void Update() 
 	{
+		//Draw line to the creator.
+		DrawChain();
+
 		if (hookState == GrapplingState.Firing)
 		{
 			//Do nothing. We already have our velocity.
@@ -48,6 +66,9 @@ public class GrapplingHookProj : Projectile
 				pullDir.Normalize();
 				//Pull the creator
 				pullingEntity.ExternalMove(pullDir, 2f, ForceMode.VelocityChange);
+				
+				//This could let us move linearly towards the player.
+				//rigidbody.velocity = Vector3.zero;
 				rigidbody.AddForce(pullDir * 2f, ForceMode.VelocityChange);
 			}
 		}

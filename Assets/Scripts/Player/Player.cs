@@ -212,7 +212,7 @@ public class Player : Entity
 
 			panel.rectTransform.anchorMin = new Vector2(1, 1);
 			panel.rectTransform.anchorMax = new Vector2(1, 1);
-
+			
 			p.Icon = UIManager.Instance.Icons[Random.Range(1, UIManager.Instance.Icons.Length)];
 			panel.color = new Color(0, .8f, 0);
 			panel.rectTransform.SetParent(PassiveUI.transform);
