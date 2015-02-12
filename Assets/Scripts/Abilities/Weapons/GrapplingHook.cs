@@ -60,7 +60,7 @@ public class GrapplingHook : Weapon
 	{
 		Vector3 firePoint = firePoints[primaryFirePointIndex].transform.position;
 
-		GameObject go = (GameObject)GameObject.Instantiate(hookPrefab, firePoint, Quaternion.identity);
+		GameObject go = (GameObject)GameObject.Instantiate(hookPrefab, firePoint + Vector3.up, Quaternion.identity);
 		currentProjectile = go.GetComponent<GrapplingHookProj>();
 
 		Vector3 dir = hitPoint - firePoint;
@@ -127,8 +127,8 @@ public class GrapplingHook : Weapon
 		g.NormalCooldown = 1;
 		g.SpecialCooldown = 0;
 		g.CdLeft = 0;
-		g.PrimaryDesc = "This is a grappling hook.";
-		g.SecondaryDesc = "Not yet implemented!";
+		g.PrimaryDesc = "Fires a hook and chain that latches onto the first piece of terrain or enemy it hits.\nEnemies are pulled towards you.\nYou are pulled towards terrain at a ridiculous speed.\nExercise Caution.";
+		g.SecondaryDesc = "Retracts the current hook instantaneously.\nOnly one hook can be active at a time.";
 		return g;
 	}
 	

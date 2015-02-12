@@ -32,6 +32,7 @@ public class MultiToken : MonoBehaviour
 		//	pStats = player.GetComponent<PlayerStats>();
 		//	runner = player.GetComponent<Cryomancer>();
 		}
+		tag = "Token";
 	}
 
 	void OnTriggerEnter(Collider collider)

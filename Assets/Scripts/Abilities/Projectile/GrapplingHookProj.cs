@@ -8,6 +8,7 @@ public class GrapplingHookProj : Projectile
 	public enum GrapplingState { Firing, Attached, Pulling };
 	private GrapplingState hookState = GrapplingState.Firing;
 	private Entity pullingEntity = null;
+	private GameObject pullingGameObject = null;
 	private bool collidedYet = false;
 	private LineRenderer lr;
 	public float timeRemaining = 5;
@@ -78,6 +79,20 @@ public class GrapplingHookProj : Projectile
 				//This could let us move linearly towards the player.
 				//rigidbody.velocity = Vector3.zero;
 				rigidbody.AddForce(pullDir * 2f, ForceMode.VelocityChange);
+			}
+			else if (pullingGameObject != null)
+			{
+				if (pullingGameObject.rigidbody != null)
+				{
+					Vector3 pullDir = creator.Carrier.transform.position - transform.position;
+					pullDir.Normalize();
+					//Pull the creator
+					pullingGameObject.rigidbody.AddForce(pullDir * 2f, ForceMode.VelocityChange);
+
+					//This could let us move linearly towards the player.
+					//rigidbody.velocity = Vector3.zero;
+					rigidbody.AddForce(pullDir * 2f, ForceMode.VelocityChange);
+				}
 			}
 		}
 	}
@@ -161,13 +176,34 @@ public class GrapplingHookProj : Projectile
 
 			else if(cTag == "Projectile")
 			{
-				//((GrapplingHook)creator).RemoveProjectile();
-				enabled = false;
+				
+			}
+			else if (cTag == "Token")
+			{
+				MultiToken token = collider.gameObject.GetComponent<MultiToken>();
+				if (token != null)
+				{
+					//Pull token.
+					RetractPullingTarget(collider.gameObject);
+				}
 			}
 			else
 			{
 				BecomeAttached();
 			}
+		}
+	}
+
+	public void RetractPullingTarget(GameObject collidedObject)
+	{
+		if (!collidedYet)
+		{
+			rigidbody.velocity = Vector3.zero;
+
+			hookState = GrapplingState.Pulling;
+			pullingGameObject = collidedObject;
+			collidedYet = true;
+			timeRemaining += 5;
 		}
 	}
 
