@@ -656,7 +656,7 @@ public class EnemyController : MonoBehaviour
 						
 						if (newPath.Count > 0)
 						{
-							Debug.Log("New Path Acquired: " + newPath.Count + "\n");
+							//Debug.Log("New Path Acquired: " + newPath.Count + "\n");
 						}
 						curPath = newPath;
 					}
