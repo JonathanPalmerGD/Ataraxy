@@ -141,7 +141,7 @@ public class Weapon : Ability
 					//Display visual effect
 
 					//Damage the enemy
-					e.AdjustHealth(-PrimaryDamage);
+					e.AdjustHealth(-PrimaryDamage * (1 + Carrier.Level * .1f));
 				}
 			}
 			if (targType.IsSubclassOf(typeof(NPC)) || targType.IsAssignableFrom(typeof(NPC)))
@@ -179,7 +179,7 @@ public class Weapon : Ability
 					//Display visual effect
 
 					//Damage the enemy
-					e.AdjustHealth(-SpecialDamage);
+					e.AdjustHealth(-SpecialDamage * (1 + Carrier.Level * .1f));
 				}
 			}
 			else if (targType != null && targType.IsAssignableFrom(typeof(NPC)))

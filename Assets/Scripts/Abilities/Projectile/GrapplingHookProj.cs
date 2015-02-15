@@ -133,7 +133,7 @@ public class GrapplingHookProj : Projectile
 						if (Faction == Allegiance.Player && collidedEntity.Faction == Allegiance.Enemy)
 						{
 							//Deal damage to the enemy
-							collidedEntity.GetComponent<Enemy>().AdjustHealth(-Damage);
+							collidedEntity.GetComponent<Enemy>().AdjustHealth(-Damage * (1 + creator.Carrier.Level * .1f));
 
 							//Make ourself a child.
 							//gameObject.transform.SetParent(collidedEntity.transform);
@@ -159,7 +159,7 @@ public class GrapplingHookProj : Projectile
 							{
 								Debug.LogError("Grappling Hook not configured for enemy use\n");
 								//Deal damage to the enemy
-								GameManager.Instance.player.AdjustHealth(-Damage);
+								GameManager.Instance.player.AdjustHealth(-Damage * (1 + creator.Carrier.Level * .1f));
 
 								//Apply AbilityEffect to the target.
 								for (int i = 0; i < projectileEffects.Count; i++)

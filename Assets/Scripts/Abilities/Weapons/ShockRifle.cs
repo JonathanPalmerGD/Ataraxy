@@ -61,7 +61,7 @@ public class ShockRifle : Weapon
 						//Display visual effect
 
 						//Damage the enemy
-						e.AdjustHealth(-PrimaryDamage);
+						e.AdjustHealth(-PrimaryDamage * (1 + Carrier.Level * .1f));
 					}
 				}
 			}
