@@ -17,7 +17,7 @@ public class GrapplingHook : Weapon
 		Icon = UIManager.Instance.Icons[IconIndex];
 		primaryFirePointIndex = 0;
 		specialFirePointIndex = 0;
-		PrimaryDamage = 5;
+		PrimaryDamage = 2.5f;
 		NormalCooldown = Random.Range(.65f, 1.4f);
 		SpecialCooldown = Random.Range(1.3f, 2);
 		DurSpecialCost = 0;
@@ -66,6 +66,8 @@ public class GrapplingHook : Weapon
 		Vector3 dir = hitPoint - firePoint;
 		dir.Normalize();
 
+		go.transform.LookAt(hitPoint);
+
 		currentProjectile.creator = this;
 		currentProjectile.rigidbody.AddForce((dir * currentProjectile.ProjVel * currentProjectile.rigidbody.mass));
 
@@ -105,17 +107,28 @@ public class GrapplingHook : Weapon
 
 	}
 
-	public void RemoveProjectile(float destroyTime = .5f)
+	public void RemoveProjectile(float destroyTime = .0f)
 	{
 		//If we're busy
 		if (weaponState == GrapplingHookWeaponState.Busy)
 		{
-			Carrier.rigidbody.useGravity = true;
 			//Set us to ready.
 			weaponState = GrapplingHookWeaponState.Ready;
 			//Clean up our weapon
 			Destroy(currentProjectile.gameObject, destroyTime);
 		}
+	}
+
+	public void ProjectileDestroyed()
+	{
+		if (Carrier != null)
+		{
+			Carrier.rigidbody.useGravity = true;
+		}
+		//Set us to ready.
+		weaponState = GrapplingHookWeaponState.Ready;
+
+		currentProjectile = null;
 	}
 	
 	#region Static Functions
@@ -123,12 +136,12 @@ public class GrapplingHook : Weapon
 	{
 		GrapplingHook g = ScriptableObject.CreateInstance<GrapplingHook>();
 		g.AbilityName = GrapplingHook.GetWeaponName();
-		g.Durability = Random.Range(6, 17);
+		g.Durability = Random.Range(23, 35);
 		g.NormalCooldown = 1;
 		g.SpecialCooldown = 0;
 		g.CdLeft = 0;
-		g.PrimaryDesc = "Fires a hook and chain that latches onto the first piece of terrain or enemy it hits.\nEnemies are pulled towards you.\nYou are pulled towards terrain at a ridiculous speed.\nExercise Caution.";
-		g.SecondaryDesc = "Retracts the current hook instantaneously.\nOnly one hook can be active at a time.";
+		g.PrimaryDesc = "Fires a hook and chain that latches onto the first piece of terrain, token or enemy it hits.\nEnemies & tokens are pulled towards you.\nYou are pulled towards terrain at a ridiculous speed.\nExercise Caution.";
+		g.SecondaryDesc = "Disables and Retracts the current hook instantaneously.\nOnly one hook can be active at a time.";
 		return g;
 	}
 	

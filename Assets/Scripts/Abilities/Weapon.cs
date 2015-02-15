@@ -417,17 +417,19 @@ public class Weapon : Ability
 		w.NormalCooldown = 1;
 		w.SpecialCooldown = 6;
 		w.CdLeft = 0;
+		w.PrimaryDesc = "[Damage]\nDefault Hitscan Laser";
+		w.SecondaryDesc = "[Damage]\nA deadly laser.";
 		return w;
 	}	
 
 	static string[] adj = { "Basic", "Bulky", "Hasty", "Deadly", "Steel", "Vampiric", "Anachronic", "Violent", "Nimble" };
-	static string[] noun = { "Pistol", "Grenade Launcher", "Whip", "Sniper Rifle", "Mace", "Tome" };
+	static string[] noun = { "Default Weapon" };
 	public static string GetWeaponName()
 	{
 		int rndA = Random.Range(0, adj.Length);
 		int rndB = Random.Range(0, noun.Length);
 
-		return (/*adj[rndA] + " " + */noun[rndB]);
+		return (adj[rndA] + " " + noun[rndB]);
 	}
 	#endregion
 }

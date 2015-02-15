@@ -21,7 +21,7 @@ public class Enemy : NPC
 	public float XpReward = 5;
 
 	//private float xpRateOverTime = .5f;
-	private float xpRateOverTime = 5.5f;
+	private float xpRateOverTime = 1.5f;
 
 	private bool gainXpWhenHit = false;
 	private float xpGainWhenHit = .5f;
@@ -204,7 +204,7 @@ public class Enemy : NPC
 		}
 		else
 		{
-			Health += 5;
+			//Health += 5;
 			AdjustHealth(5);
 		}
 		base.GainLevel();

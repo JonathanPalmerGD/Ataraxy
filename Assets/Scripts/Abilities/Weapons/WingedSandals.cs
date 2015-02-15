@@ -68,8 +68,8 @@ public class WingedSandals : Weapon
 		ws.NormalCooldown = .5f;
 		ws.SpecialCooldown = 12f;
 		ws.CdLeft = 0;
-		ws.PrimaryDesc = "A small flap of the sandal's tiny wings for flying short distances.";
-		ws.SecondaryDesc = "A powerful ascending gust.";
+		ws.PrimaryDesc = "[Utility]\nA small flap of the sandal's tiny wings.\nCan be chained to fly short distances.";
+		ws.SecondaryDesc = "[Utility]\nA powerful ascending gust.";
 		return ws;
 	}
 

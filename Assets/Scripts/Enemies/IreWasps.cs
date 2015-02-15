@@ -74,7 +74,7 @@ public class IreWasps : FlyingEnemy
 			//Hurt the player
 			//Debug.Log("Dealing : " + attackDuration * attackDamage + " damage\n");
 			GameManager.Instance.player.AdjustHealth(-1 * attackDuration * attackDamage);
-			GainExperience((attackDuration) / 4);
+			GainExperience((attackDuration) / 6);
 
 			//Then check if the player got away
 			if (!CanSeePlayer || distFromPlayer > transform.localScale.x)
@@ -149,7 +149,7 @@ public class IreWasps : FlyingEnemy
 					{
 						stateTimer = 1;
 						//Gain experience on charge
-						GainExperience(10);
+						GainExperience(3);
 				
 						ChangeState(EnemyState.Attacking);
 						//Apply a force and fly in the direction of the player

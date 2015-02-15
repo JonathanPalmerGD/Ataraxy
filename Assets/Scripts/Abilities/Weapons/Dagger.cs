@@ -15,7 +15,7 @@ public class Dagger : Weapon
 		Icon = UIManager.Instance.Icons[IconIndex];
 
 		DurSpecialCost = 5; 
-		NormalCooldown = .30f;
+		NormalCooldown = .20f;
 		SpecialCooldown = 2f;
 #if CHEAT
 		//NormalCooldown = .30f;
@@ -72,12 +72,12 @@ public class Dagger : Weapon
 	{
 		Dagger w = ScriptableObject.CreateInstance<Dagger>();
 		w.AbilityName = Dagger.GetWeaponName();
-		w.Durability = Random.Range(10, 60);
+		w.Durability = Random.Range(40, 70);
 		w.NormalCooldown = 1;
 		w.SpecialCooldown = 6;
 		w.CdLeft = 0;
-		w.PrimaryDesc = "A quick stab.\nBackstabs coming soon!";
-		w.SecondaryDesc = "A quick dash forward.\nUseful for getaways or crossing length gaps.";
+		w.PrimaryDesc = "[Damage]\nA quick stab.\nBackstabs coming soon!";
+		w.SecondaryDesc = "[Utility]\nA quick dash forward.\nUseful for getaways or crossing length gaps.";
 		return w;
 	}
 

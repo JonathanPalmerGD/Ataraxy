@@ -33,7 +33,7 @@ public class GrapplingHookProj : Projectile
 	{
 		Vector3 firstPos = ((Player)creator.Carrier).FirePoints[0].transform.position;
 		lr.SetPosition(0, firstPos);
-		lr.SetPosition(1, transform.position);
+		lr.SetPosition(1, transform.position - transform.forward * transform.localScale.z/2);
 		lr.material.mainTextureScale = new Vector2(Vector3.Distance(firstPos, transform.position), 1);
 	}
 
@@ -41,7 +41,7 @@ public class GrapplingHookProj : Projectile
 	{
 		Init();
 
-		ProjVel = 1200;
+		ProjVel = 1900;
 	}
 
 	public virtual void Update() 
@@ -95,6 +95,11 @@ public class GrapplingHookProj : Projectile
 				}
 			}
 		}
+	}
+
+	void OnDestroy()
+	{
+		((GrapplingHook)creator).ProjectileDestroyed();
 	}
 
 	void OnTriggerEnter(Collider collider)

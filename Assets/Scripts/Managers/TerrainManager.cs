@@ -316,7 +316,7 @@ public class TerrainManager : Singleton<TerrainManager>
 			//If we are, get the connection.
 			DestinationConnection dc = start.islandConnections[destination];
 
-			if (dc != null)
+			if (dc != null && dc.connections.Count > 0)
 			{
 				//Compare the two shortest connectors to that island
 				//NodeConnection shortest = dc.connections[0];
@@ -335,7 +335,8 @@ public class TerrainManager : Singleton<TerrainManager>
 			}
 			else
 			{
-				Debug.LogError("We say we're connected but we don't have a non-null destination connection, wtf?\n");
+				Debug.LogWarning("We say we're connected but we don't have a non-null destination connection, wtf?\n");
+				return new Stack<PathNode>();
 			}
 		}
 
@@ -388,20 +389,29 @@ public class TerrainManager : Singleton<TerrainManager>
 					}*/
 
 					//Debug.Log(depth + "\t[Adding Neighbor]" + curIsland.name + " to " + neighborRanking[i] + "\n");
-					NodeConnection nc = start.islandConnections[neighborRanking[i]].connections[0];
 
-					//Push the destination island edge node
-					path.Push(nc.finishNode);
-					//Debug.DrawLine(nc.finishNode.transform.position, nc.finishNode.transform.position + Vector3.up * 3, Color.yellow, 35f);
+					if (start.islandConnections[neighborRanking[i]].connections.Count > 0)
+					{
+						NodeConnection nc = start.islandConnections[neighborRanking[i]].connections[0];
 
-					//Push the destination island center node.
-					//path.Push(neighborRanking[i].nodes[0]);
+						//Push the destination island edge node
+						path.Push(nc.finishNode);
+						//Debug.DrawLine(nc.finishNode.transform.position, nc.finishNode.transform.position + Vector3.up * 3, Color.yellow, 35f);
 
-					//Push current island edge node
-					path.Push(nc.startNode);
-					//Debug.DrawLine(nc.startNode.transform.position + Vector3.right * .5f, nc.startNode.transform.position + Vector3.right * .5f + Vector3.up * 3, Color.blue, 35f);
+						//Push the destination island center node.
+						//path.Push(neighborRanking[i].nodes[0]);
 
-					return path;
+						//Push current island edge node
+						path.Push(nc.startNode);
+						//Debug.DrawLine(nc.startNode.transform.position + Vector3.right * .5f, nc.startNode.transform.position + Vector3.right * .5f + Vector3.up * 3, Color.blue, 35f);
+
+						return path;
+					}
+					else
+					{
+						Debug.LogWarning("Connection fizzled.\n");
+						return new Stack<PathNode>();
+					}
 				}
 				//Otherwise, continue searching.
 			}

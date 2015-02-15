@@ -86,8 +86,8 @@ public class Longsword : Weapon
 		w.NormalCooldown = 1;
 		w.SpecialCooldown = 6;
 		w.CdLeft = 0;
-		w.PrimaryDesc = "A left-to-right slash.";
-		w.SecondaryDesc = "A right-to-left slash.\nStrangely similar to the primary fire...";
+		w.PrimaryDesc = "[Damage]\nA left-to-right slash.";
+		w.SecondaryDesc = "[Damage]\nA right-to-left slash.\nStrangely similar to the primary fire...";
 		return w;
 	}
 

@@ -95,8 +95,8 @@ public class RocketLauncher : Weapon
 		w.NormalCooldown = 1;
 		w.SpecialCooldown = 6;
 		w.CdLeft = 0;
-		w.PrimaryDesc = "An explosive rocket. Homing if you fire when targetting an enemy.";
-		w.SecondaryDesc = "Not yet implemented!";
+		w.PrimaryDesc = "[Damage], [Explosive]\nAn explosive rocket. Homing if you fire when targetting an enemy.";
+		w.SecondaryDesc = "[Damage]\nNot yet implemented!";
 		return w;
 	}
 

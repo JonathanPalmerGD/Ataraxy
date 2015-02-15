@@ -18,7 +18,7 @@ public class ShockRifle : Weapon
 		PrimaryDamage = .4f;
 		SpecialDamage = 4;
 		DurSpecialCost = 3;
-		NormalCooldown = .3f;
+		NormalCooldown = .25f;
 		SpecialCooldown = Random.Range(1.1f, 1.3f);
 #if CHEAT
 		NormalCooldown = .3f;
@@ -36,7 +36,7 @@ public class ShockRifle : Weapon
 		lrColors[0] = BeamColor;
 		lrColors[1] = BeamColor;
 		Vector2 lineSize = new Vector2(.1f, .1f);
-		SetupLineRenderer(lrColors, lineSize, .3f, firePoints, hitPoint);
+		SetupLineRenderer(lrColors, lineSize, NormalCooldown / 2, firePoints, hitPoint);
 
 		if (target != null)
 		{
@@ -99,11 +99,11 @@ public class ShockRifle : Weapon
 		ShockRifle w = ScriptableObject.CreateInstance<ShockRifle>();
 		w.AbilityName = ShockRifle.GetWeaponName();
 		w.Durability = Random.Range(80, 95);
-		w.NormalCooldown = .4f;
+		w.NormalCooldown = .3f;
 		w.SpecialCooldown = 4;
 		w.CdLeft = 0;
-		w.PrimaryDesc = "A fast firing shocking laser.\nWarning: Laser discharge explodes static orbs.";
-		w.SecondaryDesc = "An growing orb of static.";
+		w.PrimaryDesc = "[Damage] [Combo]\nA fast firing shocking laser.\nWarning: Laser discharge explodes static orbs.";
+		w.SecondaryDesc = "[Damage], [Combo], [Explosive]\nAn growing orb of static.";
 		return w;
 	}
 

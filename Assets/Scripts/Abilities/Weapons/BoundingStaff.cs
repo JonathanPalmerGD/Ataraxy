@@ -2,9 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class GravityStaff : Weapon 
+public class BoundingStaff : Weapon 
 {
-	public static int IconIndex = 13;
+	public static int IconIndex = 37;
 	Vector3 movementVector;
 
 	public override void Init()
@@ -12,7 +12,7 @@ public class GravityStaff : Weapon
 		base.Init();
 		Icon = UIManager.Instance.Icons[IconIndex];
 
-		DurCost = 6;
+		DurCost = 4;
 		DurSpecialCost = 1;
 		NormalCooldown = .9f;
 		SpecialCooldown = .08f;
@@ -38,25 +38,25 @@ public class GravityStaff : Weapon
 
 		//Debug.Log(dir + "\n" + movementDir + "\n");
 		//MoveCarrier(movementDir, 0, Vector3.up, 1.5f, true);
-		MoveCarrier(movementDir, .2f, Vector3.up, 0.45f, true);
+		MoveCarrier(movementDir, 1.4f, Vector3.up, 0.05f, true);
 	}
 
 	#region Static Functions
-	public static GravityStaff New()
+	public static BoundingStaff New()
 	{
-		GravityStaff gs = ScriptableObject.CreateInstance<GravityStaff>();
-		gs.AbilityName = GravityStaff.GetWeaponName();
-		gs.Durability = Random.Range(140, 200);
-		gs.NormalCooldown = 1;
-		gs.SpecialCooldown = .08f;
-		gs.CdLeft = 0;
-		gs.PrimaryDesc = "[Damage]\nA weak laser as a last resort.";
-		gs.SecondaryDesc = "[Utility]\nHold: Dampen gravity effects on you.\nUseful for long or high jumps.";
-		return gs;
+		BoundingStaff bs = ScriptableObject.CreateInstance<BoundingStaff>();
+		bs.AbilityName = BoundingStaff.GetWeaponName();
+		bs.Durability = Random.Range(80, 99);
+		bs.NormalCooldown = 1;
+		bs.SpecialCooldown = .08f;
+		bs.CdLeft = 0;
+		bs.PrimaryDesc = "[Damage]\nA weak laser as a last resort.";
+		bs.SecondaryDesc = "[Utility]\nHold: Invoke the God of Travel to boost your forward speed.\nUseful for long.";
+		return bs;
 	}
 
 	static string[] adj = { "Basic", "Bulky", "Hasty", "Deadly", "Steel", "Vampiric", "Anachronic", "Violent", "Nimble", "Strange" };
-	static string weaponName = "Gravity Staff";
+	static string weaponName = "Bounding Staff";
 	public static string GetWeaponName()
 	{
 		int rndA = Random.Range(0, adj.Length);

@@ -100,8 +100,8 @@ public class Rapier : Weapon
 		w.NormalCooldown = 1;
 		w.SpecialCooldown = 6;
 		w.CdLeft = 0;
-		w.PrimaryDesc = "A thin but powerful melee stab.";
-		w.SecondaryDesc = "A dashing lunge combined with a powerful stab!";
+		w.PrimaryDesc = "[Damage]\nA thin but powerful melee stab.";
+		w.SecondaryDesc = "[Damage], [Utility]\nA dashing lunge combined with a powerful stab!";
 		return w;
 	}
 

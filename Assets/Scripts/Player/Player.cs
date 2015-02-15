@@ -136,25 +136,8 @@ public class Player : Entity
 		weapons = new List<Weapon>();
 		passives = new List<Passive>();
 
-		//Give the player a default thing
-		#region Player Starting Items
-		//SetupAbility(MonkStaff.New());
-		//SetupAbility(Longsword.New());
-		//SetupAbility(Rapier.New());
-		//SetupAbility(Dagger.New());
-		//SetupAbility(RocketLauncher.New());
-		//SetupAbility(ShockRifle.New());
-		//SetupAbility(Weapon.New());
-		//SetupAbility(MultiToken.NewWeapon());
-		SetupAbility(GravityStaff.New());
-		SetupAbility(GrapplingHook.New());
-		//SetupAbility(Weapon.New());
-		
-		SetupAbility(Passive.New());
-		//SetupAbility(Passive.New());
-		//SetupAbility(Passive.New());
-		//SetupAbility(Passive.New());
-		#endregion
+		//Give the player starting stuff
+		GiveStartingItems();
 
 		//Stub method currently. For if we add mana/other things
 		SetupResourceSystem();
@@ -174,6 +157,27 @@ public class Player : Entity
 
 		gameObject.tag = "Player";
 		Faction = Allegiance.Player;
+	}
+
+	public void GiveStartingItems()
+	{
+		#if UNITY_EDITOR
+		SetupAbility(GravityStaff.New());
+		SetupAbility(BoundingStaff.New());
+		SetupAbility(GrapplingHook.New());
+		SetupAbility(WingedSandals.New());
+		SetupAbility(Longsword.New());
+		SetupAbility(Rapier.New());
+		SetupAbility(Dagger.New());
+		SetupAbility(RocketLauncher.New());
+		SetupAbility(ShockRifle.New());
+		SetupAbility(Passive.New());
+		SetupAbility(Passive.New());
+		SetupAbility(Passive.New());
+		#else
+		SetupAbility(GravityStaff.New());
+		SetupAbility(Passive.New());
+		#endif
 	}
 
 	public void SetupAbility(Ability ToAdd)
@@ -574,6 +578,7 @@ public class Player : Entity
 			if (Input.GetKeyDown(KeyCode.H))
 			{
 				SetupAbility(GravityStaff.New());
+				SetupAbility(BoundingStaff.New());
 				SetupAbility(GrapplingHook.New());
 				SetupAbility(WingedSandals.New());
 			}
