@@ -316,7 +316,7 @@ public class Weapon : Ability
 		//Friendly fire stub for determining who should and shouldn't be affected.
 		proj.Faction = Faction;
 		//My Weapon's are Scriptable Objects. Some projectiles might influence their parent weapon by refunding health or ammo.
-		proj.creator = this;
+		proj.Creator = this;
 		
 		//Give the projectile velocity. Melee projectiles generally have drag to slow them down quickly.
 		if (specialVelocity != 0)

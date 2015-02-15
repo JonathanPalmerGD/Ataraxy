@@ -62,13 +62,14 @@ public class GrapplingHook : Weapon
 
 		GameObject go = (GameObject)GameObject.Instantiate(hookPrefab, firePoint + Vector3.up, Quaternion.identity);
 		currentProjectile = go.GetComponent<GrapplingHookProj>();
+		currentProjectile.Shooter = Carrier;
 
 		Vector3 dir = hitPoint - firePoint;
 		dir.Normalize();
 
 		go.transform.LookAt(hitPoint);
 
-		currentProjectile.creator = this;
+		currentProjectile.Creator = this;
 		currentProjectile.rigidbody.AddForce((dir * currentProjectile.ProjVel * currentProjectile.rigidbody.mass));
 
 		currentProjectile.Damage = PrimaryDamage;

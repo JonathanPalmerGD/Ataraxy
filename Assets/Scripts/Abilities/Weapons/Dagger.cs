@@ -38,6 +38,7 @@ public class Dagger : Weapon
 		DaggerStab stab = go.GetComponent<DaggerStab>();
 
 		stab.Init();
+		stab.Shooter = Carrier;
 
 		List<Vector3> stabPoints = new List<Vector3>();
 

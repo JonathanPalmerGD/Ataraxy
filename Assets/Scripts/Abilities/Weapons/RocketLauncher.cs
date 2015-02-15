@@ -38,6 +38,7 @@ public class RocketLauncher : Weapon
 				{
 					GameObject go = (GameObject)GameObject.Instantiate(rocketPrefab, firePoint, Quaternion.identity);
 					Rocket rocket = go.GetComponent<Rocket>();
+					rocket.Shooter = Carrier;
 
 					rocket.Faction = Faction;
 

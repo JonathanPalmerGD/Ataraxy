@@ -36,6 +36,7 @@ public class Longsword : Weapon
 		GameObject go = (GameObject)GameObject.Instantiate(bladeSlashPrefab, firePoint, Quaternion.identity);
 		BladeSlash slash = go.GetComponent<BladeSlash>();
 		slash.Init();
+		slash.Shooter = Carrier;
 
 		//Slash Edge Extend direction
 		Vector3 LeftVector = Vector3.Cross(dir, Vector3.up);
@@ -61,6 +62,7 @@ public class Longsword : Weapon
 		GameObject go = (GameObject)GameObject.Instantiate(bladeSlashPrefab, firePoint, Quaternion.identity);
 		BladeSlash slash = go.GetComponent<BladeSlash>();
 		slash.Init();
+		slash.Shooter = Carrier;
 
 		//Slash Edge Extend direction
 		Vector3 LeftVector = Vector3.Cross(dir, Vector3.up);

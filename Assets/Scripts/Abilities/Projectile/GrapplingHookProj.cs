@@ -24,14 +24,14 @@ public class GrapplingHookProj : Projectile
 		//lr.material = new Material(Shader.Find("Particles/Additive"));
 
 		lr.SetVertexCount(2);
-		lr.SetColors(creator.BeamColor, creator.BeamColor);
+		lr.SetColors(Creator.BeamColor, Creator.BeamColor);
 		lr.SetWidth(.2f, .2f);
 		DrawChain();
 	}
 
 	public virtual void DrawChain()
 	{
-		Vector3 firstPos = ((Player)creator.Carrier).FirePoints[0].transform.position;
+		Vector3 firstPos = ((Player)Creator.Carrier).FirePoints[0].transform.position;
 		lr.SetPosition(0, firstPos);
 		lr.SetPosition(1, transform.position - transform.forward * transform.localScale.z/2);
 		lr.material.mainTextureScale = new Vector2(Vector3.Distance(firstPos, transform.position), 1);
@@ -50,7 +50,7 @@ public class GrapplingHookProj : Projectile
 
 		if (timeRemaining < 0)
 		{
-			((GrapplingHook)creator).RemoveProjectile();
+			((GrapplingHook)Creator).RemoveProjectile();
 		}
 
 		//Draw line to the creator.
@@ -62,16 +62,16 @@ public class GrapplingHookProj : Projectile
 		}
 		else if (hookState == GrapplingState.Attached)
 		{
-			Vector3 pullDir = transform.position - creator.Carrier.transform.position;
+			Vector3 pullDir = transform.position - Creator.Carrier.transform.position;
 			pullDir.Normalize();
 			//Pull the creator
-			creator.Carrier.ExternalMove(pullDir, 1, ForceMode.VelocityChange);
+			Creator.Carrier.ExternalMove(pullDir, 1, ForceMode.VelocityChange);
 		}
 		else if (hookState == GrapplingState.Pulling)
 		{
 			if (pullingEntity != null)
 			{
-				Vector3 pullDir = creator.Carrier.transform.position - transform.position;
+				Vector3 pullDir = Creator.Carrier.transform.position - transform.position;
 				pullDir.Normalize();
 				//Pull the creator
 				pullingEntity.ExternalMove(pullDir, 2f, ForceMode.VelocityChange);
@@ -84,7 +84,7 @@ public class GrapplingHookProj : Projectile
 			{
 				if (pullingGameObject.rigidbody != null)
 				{
-					Vector3 pullDir = creator.Carrier.transform.position - transform.position;
+					Vector3 pullDir = Creator.Carrier.transform.position - transform.position;
 					pullDir.Normalize();
 					//Pull the creator
 					pullingGameObject.rigidbody.AddForce(pullDir * 2f, ForceMode.VelocityChange);
@@ -99,7 +99,7 @@ public class GrapplingHookProj : Projectile
 
 	void OnDestroy()
 	{
-		((GrapplingHook)creator).ProjectileDestroyed();
+		((GrapplingHook)Creator).ProjectileDestroyed();
 	}
 
 	void OnTriggerEnter(Collider collider)
@@ -119,7 +119,7 @@ public class GrapplingHookProj : Projectile
 						//Debug.LogWarning("Projectile collided with same Faction as firing source.\n");
 						if (hookState == GrapplingState.Attached || hookState == GrapplingState.Pulling)
 						{
-							((GrapplingHook)creator).RemoveProjectile();
+							((GrapplingHook)Creator).RemoveProjectile();
 						}
 
 						return;
@@ -133,7 +133,7 @@ public class GrapplingHookProj : Projectile
 						if (Faction == Allegiance.Player && collidedEntity.Faction == Allegiance.Enemy)
 						{
 							//Deal damage to the enemy
-							collidedEntity.GetComponent<Enemy>().AdjustHealth(-Damage * (1 + creator.Carrier.Level * .1f));
+							collidedEntity.GetComponent<Enemy>().AdjustHealth(-Damage * (1 + Creator.Carrier.Level * .1f));
 
 							//Make ourself a child.
 							//gameObject.transform.SetParent(collidedEntity.transform);
@@ -159,7 +159,7 @@ public class GrapplingHookProj : Projectile
 							{
 								Debug.LogError("Grappling Hook not configured for enemy use\n");
 								//Deal damage to the enemy
-								GameManager.Instance.player.AdjustHealth(-Damage * (1 + creator.Carrier.Level * .1f));
+								GameManager.Instance.player.AdjustHealth(-Damage * (1 + Creator.Carrier.Level * .1f));
 
 								//Apply AbilityEffect to the target.
 								for (int i = 0; i < projectileEffects.Count; i++)
@@ -229,7 +229,7 @@ public class GrapplingHookProj : Projectile
 	{
 		if (!collidedYet)
 		{
-			creator.Carrier.rigidbody.useGravity = false;
+			Creator.Carrier.rigidbody.useGravity = false;
 			rigidbody.velocity = Vector3.zero;
 			hookState = GrapplingState.Attached;
 			collidedYet = true;
@@ -241,16 +241,16 @@ public class GrapplingHookProj : Projectile
 	{
 		if (hookState == GrapplingState.Attached)
 		{
-			Vector3 pullDir = transform.position - creator.Carrier.transform.position;
+			Vector3 pullDir = transform.position - Creator.Carrier.transform.position;
 			pullDir.Normalize();
 			//Pull the creator
-			creator.Carrier.ExternalMove(pullDir, -1, ForceMode.VelocityChange);
+			Creator.Carrier.ExternalMove(pullDir, -1, ForceMode.VelocityChange);
 		}
 		else if (hookState == GrapplingState.Pulling)
 		{
 			if (pullingEntity != null)
 			{
-				Vector3 pullDir = creator.Carrier.transform.position - transform.position;
+				Vector3 pullDir = Creator.Carrier.transform.position - transform.position;
 				pullDir.Normalize();
 				//Pull the creator
 				pullingEntity.ExternalMove(pullDir, -2f, ForceMode.VelocityChange);

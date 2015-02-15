@@ -49,7 +49,12 @@ public class Projectile : MonoBehaviour
 		set { faction = value; }
 	}*/
 
-	public Weapon creator;
+	private Weapon creator;
+	public Weapon Creator
+	{
+		get { return creator; }
+		set { creator = value; }
+	}
 
 	public List<AbilityEffect> projectileEffects;
 
@@ -92,7 +97,7 @@ public class Projectile : MonoBehaviour
 						if (Faction == Allegiance.Player && atObj.Faction == Allegiance.Enemy)
 						{
 							//Deal damage to the enemy
-							atObj.GetComponent<Enemy>().AdjustHealth(-Damage * (1 + creator.Carrier.Level * .1f));
+							atObj.GetComponent<Enemy>().AdjustHealth(-Damage * (1 + Shooter.Level * .1f));
 
 							//Apply AbilityEffect to the target.
 							for (int i = 0; i < projectileEffects.Count; i++)
@@ -104,7 +109,7 @@ public class Projectile : MonoBehaviour
 						else if (Faction == Allegiance.Enemy && atObj.Faction == Allegiance.Player)
 						{
 							//Deal damage to the enemy
-							GameManager.Instance.player.AdjustHealth(-Damage * (1 + creator.Carrier.Level * .1f));
+							GameManager.Instance.player.AdjustHealth(-Damage * (1 + Shooter.Level * .1f));
 
 							//Apply AbilityEffect to the target.
 							for (int i = 0; i < projectileEffects.Count; i++)

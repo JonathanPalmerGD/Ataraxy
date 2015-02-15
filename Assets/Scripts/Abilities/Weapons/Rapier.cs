@@ -40,6 +40,7 @@ public class Rapier : Weapon
 		RapierStab stab = go.GetComponent<RapierStab>();
 
 		stab.Init();
+		stab.Shooter = Carrier;
 
 		List<Vector3> stabPoints = new List<Vector3>();
 
@@ -71,6 +72,7 @@ public class Rapier : Weapon
 		RapierStab stab = go.GetComponent<RapierStab>();
 
 		stab.Init();
+		stab.Shooter = Carrier;
 
 		List<Vector3> stabPoints = new List<Vector3>();
 
