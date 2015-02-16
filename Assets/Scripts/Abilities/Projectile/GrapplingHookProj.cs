@@ -87,7 +87,8 @@ public class GrapplingHookProj : Projectile
 					Vector3 pullDir = Creator.Carrier.transform.position - transform.position;
 					pullDir.Normalize();
 					//Pull the creator
-					pullingGameObject.rigidbody.AddForce(pullDir * 2f, ForceMode.VelocityChange);
+					//pullingGameObject.rigidbody.AddForce(pullDir * 2f, ForceMode.VelocityChange);
+					pullingGameObject.transform.position = transform.position + transform.forward * (transform.localScale.z / 2);
 
 					//This could let us move linearly towards the player.
 					//rigidbody.velocity = Vector3.zero;
