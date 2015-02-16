@@ -13,6 +13,10 @@ public class WingedSandals : Weapon
 		//daggerStabPrefab = Resources.Load<GameObject>("DaggerStab");
 		Icon = UIManager.Instance.Icons[IconIndex];
 
+		crosshairIndex = 6;
+		crosshairColor = Color.black;
+		crosshairSize = new Vector2(128, 128);
+
 		DurCost = 1;
 		DurSpecialCost = 6;
 		NormalCooldown = .5f;
@@ -27,11 +31,11 @@ public class WingedSandals : Weapon
 		BeamColor = Color.white;
 	}
 
-	public override void UseWeapon(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
+	public override void UseWeapon(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 targetScanDir = default(Vector3), bool lockOn = false)
 	{
 		Vector3 firePoint = firePoints[0].transform.position;
 
-		Vector3 dir = hitPoint - firePoint;
+		Vector3 dir = targetScanDir - firePoint;
 		//Debug.DrawLine(firePoint, firePoint + dir, Color.black, 6.0f);
 
 		float lungeVel = 2.2f;
@@ -42,11 +46,11 @@ public class WingedSandals : Weapon
 		MoveCarrier(movementDir, lungeVel, Vector3.up, 3.5f, false);
 	}
 
-	public override void UseWeaponSpecial(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
+	public override void UseWeaponSpecial(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 targetScanDir = default(Vector3), bool lockOn = false)
 	{
 		Vector3 firePoint = firePoints[0].transform.position;
 
-		Vector3 dir = hitPoint - firePoint;
+		Vector3 dir = targetScanDir - firePoint;
 
 		Vector3 movementDir = dir;
 		movementDir = new Vector3(movementDir.x, 0, movementDir.z);

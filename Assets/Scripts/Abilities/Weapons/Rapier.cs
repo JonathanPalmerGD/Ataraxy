@@ -14,6 +14,7 @@ public class Rapier : Weapon
 		daggerStabPrefab = Resources.Load<GameObject>("Projectiles/RapierStab");
 		Icon = UIManager.Instance.Icons[IconIndex];
 
+		crosshairIndex = 3;
 		SpecialDamage = 9;
 		DurSpecialCost = 5;
 		NormalCooldown = .80f;
@@ -29,11 +30,11 @@ public class Rapier : Weapon
 		//BeamColor = new Color(1f, .85f, .65f);
 	}
 
-	public override void UseWeapon(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
+	public override void UseWeapon(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 targetScanDir = default(Vector3), bool lockOn = false)
 	{
 		Vector3 firePoint = firePoints[0].transform.position;
 
-		Vector3 dir = hitPoint - firePoint;
+		Vector3 dir = targetScanDir - firePoint;
 		dir.Normalize();
 
 		GameObject go = (GameObject)GameObject.Instantiate(daggerStabPrefab, firePoint, Quaternion.identity);
@@ -51,11 +52,11 @@ public class Rapier : Weapon
 		SetupMeleeProjectile(stab, dir, stabPoints, new Vector2(.25f, .0f));
 	}
 
-	public override void UseWeaponSpecial(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
+	public override void UseWeaponSpecial(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 targetScanDir = default(Vector3), bool lockOn = false)
 	{
 		Vector3 firePoint = firePoints[0].transform.position;
 
-		Vector3 dir = hitPoint - firePoint;
+		Vector3 dir = targetScanDir - firePoint;
 
 		float lungeVel = 20;
 		Vector3 movementDir = dir;

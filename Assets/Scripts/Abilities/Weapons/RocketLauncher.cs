@@ -13,6 +13,11 @@ public class RocketLauncher : Weapon
 		base.Init();
 		rocketPrefab = Resources.Load<GameObject>("Projectiles/Rocket");
 		Icon = UIManager.Instance.Icons[IconIndex];
+
+		crosshairIndex = 5;
+		crosshairColor = Color.red;
+		specialCrosshairColor = Color.yellow;
+
 		primaryFirePointIndex = 1;
 		specialFirePointIndex = 1;
 		NormalCooldown = Random.Range(.65f, 1.4f);
@@ -25,7 +30,7 @@ public class RocketLauncher : Weapon
 		BeamColor = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
 	}
 
-	public override void UseWeapon(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
+	public override void UseWeapon(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 targetScanDir = default(Vector3), bool lockOn = false)
 	{
 		Vector3 firePoint = firePoints[primaryFirePointIndex].transform.position;
 		if (targType != null)
@@ -52,7 +57,7 @@ public class RocketLauncher : Weapon
 						rocket.target = null;
 						rocket.homing = false;
 
-						rocket.rigidbody.AddForce((hitPoint - firePoint) * rocket.ProjVel * rocket.rigidbody.mass);
+						rocket.rigidbody.AddForce((targetScanDir - firePoint) * rocket.ProjVel * rocket.rigidbody.mass);
 					}
 				}
 			}
@@ -77,8 +82,8 @@ public class RocketLauncher : Weapon
 			rocket.target = null;
 			rocket.homing = false;
 
-			//Debug.DrawLine(firePoint, hitPoint, Color.red, 5.0f);
-			Vector3 dir = hitPoint - firePoint;
+			//Debug.DrawLine(firePoint, targetScanDir, Color.red, 5.0f);
+			Vector3 dir = targetScanDir - firePoint;
 			dir.Normalize();
 
 			rocket.rigidbody.AddForce((dir * rocket.ProjVel * rocket.rigidbody.mass));

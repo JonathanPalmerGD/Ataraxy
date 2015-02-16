@@ -14,6 +14,9 @@ public class Dagger : Weapon
 		daggerStabPrefab = Resources.Load<GameObject>("Projectiles/DaggerStab");
 		Icon = UIManager.Instance.Icons[IconIndex];
 
+		crosshairSize = new Vector2(128, 128);
+
+		crosshairIndex = 1;
 		DurSpecialCost = 5; 
 		NormalCooldown = .20f;
 		SpecialCooldown = 2f;
@@ -27,11 +30,11 @@ public class Dagger : Weapon
 		BeamColor = Color.white;
 	}
 
-	public override void UseWeapon(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
+	public override void UseWeapon(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 targetScanDir = default(Vector3), bool lockOn = false)
 	{
 		Vector3 firePoint = firePoints[0].transform.position;
 
-		Vector3 dir = hitPoint - firePoint;
+		Vector3 dir = targetScanDir - firePoint;
 		dir.Normalize();
 
 		GameObject go = (GameObject)GameObject.Instantiate(daggerStabPrefab, firePoint, Quaternion.identity);
@@ -49,11 +52,11 @@ public class Dagger : Weapon
 		SetupMeleeProjectile(stab, dir, stabPoints, new Vector2(.5f, .0f));
 	}
 
-	public override void UseWeaponSpecial(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
+	public override void UseWeaponSpecial(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 targetScanDir = default(Vector3), bool lockOn = false)
 	{
 		Vector3 firePoint = firePoints[0].transform.position;
 
-		Vector3 dir = hitPoint - firePoint;
+		Vector3 dir = targetScanDir - firePoint;
 
 		float lungeVel = 15;
 		Vector3 movementDir = dir;

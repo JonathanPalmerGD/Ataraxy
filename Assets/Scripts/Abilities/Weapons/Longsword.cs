@@ -14,6 +14,7 @@ public class Longsword : Weapon
 		bladeSlashPrefab = Resources.Load<GameObject>("Projectiles/BladeSlash");
 		Icon = UIManager.Instance.Icons[IconIndex];
 
+		crosshairIndex = 7;
 		DurSpecialCost = 1;
 		SpecialCooldown = NormalCooldown;
 #if CHEAT
@@ -26,11 +27,11 @@ public class Longsword : Weapon
 		BeamColor = Color.white;
 	}
 
-	public override void UseWeapon(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
+	public override void UseWeapon(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 targetScanDir = default(Vector3), bool lockOn = false)
 	{
 		Vector3 firePoint = firePoints[0].transform.position;
 
-		Vector3 dir = hitPoint - firePoint;
+		Vector3 dir = targetScanDir - firePoint;
 		dir.Normalize();
 
 		GameObject go = (GameObject)GameObject.Instantiate(bladeSlashPrefab, firePoint, Quaternion.identity);
@@ -52,11 +53,11 @@ public class Longsword : Weapon
 		//MoveCarrier(movementDir, lungeVel, Vector3.up, 3, true);
 	}
 
-	public override void UseWeaponSpecial(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
+	public override void UseWeaponSpecial(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 targetScanDir = default(Vector3), bool lockOn = false)
 	{
 		Vector3 firePoint = firePoints[0].transform.position;
 
-		Vector3 dir = hitPoint - firePoint;
+		Vector3 dir = targetScanDir - firePoint;
 		dir.Normalize();
 
 		GameObject go = (GameObject)GameObject.Instantiate(bladeSlashPrefab, firePoint, Quaternion.identity);

@@ -63,6 +63,12 @@ public class Crosshair : MonoBehaviour
 		}
 	}
 
+	public void SetCrosshairSize(Vector2 size)
+	{
+		Image img = this.GetComponent<Image>();
+		img.rectTransform.sizeDelta = new Vector2(size.x, size.y);	
+	}
+
 	void Update()
 	{
 		if (Input.GetKeyDown(KeyCode.Minus))

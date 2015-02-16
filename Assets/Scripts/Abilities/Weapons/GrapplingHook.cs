@@ -15,9 +15,14 @@ public class GrapplingHook : Weapon
 		base.Init();
 		hookPrefab = Resources.Load<GameObject>("Projectiles/Grappling Hook");
 		Icon = UIManager.Instance.Icons[IconIndex];
+
+		crosshairIndex = 7;
+		crosshairColor = new Color(.3f, .3f, .3f);
+		specialCrosshairColor = new Color(.3f, 1f, .3f);
+
 		primaryFirePointIndex = 0;
 		specialFirePointIndex = 0;
-		PrimaryDamage = 2.5f;
+		PrimaryDamage = 0.4f;
 		NormalCooldown = Random.Range(.65f, 1.4f);
 		SpecialCooldown = Random.Range(1.3f, 2);
 		DurSpecialCost = 0;
@@ -44,6 +49,21 @@ public class GrapplingHook : Weapon
 		base.UpdateWeapon(time);
 	}
 
+	public override void UpdateCrosshair(Crosshair crosshair, Vector3 contactPoint = default(Vector3))
+	{
+		if (contactPoint != default(Vector3) && Vector3.SqrMagnitude(contactPoint - Carrier.transform.position) < 3300)
+		{
+			crosshair.CrosshairColor = specialCrosshairColor;
+		}
+		else
+		{
+			crosshair.CrosshairColor = crosshairColor;
+		}
+
+		crosshair.CrosshairIndex = crosshairIndex;
+		crosshair.SetCrosshairSize(crosshairSize);
+	}
+
 	public override bool CheckAbility()
 	{
 		if (weaponState == GrapplingHookWeaponState.Busy)
@@ -56,7 +76,7 @@ public class GrapplingHook : Weapon
 		}
 	}
 
-	public override void UseWeapon(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
+	public override void UseWeapon(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 targetScanDir = default(Vector3), bool lockOn = false)
 	{
 		Vector3 firePoint = firePoints[primaryFirePointIndex].transform.position;
 
@@ -64,10 +84,10 @@ public class GrapplingHook : Weapon
 		currentProjectile = go.GetComponent<GrapplingHookProj>();
 		currentProjectile.Shooter = Carrier;
 
-		Vector3 dir = hitPoint - firePoint;
+		Vector3 dir = targetScanDir - firePoint;
 		dir.Normalize();
 
-		go.transform.LookAt(hitPoint);
+		go.transform.LookAt(targetScanDir);
 
 		currentProjectile.Creator = this;
 		currentProjectile.rigidbody.AddForce((dir * currentProjectile.ProjVel * currentProjectile.rigidbody.mass));
@@ -76,12 +96,12 @@ public class GrapplingHook : Weapon
 
 		currentProjectile.Faction = Faction;
 
-		currentProjectile.timeRemaining = 5;
+		currentProjectile.timeRemaining = 2f;
 
 		weaponState = GrapplingHookWeaponState.Busy;
 	}
 
-	public override void UseWeaponSpecial(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
+	public override void UseWeaponSpecial(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 targetScanDir = default(Vector3), bool lockOn = false)
 	{
 		//Destroy our projectile.
 		RemoveProjectile(0f);

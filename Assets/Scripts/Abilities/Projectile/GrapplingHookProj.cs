@@ -41,7 +41,7 @@ public class GrapplingHookProj : Projectile
 	{
 		Init();
 
-		ProjVel = 1900;
+		ProjVel = 2600;
 	}
 
 	public virtual void Update() 
@@ -65,7 +65,10 @@ public class GrapplingHookProj : Projectile
 			Vector3 pullDir = transform.position - Creator.Carrier.transform.position;
 			pullDir.Normalize();
 			//Pull the creator
-			Creator.Carrier.ExternalMove(pullDir, 1, ForceMode.VelocityChange);
+			//Creator.Carrier.ExternalMove(pullDir, 1, ForceMode.VelocityChange);
+
+			Creator.Carrier.rigidbody.velocity = Vector3.zero;
+			Creator.Carrier.ExternalMove(pullDir, 40, ForceMode.VelocityChange);
 		}
 		else if (hookState == GrapplingState.Pulling)
 		{
@@ -73,12 +76,20 @@ public class GrapplingHookProj : Projectile
 			{
 				Vector3 pullDir = Creator.Carrier.transform.position - transform.position;
 				pullDir.Normalize();
-				//Pull the creator
-				pullingEntity.ExternalMove(pullDir, 2f, ForceMode.VelocityChange);
+
+				//Pull the target
+				//pullingEntity.ExternalMove(pullDir, 2f, ForceMode.VelocityChange);
 				
 				//This could let us move linearly towards the player.
 				//rigidbody.velocity = Vector3.zero;
-				rigidbody.AddForce(pullDir * 2f, ForceMode.VelocityChange);
+				//rigidbody.AddForce(pullDir * 2f, ForceMode.VelocityChange);
+
+
+				pullingEntity.transform.position = transform.position + transform.forward * (transform.localScale.z / 2 + pullingEntity.transform.localScale.x / 3);
+
+				//This could let us move linearly towards the player.
+				rigidbody.velocity = Vector3.zero;
+				rigidbody.AddForce(pullDir * 20f, ForceMode.VelocityChange);
 			}
 			else if (pullingGameObject != null)
 			{
@@ -86,13 +97,14 @@ public class GrapplingHookProj : Projectile
 				{
 					Vector3 pullDir = Creator.Carrier.transform.position - transform.position;
 					pullDir.Normalize();
-					//Pull the creator
+
+					//Pull the target - Set it inside of us
 					//pullingGameObject.rigidbody.AddForce(pullDir * 2f, ForceMode.VelocityChange);
 					pullingGameObject.transform.position = transform.position + transform.forward * (transform.localScale.z / 2);
 
 					//This could let us move linearly towards the player.
-					//rigidbody.velocity = Vector3.zero;
-					rigidbody.AddForce(pullDir * 2f, ForceMode.VelocityChange);
+					rigidbody.velocity = Vector3.zero;
+					rigidbody.AddForce(pullDir * 20f, ForceMode.VelocityChange);
 				}
 			}
 		}

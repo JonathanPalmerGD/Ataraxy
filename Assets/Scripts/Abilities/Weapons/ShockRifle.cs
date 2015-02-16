@@ -14,7 +14,9 @@ public class ShockRifle : Weapon
 
 		primaryFirePointIndex = 1;
 		specialFirePointIndex = 1;
+		crosshairColor = new Color(.7f, .6f, .95f);
 
+		crosshairIndex = 7;
 		PrimaryDamage = .4f;
 		SpecialDamage = 4;
 		DurSpecialCost = 3;
@@ -30,13 +32,13 @@ public class ShockRifle : Weapon
 		BeamColor = new Color(.75f, .14f, .77f);
 	}
 
-	public override void UseWeapon(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
+	public override void UseWeapon(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 targetScanDir = default(Vector3), bool lockOn = false)
 	{
 		Color[] lrColors = new Color[2];
 		lrColors[0] = BeamColor;
 		lrColors[1] = BeamColor;
 		Vector2 lineSize = new Vector2(.1f, .1f);
-		SetupLineRenderer(lrColors, lineSize, NormalCooldown / 2, firePoints, hitPoint);
+		SetupLineRenderer(lrColors, lineSize, NormalCooldown / 2, firePoints, targetScanDir);
 
 		if (target != null)
 		{
@@ -77,7 +79,7 @@ public class ShockRifle : Weapon
 		}
 	}
 
-	public override void UseWeaponSpecial(GameObject target = null, System.Type targType = null,  GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
+	public override void UseWeaponSpecial(GameObject target = null, System.Type targType = null,  GameObject[] firePoints = null, Vector3 targetScanDir = default(Vector3), bool lockOn = false)
 	{
 		Vector3 firePoint = firePoints[specialFirePointIndex].transform.position;
 
@@ -85,7 +87,7 @@ public class ShockRifle : Weapon
 		ShockBall shock = go.GetComponent<ShockBall>();
 
 		shock.Faction = Faction;
-		Vector3 dir = hitPoint - firePoint;
+		Vector3 dir = targetScanDir - firePoint;
 		dir.Normalize();
 
 		shock.rigidbody.AddForce(dir * shock.ProjVel * shock.rigidbody.mass);

@@ -30,8 +30,8 @@ public class GameManager : Singleton<GameManager>
 			player = playerGO.GetComponent<Player>();
 		}
 
-		//Screen.showCursor = false;
-		//Screen.lockCursor = true;
+		Screen.showCursor = false;
+		Screen.lockCursor = true;
 	}
 
 	public HomingDeathAlert CreateTransferParticle(Enemy dyingEnemy, GameObject target, string message = "")

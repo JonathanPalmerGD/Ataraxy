@@ -84,6 +84,12 @@ public class Weapon : Ability
 	}
 
 	#endregion
+	#region Crosshair Index & Color
+	public int crosshairIndex = 3;
+	public Color crosshairColor = Color.white;
+	public Color specialCrosshairColor = Color.green;
+	public Vector2 crosshairSize = new Vector2(96, 96);
+	#endregion
 	#region Description
 	private string primaryDesc = "A weak laser";
 	public string PrimaryDesc
@@ -120,13 +126,20 @@ public class Weapon : Ability
 		BeamColor = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
 	}
 
-	public virtual void UseWeapon(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
+	public virtual void UpdateCrosshair(Crosshair crosshair, Vector3 contactPoint = default(Vector3))
+	{
+		crosshair.CrosshairColor = crosshairColor;
+		crosshair.CrosshairIndex = crosshairIndex;
+		crosshair.SetCrosshairSize(crosshairSize);
+	}
+
+	public virtual void UseWeapon(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 targetScanDir = default(Vector3), bool lockOn = false)
 	{
 		Color[] lrColors = new Color[2];
 		lrColors[0] = BeamColor;
 		lrColors[1] = Color.grey;
 		Vector2 lineSize = new Vector2( .1f, .1f );
-		SetupLineRenderer(lrColors, lineSize, .3f, firePoints, hitPoint);
+		SetupLineRenderer(lrColors, lineSize, .3f, firePoints, targetScanDir);
 
 		if (targType != null)
 		{
@@ -158,13 +171,13 @@ public class Weapon : Ability
 		}
 	}
 
-	public virtual void UseWeaponSpecial(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
+	public virtual void UseWeaponSpecial(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 targetScanDir = default(Vector3), bool lockOn = false)
 	{
 		Color[] lrColors = new Color[2];
 		lrColors[0] = Color.red;
 		lrColors[1] = Color.red;
 		Vector2 lineSize = new Vector2(.2f, .2f);
-		SetupLineRenderer(lrColors, lineSize, 1f, firePoints, hitPoint);
+		SetupLineRenderer(lrColors, lineSize, 1f, firePoints, targetScanDir);
 
 		if (targType != null)
 		{
@@ -196,9 +209,9 @@ public class Weapon : Ability
 		}
 	}
 
-	public virtual void SetupLineRenderer(Color[] colors, Vector2 lineSize, float time, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3))
+	public virtual void SetupLineRenderer(Color[] colors, Vector2 lineSize, float time, GameObject[] firePoints = null, Vector3 targetScanDir = default(Vector3))
 	{
-		if (hitPoint != default(Vector3) && firePoints.Length > 0)
+		if (targetScanDir != default(Vector3) && firePoints.Length > 0)
 		{
 			LineRenderer lr = Carrier.gameObject.GetComponent<LineRenderer>();
 			if (lr == null)
@@ -212,7 +225,7 @@ public class Weapon : Ability
 			lr.SetColors(colors[0], colors[1]);
 			lr.SetWidth(lineSize.x, lineSize.y);
 			lr.SetPosition(0, firePoints[0].transform.position);
-			lr.SetPosition(1, hitPoint);
+			lr.SetPosition(1, targetScanDir);
 			Destroy(lr, time);
 		}
 	}

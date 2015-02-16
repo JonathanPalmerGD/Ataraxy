@@ -27,6 +27,7 @@ public class UIManager : Singleton<UIManager>
 	public Text player_WeaponText;
 	public Slider player_Resource;
 	public Image player_Selector;
+	public Image player_Crosshair;
 	public GameObject player_WeaponFolder;
 	public GameObject player_PassiveFolder;
 
@@ -64,6 +65,7 @@ public class UIManager : Singleton<UIManager>
 		player_Name = GameObject.Find("Player_Name").GetComponent<Text>();
 		player_WeaponText = GameObject.Find("WeaponText").GetComponent<Text>();
 		player_Selector = GameObject.Find("Selector").GetComponent<Image>();
+		player_Crosshair = GameObject.Find("Crosshair").GetComponent<Image>();
 		player_WeaponFolder = GameObject.Find("Weapons");
 		player_PassiveFolder = GameObject.Find("Passives");
 

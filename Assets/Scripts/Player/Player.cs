@@ -12,6 +12,8 @@ public class Player : Entity
 
 	#region Player Unique Interface
 	public Image SelectorUI;
+	public Image CrosshairUI;
+	public Crosshair playerCrosshair;
 	public Text WeaponText;
 	public GameObject WeaponUI;
 	public GameObject PassiveUI;
@@ -25,7 +27,8 @@ public class Player : Entity
 	public Camera mainCamera;
 	public NPC targetedEntity = null;
 	public GameObject hitscanTarget = null;
-	public Vector3 hitPoint = Vector3.zero;
+	public Vector3 targetScanDir = Vector3.zero;
+	public Vector3 hitscanContact = Vector3.zero;
 	public GameObject leftShFirePoint;
 	public GameObject rightShFirePoint;
 	public GameObject leftHipFirePoint;
@@ -123,6 +126,8 @@ public class Player : Entity
 		ResourceText = UIManager.Instance.player_ResourceText;
 		WeaponText = UIManager.Instance.player_WeaponText;
 		SelectorUI = UIManager.Instance.player_Selector;
+		CrosshairUI = UIManager.Instance.player_Crosshair;
+		playerCrosshair = CrosshairUI.GetComponent<Crosshair>();
 		WeaponUI = UIManager.Instance.player_WeaponFolder;
 		PassiveUI = UIManager.Instance.player_PassiveFolder;
 
@@ -287,6 +292,8 @@ public class Player : Entity
 					if (weaponIndex == i)
 					{
 						WeaponText.text = weapons[i].AbilityName;
+						weapons[i].UpdateCrosshair(playerCrosshair, hitscanContact);
+
 						if (weapons[i].CdLeft > 0)
 						{
 							SelectorUI.type = Image.Type.Filled;
@@ -394,11 +401,11 @@ public class Player : Entity
 						//If we have the same target this frame as our HUD
 						if (targetedEntity != null && hitscanTarget != null && hitscanTarget == targetedEntity.gameObject)
 						{
-							weapons[weaponIndex].UseWeapon(targetedEntity.gameObject, targetedEntity.GetType(), FirePoints, hitPoint, true);
+							weapons[weaponIndex].UseWeapon(targetedEntity.gameObject, targetedEntity.GetType(), FirePoints, targetScanDir, true);
 						}
 						else
 						{
-							weapons[weaponIndex].UseWeapon(hitscanTarget, null, FirePoints, hitPoint, true);
+							weapons[weaponIndex].UseWeapon(hitscanTarget, null, FirePoints, targetScanDir, true);
 						}
 					}
 
@@ -426,11 +433,11 @@ public class Player : Entity
 						//If we have the same target this frame as our HUD
 						if (targetedEntity != null && hitscanTarget != null && hitscanTarget == targetedEntity.gameObject)
 						{
-							weapons[weaponIndex].UseWeaponSpecial(targetedEntity.gameObject, targetedEntity.GetType(), FirePoints, hitPoint, true);
+							weapons[weaponIndex].UseWeaponSpecial(targetedEntity.gameObject, targetedEntity.GetType(), FirePoints, targetScanDir, true);
 						}
 						else
 						{
-							weapons[weaponIndex].UseWeaponSpecial(hitscanTarget, null, FirePoints, hitPoint, true);
+							weapons[weaponIndex].UseWeaponSpecial(hitscanTarget, null, FirePoints, targetScanDir, true);
 						}
 					}
 
@@ -631,12 +638,13 @@ public class Player : Entity
 		RaycastHit hit;
 		//Debug.DrawLine(transform.position, (transform.position + ray) * 100, Color.green);
 
-		//If we fire, set hitPoint to someplace arbitrarily far away in the shooting. Even if we hit something, we want to target wherever the cursor pointed.
-		hitPoint = transform.position + (ray.direction * 500);
+		//If we fire, set targetScanDir to someplace arbitrarily far away in the shooting. Even if we hit something, we want to target wherever the cursor pointed.
+		targetScanDir = transform.position + (ray.direction * 500);
 
 		//If we hit something
 		if (Physics.Raycast(ray, out hit))
 		{
+			hitscanContact = hit.point;
 			//Handle cases for what we hit.
 
 			//Debug.Log(hit.collider.gameObject.tag + "\n");
@@ -677,6 +685,7 @@ public class Player : Entity
 		}
 		else
 		{
+			hitscanContact = targetScanDir;
 			//We didn't hit anything. We're about to return null as the default.
 			//Debug.Log("Targetting nothing\n");
 		}

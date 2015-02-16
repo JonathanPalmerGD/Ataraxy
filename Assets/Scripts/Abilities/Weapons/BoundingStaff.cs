@@ -13,6 +13,7 @@ public class BoundingStaff : Weapon
 		Icon = UIManager.Instance.Icons[IconIndex];
 
 		DurCost = 4;
+		crosshairIndex = 4;
 		DurSpecialCost = 1;
 		NormalCooldown = .9f;
 		SpecialCooldown = .08f;
@@ -26,11 +27,11 @@ public class BoundingStaff : Weapon
 		BeamColor = Color.white;
 	}
 
-	public override void UseWeaponSpecial(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 hitPoint = default(Vector3), bool lockOn = false)
+	public override void UseWeaponSpecial(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 targetScanDir = default(Vector3), bool lockOn = false)
 	{
 		Vector3 firePoint = firePoints[0].transform.position;
 
-		Vector3 dir = hitPoint - firePoint;
+		Vector3 dir = targetScanDir - firePoint;
 
 		//float float = 45;
 		Vector3 movementDir = dir;
