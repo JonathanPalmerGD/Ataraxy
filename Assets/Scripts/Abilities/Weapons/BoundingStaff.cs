@@ -39,7 +39,7 @@ public class BoundingStaff : Weapon
 
 		//Debug.Log(dir + "\n" + movementDir + "\n");
 		//MoveCarrier(movementDir, 0, Vector3.up, 1.5f, true);
-		MoveCarrier(movementDir, 1.4f, Vector3.up, 0.05f, true);
+		MoveCarrier(movementDir, 1.8f, Vector3.up, 0.05f, true);
 	}
 
 	#region Static Functions

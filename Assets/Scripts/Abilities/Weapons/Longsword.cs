@@ -16,6 +16,7 @@ public class Longsword : Weapon
 
 		crosshairIndex = 7;
 		DurSpecialCost = 1;
+		NormalCooldown = Random.Range(.45f, .55f);
 		SpecialCooldown = NormalCooldown;
 #if CHEAT
 		NormalCooldown = .5f;

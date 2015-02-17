@@ -38,7 +38,7 @@ public class WingedSandals : Weapon
 		Vector3 dir = targetScanDir - firePoint;
 		//Debug.DrawLine(firePoint, firePoint + dir, Color.black, 6.0f);
 
-		float lungeVel = 2.2f;
+		float lungeVel = 4.2f;
 		Vector3 movementDir = dir;
 		movementDir = new Vector3(movementDir.x, 0, movementDir.z);
 		movementDir.Normalize();
@@ -68,7 +68,7 @@ public class WingedSandals : Weapon
 	{
 		WingedSandals ws = ScriptableObject.CreateInstance<WingedSandals>();
 		ws.AbilityName = WingedSandals.GetWeaponName();
-		ws.Durability = Random.Range(25, 40);
+		ws.Durability = Random.Range(35, 50);
 		ws.NormalCooldown = .5f;
 		ws.SpecialCooldown = 12f;
 		ws.CdLeft = 0;
