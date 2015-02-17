@@ -321,6 +321,25 @@ public class Island : WorldObject
 		}
 	}
 
+	public void PlaceRandomEncounter()
+	{
+		if (Random.Range(0, 100) > 85)
+		{
+			Family.encounterCounter++;
+			Vector3 featurePosition = transform.position + (Vector3.up * (transform.localScale.y / 2 + .2f));
+
+			GameObject newEncounter = (GameObject)GameObject.Instantiate(TerrainManager.Instance.encounterPrefabs[Random.Range(0, TerrainManager.Instance.encounterPrefabs.Count)], Vector3.zero, transform.rotation);
+
+			EncounterCreator encCreator = newEncounter.GetComponent<EncounterCreator>() ;
+
+			newEncounter.transform.SetParent(transform);
+			newEncounter.transform.position = featurePosition;
+
+			encCreator.location = this;
+			encCreator.Init();
+		}
+	}
+
 	public void PlaceRandomEnemy()
 	{
 		if (Random.Range(0, 100) > 80)
@@ -331,7 +350,7 @@ public class Island : WorldObject
 
 			featurePosition = new Vector3(transform.position.x + xRnd * .8f, transform.position.y + transform.localScale.y / 2 + .2f, transform.position.z + zRnd * .8f);
 
-			GameObject newEnemy = (GameObject)GameObject.Instantiate(TerrainManager.Instance.enemies[Random.Range(0, TerrainManager.Instance.enemies.Count)], Vector3.zero, transform.rotation);
+			GameObject newEnemy = (GameObject)GameObject.Instantiate(TerrainManager.Instance.enemyPrefabs[Random.Range(0, TerrainManager.Instance.enemyPrefabs.Count)], Vector3.zero, transform.rotation);
 
 			newEnemy.transform.SetParent(transform.parent);
 			newEnemy.transform.position = featurePosition;

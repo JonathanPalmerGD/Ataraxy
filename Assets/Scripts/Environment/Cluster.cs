@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-public class Cluster : WorldObject 
+public class Cluster : WorldObject
 {
+	public int encounterCounter = 0;
 	public Cluster[] neighborClusters = new Cluster[8];
 	public int neighborsPopulated = 0;
 	public List<Island> platforms;
@@ -92,6 +93,12 @@ public class Cluster : WorldObject
 		{
 			ConfigureIsland(platforms[i]);
 		}
+
+		//To check if we're making progression impossible clusters.
+		if(encounterCounter == 0)
+		{
+			//Debug.Log("Cluster generated with 0 valid encounters\n");
+		}
 	}
 
 	/// <summary>
@@ -101,6 +108,7 @@ public class Cluster : WorldObject
 	/// <param name="island"></param>
 	public void ConfigureIsland(Island island)
 	{
+		island.Family = this;
 		island.CreatePathNodes();
 
 		float dist = Mathf.Max(island.transform.localScale.x, island.transform.localScale.z) + TerrainManager.IslandNeighborDist;
@@ -143,7 +151,8 @@ public class Cluster : WorldObject
 
 		island.ConfigureNodes();
 
-		island.PlaceRandomEnemy();
+		island.PlaceRandomEncounter();
+		//island.PlaceRandomEnemy();
 		island.PlaceRandomObject();
 	}
 	#endregion

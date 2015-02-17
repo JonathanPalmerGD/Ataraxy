@@ -36,7 +36,8 @@ public class TerrainManager : Singleton<TerrainManager>
 	public List<Cluster> clusters;
 	public List<Texture2D> textures;
 	public List<GameObject> terrainFeatures;
-	public List<GameObject> enemies;
+	public List<GameObject> enemyPrefabs;
+	public List<GameObject> encounterPrefabs;
 	public List<GameObject> islandPrefabs;
 	public List<GameObject> landmarkPrefabs;
 	#endregion
@@ -52,7 +53,8 @@ public class TerrainManager : Singleton<TerrainManager>
 		islandPrefabs = Resources.LoadAll<GameObject>("Islands").ToList();
 		landmarkPrefabs = Resources.LoadAll<GameObject>("Landmarks").ToList();
 		terrainFeatures = Resources.LoadAll<GameObject>("TerrainFeatures").ToList();
-		enemies = Resources.LoadAll<GameObject>("Enemies").ToList();
+		enemyPrefabs = Resources.LoadAll<GameObject>("Enemies").ToList();
+		encounterPrefabs = Resources.LoadAll<GameObject>("Encounters").ToList();
 	}
 	#region Cluster Setup
 	public void RegisterCluster(Cluster reportingCluster)
