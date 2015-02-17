@@ -181,8 +181,9 @@ public class Player : Entity
 		SetupAbility(Passive.New());
 		#else
 		SetupAbility(GravityStaff.New());
+		SetupAbility(GrapplingHook.New());
 		SetupAbility(Passive.New());
-		#endif
+#endif
 	}
 
 	public void SetupAbility(Ability ToAdd)

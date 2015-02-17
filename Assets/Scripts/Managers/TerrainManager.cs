@@ -140,7 +140,7 @@ public class TerrainManager : Singleton<TerrainManager>
 
 	private void SetupNeighborClusters(Cluster center)
 	{
-		if (center.neighborClusters != null)
+		if(center != null && center.neighborClusters != null)
 		{
 			//Loop through all the potential neighbors.
 			for (int i = 0; i < center.neighborClusters.Length; i++)

@@ -191,8 +191,7 @@ public class GrapplingHookProj : Projectile
 					#endregion
 				}
 			}
-
-			else if(cTag == "Projectile")
+			else if (cTag == "Projectile" || cTag == "Checkpoint")
 			{
 				
 			}
