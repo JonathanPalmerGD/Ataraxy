@@ -38,11 +38,6 @@ public class MultiToken : MonoBehaviour
 		//Only when we hit the player
 		if (collider.gameObject.tag == "Player")
 		{
-			//Debug.Log("Collected");
-			//Give the player a new passive/weapon.
-			//Spawn new terrain
-			//Spawn new enemies
-
 			if (grantExperience)
 			{
 				GameManager.Instance.player.GainExperience(xpReward);
@@ -51,14 +46,19 @@ public class MultiToken : MonoBehaviour
 			{
 				player.AdjustHealth(heal);
 			}
+			//This checks if we can actually give those things
 			GrantWeaponOrPassive();
+			//Checks if the token creates terrain.
 			CreateTerrain();
+			//Checks if the token repairs.
 			RepairWeapon();
+			//Plays audio if we have it.
 			PlayAudio();
+
+			//Disables the token
 			DisableToken();
 		}
 	}
-
 	
 	#region Grant Weapons & Passives
 	public void GrantWeaponOrPassive()
