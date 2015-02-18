@@ -609,27 +609,27 @@ public class Player : Entity
 			#region Sensitivity Controls
 			if (Input.GetKeyDown(KeyCode.LeftBracket))
 			{
-				MouseLook look = gameObject.GetComponent<MouseLook>();
+				MouseView look = gameObject.GetComponent<MouseView>();
 
-				look.sensitivityX--;
-				look.sensitivityY--;
+				look.sensitivity.x--;
+				look.sensitivity.y--;
 
-				MouseLook yLook = GameObject.Find("Main Camera").GetComponent<MouseLook>();
+				MouseView yLook = GameObject.Find("Main Camera").GetComponent<MouseView>();
 
-				yLook.sensitivityX--;
-				yLook.sensitivityY--;
+				yLook.sensitivity.x--;
+				yLook.sensitivity.y--;
 			}
 			if (Input.GetKeyDown(KeyCode.RightBracket))
 			{
-				MouseLook look = gameObject.GetComponent<MouseLook>();
+				MouseView look = gameObject.GetComponent<MouseView>();
 
-				look.sensitivityX++;
-				look.sensitivityY++;
+				look.sensitivity.x--;
+				look.sensitivity.y--;
 
-				MouseLook yLook = GameObject.Find("Main Camera").GetComponent<MouseLook>();
+				MouseView yLook = GameObject.Find("Main Camera").GetComponent<MouseView>();
 
-				yLook.sensitivityX++;
-				yLook.sensitivityY++;
+				yLook.sensitivity.x--;
+				yLook.sensitivity.y--;
 			}
 			#endregion
 		}
