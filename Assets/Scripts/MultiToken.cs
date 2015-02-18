@@ -4,14 +4,18 @@ using System.Collections;
 public class MultiToken : MonoBehaviour 
 {
 	//Bunch of references to stats and such. We could trim this down honestly.
-	private GameObject player;
+	private Player player;
 
+	public bool createTerrain = true;
 	public bool healPlayer = true;
 	public bool grantWeapon = true;
-	public bool grantPassive = true;
+	public bool grantPassive = false;
+	public bool repairWeapon = false;
 	public bool grantExperience = false;
 
-	public int heal = 10;
+	public int heal = 2;
+	public int minRepair = 20;
+	public int maxRepair = 45;
 	public float xpReward = 10;
 
 	//Some audio info
@@ -21,16 +25,10 @@ public class MultiToken : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-		player = GameObject.FindGameObjectWithTag("Player");
-		//boss = GameObject.FindGameObjectWithTag("Boss");
-		//if (boss != null)
-		//{
-		//	bStats = boss.GetComponent<BossStats>();
-		//}
-		if (player != null)
+		player = GameManager.Instance.player;
+		if (player == null)
 		{
-		//	pStats = player.GetComponent<PlayerStats>();
-		//	runner = player.GetComponent<Cryomancer>();
+			Debug.LogError("Token cannot find player Game Object.\n");
 		}
 		tag = "Token";
 	}
@@ -49,15 +47,64 @@ public class MultiToken : MonoBehaviour
 			{
 				GameManager.Instance.player.GainExperience(xpReward);
 			}
-			if (true || GameManager.Instance.player.weapons.Count == 0 || Random.Range(0, 4) != 0)
+			if (healPlayer)
 			{
-				GameManager.Instance.player.SetupAbility(NewWeapon());
+				player.AdjustHealth(heal);
+			}
+			GrantWeaponOrPassive();
+			CreateTerrain();
+			RepairWeapon();
+			PlayAudio();
+			DisableToken();
+		}
+	}
+
+	
+	#region Grant Weapons & Passives
+	public void GrantWeaponOrPassive()
+	{
+		if (!grantPassive && !grantWeapon)
+		{
+			return;
+		}
+		if (!grantPassive && grantWeapon)
+		{
+			GrantWeapon();
+		}
+		else if (!grantWeapon && grantPassive)
+		{
+			GrantPassive();
+		}
+		else
+		{
+			if (player.weapons.Count == 0 || Random.Range(0, 4) != 0)
+			{
+				GrantWeapon();
 			}
 			else
 			{
-				GameManager.Instance.player.SetupAbility(Passive.New());
+				GrantPassive();
 			}
+		}
+	}
 
+	public void GrantPassive()
+	{
+		player.SetupAbility(Passive.New());
+	}
+	public void GrantWeapon()
+	{
+		if (grantWeapon)
+		{
+			player.SetupAbility(NewWeapon());
+		}
+	}
+	#endregion
+	
+	public void CreateTerrain()
+	{
+		if (createTerrain)
+		{
 			Cluster nearest = TerrainManager.Instance.FindNearestCluster(transform.position);
 
 			if (nearest != null)
@@ -66,22 +113,37 @@ public class MultiToken : MonoBehaviour
 			}
 
 			TerrainManager.Instance.CreateNewCluster(nearest);
+		}
+	}
 
-			if (playOnPickup && acquireClip != null)
-			{
-				player.audio.clip = acquireClip;
-				player.audio.Play();
-			}
-			if (light != null)
-			{
-				light.enabled = false;
-			}
-			gameObject.SetActive(false);
-			renderer.enabled = false;
-			if (particleSystem != null)
-			{
-				particleSystem.enableEmission = false;
-			}
+	public void RepairWeapon()
+	{
+		if (repairWeapon)
+		{
+			player.AdjustActiveDurability(Random.Range(minRepair, maxRepair));
+		}
+	}
+
+	public void PlayAudio()
+	{
+		if (playOnPickup && acquireClip != null)
+		{
+			player.gameObject.audio.clip = acquireClip;
+			player.gameObject.audio.Play();
+		}
+	}
+
+	public void DisableToken()
+	{
+		if (light != null)
+		{
+			light.enabled = false;
+		}
+		gameObject.SetActive(false);
+		renderer.enabled = false;
+		if (particleSystem != null)
+		{
+			particleSystem.enableEmission = false;
 		}
 	}
 

@@ -77,6 +77,7 @@ public class RocketLauncher : Weapon
 			Rocket rocket = go.GetComponent<Rocket>();
 
 			rocket.Faction = Faction;
+			rocket.Shooter = Carrier;
 
 			rocket.rigidbody.drag = 0;
 			rocket.target = null;

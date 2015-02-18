@@ -360,9 +360,12 @@ public class Player : Entity
 		else
 		{
 			//This would ideally only be set when the player pauses. Not an important optimization.
-			UIManager.Instance.item_NameText.text = weapons[weaponIndex].AbilityName;
-			UIManager.Instance.item_PrimaryText.text = weapons[weaponIndex].PrimaryDesc;
-			UIManager.Instance.item_SecondaryText.text = weapons[weaponIndex].SecondaryDesc;
+			if (weapons.Count > 0)
+			{
+				UIManager.Instance.item_NameText.text = weapons[weaponIndex].AbilityName;
+				UIManager.Instance.item_PrimaryText.text = weapons[weaponIndex].PrimaryDesc;
+				UIManager.Instance.item_SecondaryText.text = weapons[weaponIndex].SecondaryDesc;
+			}
 		}
 	}
 
@@ -521,6 +524,15 @@ public class Player : Entity
 			#region Unity Editor Only
 			#if UNITY_EDITOR || CHEAT
 
+			if (Input.GetKeyDown(KeyCode.Semicolon))
+			{
+				AdjustActiveDurability(15);
+			}
+			if (Input.GetKeyDown(KeyCode.Quote))
+			{
+				AdjustActiveDurability(-15);
+			}
+
 			#region Dev Movement Buttons
 			if (Input.GetKeyDown(KeyCode.PageUp))
 			{
@@ -629,6 +641,15 @@ public class Player : Entity
 		base.KillEntity();
 
 		Application.LoadLevel("GameOver");
+	}
+
+	public void AdjustActiveDurability(int amount)
+	{
+		if (weapons.Count > 0)
+		{
+			weapons[weaponIndex].Durability += amount;
+			weapons[weaponIndex].HandleVisuals();
+		}
 	}
 
 	#region Targetting and Hitscan

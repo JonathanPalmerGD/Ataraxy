@@ -126,6 +126,12 @@ public class Weapon : Ability
 		BeamColor = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
 	}
 
+	public override void HandleVisuals()
+	{
+		Remainder.text = Durability.ToString();
+		base.HandleVisuals();
+	}
+
 	public virtual void UpdateCrosshair(Crosshair crosshair, Vector3 contactPoint = default(Vector3))
 	{
 		crosshair.CrosshairColor = crosshairColor;
