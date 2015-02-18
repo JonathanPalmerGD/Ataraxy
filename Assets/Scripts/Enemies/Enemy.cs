@@ -131,9 +131,20 @@ public class Enemy : NPC
 
 	public virtual GameObject SpawnToken()
 	{
+		GameObject tokenToSpawn = GameManager.Instance.tokenPrefab;
 		//Drop a token.
-		GameObject newToken = (GameObject)GameObject.Instantiate(GameManager.Instance.tokenPrefab, transform.position + Vector3.up * 2, Quaternion.identity);
-		return newToken;	
+		if (Random.Range(0, 10) < 8)
+		{
+			tokenToSpawn = GameManager.Instance.tokenPrefab;
+		}
+		else
+		{
+			tokenToSpawn = GameManager.Instance.repairTokenPrefab;
+		}
+
+		GameObject newToken = (GameObject)GameObject.Instantiate(tokenToSpawn, transform.position + Vector3.up * 2, Quaternion.identity);
+
+		return newToken;
 	}
 
 	public virtual void ThrowToken(GameObject newToken)

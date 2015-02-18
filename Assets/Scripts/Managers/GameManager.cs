@@ -9,6 +9,7 @@ public class GameManager : Singleton<GameManager>
 	public GameObject playerGO;
 	public Player player;
 	public GameObject tokenPrefab;
+	public GameObject repairTokenPrefab;
 	public GameObject xpHomePrefab;
 	public List<Enemy> enemies;
 									//Pl	//Neu	//Env	//En	//Dr
@@ -23,6 +24,7 @@ public class GameManager : Singleton<GameManager>
 	{
 		base.Awake();
 		tokenPrefab = Resources.Load<GameObject>("Token");
+		repairTokenPrefab = Resources.Load<GameObject>("RepairToken");
 		xpHomePrefab = Resources.Load<GameObject>("Projectiles/HomingDeathAlert");
 		playerGO = GameObject.FindGameObjectWithTag("Player");
 		if (playerGO != null)
@@ -30,8 +32,10 @@ public class GameManager : Singleton<GameManager>
 			player = playerGO.GetComponent<Player>();
 		}
 
+#if !UNITY_EDITOR
 		Screen.showCursor = false;
 		Screen.lockCursor = true;
+#endif
 	}
 
 	public HomingDeathAlert CreateTransferParticle(Enemy dyingEnemy, GameObject target, string message = "")

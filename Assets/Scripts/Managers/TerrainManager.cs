@@ -89,7 +89,7 @@ public class TerrainManager : Singleton<TerrainManager>
 
 				int direction = Random.Range(0, center.neighborClusters.Length);
 
-				if(center.neighborClusters[direction] == null)
+				if (center.neighborClusters[direction] == null)
 				{
 					//We want to create a new cluster near an existing one. We use center.GetFinalPosition to avoid an incorrect target height.
 					c = ((GameObject)GameObject.Instantiate(clusterPrefab, center.transform.position, Quaternion.identity)).GetComponent<Cluster>();
@@ -98,7 +98,7 @@ public class TerrainManager : Singleton<TerrainManager>
 					c.clusterContents.transform.position -= Vector3.up * underworldYOffset;
 
 					c.RandomLandmarks = true;
-					
+
 
 					tries = 1000;
 				}
@@ -138,6 +138,11 @@ public class TerrainManager : Singleton<TerrainManager>
 			}*/
 			#endregion
 		}
+		else
+		{
+			//This a debug error for troubleshooting cluster generation.
+			//Debug.LogError("All neighbor slots are filled. Cannot create cluster\n");
+		}
 	}
 
 	private void SetupNeighborClusters(Cluster center)
@@ -162,21 +167,37 @@ public class TerrainManager : Singleton<TerrainManager>
 				{
 					//Debug.DrawLine(c.transform.position, neighborC.transform.position + Vector3.up * i, Color.green, 36.0f);
 
-					//Register ourselves with it. Use the opposite index of ourselves.
-					neighborC.neighborClusters[FindOppositeDirIndex(i)] = center;
+					//If we didn't already exist, increase both neighbor populated.
+					if (neighborC.neighborClusters[FindOppositeDirIndex(i)] == null)
+					{
+						//Register ourselves with it. Use the opposite index of ourselves.
+						neighborC.neighborClusters[FindOppositeDirIndex(i)] = center;
 
-					//Set our neighbor as the newly found cluster.
-					center.neighborClusters[i] = neighborC;
+						//Set our neighbor as the newly found cluster.
+						center.neighborClusters[i] = neighborC;
 
-					//Increase both's neighborCount.
-					center.neighborsPopulated++;
-					neighborC.neighborsPopulated++;
+
+						//Increase both's neighborCount.
+						center.neighborsPopulated++;
+						neighborC.neighborsPopulated++;
+					}
+					//else
+					//{
+					//	Debug.Log("Reverse recording. Skipping addition?\n");
+					//}
 				}
 			}
 		}
 		else
 		{
-			Debug.LogError("Error with cluster neighbor generation\n");
+			if (center == null)
+			{
+				Debug.LogError("Error with cluster neighbor generation\n");
+			}
+			else
+			{
+				Debug.LogError("Error with center.neighborClusters being null\n");
+			}
 		}
 	}
 
@@ -635,15 +656,33 @@ public class TerrainManager : Singleton<TerrainManager>
 	#region Update
 	void Update()
 	{
+#if UNITY_EDITOR
 		if (Input.GetKeyDown(KeyCode.P))
 		{
+			string TerrainInfo = "";
+			
 			int islandCount = 0;
+			int encCounter = 0;
 			foreach (Cluster c in clusters)
 			{
+				string islandName = c.name;
+				string platformInfo = c.platforms.Count + " islands";
+				string encounterInfo = c.encounterCounter + " encounters";
+
+				TerrainInfo += string.Format("{0,30} {1,30} {2,30}", islandName, platformInfo, encounterInfo) + "\n";
+					
+					//+ c.name + "\t\t" + c.platforms.Count + " islands\t\t" + c.encounterCounter + " encounters\n";
 				islandCount += c.platforms.Count;
+				encCounter += c.encounterCounter;
 			}
-			Debug.Log("There are currently " + islandCount + " islands.\n");
+
+			TerrainInfo = "TerrainManager Information Report:\n" +
+				"   # of Clusters: " + clusters.Count + "\t" +
+				"   # of Islands: " + islandCount + "\t" +
+				"   # of Encounters: " + encCounter + "\n\n" + TerrainInfo;
+			Debug.Log(TerrainInfo + "\n\n\n\n");
 		}
+#endif
 	}
 	#endregion
 }

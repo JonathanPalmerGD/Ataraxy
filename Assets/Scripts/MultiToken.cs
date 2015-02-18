@@ -109,7 +109,11 @@ public class MultiToken : MonoBehaviour
 
 			if (nearest != null)
 			{
-				//Debug.DrawLine(transform.position, nearest.transform.position, Color.cyan, 8.0f);
+				Debug.DrawLine(transform.position, nearest.transform.position, Color.cyan, 8.0f);
+			}
+			else
+			{
+				Debug.LogError("Nearest cluster not found\n");
 			}
 
 			TerrainManager.Instance.CreateNewCluster(nearest);

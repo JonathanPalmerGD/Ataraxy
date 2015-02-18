@@ -7,6 +7,11 @@ public class Cluster : WorldObject
 {
 	public int encounterCounter = 0;
 	public Cluster[] neighborClusters = new Cluster[8];
+	//This variable exists because we use an array of clusters for storing neighbors. We need to 
+	/// <summary>
+	/// How many non-null clusters are in neighborClusters currently.
+	/// Since order of the array matters, we have to track this ourself.
+	/// </summary>
 	public int neighborsPopulated = 0;
 	public List<Island> platforms;
 	public int poissonKVal = 20;
