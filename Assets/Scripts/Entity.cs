@@ -228,11 +228,17 @@ public class Entity : MonoBehaviour
 			KillEntity();
 		}
 	}
-	
+
+	public virtual Vector3 GetForward()
+	{
+		return transform.forward;
+	}
+
 	public virtual void ExternalMove(Vector3 direction, float force, ForceMode fMode = ForceMode.Force)
 	{
 		if (rigidbody != null)
 		{
+			Debug.DrawLine(transform.position, transform.position + direction * force * 10, Color.gray, 2f);
 			rigidbody.AddForce(direction * force, fMode);
 		}
 	}

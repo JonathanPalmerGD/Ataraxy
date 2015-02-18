@@ -37,12 +37,14 @@ public class WingedSandals : Weapon
 
 		Vector3 dir = targetScanDir - firePoint;
 		//Debug.DrawLine(firePoint, firePoint + dir, Color.black, 6.0f);
-
+		Debug.DrawLine(GameManager.Instance.playerGO.transform.position, GameManager.Instance.playerGO.transform.position + dir * 10, Color.green, 2f);
+		Debug.DrawLine(GameManager.Instance.playerGO.transform.position, GameManager.Instance.playerGO.transform.position + GameManager.Instance.playerGO.transform.forward * 10, Color.black, 2f);
+		
 		float lungeVel = 4.2f;
 		Vector3 movementDir = dir;
 		movementDir = new Vector3(movementDir.x, 0, movementDir.z);
 		movementDir.Normalize();
-
+		
 		MoveCarrier(movementDir, lungeVel, Vector3.up, 3.5f, false);
 	}
 

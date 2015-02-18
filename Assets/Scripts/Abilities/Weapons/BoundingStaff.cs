@@ -32,14 +32,16 @@ public class BoundingStaff : Weapon
 		Vector3 firePoint = firePoints[0].transform.position;
 
 		Vector3 dir = targetScanDir - firePoint;
+		//Debug.DrawLine(GameManager.Instance.playerGO.transform.position, GameManager.Instance.playerGO.transform.position + dir * 30, Color.green, .8f);
 
-		//float float = 45;
 		Vector3 movementDir = dir;
 		movementDir = new Vector3(movementDir.x, 0, movementDir.z);
+		movementDir.Normalize();
 
-		//Debug.Log(dir + "\n" + movementDir + "\n");
-		//MoveCarrier(movementDir, 0, Vector3.up, 1.5f, true);
-		MoveCarrier(movementDir, 1.8f, Vector3.up, 0.05f, true);
+		//Carrier.gameObject.GetComponent<Controller>().speedMultiplier = 3f;
+
+		//MoveCarrier(movementDir, 1.8f, Vector3.up, 0.05f, true);
+		Carrier.ExternalMove(movementDir, 100.5f, ForceMode.Acceleration);
 	}
 
 	#region Static Functions

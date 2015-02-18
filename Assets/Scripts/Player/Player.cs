@@ -241,6 +241,16 @@ public class Player : Entity
 	#region Update, MaintainAbilities
 	public override void Update()
 	{
+		Vector3 wFor = new Vector3((transform.position + transform.forward * 10).x, transform.position.y, (transform.position + transform.forward * 10).z);
+		Vector3 wCamFor = new Vector3((transform.position + GetForward() * 10).x, transform.position.y, (transform.position + GetForward() * 10).z);
+		Vector3 wVel = new Vector3((transform.position + rigidbody.velocity * 10).x, transform.position.y, (transform.position + rigidbody.velocity * 10).z);
+		//Vector3 wScan = new Vector3(targetScanDir.x, transform.position.y, targetScanDir.z);
+
+		Debug.DrawLine(transform.position, wFor, Color.blue, .02f);
+		Debug.DrawLine(transform.position, wCamFor, Color.yellow, .02f);
+		Debug.DrawLine(transform.position, wVel, Color.cyan, .02f);
+		//Debug.DrawLine(transform.position, wScan, Color.magenta, .02f);
+
 		GetInput();
 		if (!UIManager.Instance.paused)
 		{
@@ -544,34 +554,31 @@ public class Player : Entity
 			{
 				Vector3 newVel = new Vector3(0.0f, 1, 0.0f);
 				newVel.Normalize();
-				newVel *= 20;
 				rigidbody.velocity = Vector3.zero;
-				rigidbody.AddForce(newVel, ForceMode.VelocityChange);
+				ExternalMove(newVel, 30, ForceMode.VelocityChange);
 			}
 			//Go down
 			if (Input.GetKeyDown(KeyCode.G))
 			{
 				Vector3 newVel = new Vector3(0.0f, -1, 0.0f);
 				newVel.Normalize();
-				newVel *= 20;
 				rigidbody.velocity = Vector3.zero;
-				rigidbody.AddForce(newVel, ForceMode.VelocityChange);
+				ExternalMove(newVel, 55, ForceMode.VelocityChange);
 			}
 			//Go Forward
 			if (Input.GetKeyDown(KeyCode.LeftShift))
 			{
-				Vector3 newVel = new Vector3(transform.forward.x * 20.0f, 1, transform.forward.z * 20.0f);
+				Vector3 newVel = new Vector3(GetForward().x, 0, GetForward().z);
 				newVel.Normalize();
-				newVel *= 40;
 				rigidbody.velocity = Vector3.zero;
-				rigidbody.AddForce(newVel, ForceMode.VelocityChange);
+				ExternalMove(newVel, 80, ForceMode.VelocityChange);
 			}
 			//Stops all player movement.
 			if (Input.GetKeyDown(KeyCode.LeftControl))
 			{
 				rigidbody.velocity = Vector3.zero;
 			}
-			//Float while holding left control down.
+			//Toggles gravity. 
 			if (Input.GetKeyDown(KeyCode.LeftControl))
 			{
 				rigidbody.useGravity = !rigidbody.useGravity;
@@ -612,29 +619,34 @@ public class Player : Entity
 				MouseView look = gameObject.GetComponent<MouseView>();
 
 				look.sensitivity.x--;
-				look.sensitivity.y--;
+				//look.sensitivity.y--;
 
 				MouseView yLook = GameObject.Find("Main Camera").GetComponent<MouseView>();
 
-				yLook.sensitivity.x--;
+				//yLook.sensitivity.x--;
 				yLook.sensitivity.y--;
 			}
 			if (Input.GetKeyDown(KeyCode.RightBracket))
 			{
 				MouseView look = gameObject.GetComponent<MouseView>();
 
-				look.sensitivity.x--;
-				look.sensitivity.y--;
+				look.sensitivity.x++;
+				//look.sensitivity.y++;
 
 				MouseView yLook = GameObject.Find("Main Camera").GetComponent<MouseView>();
 
-				yLook.sensitivity.x--;
-				yLook.sensitivity.y--;
+				//yLook.sensitivity.x++;
+				yLook.sensitivity.y++;
 			}
 			#endregion
 		}
 	}
 	#endregion
+	
+	public override Vector3 GetForward()
+	{
+		return mainCamera.transform.forward;
+	}
 
 	public override void KillEntity()
 	{

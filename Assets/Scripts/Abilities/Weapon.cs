@@ -267,45 +267,14 @@ public class Weapon : Ability
 				Vector3 gainedVelocity = (movementDir * movementVel) + (secondDir * secondVel);
 				updatedVelocity += gainedVelocity;
 				Carrier.gameObject.rigidbody.velocity = updatedVelocity;
+				//float mag = updatedVelocity.magnitude;
+				//Carrier.ExternalMove(updatedVelocity.normalized, 40, ForceMode.VelocityChange);
 			}
 		}
 		else
 		{
 			//Move the enemy?
 		}
-		#region [OLD] CharacterMotor Player
-		/*if (WeaponBearer.tag == "Player")
-		{
-			//Get player's character controller?
-			CharacterMotor charMotor = WeaponBearer.GetComponent<CharacterMotor>();
-
-
-			if (additiveMovement)
-			{
-				Vector3 updatedVelocity = charMotor.movement.velocity;
-				Debug.Log(updatedVelocity + "\t" + 
-					movementDir + " * " + movementVel + "=" + (movementDir * movementVel) + "\n" + 
-					secondDir + "*" + secondVel+  "=" + (secondDir * secondVel) + "\t\t\t" + 
-					((movementDir * movementVel) + (secondDir * secondVel)));
-				updatedVelocity += (movementDir * movementVel) + (secondDir * secondVel);
-				charMotor.SetVelocity(updatedVelocity);
-			}
-			else
-			{
-				
-				Vector3 updatedVelocity = (movementDir * movementVel) + (secondDir * secondVel);
-				Debug.Log(updatedVelocity + "\t" +
-					movementDir + " * " + movementVel + "=" + (movementDir * movementVel) + "\n" +
-					secondDir + "*" + secondVel + "=" + (secondDir * secondVel) + "\t\t\t" +
-					((movementDir * movementVel) + (secondDir * secondVel)));
-				charMotor.SetVelocity(updatedVelocity);
-			}
-		}
-		else
-		{
-			//Move the enemy?
-		}*/
-		#endregion
 	}
 
 	/// <summary>
