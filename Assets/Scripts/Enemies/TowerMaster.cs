@@ -16,6 +16,7 @@ public class TowerMaster : Enemy
 		EvilHand.Faction = Faction;
 		EvilHand.hookPrefab = Resources.Load<GameObject>("Projectiles/Evil Grappling Hook"); 
 		EvilHand.NormalCooldown = 0;
+		EvilHand.primaryFirePointIndex = 0;
 		EvilHand.Carrier = this;
 		MaxHealth = 18;
 		Health = MaxHealth;
@@ -36,20 +37,24 @@ public class TowerMaster : Enemy
 	
 	public override void Update () 
 	{
-		/*//Update my grappling hook.
+		EvilHand.UpdateWeapon(Time.deltaTime);
+
+		//Update my grappling hook.
 		if(Input.GetKeyDown(KeyCode.Z))
 		{
 			//Get the player current position
-			Vector3 targetScanDir = transform.position - GameManager.Instance.playerGO.transform.position;
+			Vector3 targetScanDir = GameManager.Instance.playerGO.transform.position - FirePoints[0].transform.position;
+			//Debug.DrawLine(FirePoints[0].transform.position, FirePoints[0].transform.position + targetScanDir, Color.green, 5.0f);
 
-			//Fire Grappling Hook at the player
-
-			//(GameObject target, System.Type targType, GameObject[] firePoints, Vector3 targetScanDir, bool lockOn)
-			EvilHand.UseWeapon(null, null, FirePoints, targetScanDir, false);
+			if (EvilHand.weaponState == GrapplingHook.GrapplingHookWeaponState.Ready)
+			{
+				//Fire Grappling Hook at the player
+				EvilHand.UseWeapon(null, null, FirePoints, GameManager.Instance.playerGO.transform.position, false);
+			}
 		}
 
 		//{ Idle, Searching, Preparing, Attacking };
-
+		/*
 		if(state == EnemyState.Idle)
 		{
 		}

@@ -39,12 +39,18 @@ public class GrapplingHook : Weapon
 		//If we're ready, make our UI white.
 		if(weaponState == GrapplingHookWeaponState.Ready)
 		{
-			IconUI.color = new Color(1, 1, 1, IconUI.color.a);
+			if (IconUI != null)
+			{
+				IconUI.color = new Color(1, 1, 1, IconUI.color.a);
+			}
 		}
 		//If we're not ready, make our UI grey.
 		if(weaponState == GrapplingHookWeaponState.Busy)
 		{
-			IconUI.color = new Color(.7f, .3f, .3f, IconUI.color.a);
+			if (IconUI != null)
+			{
+				IconUI.color = new Color(.7f, .3f, .3f, IconUI.color.a);
+			}
 		}
 		base.UpdateWeapon(time);
 	}
@@ -125,7 +131,6 @@ public class GrapplingHook : Weapon
 		}
 		//Otherwise we'll check the normal conditions.
 		return base.HandleDurability(specialAttack, target, lockOn);
-
 	}
 
 	public void RemoveProjectile(float destroyTime = .0f)
@@ -142,7 +147,7 @@ public class GrapplingHook : Weapon
 
 	public void ProjectileDestroyed()
 	{
-		if (Carrier != null)
+		if (Carrier != null && Carrier.rigidbody != null)
 		{
 			Carrier.rigidbody.useGravity = true;
 		}

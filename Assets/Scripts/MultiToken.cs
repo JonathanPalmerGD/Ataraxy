@@ -31,6 +31,13 @@ public class MultiToken : MonoBehaviour
 			Debug.LogError("Token cannot find player Game Object.\n");
 		}
 		tag = "Token";
+
+		//Give each child the token tag
+		foreach(Transform child in transform)
+		{
+			child.tag = "Token";
+		}
+ 
 	}
 
 	void OnTriggerEnter(Collider collider)

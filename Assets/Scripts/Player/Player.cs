@@ -558,7 +558,7 @@ public class Player : Entity
 				Vector3 newVel = new Vector3(0.0f, 1, 0.0f);
 				newVel.Normalize();
 				rigidbody.velocity = Vector3.zero;
-				ExternalMove(newVel, 30, ForceMode.VelocityChange);
+				ExternalMove(newVel, 20, ForceMode.VelocityChange);
 			}
 			//Go down
 			if (Input.GetKeyDown(KeyCode.G))
@@ -566,7 +566,7 @@ public class Player : Entity
 				Vector3 newVel = new Vector3(0.0f, -1, 0.0f);
 				newVel.Normalize();
 				rigidbody.velocity = Vector3.zero;
-				ExternalMove(newVel, 55, ForceMode.VelocityChange);
+				ExternalMove(newVel, 30, ForceMode.VelocityChange);
 			}
 			//Go Forward
 			if (Input.GetKeyDown(KeyCode.LeftShift))

@@ -12,6 +12,7 @@ public class GrapplingHookProj : Projectile
 	private bool collidedYet = false;
 	private LineRenderer lr;
 	public float timeRemaining = 5;
+	public float hookSpeed = 20;
 
 	public override void Init()
 	{
@@ -50,7 +51,7 @@ public class GrapplingHookProj : Projectile
 
 		if (timeRemaining < 0)
 		{
-			((GrapplingHook)Creator).RemoveProjectile();
+			Retract();
 		}
 
 		//Draw line to the creator.
@@ -62,50 +63,59 @@ public class GrapplingHookProj : Projectile
 		}
 		else if (hookState == GrapplingState.Attached)
 		{
+			HandleRetracted();
+
 			Vector3 pullDir = transform.position - Creator.Carrier.transform.position;
 			pullDir.Normalize();
+
+			//I don't think this looks better
+			//transform.LookAt(transform.position + pullDir * 5, Vector3.up);
+
 			//Pull the creator
 			//Creator.Carrier.ExternalMove(pullDir, 1, ForceMode.VelocityChange);
 
 			Creator.Carrier.rigidbody.velocity = Vector3.zero;
-			Creator.Carrier.ExternalMove(pullDir, 40, ForceMode.VelocityChange);
+			Creator.Carrier.ExternalMove(pullDir, 2 * hookSpeed, ForceMode.VelocityChange);
 		}
 		else if (hookState == GrapplingState.Pulling)
 		{
+			HandleRetracted();
+
+			Vector3 pullDir = Creator.Carrier.transform.position - transform.position;
+			pullDir.Normalize();
+
+			//Orients the grappling hook to face away from the player as it retracts.
+			transform.LookAt(transform.position - pullDir * 5, Vector3.up);
+
+			//This could let us move linearly towards the player.
+			rigidbody.velocity = Vector3.zero;
+			rigidbody.AddForce(pullDir * hookSpeed, ForceMode.VelocityChange);
 			if (pullingEntity != null)
 			{
-				Vector3 pullDir = Creator.Carrier.transform.position - transform.position;
-				pullDir.Normalize();
-
 				//Pull the target
-				//pullingEntity.ExternalMove(pullDir, 2f, ForceMode.VelocityChange);
-				
-				//This could let us move linearly towards the player.
-				//rigidbody.velocity = Vector3.zero;
-				//rigidbody.AddForce(pullDir * 2f, ForceMode.VelocityChange);
-
-
 				pullingEntity.transform.position = transform.position + transform.forward * (transform.localScale.z / 2 + pullingEntity.transform.localScale.x / 3);
-
-				//This could let us move linearly towards the player.
-				rigidbody.velocity = Vector3.zero;
-				rigidbody.AddForce(pullDir * 20f, ForceMode.VelocityChange);
 			}
 			else if (pullingGameObject != null)
 			{
 				if (pullingGameObject.rigidbody != null)
 				{
-					Vector3 pullDir = Creator.Carrier.transform.position - transform.position;
-					pullDir.Normalize();
-
 					//Pull the target - Set it inside of us
-					//pullingGameObject.rigidbody.AddForce(pullDir * 2f, ForceMode.VelocityChange);
 					pullingGameObject.transform.position = transform.position + transform.forward * (transform.localScale.z / 2);
-
-					//This could let us move linearly towards the player.
-					rigidbody.velocity = Vector3.zero;
-					rigidbody.AddForce(pullDir * 20f, ForceMode.VelocityChange);
 				}
+			}
+		}
+	}
+
+	void HandleRetracted()
+	{
+		float distance = Vector3.Distance(transform.position, Creator.Carrier.gameObject.transform.position);
+
+		if (distance < 4)
+		{
+			//Debug.LogWarning("Projectile collided with same Faction as firing source.\n");
+			if (hookState == GrapplingState.Attached || hookState == GrapplingState.Pulling)
+			{
+				((GrapplingHook)Creator).RemoveProjectile(0);
 			}
 		}
 	}
@@ -173,8 +183,6 @@ public class GrapplingHookProj : Projectile
 						//Else if it is from an Enemy
 						else if (Faction == Allegiance.Enemy && collidedEntity.Faction == Allegiance.Player)
 						{
-							Debug.LogError("Grappling Hook now configured for enemy use!\n");
-
 							//Deal damage to the player
 							GameManager.Instance.player.AdjustHealth(-Damage);
 
@@ -211,7 +219,7 @@ public class GrapplingHookProj : Projectile
 					RetractPullingTarget(collider.gameObject);
 				}
 			}
-			else
+			else if(collider.gameObject != Creator.Carrier.gameObject)
 			{
 				BecomeAttached();
 			}
@@ -255,8 +263,11 @@ public class GrapplingHookProj : Projectile
 		{
 			if (!collidedYet)
 			{
+				//Face what we grabbed towards the Carrier?
+
 				rigidbody.velocity = Vector3.zero;
 				collidedEntity.rigidbody.velocity = Vector3.zero;
+				//collidedEntity.transform.LookAt(Creator.Carrier.transform.position, Vector3.up);
 			
 				hookState = GrapplingState.Pulling;
 				pullingEntity = collidedEntity;
@@ -270,16 +281,25 @@ public class GrapplingHookProj : Projectile
 		}
 	}
 
+	public void Retract()
+	{
+		collidedYet = true;
+		rigidbody.velocity = Vector3.zero;
+		hookState = GrapplingState.Pulling;
+		hookSpeed = 80;
+	}
+
 	/// <summary>
 	/// Hook attaches to location and pulls carrier.
 	/// Destroys hook if carrier has no rigidbody.
 	/// </summary>
 	public void BecomeAttached()
 	{
-		if(Creator.Carrier.rigidbody != null)
+		if (!collidedYet)
 		{
-			if (!collidedYet)
+			if (Creator.Carrier.rigidbody != null)
 			{
+			
 				rigidbody.velocity = Vector3.zero;
 				Creator.Carrier.rigidbody.useGravity = false;
 
@@ -287,10 +307,10 @@ public class GrapplingHookProj : Projectile
 				collidedYet = true;
 				timeRemaining += 5;
 			}
-		}
-		else
-		{
-			((GrapplingHook)Creator).RemoveProjectile();
+			else
+			{
+				Retract();
+			}
 		}
 	}
 
@@ -308,10 +328,10 @@ public class GrapplingHookProj : Projectile
 		{
 			if (pullingEntity != null)
 			{
-				Vector3 pullDir = Creator.Carrier.transform.position - transform.position;
-				pullDir.Normalize();
-				if(pullingEntity.rigidbody != null)
+				if (pullingEntity.rigidbody != null)
 				{
+					Vector3 pullDir = Creator.Carrier.transform.position - transform.position;
+					pullDir.Normalize();
 					//Pull the creator
 					pullingEntity.ExternalMove(pullDir, -2f, ForceMode.VelocityChange);
 				}
