@@ -9,6 +9,7 @@ public class GrapplingHook : Weapon
 	public float pullVelocity;
 	public enum GrapplingHookWeaponState { Ready, Busy }
 	public GrapplingHookWeaponState weaponState = GrapplingHookWeaponState.Ready;
+	public float assignedHookSpeed = 20;
 	
 	public override void Init()
 	{
@@ -96,7 +97,7 @@ public class GrapplingHook : Weapon
 		go.transform.LookAt(targetScanDir);
 
 		currentProjectile.Creator = this;
-		currentProjectile.rigidbody.AddForce((dir * currentProjectile.ProjVel * currentProjectile.rigidbody.mass));
+		currentProjectile.rigidbody.AddForce((dir * assignedHookSpeed *(currentProjectile.ProjVel / 20) * currentProjectile.rigidbody.mass));
 
 		currentProjectile.Damage = PrimaryDamage;
 

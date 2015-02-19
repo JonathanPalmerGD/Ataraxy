@@ -5,6 +5,9 @@ public class TowerMaster : Enemy
 {
 	public GameObject[] Blocks;
 	public GrapplingHook EvilHand;
+	float distFromPlayer;
+	public float searchingTime = 3;
+	public float preparingTime = 1;
 
 	#region Start & Update
 	public override void Start () 
@@ -18,7 +21,7 @@ public class TowerMaster : Enemy
 		EvilHand.NormalCooldown = 0;
 		EvilHand.primaryFirePointIndex = 0;
 		EvilHand.Carrier = this;
-		MaxHealth = 18;
+		MaxHealth = 24;
 		Health = MaxHealth;
 
 		base.Start();
@@ -33,97 +36,186 @@ public class TowerMaster : Enemy
 		{
 			go.renderer.material = renderer.material;
 		}
+
+		ChangeState(EnemyState.Searching);
 	}
 	
 	public override void Update () 
 	{
 		EvilHand.UpdateWeapon(Time.deltaTime);
 
-		//Update my grappling hook.
-		if(Input.GetKeyDown(KeyCode.Z))
-		{
-			//Get the player current position
-			Vector3 targetScanDir = GameManager.Instance.playerGO.transform.position - FirePoints[0].transform.position;
-			//Debug.DrawLine(FirePoints[0].transform.position, FirePoints[0].transform.position + targetScanDir, Color.green, 5.0f);
+		HandleKnowledge();
+		HandleAggression();
+	}
+	#endregion
 
-			if (EvilHand.weaponState == GrapplingHook.GrapplingHookWeaponState.Ready)
+	public override void HandleKnowledge()
+	{
+		distFromPlayer = Vector3.Distance(transform.position, GameManager.Instance.player.transform.position);
+
+		#region Update Knowledge of Player
+		if (distFromPlayer < 50)
+		{
+			CanSeePlayer = true;
+		}
+		else
+		{
+			//If we could see them and can't anymore
+			if (CanSeePlayer)
 			{
-				//Fire Grappling Hook at the player
-				EvilHand.UseWeapon(null, null, FirePoints, GameManager.Instance.playerGO.transform.position, false);
+				//Do something specific.
+			}
+			CanSeePlayer = false;
+		}
+		#endregion
+	}
+
+	public override void HandleAggression()
+	{
+		if (CanSeePlayer)
+		{
+			transform.LookAt(GameManager.Instance.playerGO.transform.position, Vector3.forward);
+		}
+		#region Idle State
+		if (state == EnemyState.Idle)
+		{
+
+		}
+		#endregion
+		#region Searching State
+		else if (state == EnemyState.Searching)
+		{
+			if (CanSeePlayer)
+			{
+				if (stateTimer > 0)
+				{
+					stateTimer -= Time.deltaTime;
+				}
+				else
+				{
+					ChangeState(EnemyState.Preparing);
+				}
 			}
 		}
-
-		//{ Idle, Searching, Preparing, Attacking };
-		/*
-		if(state == EnemyState.Idle)
-		{
-		}
-		else if(state == EnemyState.Searching)
-		{
-			if(CanSeePlayer)
-			{
-				ChangeState(EnemyState.Preparing);
-			}
-		}
-		else if(state == EnemyState.Preparing)
+		#endregion
+		#region Preparing State
+		else if (state == EnemyState.Preparing)
 		{
 			//Count up for a second or so
 			if (stateTimer > 0)
 			{
 				stateTimer -= Time.deltaTime;
+				//Use the line renderer to draw in direction of the player?
 			}
 			else
 			{
-				stateTimer = 1;
+				stateTimer = 3;
 
 				ChangeState(EnemyState.Attacking);
-
-
-
-				//Gain experience on throwing a grappling
-				//GainExperience(3);
-				
-				ChangeState(EnemyState.Attacking);
-				//Vector3 dirToPlayer = (chargeTargetLocation - transform.position + Vector3.up * .1f);
-				//dirToPlayer.Normalize();
-
-				//particleSystem.startColor = attackColor;
 			}
 		}
-		else if(state == EnemyState.Attacking)
+		#endregion
+		#region Attacking State
+		else if (state == EnemyState.Attacking)
 		{
-
 			//Wait for projectile to time out
-			//If it times out, switch to searching.
-		}*/
+			if (EvilHand.weaponState != GrapplingHook.GrapplingHookWeaponState.Busy)
+			{
+				//If it times out, switch to searching.
+				ChangeState(EnemyState.Searching);
+			}
+		}
+		#endregion
 	}
-	#endregion
+
+	void FireGrapple()
+	{
+		//Get the player current position
+		Vector3 targetScanDir = GameManager.Instance.playerGO.transform.position - FirePoints[0].transform.position;
+		//Debug.DrawLine(FirePoints[0].transform.position, FirePoints[0].transform.position + targetScanDir, Color.green, 5.0f);
+
+		if (EvilHand.weaponState == GrapplingHook.GrapplingHookWeaponState.Ready)
+		{
+			//Fire Grappling Hook at the player
+			EvilHand.UseWeapon(null, null, FirePoints, GameManager.Instance.playerGO.transform.position, false);
+		}
+	}
 
 	void ChangeState(EnemyState targetState)
 	{
+		//Debug.Log("Switching to " + targetState.ToString() + " state\n");
 		switch (targetState)
 		{
 		case EnemyState.Idle:
 			state = EnemyState.Idle;
 			stateTimer = 0;
-			//particleSystem.startColor = passiveColor;
+			gunMuzzle.GetComponent<Rotate>().rotationSpeed = 2;
+
 			break;
+
 		case EnemyState.Searching:
 
+			gunMuzzle.GetComponent<Rotate>().rotationSpeed = 2;
+			stateTimer = searchingTime;
 			state = EnemyState.Searching;
 			break;
+
 		case EnemyState.Preparing:
-			
-			//particleSystem.startColor = prepareColor;
+			stateTimer = preparingTime;
+
+			gunMuzzle.GetComponent<Rotate>().rotationSpeed = 20;
+
 			state = EnemyState.Preparing;
 			break;
+
 		case EnemyState.Attacking:
-			
-			//particleSystem.startColor = attackColor;
+			FireGrapple();
+
+			gunMuzzle.GetComponent<Rotate>().rotationSpeed = 6;
 			state = EnemyState.Attacking;
 			break;
 		}
 	}
+
+	public override void GainLevel()
+	{
+		XpReward += 5;
+		int randomBonuses = Random.Range(0, 4);
+		if (randomBonuses == 1)
+		{
+			//Debug.Log("Decreasing Searching Time\n");
+			if (searchingTime > .5f)
+			{
+				searchingTime -= .75f;
+			}
+		}
+		else if (randomBonuses == 2)
+		{
+			//Debug.Log("Bonus Damage\n");
+			EvilHand.PrimaryDamage += 2;
+		}
+		else if (randomBonuses == 3)
+		{
+			//Debug.Log("Faster Hook Speed\n");
+			EvilHand.assignedHookSpeed *= 1.5f;
+		}
+		else
+		{
+			//Debug.Log("Health\n");
+			MaxHealth += 5;
+			base.AdjustHealth(5);
+		}
+
+
+		XP -= XPNeeded;
+		Level++;
+
+		if (LevelText != null)
+		{
+			LevelText.text = Level.ToString();
+		}
+	}
+
 
 	#region Target & Untarget
 	public override void Target()
@@ -158,7 +250,7 @@ public class TowerMaster : Enemy
 
 	public override void ThrowToken(GameObject newToken)
 	{
-		newToken.transform.position -= Vector3.up * 2;
+		newToken.transform.position -= Vector3.up * 1;
 		newToken.rigidbody.useGravity = false;
 	}
 

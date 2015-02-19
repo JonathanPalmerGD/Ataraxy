@@ -20,7 +20,7 @@ public class Enemy : NPC
 	/// </summary>
 	public float XpReward = 5;
 
-	//private float xpRateOverTime = .5f;
+	//private float xpRateOverTime = 25f;
 	private float xpRateOverTime = 1.5f;
 
 	private bool gainXpWhenHit = false;

@@ -63,6 +63,9 @@ public class Player : Entity
 
 	public override void GainLevel()
 	{
+		MaxHealth += 5;
+		AdjustHealth(MaxHealth);
+		
 		base.GainLevel();
 
 		SetupHealthUI();

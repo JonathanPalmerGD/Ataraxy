@@ -107,6 +107,7 @@ public class IreWasps : FlyingEnemy
 				if (CanSeePlayer)
 				{
 					rigidbody.velocity = Vector3.zero;
+					ChangeState(EnemyState.Idle);
 				}
 				CanSeePlayer = false;
 			}

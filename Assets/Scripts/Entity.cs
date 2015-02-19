@@ -316,8 +316,7 @@ public class Entity : MonoBehaviour
 		XP -= XPNeeded;
 		Level++;
 
-		MaxHealth += 5;
-		AdjustHealth(MaxHealth);
+		
 
 		if (LevelText != null)
 		{
