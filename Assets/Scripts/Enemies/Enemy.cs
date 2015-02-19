@@ -165,7 +165,10 @@ public class Enemy : NPC
 
 	public virtual void FindFiringPositions()
 	{
-		gunMuzzle = transform.FindChild("Gun Muzzle").gameObject;
+		if(gunMuzzle == null)
+		{
+			gunMuzzle = transform.FindChild("Gun Muzzle").gameObject;
+		}
 		FiringCooldown = 6;
 	}
 

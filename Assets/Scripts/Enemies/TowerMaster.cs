@@ -21,6 +21,7 @@ public class TowerMaster : Enemy
 		EvilHand.NormalCooldown = 0;
 		EvilHand.primaryFirePointIndex = 0;
 		EvilHand.Carrier = this;
+		EvilHand.firePointOffset = Vector3.zero;
 		MaxHealth = 24;
 		Health = MaxHealth;
 
@@ -72,19 +73,17 @@ public class TowerMaster : Enemy
 
 	public override void HandleAggression()
 	{
-		if (CanSeePlayer)
-		{
-			transform.LookAt(GameManager.Instance.playerGO.transform.position, Vector3.forward);
-		}
 		#region Idle State
 		if (state == EnemyState.Idle)
 		{
-
+			FacePlayer();
 		}
 		#endregion
 		#region Searching State
 		else if (state == EnemyState.Searching)
 		{
+			FacePlayer();
+
 			if (CanSeePlayer)
 			{
 				if (stateTimer > 0)
@@ -101,6 +100,8 @@ public class TowerMaster : Enemy
 		#region Preparing State
 		else if (state == EnemyState.Preparing)
 		{
+			FacePlayer();
+
 			//Count up for a second or so
 			if (stateTimer > 0)
 			{
@@ -132,12 +133,21 @@ public class TowerMaster : Enemy
 	{
 		//Get the player current position
 		Vector3 targetScanDir = GameManager.Instance.playerGO.transform.position - FirePoints[0].transform.position;
-		//Debug.DrawLine(FirePoints[0].transform.position, FirePoints[0].transform.position + targetScanDir, Color.green, 5.0f);
+
+		Debug.DrawLine(FirePoints[0].transform.position, FirePoints[0].transform.position + targetScanDir, Color.green, 5.0f);
 
 		if (EvilHand.weaponState == GrapplingHook.GrapplingHookWeaponState.Ready)
 		{
 			//Fire Grappling Hook at the player
 			EvilHand.UseWeapon(null, null, FirePoints, GameManager.Instance.playerGO.transform.position, false);
+		}
+	}
+
+	void FacePlayer()
+	{
+		if (CanSeePlayer)
+		{
+			transform.LookAt(GameManager.Instance.playerGO.transform.position, Vector3.forward);
 		}
 	}
 

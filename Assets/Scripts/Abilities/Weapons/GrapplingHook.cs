@@ -10,6 +10,7 @@ public class GrapplingHook : Weapon
 	public enum GrapplingHookWeaponState { Ready, Busy }
 	public GrapplingHookWeaponState weaponState = GrapplingHookWeaponState.Ready;
 	public float assignedHookSpeed = 20;
+	public Vector3 firePointOffset = Vector3.up;
 	
 	public override void Init()
 	{
@@ -87,7 +88,7 @@ public class GrapplingHook : Weapon
 	{
 		Vector3 firePoint = firePoints[primaryFirePointIndex].transform.position;
 
-		GameObject go = (GameObject)GameObject.Instantiate(hookPrefab, firePoint + Vector3.up, Quaternion.identity);
+		GameObject go = (GameObject)GameObject.Instantiate(hookPrefab, firePoint + firePointOffset, Quaternion.identity);
 		currentProjectile = go.GetComponent<GrapplingHookProj>();
 		currentProjectile.Shooter = Carrier;
 

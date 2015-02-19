@@ -110,7 +110,7 @@ public class GrapplingHookProj : Projectile
 	{
 		float distance = Vector3.Distance(transform.position, Creator.Carrier.gameObject.transform.position);
 
-		if (distance < 4)
+		if (distance < 1.4f)
 		{
 			//Debug.LogWarning("Projectile collided with same Faction as firing source.\n");
 			if (hookState == GrapplingState.Attached || hookState == GrapplingState.Pulling)
