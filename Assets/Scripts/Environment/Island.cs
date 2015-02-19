@@ -321,9 +321,9 @@ public class Island : WorldObject
 		}
 	}
 
-	public void PlaceRandomEncounter()
+	public void PlaceRandomEncounter(bool force = false)
 	{
-		if (Random.Range(0, 100) > 85)
+		if (force || Random.Range(0, 100) > 85)
 		{
 			Family.encounterCounter++;
 			Vector3 featurePosition = transform.position + (Vector3.up * (transform.localScale.y / 2 + .2f));

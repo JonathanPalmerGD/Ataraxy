@@ -102,6 +102,9 @@ public class Cluster : WorldObject
 		//To check if we're making progression impossible clusters.
 		if(encounterCounter == 0)
 		{
+			//Select the largest island, make an encounter there
+			//Debug.Log("Forcing Random Encounter");
+			platforms[Random.Range(0, platforms.Count)].PlaceRandomEncounter(true);
 			//Debug.Log("Cluster generated with 0 valid encounters\n");
 		}
 	}

@@ -244,6 +244,8 @@ public class GrapplingHookProj : Projectile
 				pullingGameObject = collidedObject;
 				collidedYet = true;
 				timeRemaining += 5;
+
+				hookSpeed = 50;
 			}
 		}
 		else
@@ -273,6 +275,8 @@ public class GrapplingHookProj : Projectile
 				pullingEntity = collidedEntity;
 				collidedYet = true;
 				timeRemaining += 5;
+
+				hookSpeed = 30;
 			}
 		}
 		else
