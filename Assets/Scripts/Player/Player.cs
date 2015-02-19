@@ -33,7 +33,6 @@ public class Player : Entity
 	public GameObject rightShFirePoint;
 	public GameObject leftHipFirePoint;
 	public GameObject rightHipFirePoint;
-	public GameObject[] FirePoints;
 	#endregion
 
 	#region Weapon Variables
@@ -353,6 +352,10 @@ public class Player : Entity
 			}
 			#endregion
 			#region Handle Selector Location
+			//Set WeaponUI width equal to n * 67
+			// 1 = 64
+			// 64 * n + ((n-1)*3)
+			//WeaponUI.rectTransform.rect = new Rect(
 			SelectorUI.rectTransform.position = new Vector3((1 + WeaponIndex) * 67 - 32, 35);
 			int index = SelectorUI.transform.GetSiblingIndex();
 			SelectorUI.transform.SetSiblingIndex(index + 1);

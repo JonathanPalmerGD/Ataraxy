@@ -161,6 +161,8 @@ public class Entity : MonoBehaviour
 	}
 	#endregion
 
+	public GameObject[] FirePoints;
+
 	#region Assets - Audio, Animation, and Textures
 	private AudioClip deathClip;
 	public AudioClip DeathClip

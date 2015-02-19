@@ -31,7 +31,7 @@ public class GrapplingHookProj : Projectile
 
 	public virtual void DrawChain()
 	{
-		Vector3 firstPos = ((Player)Creator.Carrier).FirePoints[0].transform.position;
+		Vector3 firstPos = Creator.Carrier.FirePoints[0].transform.position;
 		lr.SetPosition(0, firstPos);
 		lr.SetPosition(1, transform.position - transform.forward * transform.localScale.z/2);
 		lr.material.mainTextureScale = new Vector2(Vector3.Distance(firstPos, transform.position), 1);
@@ -112,7 +112,10 @@ public class GrapplingHookProj : Projectile
 
 	void OnDestroy()
 	{
-		((GrapplingHook)Creator).ProjectileDestroyed();
+		if(Creator != null)
+		{
+			((GrapplingHook)Creator).ProjectileDestroyed();
+		}
 	}
 
 	void OnTriggerEnter(Collider collider)
@@ -167,26 +170,30 @@ public class GrapplingHookProj : Projectile
 						}
 						#endregion
 						#region Enemy Use
-							//Else if it is from an Enemy
-							else if (Faction == Allegiance.Enemy && collidedEntity.Faction == Allegiance.Player)
+						//Else if it is from an Enemy
+						else if (Faction == Allegiance.Enemy && collidedEntity.Faction == Allegiance.Player)
+						{
+							Debug.LogError("Grappling Hook now configured for enemy use!\n");
+
+							//Deal damage to the player
+							GameManager.Instance.player.AdjustHealth(-Damage);
+
+							//Grab the player!
+							RetractPullingTarget(collidedEntity);
+
+							//Apply AbilityEffect to the target.
+							for (int i = 0; i < projectileEffects.Count; i++)
 							{
-								Debug.LogError("Grappling Hook not configured for enemy use\n");
-								//Deal damage to the enemy
-								GameManager.Instance.player.AdjustHealth(-Damage * (1 + Creator.Carrier.Level * .1f));
-
-								//Apply AbilityEffect to the target.
-								for (int i = 0; i < projectileEffects.Count; i++)
-								{
-									GameManager.Instance.player.ApplyAbilityEffect(projectileEffects[i]);
-								}
-
-								//Award experience to the enemy who fired it.
-								if (AwardXPOnHit && Shooter != null)
-								{
-									Shooter.GainExperience(XpBountyOnHit);
-								}
+								GameManager.Instance.player.ApplyAbilityEffect(projectileEffects[i]);
 							}
-							#endregion
+
+							//Award experience to the enemy who fired it.
+							if (AwardXPOnHit && Shooter != null)
+							{
+								Shooter.GainExperience(XpBountyOnHit);
+							}
+						}
+						#endregion
 					}
 					#endregion
 				}
@@ -211,41 +218,79 @@ public class GrapplingHookProj : Projectile
 		}
 	}
 
+	/// <summary>
+	/// Pulls the target back towards the Carrier.
+	/// Destroys hook if the target is immovable.
+	/// </summary>
+	/// <param name="collidedEntity">Collided entity.</param>
 	public void RetractPullingTarget(GameObject collidedObject)
 	{
-		if (!collidedYet)
+		if(collidedObject.rigidbody != null)
 		{
-			rigidbody.velocity = Vector3.zero;
+			if (!collidedYet)
+			{
+				rigidbody.velocity = Vector3.zero;
+				collidedObject.rigidbody.velocity = Vector3.zero;
 
-			hookState = GrapplingState.Pulling;
-			pullingGameObject = collidedObject;
-			collidedYet = true;
-			timeRemaining += 5;
+				hookState = GrapplingState.Pulling;
+				pullingGameObject = collidedObject;
+				collidedYet = true;
+				timeRemaining += 5;
+			}
+		}
+		else
+		{
+			((GrapplingHook)Creator).RemoveProjectile();
 		}
 	}
 
+	/// <summary>
+	/// Pulls the target back towards the Carrier.
+	/// Destroys hook if the target is immovable.
+	/// </summary>
+	/// <param name="collidedEntity">Collided entity.</param>
 	public void RetractPullingTarget(Entity collidedEntity)
 	{
-		if (!collidedYet)
+		if(collidedEntity.rigidbody != null)
 		{
-			rigidbody.velocity = Vector3.zero;
-
-			hookState = GrapplingState.Pulling;
-			pullingEntity = collidedEntity;
-			collidedYet = true;
-			timeRemaining += 5;
+			if (!collidedYet)
+			{
+				rigidbody.velocity = Vector3.zero;
+				collidedEntity.rigidbody.velocity = Vector3.zero;
+			
+				hookState = GrapplingState.Pulling;
+				pullingEntity = collidedEntity;
+				collidedYet = true;
+				timeRemaining += 5;
+			}
+		}
+		else
+		{
+			((GrapplingHook)Creator).RemoveProjectile();
 		}
 	}
 
+	/// <summary>
+	/// Hook attaches to location and pulls carrier.
+	/// Destroys hook if carrier has no rigidbody.
+	/// </summary>
 	public void BecomeAttached()
 	{
-		if (!collidedYet)
+		if(Creator.Carrier.rigidbody != null)
 		{
-			Creator.Carrier.rigidbody.useGravity = false;
-			rigidbody.velocity = Vector3.zero;
-			hookState = GrapplingState.Attached;
-			collidedYet = true;
-			timeRemaining += 5;
+			if (!collidedYet)
+			{
+				rigidbody.velocity = Vector3.zero;
+				Creator.Carrier.rigidbody.useGravity = false;
+
+				hookState = GrapplingState.Attached;
+				collidedYet = true;
+				timeRemaining += 5;
+			}
+		}
+		else
+		{
+			((GrapplingHook)Creator).RemoveProjectile();
 		}
 	}
 
@@ -255,6 +300,7 @@ public class GrapplingHookProj : Projectile
 		{
 			Vector3 pullDir = transform.position - Creator.Carrier.transform.position;
 			pullDir.Normalize();
+
 			//Pull the creator
 			Creator.Carrier.ExternalMove(pullDir, -1, ForceMode.VelocityChange);
 		}
@@ -264,8 +310,11 @@ public class GrapplingHookProj : Projectile
 			{
 				Vector3 pullDir = Creator.Carrier.transform.position - transform.position;
 				pullDir.Normalize();
-				//Pull the creator
-				pullingEntity.ExternalMove(pullDir, -2f, ForceMode.VelocityChange);
+				if(pullingEntity.rigidbody != null)
+				{
+					//Pull the creator
+					pullingEntity.ExternalMove(pullDir, -2f, ForceMode.VelocityChange);
+				}
 			}
 		} 
 		timeRemaining = 0;

@@ -39,7 +39,7 @@ public class Enemy : NPC
 
 	#region Projectile Attack Variables
 	public GameObject projectilePrefab;
-	private GameObject gunMuzzle;
+	public GameObject gunMuzzle;
 
 	private float firingTimer;
 	public float FiringTimer

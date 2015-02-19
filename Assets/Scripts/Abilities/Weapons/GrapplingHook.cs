@@ -39,12 +39,12 @@ public class GrapplingHook : Weapon
 		//If we're ready, make our UI white.
 		if(weaponState == GrapplingHookWeaponState.Ready)
 		{
-			IconUI.color = new Color(1, 1, 1);
+			IconUI.color = new Color(1, 1, 1, IconUI.color.a);
 		}
 		//If we're not ready, make our UI grey.
 		if(weaponState == GrapplingHookWeaponState.Busy)
 		{
-			IconUI.color = new Color(.7f, .3f, .3f);
+			IconUI.color = new Color(.7f, .3f, .3f, IconUI.color.a);
 		}
 		base.UpdateWeapon(time);
 	}
