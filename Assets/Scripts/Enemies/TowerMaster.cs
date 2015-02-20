@@ -260,8 +260,8 @@ public class TowerMaster : Enemy
 
 	public override void ThrowToken(GameObject newToken)
 	{
-		newToken.transform.position -= Vector3.up * 1;
-		newToken.rigidbody.useGravity = false;
+		//newToken.transform.position -= Vector3.up * 4;
+		//newToken.rigidbody.useGravity = false;
 	}
 
 }

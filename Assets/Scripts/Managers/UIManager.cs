@@ -6,8 +6,11 @@ using System.Collections.Generic;
 /// <summary>
 /// This class stores references to key pieces of UI so that they do not need to be looked up multiple times.
 /// </summary>
-public class UIManager : Singleton<UIManager> 
+public class UIManager : Singleton<UIManager>
 {
+	public GameObject ScreenSpaceOverlayPrefab;
+	public Canvas UIROOT;
+
 	public Canvas target_HUD;
 	public Text target_Name;
 	public Slider target_HP;
@@ -44,6 +47,18 @@ public class UIManager : Singleton<UIManager>
 	public override void Awake()
 	{
 		base.Awake();
+
+		//Load the UI element
+
+		if (ScreenSpaceOverlayPrefab == null)
+		{
+			ScreenSpaceOverlayPrefab = Resources.Load<GameObject>("UI/SS - Overlay");
+		}
+		if (UIROOT == null)
+		{
+			UIROOT = ((GameObject)GameObject.Instantiate(ScreenSpaceOverlayPrefab, Vector3.zero, Quaternion.identity)).GetComponent<Canvas>();
+			UIROOT.gameObject.name = ScreenSpaceOverlayPrefab.name;
+		}
 	
 		pause_Menu = GameObject.Find("Pause Menu").GetComponent<Canvas>();
 
