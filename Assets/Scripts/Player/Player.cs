@@ -169,6 +169,7 @@ public class Player : Entity
 	public void GiveStartingItems()
 	{
 		#if UNITY_EDITOR
+		SetupAbility(WarpStaff.New());
 		SetupAbility(GravityStaff.New());
 		SetupAbility(BoundingStaff.New());
 		SetupAbility(GrapplingHook.New());
