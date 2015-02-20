@@ -100,26 +100,40 @@ public class UIManager : Singleton<UIManager>
 			UnpauseGame();
 		}
 	}
-	
+
+	bool wasFullScreen;
 	void Update()
 	{
-		if (!UIManager.Instance.paused)
+		if (!paused)
 		{
 			Screen.lockCursor = true;
 		}
 		#region Quit Section
 		if (Input.GetButtonDown("Quit"))
 		{
-			if (UIManager.Instance.paused)
+			if (paused)
 			{
-				UIManager.Instance.UnpauseGame();
+				UnpauseGame();
 			}
 			else
 			{
-				UIManager.Instance.PauseGame();
+				PauseGame();
 			}
 		}
 		#endregion
+
+		if (Screen.fullScreen)
+		{
+			wasFullScreen = true;
+		}
+		else
+		{
+			if (wasFullScreen && !UIManager.Instance.paused)
+			{
+				PauseGame();
+			}
+			wasFullScreen = false;
+		}
 
 		if (pause_Menu != null)
 		{
