@@ -88,6 +88,10 @@ public class UIManager : Singleton<UIManager>
 	
 	void Update()
 	{
+		if (!UIManager.Instance.paused)
+		{
+			Screen.lockCursor = true;
+		}
 		#region Quit Section
 		if (Input.GetButtonDown("Quit"))
 		{

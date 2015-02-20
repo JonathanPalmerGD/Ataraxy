@@ -55,4 +55,22 @@ public class MainMenu : MonoBehaviour
 
 		//Save if navigating away?
 	}
+
+	public void LockCursor()
+	{
+		Screen.lockCursor = true;
+	}
+
+	public void TellUIMToUnpauseGame()
+	{
+		LockCursor();
+		UIManager.Instance.UnpauseGame();
+	}
+
+	public void EngageFullScreen()
+	{
+#if !UNITY_EDITOR
+		Screen.fullScreen = true;
+#endif
+	}
 }
