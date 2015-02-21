@@ -82,10 +82,10 @@ public class Controller : MonoBehaviour {
 	Vector3 velocityChange;
 
 	//Hidden variables
-	[HideInInspector]
+	//[HideInInspector]
 	public bool crouching;
 	//This can be used to alter the speed from another script
-	[HideInInspector]
+	//[HideInInspector]
 	public float speedMultiplier = 1f;
 
 	void Start ()
@@ -248,7 +248,7 @@ public class Controller : MonoBehaviour {
 			CrouchState(crouching);
 		}
 
-		if(Input.GetKey(KeyCode.LeftControl) || !canStand)
+		/*if(Input.GetKey(KeyCode.LeftControl) || !canStand)
 		{
 			if (grounded)
 			{
@@ -257,7 +257,7 @@ public class Controller : MonoBehaviour {
 
 			crouching = true;
 		}
-		else if (Input.GetKey(KeyCode.LeftShift) && canStand && stamina > 0 && ableToRun)
+		else */if (Input.GetKey(KeyCode.LeftShift) && canStand && stamina > 0 && ableToRun)
 		{
 			//Running
 			if (grounded)
@@ -273,6 +273,12 @@ public class Controller : MonoBehaviour {
 		}
 		else
 		{
+			speed = walkSpeed * speedMultiplier;
+
+			crouching = false;
+			
+			#region Disabled Crouching
+			/*
 			if(!canStand)
 			{
 				if (grounded)
@@ -286,7 +292,8 @@ public class Controller : MonoBehaviour {
 				speed = walkSpeed * speedMultiplier;
 				
 				crouching = false;
-			}
+			}*/
+			#endregion
 		}
 
 		if (grounded)

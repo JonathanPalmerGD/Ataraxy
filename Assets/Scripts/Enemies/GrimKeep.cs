@@ -54,7 +54,6 @@ public class GrimKeep : Enemy
 
 	public override void ThrowToken(GameObject newToken)
 	{
-		newToken.transform.position -= Vector3.up * 2;
-		newToken.rigidbody.useGravity = false;
+		newToken.rigidbody.useGravity = true;
 	}
 }

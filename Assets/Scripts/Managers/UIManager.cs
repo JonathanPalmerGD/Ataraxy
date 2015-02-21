@@ -106,7 +106,9 @@ public class UIManager : Singleton<UIManager>
 	{
 		if (!paused)
 		{
+#if !UNITY_EDITOR
 			Screen.lockCursor = true;
+#endif
 		}
 		#region Quit Section
 		if (Input.GetButtonDown("Quit"))
