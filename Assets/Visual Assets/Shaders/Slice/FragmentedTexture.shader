@@ -1,9 +1,7 @@
-﻿Shader "Slice/Fragmented Localspace" {
+﻿Shader "Slice/Fragmented Texture" {
   Properties {
-	  _Frequency ("Clip Frequency", Range(0,30)) = 5.0
-	  _Offset ("Clip Offset", Range(0,1)) = .5
-	  _Openness ("Openness", Range(0,1)) = .5
-      _Color ("Color", Color) = (0.26,0.19,0.16,0.0)
+	  _PerComplete ("Completeness", Range(0,1)) = .5
+      //_Color ("Color", Color) = (0.26,0.19,0.16,0.0)
       _MainTex ("Texture", 2D) = "white" {}
       _BumpMap ("Bumpmap", 2D) = "bump" {}
     }
@@ -20,20 +18,17 @@
       };
       sampler2D _MainTex;
       sampler2D _BumpMap;
-	  float _Frequency;
-	  float _Offset;
-	  float _Openness;
+	  float _PerComplete;
 	  void vert (inout appdata_full v, out Input o) {
 			UNITY_INITIALIZE_OUTPUT(Input,o);
 			o.objPos = v.vertex;
 	  }
 
       void surf (Input IN, inout SurfaceOutput o) {
-	      clip (frac((IN.objPos.x+_Offset) * _Frequency) - _Openness);
-	      //clip (frac((IN.objPos.y+_Offset) * _Frequency) - _Openness);
-	      clip (frac((IN.objPos.z+_Offset) * _Frequency) - _Openness);
-          o.Albedo = tex2D (_MainTex, IN.uv_MainTex).rgb;
-          o.Normal = UnpackNormal (tex2D (_BumpMap, IN.uv_BumpMap));
+	  //If the texture alpha is less than a set value, clip it.
+		 clip (tex2D (_BumpMap, IN.uv_BumpMap).b - _PerComplete);
+	     o.Albedo = tex2D (_MainTex, IN.uv_MainTex).rgb;
+         //o.Normal = UnpackNormal (tex2D (_BumpMap, IN.uv_BumpMap));
       }
       ENDCG
     } 
