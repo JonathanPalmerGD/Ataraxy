@@ -4,8 +4,9 @@ using System.Collections;
 public class SliceAnimator : MonoBehaviour
 {
 	private float sOpenness = 1f;
-	private float sClipFrequency = .5f;
+	private float sClipFrequency = 4f;
 	private float lerpDur = 1.5f;
+	private float maxShieldPer = .0f;
 	public bool opening = false;
 
 	private float counter = 0;
@@ -14,11 +15,11 @@ public class SliceAnimator : MonoBehaviour
 	{
 		if (opening)
 		{
-			sOpenness = Mathf.Lerp(.15f, 1, counter / lerpDur);
+			sOpenness = Mathf.Lerp(maxShieldPer, 1, counter / lerpDur);
 		}
 		else
 		{
-			sOpenness = Mathf.Lerp(1, .15f, counter / lerpDur);
+			sOpenness = Mathf.Lerp(1, maxShieldPer, counter / lerpDur);
 		}
 		counter += Time.deltaTime;
 
@@ -29,20 +30,20 @@ public class SliceAnimator : MonoBehaviour
 		}
 		if (Input.GetKeyDown(KeyCode.Period))
 		{
-			sClipFrequency++;
+			sClipFrequency--;
 
-			if (sClipFrequency > 9)
+			if (sClipFrequency < 1)
 			{
-				sClipFrequency = 1;
+				sClipFrequency = 10;
 			}
 		}
 		if (Input.GetKeyDown(KeyCode.Slash))
 		{
-			sClipFrequency += 2;
+			maxShieldPer += .1f;
 
-			if (sClipFrequency > 9)
+			if (maxShieldPer > .5f)
 			{
-				sClipFrequency = 1;
+				maxShieldPer = 0;
 			}
 		}
 

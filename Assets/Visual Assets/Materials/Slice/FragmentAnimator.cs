@@ -21,14 +21,10 @@ public class FragmentAnimator : MonoBehaviour
 		}
 		counter += Time.deltaTime;
 
-		if (Input.GetKeyDown(KeyCode.Period))
+		if (Input.GetKeyDown(KeyCode.Comma))
 		{
 			opening = !opening;
 			counter = 0;
-		}
-		if (Input.GetKeyDown(KeyCode.Comma))
-		{
-			
 		}
 
 		renderer.material.SetFloat("_PerComplete", perComplete);

@@ -26,7 +26,7 @@
 
       void surf (Input IN, inout SurfaceOutput o) {
 	  //If the texture alpha is less than a set value, clip it.
-		 clip (tex2D (_BumpMap, IN.uv_BumpMap).b - _PerComplete);
+		 clip (_PerComplete - tex2D (_BumpMap, IN.uv_BumpMap).b);
 	     o.Albedo = tex2D (_MainTex, IN.uv_MainTex).rgb;
          //o.Normal = UnpackNormal (tex2D (_BumpMap, IN.uv_BumpMap));
       }

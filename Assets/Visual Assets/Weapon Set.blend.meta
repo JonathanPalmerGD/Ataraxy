@@ -29,6 +29,7 @@ ModelImporter:
     100046: Tower_Shield
     100048: //RootNode
     100050: Witch_Sword
+    100052: Blacksmith_Hammer
     400000: Battle_Axe
     400002: Buckler
     400004: Cleaver
@@ -55,6 +56,7 @@ ModelImporter:
     400046: Tower_Shield
     400048: //RootNode
     400050: Witch_Sword
+    400052: Blacksmith_Hammer
     2300000: Battle_Axe
     2300002: Buckler
     2300004: Cleaver
@@ -80,6 +82,7 @@ ModelImporter:
     2300044: Thruster
     2300046: Tower_Shield
     2300048: Witch_Sword
+    2300050: Blacksmith_Hammer
     3300000: Battle_Axe
     3300002: Buckler
     3300004: Cleaver
@@ -105,6 +108,7 @@ ModelImporter:
     3300044: Thruster
     3300046: Tower_Shield
     3300048: Witch_Sword
+    3300050: Blacksmith_Hammer
     4300000: Magic_Sword_1
     4300002: Plane
     4300004: Targe
@@ -130,6 +134,7 @@ ModelImporter:
     4300044: Sword
     4300046: Thruster
     4300048: Witch_Sword
+    4300050: Blacksmith_Hammer
     7400000: Default Take
     9500000: //RootNode
   materials:

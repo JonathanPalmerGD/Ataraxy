@@ -1,0 +1,894 @@
+fileFormatVersion: 2
+guid: cb4a702a8b1098f4190b156ae85f1434
+ModelImporter:
+  serializedVersion: 16
+  fileIDToRecycleName:
+    100000: Battle Axe
+    100002: Blacksmith Hammer
+    100004: Buckler
+    100006: Camera
+    100008: Cleaver
+    100010: Dagger
+    100012: Flanged Mace
+    100014: Great Axe
+    100016: Great Sceptre
+    100018: Great Sword
+    100020: Halberd
+    100022: Hammer
+    100024: Hand Axe
+    100026: Heavy Sword
+    100028: Kite Shield
+    100030: Lamp
+    100032: Lamp.001
+    100034: Mace
+    100036: Magic Sword 1
+    100038: Pike
+    100040: Plane
+    100042: Sceptre
+    100044: Spear
+    100046: Stave
+    100048: Sword
+    100050: Targe
+    100052: Thruster
+    100054: Tower Shield
+    100056: //RootNode
+    100058: Witch Sword
+    400000: Battle Axe
+    400002: Blacksmith Hammer
+    400004: Buckler
+    400006: Camera
+    400008: Cleaver
+    400010: Dagger
+    400012: Flanged Mace
+    400014: Great Axe
+    400016: Great Sceptre
+    400018: Great Sword
+    400020: Halberd
+    400022: Hammer
+    400024: Hand Axe
+    400026: Heavy Sword
+    400028: Kite Shield
+    400030: Lamp
+    400032: Lamp.001
+    400034: Mace
+    400036: Magic Sword 1
+    400038: Pike
+    400040: Plane
+    400042: Sceptre
+    400044: Spear
+    400046: Stave
+    400048: Sword
+    400050: Targe
+    400052: Thruster
+    400054: Tower Shield
+    400056: //RootNode
+    400058: Witch Sword
+    2300000: Battle Axe
+    2300002: Blacksmith Hammer
+    2300004: Buckler
+    2300006: Cleaver
+    2300008: Dagger
+    2300010: Flanged Mace
+    2300012: Great Axe
+    2300014: Great Sceptre
+    2300016: Great Sword
+    2300018: Halberd
+    2300020: Hammer
+    2300022: Hand Axe
+    2300024: Heavy Sword
+    2300026: Kite Shield
+    2300028: Mace
+    2300030: Magic Sword 1
+    2300032: Pike
+    2300034: Plane
+    2300036: Sceptre
+    2300038: Spear
+    2300040: Stave
+    2300042: Sword
+    2300044: Targe
+    2300046: Thruster
+    2300048: Tower Shield
+    2300050: Witch Sword
+    3300000: Battle Axe
+    3300002: Blacksmith Hammer
+    3300004: Buckler
+    3300006: Cleaver
+    3300008: Dagger
+    3300010: Flanged Mace
+    3300012: Great Axe
+    3300014: Great Sceptre
+    3300016: Great Sword
+    3300018: Halberd
+    3300020: Hammer
+    3300022: Hand Axe
+    3300024: Heavy Sword
+    3300026: Kite Shield
+    3300028: Mace
+    3300030: Magic Sword 1
+    3300032: Pike
+    3300034: Plane
+    3300036: Sceptre
+    3300038: Spear
+    3300040: Stave
+    3300042: Sword
+    3300044: Targe
+    3300046: Thruster
+    3300048: Tower Shield
+    3300050: Witch Sword
+    4300000: Blacksmith Hammer
+    4300002: Magic Sword 1
+    4300004: Plane
+    4300006: Targe
+    4300008: Buckler
+    4300010: Tower Shield
+    4300012: Kite Shield
+    4300014: Battle Axe
+    4300016: Cleaver
+    4300018: Dagger
+    4300020: Flanged Mace
+    4300022: Great Axe
+    4300024: Great Sword
+    4300026: Great Sceptre
+    4300028: Halberd
+    4300030: Hammer
+    4300032: Hand Axe
+    4300034: Heavy Sword
+    4300036: Mace
+    4300038: Pike
+    4300040: Sceptre
+    4300042: Spear
+    4300044: Stave
+    4300046: Sword
+    4300048: Thruster
+    4300050: Witch Sword
+    7400000: Blacksmith Hammer|CameraAction
+    7400002: Blacksmith Hammer|LampAction
+    7400004: Blacksmith Hammer|LampAction.001
+    7400006: Blacksmith Hammer|RodAction
+    7400008: Blacksmith Hammer|RodAction.001
+    7400010: Blacksmith Hammer|RodAction.002
+    7400012: Blacksmith Hammer|RodAction.003
+    7400014: Blacksmith Hammer|RodAction.004
+    7400016: Blacksmith Hammer|RodAction.005
+    7400018: Blacksmith Hammer|RodAction.006
+    7400020: Blacksmith Hammer|RodAction.007
+    7400022: Blacksmith Hammer|RodAction.008
+    7400024: Blacksmith Hammer|RodAction.009
+    7400026: Blacksmith Hammer|RodAction.010
+    7400028: Blacksmith Hammer|RodAction.011
+    7400030: Blacksmith Hammer|RodAction.012
+    7400032: Blacksmith Hammer|RodAction.013
+    7400034: Blacksmith Hammer|RodAction.014
+    7400036: Blacksmith Hammer|RodAction.015
+    7400038: Blacksmith Hammer|RodAction.016
+    7400040: Blacksmith Hammer|RodAction.017
+    7400042: Blacksmith Hammer|RodAction.018
+    7400044: Blacksmith Hammer|RodAction.019
+    7400046: Blacksmith Hammer|RodAction.020
+    7400048: Magic Sword 1|CameraAction
+    7400050: Magic Sword 1|LampAction
+    7400052: Magic Sword 1|LampAction.001
+    7400054: Magic Sword 1|RodAction
+    7400056: Magic Sword 1|RodAction.001
+    7400058: Magic Sword 1|RodAction.002
+    7400060: Magic Sword 1|RodAction.003
+    7400062: Magic Sword 1|RodAction.004
+    7400064: Magic Sword 1|RodAction.005
+    7400066: Magic Sword 1|RodAction.006
+    7400068: Magic Sword 1|RodAction.007
+    7400070: Magic Sword 1|RodAction.008
+    7400072: Magic Sword 1|RodAction.009
+    7400074: Magic Sword 1|RodAction.010
+    7400076: Magic Sword 1|RodAction.011
+    7400078: Magic Sword 1|RodAction.012
+    7400080: Magic Sword 1|RodAction.013
+    7400082: Magic Sword 1|RodAction.014
+    7400084: Magic Sword 1|RodAction.015
+    7400086: Magic Sword 1|RodAction.016
+    7400088: Magic Sword 1|RodAction.017
+    7400090: Magic Sword 1|RodAction.018
+    7400092: Magic Sword 1|RodAction.019
+    7400094: Magic Sword 1|RodAction.020
+    7400096: Lamp.001|CameraAction
+    7400098: Lamp.001|LampAction
+    7400100: Lamp.001|LampAction.001
+    7400102: Lamp.001|RodAction
+    7400104: Lamp.001|RodAction.001
+    7400106: Lamp.001|RodAction.002
+    7400108: Lamp.001|RodAction.003
+    7400110: Lamp.001|RodAction.004
+    7400112: Lamp.001|RodAction.005
+    7400114: Lamp.001|RodAction.006
+    7400116: Lamp.001|RodAction.007
+    7400118: Lamp.001|RodAction.008
+    7400120: Lamp.001|RodAction.009
+    7400122: Lamp.001|RodAction.010
+    7400124: Lamp.001|RodAction.011
+    7400126: Lamp.001|RodAction.012
+    7400128: Lamp.001|RodAction.013
+    7400130: Lamp.001|RodAction.014
+    7400132: Lamp.001|RodAction.015
+    7400134: Lamp.001|RodAction.016
+    7400136: Lamp.001|RodAction.017
+    7400138: Lamp.001|RodAction.018
+    7400140: Lamp.001|RodAction.019
+    7400142: Lamp.001|RodAction.020
+    7400144: Plane|CameraAction
+    7400146: Plane|LampAction
+    7400148: Plane|LampAction.001
+    7400150: Plane|RodAction
+    7400152: Plane|RodAction.001
+    7400154: Plane|RodAction.002
+    7400156: Plane|RodAction.003
+    7400158: Plane|RodAction.004
+    7400160: Plane|RodAction.005
+    7400162: Plane|RodAction.006
+    7400164: Plane|RodAction.007
+    7400166: Plane|RodAction.008
+    7400168: Plane|RodAction.009
+    7400170: Plane|RodAction.010
+    7400172: Plane|RodAction.011
+    7400174: Plane|RodAction.012
+    7400176: Plane|RodAction.013
+    7400178: Plane|RodAction.014
+    7400180: Plane|RodAction.015
+    7400182: Plane|RodAction.016
+    7400184: Plane|RodAction.017
+    7400186: Plane|RodAction.018
+    7400188: Plane|RodAction.019
+    7400190: Plane|RodAction.020
+    7400192: Targe|CameraAction
+    7400194: Targe|LampAction
+    7400196: Targe|LampAction.001
+    7400198: Targe|RodAction
+    7400200: Targe|RodAction.001
+    7400202: Targe|RodAction.002
+    7400204: Targe|RodAction.003
+    7400206: Targe|RodAction.004
+    7400208: Targe|RodAction.005
+    7400210: Targe|RodAction.006
+    7400212: Targe|RodAction.007
+    7400214: Targe|RodAction.008
+    7400216: Targe|RodAction.009
+    7400218: Targe|RodAction.010
+    7400220: Targe|RodAction.011
+    7400222: Targe|RodAction.012
+    7400224: Targe|RodAction.013
+    7400226: Targe|RodAction.014
+    7400228: Targe|RodAction.015
+    7400230: Targe|RodAction.016
+    7400232: Targe|RodAction.017
+    7400234: Targe|RodAction.018
+    7400236: Targe|RodAction.019
+    7400238: Targe|RodAction.020
+    7400240: Buckler|CameraAction
+    7400242: Buckler|LampAction
+    7400244: Buckler|LampAction.001
+    7400246: Buckler|RodAction
+    7400248: Buckler|RodAction.001
+    7400250: Buckler|RodAction.002
+    7400252: Buckler|RodAction.003
+    7400254: Buckler|RodAction.004
+    7400256: Buckler|RodAction.005
+    7400258: Buckler|RodAction.006
+    7400260: Buckler|RodAction.007
+    7400262: Buckler|RodAction.008
+    7400264: Buckler|RodAction.009
+    7400266: Buckler|RodAction.010
+    7400268: Buckler|RodAction.011
+    7400270: Buckler|RodAction.012
+    7400272: Buckler|RodAction.013
+    7400274: Buckler|RodAction.014
+    7400276: Buckler|RodAction.015
+    7400278: Buckler|RodAction.016
+    7400280: Buckler|RodAction.017
+    7400282: Buckler|RodAction.018
+    7400284: Buckler|RodAction.019
+    7400286: Buckler|RodAction.020
+    7400288: Tower Shield|CameraAction
+    7400290: Tower Shield|LampAction
+    7400292: Tower Shield|LampAction.001
+    7400294: Tower Shield|RodAction
+    7400296: Tower Shield|RodAction.001
+    7400298: Tower Shield|RodAction.002
+    7400300: Tower Shield|RodAction.003
+    7400302: Tower Shield|RodAction.004
+    7400304: Tower Shield|RodAction.005
+    7400306: Tower Shield|RodAction.006
+    7400308: Tower Shield|RodAction.007
+    7400310: Tower Shield|RodAction.008
+    7400312: Tower Shield|RodAction.009
+    7400314: Tower Shield|RodAction.010
+    7400316: Tower Shield|RodAction.011
+    7400318: Tower Shield|RodAction.012
+    7400320: Tower Shield|RodAction.013
+    7400322: Tower Shield|RodAction.014
+    7400324: Tower Shield|RodAction.015
+    7400326: Tower Shield|RodAction.016
+    7400328: Tower Shield|RodAction.017
+    7400330: Tower Shield|RodAction.018
+    7400332: Tower Shield|RodAction.019
+    7400334: Tower Shield|RodAction.020
+    7400336: Kite Shield|CameraAction
+    7400338: Kite Shield|LampAction
+    7400340: Kite Shield|LampAction.001
+    7400342: Kite Shield|RodAction
+    7400344: Kite Shield|RodAction.001
+    7400346: Kite Shield|RodAction.002
+    7400348: Kite Shield|RodAction.003
+    7400350: Kite Shield|RodAction.004
+    7400352: Kite Shield|RodAction.005
+    7400354: Kite Shield|RodAction.006
+    7400356: Kite Shield|RodAction.007
+    7400358: Kite Shield|RodAction.008
+    7400360: Kite Shield|RodAction.009
+    7400362: Kite Shield|RodAction.010
+    7400364: Kite Shield|RodAction.011
+    7400366: Kite Shield|RodAction.012
+    7400368: Kite Shield|RodAction.013
+    7400370: Kite Shield|RodAction.014
+    7400372: Kite Shield|RodAction.015
+    7400374: Kite Shield|RodAction.016
+    7400376: Kite Shield|RodAction.017
+    7400378: Kite Shield|RodAction.018
+    7400380: Kite Shield|RodAction.019
+    7400382: Kite Shield|RodAction.020
+    7400384: Lamp|CameraAction
+    7400386: Lamp|LampAction
+    7400388: Lamp|LampAction.001
+    7400390: Lamp|RodAction
+    7400392: Lamp|RodAction.001
+    7400394: Lamp|RodAction.002
+    7400396: Lamp|RodAction.003
+    7400398: Lamp|RodAction.004
+    7400400: Lamp|RodAction.005
+    7400402: Lamp|RodAction.006
+    7400404: Lamp|RodAction.007
+    7400406: Lamp|RodAction.008
+    7400408: Lamp|RodAction.009
+    7400410: Lamp|RodAction.010
+    7400412: Lamp|RodAction.011
+    7400414: Lamp|RodAction.012
+    7400416: Lamp|RodAction.013
+    7400418: Lamp|RodAction.014
+    7400420: Lamp|RodAction.015
+    7400422: Lamp|RodAction.016
+    7400424: Lamp|RodAction.017
+    7400426: Lamp|RodAction.018
+    7400428: Lamp|RodAction.019
+    7400430: Lamp|RodAction.020
+    7400432: Camera|CameraAction
+    7400434: Camera|LampAction
+    7400436: Camera|LampAction.001
+    7400438: Camera|RodAction
+    7400440: Camera|RodAction.001
+    7400442: Camera|RodAction.002
+    7400444: Camera|RodAction.003
+    7400446: Camera|RodAction.004
+    7400448: Camera|RodAction.005
+    7400450: Camera|RodAction.006
+    7400452: Camera|RodAction.007
+    7400454: Camera|RodAction.008
+    7400456: Camera|RodAction.009
+    7400458: Camera|RodAction.010
+    7400460: Camera|RodAction.011
+    7400462: Camera|RodAction.012
+    7400464: Camera|RodAction.013
+    7400466: Camera|RodAction.014
+    7400468: Camera|RodAction.015
+    7400470: Camera|RodAction.016
+    7400472: Camera|RodAction.017
+    7400474: Camera|RodAction.018
+    7400476: Camera|RodAction.019
+    7400478: Camera|RodAction.020
+    7400480: Battle Axe|CameraAction
+    7400482: Battle Axe|LampAction
+    7400484: Battle Axe|LampAction.001
+    7400486: Battle Axe|RodAction
+    7400488: Battle Axe|RodAction.001
+    7400490: Battle Axe|RodAction.002
+    7400492: Battle Axe|RodAction.003
+    7400494: Battle Axe|RodAction.004
+    7400496: Battle Axe|RodAction.005
+    7400498: Battle Axe|RodAction.006
+    7400500: Battle Axe|RodAction.007
+    7400502: Battle Axe|RodAction.008
+    7400504: Battle Axe|RodAction.009
+    7400506: Battle Axe|RodAction.010
+    7400508: Battle Axe|RodAction.011
+    7400510: Battle Axe|RodAction.012
+    7400512: Battle Axe|RodAction.013
+    7400514: Battle Axe|RodAction.014
+    7400516: Battle Axe|RodAction.015
+    7400518: Battle Axe|RodAction.016
+    7400520: Battle Axe|RodAction.017
+    7400522: Battle Axe|RodAction.018
+    7400524: Battle Axe|RodAction.019
+    7400526: Battle Axe|RodAction.020
+    7400528: Cleaver|CameraAction
+    7400530: Cleaver|LampAction
+    7400532: Cleaver|LampAction.001
+    7400534: Cleaver|RodAction
+    7400536: Cleaver|RodAction.001
+    7400538: Cleaver|RodAction.002
+    7400540: Cleaver|RodAction.003
+    7400542: Cleaver|RodAction.004
+    7400544: Cleaver|RodAction.005
+    7400546: Cleaver|RodAction.006
+    7400548: Cleaver|RodAction.007
+    7400550: Cleaver|RodAction.008
+    7400552: Cleaver|RodAction.009
+    7400554: Cleaver|RodAction.010
+    7400556: Cleaver|RodAction.011
+    7400558: Cleaver|RodAction.012
+    7400560: Cleaver|RodAction.013
+    7400562: Cleaver|RodAction.014
+    7400564: Cleaver|RodAction.015
+    7400566: Cleaver|RodAction.016
+    7400568: Cleaver|RodAction.017
+    7400570: Cleaver|RodAction.018
+    7400572: Cleaver|RodAction.019
+    7400574: Cleaver|RodAction.020
+    7400576: Dagger|CameraAction
+    7400578: Dagger|LampAction
+    7400580: Dagger|LampAction.001
+    7400582: Dagger|RodAction
+    7400584: Dagger|RodAction.001
+    7400586: Dagger|RodAction.002
+    7400588: Dagger|RodAction.003
+    7400590: Dagger|RodAction.004
+    7400592: Dagger|RodAction.005
+    7400594: Dagger|RodAction.006
+    7400596: Dagger|RodAction.007
+    7400598: Dagger|RodAction.008
+    7400600: Dagger|RodAction.009
+    7400602: Dagger|RodAction.010
+    7400604: Dagger|RodAction.011
+    7400606: Dagger|RodAction.012
+    7400608: Dagger|RodAction.013
+    7400610: Dagger|RodAction.014
+    7400612: Dagger|RodAction.015
+    7400614: Dagger|RodAction.016
+    7400616: Dagger|RodAction.017
+    7400618: Dagger|RodAction.018
+    7400620: Dagger|RodAction.019
+    7400622: Dagger|RodAction.020
+    7400624: Flanged Mace|CameraAction
+    7400626: Flanged Mace|LampAction
+    7400628: Flanged Mace|LampAction.001
+    7400630: Flanged Mace|RodAction
+    7400632: Flanged Mace|RodAction.001
+    7400634: Flanged Mace|RodAction.002
+    7400636: Flanged Mace|RodAction.003
+    7400638: Flanged Mace|RodAction.004
+    7400640: Flanged Mace|RodAction.005
+    7400642: Flanged Mace|RodAction.006
+    7400644: Flanged Mace|RodAction.007
+    7400646: Flanged Mace|RodAction.008
+    7400648: Flanged Mace|RodAction.009
+    7400650: Flanged Mace|RodAction.010
+    7400652: Flanged Mace|RodAction.011
+    7400654: Flanged Mace|RodAction.012
+    7400656: Flanged Mace|RodAction.013
+    7400658: Flanged Mace|RodAction.014
+    7400660: Flanged Mace|RodAction.015
+    7400662: Flanged Mace|RodAction.016
+    7400664: Flanged Mace|RodAction.017
+    7400666: Flanged Mace|RodAction.018
+    7400668: Flanged Mace|RodAction.019
+    7400670: Flanged Mace|RodAction.020
+    7400672: Great Axe|CameraAction
+    7400674: Great Axe|LampAction
+    7400676: Great Axe|LampAction.001
+    7400678: Great Axe|RodAction
+    7400680: Great Axe|RodAction.001
+    7400682: Great Axe|RodAction.002
+    7400684: Great Axe|RodAction.003
+    7400686: Great Axe|RodAction.004
+    7400688: Great Axe|RodAction.005
+    7400690: Great Axe|RodAction.006
+    7400692: Great Axe|RodAction.007
+    7400694: Great Axe|RodAction.008
+    7400696: Great Axe|RodAction.009
+    7400698: Great Axe|RodAction.010
+    7400700: Great Axe|RodAction.011
+    7400702: Great Axe|RodAction.012
+    7400704: Great Axe|RodAction.013
+    7400706: Great Axe|RodAction.014
+    7400708: Great Axe|RodAction.015
+    7400710: Great Axe|RodAction.016
+    7400712: Great Axe|RodAction.017
+    7400714: Great Axe|RodAction.018
+    7400716: Great Axe|RodAction.019
+    7400718: Great Axe|RodAction.020
+    7400720: Great Sword|CameraAction
+    7400722: Great Sword|LampAction
+    7400724: Great Sword|LampAction.001
+    7400726: Great Sword|RodAction
+    7400728: Great Sword|RodAction.001
+    7400730: Great Sword|RodAction.002
+    7400732: Great Sword|RodAction.003
+    7400734: Great Sword|RodAction.004
+    7400736: Great Sword|RodAction.005
+    7400738: Great Sword|RodAction.006
+    7400740: Great Sword|RodAction.007
+    7400742: Great Sword|RodAction.008
+    7400744: Great Sword|RodAction.009
+    7400746: Great Sword|RodAction.010
+    7400748: Great Sword|RodAction.011
+    7400750: Great Sword|RodAction.012
+    7400752: Great Sword|RodAction.013
+    7400754: Great Sword|RodAction.014
+    7400756: Great Sword|RodAction.015
+    7400758: Great Sword|RodAction.016
+    7400760: Great Sword|RodAction.017
+    7400762: Great Sword|RodAction.018
+    7400764: Great Sword|RodAction.019
+    7400766: Great Sword|RodAction.020
+    7400768: Great Sceptre|CameraAction
+    7400770: Great Sceptre|LampAction
+    7400772: Great Sceptre|LampAction.001
+    7400774: Great Sceptre|RodAction
+    7400776: Great Sceptre|RodAction.001
+    7400778: Great Sceptre|RodAction.002
+    7400780: Great Sceptre|RodAction.003
+    7400782: Great Sceptre|RodAction.004
+    7400784: Great Sceptre|RodAction.005
+    7400786: Great Sceptre|RodAction.006
+    7400788: Great Sceptre|RodAction.007
+    7400790: Great Sceptre|RodAction.008
+    7400792: Great Sceptre|RodAction.009
+    7400794: Great Sceptre|RodAction.010
+    7400796: Great Sceptre|RodAction.011
+    7400798: Great Sceptre|RodAction.012
+    7400800: Great Sceptre|RodAction.013
+    7400802: Great Sceptre|RodAction.014
+    7400804: Great Sceptre|RodAction.015
+    7400806: Great Sceptre|RodAction.016
+    7400808: Great Sceptre|RodAction.017
+    7400810: Great Sceptre|RodAction.018
+    7400812: Great Sceptre|RodAction.019
+    7400814: Great Sceptre|RodAction.020
+    7400816: Halberd|CameraAction
+    7400818: Halberd|LampAction
+    7400820: Halberd|LampAction.001
+    7400822: Halberd|RodAction
+    7400824: Halberd|RodAction.001
+    7400826: Halberd|RodAction.002
+    7400828: Halberd|RodAction.003
+    7400830: Halberd|RodAction.004
+    7400832: Halberd|RodAction.005
+    7400834: Halberd|RodAction.006
+    7400836: Halberd|RodAction.007
+    7400838: Halberd|RodAction.008
+    7400840: Halberd|RodAction.009
+    7400842: Halberd|RodAction.010
+    7400844: Halberd|RodAction.011
+    7400846: Halberd|RodAction.012
+    7400848: Halberd|RodAction.013
+    7400850: Halberd|RodAction.014
+    7400852: Halberd|RodAction.015
+    7400854: Halberd|RodAction.016
+    7400856: Halberd|RodAction.017
+    7400858: Halberd|RodAction.018
+    7400860: Halberd|RodAction.019
+    7400862: Halberd|RodAction.020
+    7400864: Hammer|CameraAction
+    7400866: Hammer|LampAction
+    7400868: Hammer|LampAction.001
+    7400870: Hammer|RodAction
+    7400872: Hammer|RodAction.001
+    7400874: Hammer|RodAction.002
+    7400876: Hammer|RodAction.003
+    7400878: Hammer|RodAction.004
+    7400880: Hammer|RodAction.005
+    7400882: Hammer|RodAction.006
+    7400884: Hammer|RodAction.007
+    7400886: Hammer|RodAction.008
+    7400888: Hammer|RodAction.009
+    7400890: Hammer|RodAction.010
+    7400892: Hammer|RodAction.011
+    7400894: Hammer|RodAction.012
+    7400896: Hammer|RodAction.013
+    7400898: Hammer|RodAction.014
+    7400900: Hammer|RodAction.015
+    7400902: Hammer|RodAction.016
+    7400904: Hammer|RodAction.017
+    7400906: Hammer|RodAction.018
+    7400908: Hammer|RodAction.019
+    7400910: Hammer|RodAction.020
+    7400912: Hand Axe|CameraAction
+    7400914: Hand Axe|LampAction
+    7400916: Hand Axe|LampAction.001
+    7400918: Hand Axe|RodAction
+    7400920: Hand Axe|RodAction.001
+    7400922: Hand Axe|RodAction.002
+    7400924: Hand Axe|RodAction.003
+    7400926: Hand Axe|RodAction.004
+    7400928: Hand Axe|RodAction.005
+    7400930: Hand Axe|RodAction.006
+    7400932: Hand Axe|RodAction.007
+    7400934: Hand Axe|RodAction.008
+    7400936: Hand Axe|RodAction.009
+    7400938: Hand Axe|RodAction.010
+    7400940: Hand Axe|RodAction.011
+    7400942: Hand Axe|RodAction.012
+    7400944: Hand Axe|RodAction.013
+    7400946: Hand Axe|RodAction.014
+    7400948: Hand Axe|RodAction.015
+    7400950: Hand Axe|RodAction.016
+    7400952: Hand Axe|RodAction.017
+    7400954: Hand Axe|RodAction.018
+    7400956: Hand Axe|RodAction.019
+    7400958: Hand Axe|RodAction.020
+    7400960: Heavy Sword|CameraAction
+    7400962: Heavy Sword|LampAction
+    7400964: Heavy Sword|LampAction.001
+    7400966: Heavy Sword|RodAction
+    7400968: Heavy Sword|RodAction.001
+    7400970: Heavy Sword|RodAction.002
+    7400972: Heavy Sword|RodAction.003
+    7400974: Heavy Sword|RodAction.004
+    7400976: Heavy Sword|RodAction.005
+    7400978: Heavy Sword|RodAction.006
+    7400980: Heavy Sword|RodAction.007
+    7400982: Heavy Sword|RodAction.008
+    7400984: Heavy Sword|RodAction.009
+    7400986: Heavy Sword|RodAction.010
+    7400988: Heavy Sword|RodAction.011
+    7400990: Heavy Sword|RodAction.012
+    7400992: Heavy Sword|RodAction.013
+    7400994: Heavy Sword|RodAction.014
+    7400996: Heavy Sword|RodAction.015
+    7400998: Heavy Sword|RodAction.016
+    7401000: Heavy Sword|RodAction.017
+    7401002: Heavy Sword|RodAction.018
+    7401004: Heavy Sword|RodAction.019
+    7401006: Heavy Sword|RodAction.020
+    7401008: Mace|CameraAction
+    7401010: Mace|LampAction
+    7401012: Mace|LampAction.001
+    7401014: Mace|RodAction
+    7401016: Mace|RodAction.001
+    7401018: Mace|RodAction.002
+    7401020: Mace|RodAction.003
+    7401022: Mace|RodAction.004
+    7401024: Mace|RodAction.005
+    7401026: Mace|RodAction.006
+    7401028: Mace|RodAction.007
+    7401030: Mace|RodAction.008
+    7401032: Mace|RodAction.009
+    7401034: Mace|RodAction.010
+    7401036: Mace|RodAction.011
+    7401038: Mace|RodAction.012
+    7401040: Mace|RodAction.013
+    7401042: Mace|RodAction.014
+    7401044: Mace|RodAction.015
+    7401046: Mace|RodAction.016
+    7401048: Mace|RodAction.017
+    7401050: Mace|RodAction.018
+    7401052: Mace|RodAction.019
+    7401054: Mace|RodAction.020
+    7401056: Pike|CameraAction
+    7401058: Pike|LampAction
+    7401060: Pike|LampAction.001
+    7401062: Pike|RodAction
+    7401064: Pike|RodAction.001
+    7401066: Pike|RodAction.002
+    7401068: Pike|RodAction.003
+    7401070: Pike|RodAction.004
+    7401072: Pike|RodAction.005
+    7401074: Pike|RodAction.006
+    7401076: Pike|RodAction.007
+    7401078: Pike|RodAction.008
+    7401080: Pike|RodAction.009
+    7401082: Pike|RodAction.010
+    7401084: Pike|RodAction.011
+    7401086: Pike|RodAction.012
+    7401088: Pike|RodAction.013
+    7401090: Pike|RodAction.014
+    7401092: Pike|RodAction.015
+    7401094: Pike|RodAction.016
+    7401096: Pike|RodAction.017
+    7401098: Pike|RodAction.018
+    7401100: Pike|RodAction.019
+    7401102: Pike|RodAction.020
+    7401104: Sceptre|CameraAction
+    7401106: Sceptre|LampAction
+    7401108: Sceptre|LampAction.001
+    7401110: Sceptre|RodAction
+    7401112: Sceptre|RodAction.001
+    7401114: Sceptre|RodAction.002
+    7401116: Sceptre|RodAction.003
+    7401118: Sceptre|RodAction.004
+    7401120: Sceptre|RodAction.005
+    7401122: Sceptre|RodAction.006
+    7401124: Sceptre|RodAction.007
+    7401126: Sceptre|RodAction.008
+    7401128: Sceptre|RodAction.009
+    7401130: Sceptre|RodAction.010
+    7401132: Sceptre|RodAction.011
+    7401134: Sceptre|RodAction.012
+    7401136: Sceptre|RodAction.013
+    7401138: Sceptre|RodAction.014
+    7401140: Sceptre|RodAction.015
+    7401142: Sceptre|RodAction.016
+    7401144: Sceptre|RodAction.017
+    7401146: Sceptre|RodAction.018
+    7401148: Sceptre|RodAction.019
+    7401150: Sceptre|RodAction.020
+    7401152: Spear|CameraAction
+    7401154: Spear|LampAction
+    7401156: Spear|LampAction.001
+    7401158: Spear|RodAction
+    7401160: Spear|RodAction.001
+    7401162: Spear|RodAction.002
+    7401164: Spear|RodAction.003
+    7401166: Spear|RodAction.004
+    7401168: Spear|RodAction.005
+    7401170: Spear|RodAction.006
+    7401172: Spear|RodAction.007
+    7401174: Spear|RodAction.008
+    7401176: Spear|RodAction.009
+    7401178: Spear|RodAction.010
+    7401180: Spear|RodAction.011
+    7401182: Spear|RodAction.012
+    7401184: Spear|RodAction.013
+    7401186: Spear|RodAction.014
+    7401188: Spear|RodAction.015
+    7401190: Spear|RodAction.016
+    7401192: Spear|RodAction.017
+    7401194: Spear|RodAction.018
+    7401196: Spear|RodAction.019
+    7401198: Spear|RodAction.020
+    7401200: Stave|CameraAction
+    7401202: Stave|LampAction
+    7401204: Stave|LampAction.001
+    7401206: Stave|RodAction
+    7401208: Stave|RodAction.001
+    7401210: Stave|RodAction.002
+    7401212: Stave|RodAction.003
+    7401214: Stave|RodAction.004
+    7401216: Stave|RodAction.005
+    7401218: Stave|RodAction.006
+    7401220: Stave|RodAction.007
+    7401222: Stave|RodAction.008
+    7401224: Stave|RodAction.009
+    7401226: Stave|RodAction.010
+    7401228: Stave|RodAction.011
+    7401230: Stave|RodAction.012
+    7401232: Stave|RodAction.013
+    7401234: Stave|RodAction.014
+    7401236: Stave|RodAction.015
+    7401238: Stave|RodAction.016
+    7401240: Stave|RodAction.017
+    7401242: Stave|RodAction.018
+    7401244: Stave|RodAction.019
+    7401246: Stave|RodAction.020
+    7401248: Sword|CameraAction
+    7401250: Sword|LampAction
+    7401252: Sword|LampAction.001
+    7401254: Sword|RodAction
+    7401256: Sword|RodAction.001
+    7401258: Sword|RodAction.002
+    7401260: Sword|RodAction.003
+    7401262: Sword|RodAction.004
+    7401264: Sword|RodAction.005
+    7401266: Sword|RodAction.006
+    7401268: Sword|RodAction.007
+    7401270: Sword|RodAction.008
+    7401272: Sword|RodAction.009
+    7401274: Sword|RodAction.010
+    7401276: Sword|RodAction.011
+    7401278: Sword|RodAction.012
+    7401280: Sword|RodAction.013
+    7401282: Sword|RodAction.014
+    7401284: Sword|RodAction.015
+    7401286: Sword|RodAction.016
+    7401288: Sword|RodAction.017
+    7401290: Sword|RodAction.018
+    7401292: Sword|RodAction.019
+    7401294: Sword|RodAction.020
+    7401296: Thruster|CameraAction
+    7401298: Thruster|LampAction
+    7401300: Thruster|LampAction.001
+    7401302: Thruster|RodAction
+    7401304: Thruster|RodAction.001
+    7401306: Thruster|RodAction.002
+    7401308: Thruster|RodAction.003
+    7401310: Thruster|RodAction.004
+    7401312: Thruster|RodAction.005
+    7401314: Thruster|RodAction.006
+    7401316: Thruster|RodAction.007
+    7401318: Thruster|RodAction.008
+    7401320: Thruster|RodAction.009
+    7401322: Thruster|RodAction.010
+    7401324: Thruster|RodAction.011
+    7401326: Thruster|RodAction.012
+    7401328: Thruster|RodAction.013
+    7401330: Thruster|RodAction.014
+    7401332: Thruster|RodAction.015
+    7401334: Thruster|RodAction.016
+    7401336: Thruster|RodAction.017
+    7401338: Thruster|RodAction.018
+    7401340: Thruster|RodAction.019
+    7401342: Thruster|RodAction.020
+    7401344: Witch Sword|CameraAction
+    7401346: Witch Sword|LampAction
+    7401348: Witch Sword|LampAction.001
+    7401350: Witch Sword|RodAction
+    7401352: Witch Sword|RodAction.001
+    7401354: Witch Sword|RodAction.002
+    7401356: Witch Sword|RodAction.003
+    7401358: Witch Sword|RodAction.004
+    7401360: Witch Sword|RodAction.005
+    7401362: Witch Sword|RodAction.006
+    7401364: Witch Sword|RodAction.007
+    7401366: Witch Sword|RodAction.008
+    7401368: Witch Sword|RodAction.009
+    7401370: Witch Sword|RodAction.010
+    7401372: Witch Sword|RodAction.011
+    7401374: Witch Sword|RodAction.012
+    7401376: Witch Sword|RodAction.013
+    7401378: Witch Sword|RodAction.014
+    7401380: Witch Sword|RodAction.015
+    7401382: Witch Sword|RodAction.016
+    7401384: Witch Sword|RodAction.017
+    7401386: Witch Sword|RodAction.018
+    7401388: Witch Sword|RodAction.019
+    7401390: Witch Sword|RodAction.020
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .00999999978
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 
