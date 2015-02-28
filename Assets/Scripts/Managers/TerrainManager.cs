@@ -29,7 +29,7 @@ public class TerrainManager : Singleton<TerrainManager>
 	public static float IslandNeighborDist = 10;
 	public static bool RaycastToNodeChecking = true;
 	public static int underworldYOffset = 80;
-	public static bool CreateIslandFeatures = false;
+	public static bool CreateIslandFeatures = true;
 	#endregion
 
 	#region Prefabs & Lists of Prefabs

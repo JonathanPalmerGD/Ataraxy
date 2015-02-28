@@ -169,23 +169,23 @@ public class Player : Entity
 	public void GiveStartingItems()
 	{
 		#if UNITY_EDITOR
-		SetupAbility(WarpStaff.New());
+		//SetupAbility(WarpStaff.New());
 		SetupAbility(GravityStaff.New());
-		SetupAbility(BoundingStaff.New());
+		//SetupAbility(BoundingStaff.New());
 		SetupAbility(GrapplingHook.New());
-		SetupAbility(WingedSandals.New());
+		/*SetupAbility(WingedSandals.New());
 		SetupAbility(Longsword.New());
 		SetupAbility(Rapier.New());
 		SetupAbility(Dagger.New());
 		SetupAbility(RocketLauncher.New());
-		SetupAbility(ShockRifle.New());
-		SetupAbility(Passive.New());
-		SetupAbility(Passive.New());
-		SetupAbility(Passive.New());
+		SetupAbility(ShockRifle.New());*/
+		//SetupAbility(Passive.New());
+		//SetupAbility(Passive.New());
+		//SetupAbility(Passive.New());
 		#else
 		SetupAbility(GravityStaff.New());
 		SetupAbility(GrapplingHook.New());
-		SetupAbility(Passive.New());
+		//SetupAbility(Passive.New());
 #endif
 	}
 
@@ -360,7 +360,12 @@ public class Player : Entity
 			// 1 = 64
 			// 64 * n + ((n-1)*3)
 			//WeaponUI.rectTransform.rect = new Rect(
-			SelectorUI.rectTransform.position = new Vector3((1 + WeaponIndex) * 67 - 32, 35);
+			float halfScreen = Screen.width / 2;
+			float wC = (weapons.Count - 1) * 67 / 2;
+			float wI = (WeaponIndex) * 67;
+			SelectorUI.rectTransform.position = new Vector3(halfScreen - wC + wI, 35);
+			//SelectorUI.rectTransform.position = new Vector3((Screen.width / 2) - ((weapons.Count / 2 - WeaponIndex / 2) * 67) / 2, 35);
+			//(1 + WeaponIndex) * 67 - 32, 35);
 			int index = SelectorUI.transform.GetSiblingIndex();
 			SelectorUI.transform.SetSiblingIndex(index + 1);
 			#endregion
@@ -368,6 +373,8 @@ public class Player : Entity
 			//Try to find if our cursor is targetting something
 			hitscanTarget = TargetScan();
 
+			UIManager.Instance.player_WeaponFolder.GetComponent<RectTransform>().anchoredPosition = new Vector2((Screen.width / 2) - ((weapons.Count) * 67) / 2, 0);
+		
 			HandleLoseTarget();
 
 			Damaged = false;
@@ -390,6 +397,7 @@ public class Player : Entity
 	{
 		for (int i = 0; i < weapons.Count; i++)
 		{
+			//weapons[i].IconUI.rectTransform.anchoredPosition = new Vector2((Screen.width - (i) * 67)/ 2 , 0);
 			weapons[i].IconUI.rectTransform.anchoredPosition = new Vector2((i) * 67, 0);
 		}
 		for (int i = 0; i < passives.Count; i++)
