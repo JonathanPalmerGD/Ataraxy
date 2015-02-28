@@ -21,7 +21,7 @@ using System.Collections.Generic;
 public class Controller : MonoBehaviour {
 
 	public bool controllerAble = true;
-	public Transform camera;    //The root object that contains the camera
+	public Transform mCamera;    //The root object that contains the camera
 	public float checksPerSecond = 10f; //The amount of times per second to run IsGrounded(), CanStand() and IsMoving()
 
 	[Header("Falling")]

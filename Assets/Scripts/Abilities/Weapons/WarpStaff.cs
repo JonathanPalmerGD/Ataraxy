@@ -87,7 +87,7 @@ public class WarpStaff : Weapon {
 
 	#region Static Functions
 	// Sets Up weapon initialization on New() call. Also Sets up descriptions
-	public static WarpStaff New()
+	public new static WarpStaff New()
 	{
 		WarpStaff ws = ScriptableObject.CreateInstance<WarpStaff>();
 		// Weapon Name
@@ -101,9 +101,9 @@ public class WarpStaff : Weapon {
 	// Creates Wepon Name string for UI elements
 	static string[] adj = { "Basic", "Bulky", "Hasty", "Deadly", "Steel", "Vampiric", "Anachronic", "Violent", "Nimble", "Strange" };
 	static string weaponName = "Warp Staff";
-	public static string GetWeaponName()
+	public new static string GetWeaponName()
 	{
-		int rndA = Random.Range(0, adj.Length);
+		//int rndA = Random.Range(0, adj.Length);
 
 		return (/*adj[rndA] + " " + */weaponName);
 	}

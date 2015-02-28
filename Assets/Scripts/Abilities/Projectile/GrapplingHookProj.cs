@@ -38,14 +38,14 @@ public class GrapplingHookProj : Projectile
 		lr.material.mainTextureScale = new Vector2(Vector3.Distance(firstPos, transform.position), 1);
 	}
 
-	public virtual void Start() 
+	public override void Start() 
 	{
 		Init();
 
 		ProjVel = 2600;
 	}
 
-	public virtual void Update() 
+	public override void Update() 
 	{
 		timeRemaining -= Time.deltaTime;
 

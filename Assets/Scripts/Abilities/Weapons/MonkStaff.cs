@@ -115,7 +115,7 @@ public class MonkStaff : Weapon
 	}
 
 	#region Static Functions
-	public static MonkStaff New()
+	public new static MonkStaff New()
 	{
 		MonkStaff w = ScriptableObject.CreateInstance<MonkStaff>();
 		w.AbilityName = MonkStaff.GetWeaponName();
@@ -128,9 +128,9 @@ public class MonkStaff : Weapon
 
 	static string[] adj = { "Basic", "Bulky", "Hasty", "Deadly", "Steel", "Vampiric", "Anachronic", "Violent", "Nimble", "Strange" };
 	static string weaponName = "Monk's Staff";
-	public static string GetWeaponName()
+	public new static string GetWeaponName()
 	{
-		int rndA = Random.Range(0, adj.Length);
+		//int rndA = Random.Range(0, adj.Length);
 
 		return (/*adj[rndA] + " " + */weaponName);
 	}

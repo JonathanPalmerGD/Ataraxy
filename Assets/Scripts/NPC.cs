@@ -8,6 +8,11 @@ public class NPC : Entity
 	public Shader diffuse;
 	public Shader normalShader;
 
+	public override Allegiance Faction
+	{
+		get { return Allegiance.Neutral; }
+	}
+
 	public override void Start()
 	{
 		outline = Shader.Find("Outlined/Silhouetted Diffuse");
@@ -31,11 +36,43 @@ public class NPC : Entity
 	
 	}
 
+	public override void UpdateHealthUI()
+	{
+		//Only update our UI if we're targeted.
+		if (GameManager.Instance.player.targetedEntity == this)
+		{
+			base.UpdateHealthUI();
+		}
+	}
+
+	public override void UpdateXPUI()
+	{
+		//Only update our UI if we're targeted.
+		if (GameManager.Instance.player.targetedEntity == this)
+		{
+			base.UpdateXPUI();
+		}
+	}
+
+	public override void UpdateLevelUI()
+	{
+		Debug.Log(name + " leveled up\n");
+		//Only update our UI if we're targeted.
+		if (GameManager.Instance.player.targetedEntity == this)
+		{
+			base.UpdateLevelUI();
+		}
+	}
 	public virtual void Untarget()
 	{
 		if (InfoHUD != null)
 		{
-			InfoHUD.enabled = false;
+			Debug.Log("My name: " + name + "\nTarg: " + GameManager.Instance.player.targetedEntity);
+			if(GameManager.Instance.player.targetedEntity == this)
+			{
+				GameManager.Instance.player.targetedEntity = null;
+				InfoHUD.enabled = false;
+			}
 			renderer.material.shader = diffuse;
 		}
 	}

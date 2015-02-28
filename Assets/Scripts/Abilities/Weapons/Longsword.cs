@@ -82,7 +82,7 @@ public class Longsword : Weapon
 	}
 
 	#region Static Functions
-	public static Longsword New()
+	public new static Longsword New()
 	{
 		Longsword w = ScriptableObject.CreateInstance<Longsword>();
 		w.AbilityName = Longsword.GetWeaponName();
@@ -97,9 +97,9 @@ public class Longsword : Weapon
 
 	static string[] adj = { "Basic", "Bulky", "Hasty", "Deadly", "Steel", "Vampiric", "Anachronic", "Violent", "Nimble", "Strange" };
 	static string weaponName = "Longsword";
-	public static string GetWeaponName()
+	public new static string GetWeaponName()
 	{
-		int rndA = Random.Range(0, adj.Length);
+		//int rndA = Random.Range(0, adj.Length);
 
 		return (/*adj[rndA] + " " + */weaponName);
 	}

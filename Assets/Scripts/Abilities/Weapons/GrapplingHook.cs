@@ -160,7 +160,7 @@ public class GrapplingHook : Weapon
 	}
 	
 	#region Static Functions
-	public static GrapplingHook New()
+	public new static GrapplingHook New()
 	{
 		GrapplingHook g = ScriptableObject.CreateInstance<GrapplingHook>();
 		g.AbilityName = GrapplingHook.GetWeaponName();
@@ -175,9 +175,9 @@ public class GrapplingHook : Weapon
 	
 	static string[] adj = { "Basic", "Bulky", "Hasty", "Deadly", "Steel", "Vampiric", "Anachronic", "Violent", "Nimble", "Strange" };
 	static string weaponName = "Grappling Hook";
-	public static string GetWeaponName()
+	public new static string GetWeaponName()
 	{
-		int rndA = Random.Range(0, adj.Length);
+		//int rndA = Random.Range(0, adj.Length);
 		
 		return (/*adj[rndA] + " " +*/ weaponName);
 	}

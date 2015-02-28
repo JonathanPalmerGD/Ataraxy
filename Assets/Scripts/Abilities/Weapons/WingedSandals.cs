@@ -66,7 +66,7 @@ public class WingedSandals : Weapon
 	}
 
 	#region Static Functions
-	public static WingedSandals New()
+	public new static WingedSandals New()
 	{
 		WingedSandals ws = ScriptableObject.CreateInstance<WingedSandals>();
 		ws.AbilityName = WingedSandals.GetWeaponName();
@@ -81,9 +81,9 @@ public class WingedSandals : Weapon
 
 	static string[] adj = { "Basic", "Bulky", "Hasty", "Deadly", "Steel", "Vampiric", "Anachronic", "Violent", "Nimble", "Strange" };
 	static string weaponName = "Winged Sandals";
-	public static string GetWeaponName()
+	public new static string GetWeaponName()
 	{
-		int rndA = Random.Range(0, adj.Length);
+		//int rndA = Random.Range(0, adj.Length);
 
 		return (/*adj[rndA] + " " + */weaponName);
 	}

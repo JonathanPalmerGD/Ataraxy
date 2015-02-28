@@ -45,7 +45,7 @@ public class BoundingStaff : Weapon
 	}
 
 	#region Static Functions
-	public static BoundingStaff New()
+	public new static BoundingStaff New()
 	{
 		BoundingStaff bs = ScriptableObject.CreateInstance<BoundingStaff>();
 		bs.AbilityName = BoundingStaff.GetWeaponName();
@@ -60,9 +60,9 @@ public class BoundingStaff : Weapon
 
 	static string[] adj = { "Basic", "Bulky", "Hasty", "Deadly", "Steel", "Vampiric", "Anachronic", "Violent", "Nimble", "Strange" };
 	static string weaponName = "Bounding Staff";
-	public static string GetWeaponName()
+	public new static string GetWeaponName()
 	{
-		int rndA = Random.Range(0, adj.Length);
+		//int rndA = Random.Range(0, adj.Length);
 
 		return (/*adj[rndA] + " " + */weaponName);
 	}

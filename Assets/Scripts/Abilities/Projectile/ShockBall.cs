@@ -9,7 +9,7 @@ public class ShockBall : Projectile
 	public float blastRadius;
 	public float explosiveDamage;
 
-	void Start()
+	public override void Start()
 	{
 		Damage = 5;
 		ProjVel = 1;
@@ -18,7 +18,7 @@ public class ShockBall : Projectile
 		//explosive = transform.FindChild("Detonator-Shock").GetComponent<Detonator>();
 	}
 
-	void Update()
+	public override void Update()
 	{
 		if (((SphereCollider)collider).radius < 4)
 		{

@@ -35,7 +35,10 @@ public class RocketLauncher : Weapon
 		Vector3 firePoint = firePoints[primaryFirePointIndex].transform.position;
 		if (targType != null)
 		{
-			if (targType.IsSubclassOf(typeof(Enemy)) || targType.IsAssignableFrom(typeof(Enemy)))
+			//Debug.Log(targType.IsSubclassOf(typeof(Enemy)).ToString() + "  " + targType == typeof(Enemy).ToString());
+			//Debug.Log((targType == typeof(NPC)).ToString());
+				
+			if (targType.IsSubclassOf(typeof(Enemy)) || targType == typeof(Enemy))
 			{
 				Enemy e = target.GetComponent<Enemy>();
 				//Check Faction
@@ -64,37 +67,42 @@ public class RocketLauncher : Weapon
 			else if (targType == typeof(NPC))
 			{
 				//Debug.Log("Used Weapon on NPC\n");
+				FireRocket(firePoint, targetScanDir);
 
 			}
 		}
 		//If our targType is null from targetting a piece of terrain or something?
 		else
 		{
-			//Debug.Log("Weapon hitscan'd something else\n");
-			//Do something like play a 'bullet hitting metal wall' audio.
-
-			GameObject go = (GameObject)GameObject.Instantiate(rocketPrefab, firePoint, Quaternion.identity);
-			Rocket rocket = go.GetComponent<Rocket>();
-
-			rocket.Faction = Faction;
-			rocket.Shooter = Carrier;
-
-			rocket.rigidbody.drag = 0;
-			rocket.target = null;
-			rocket.homing = false;
-
-			//Debug.DrawLine(firePoint, targetScanDir, Color.red, 5.0f);
-			Vector3 dir = targetScanDir - firePoint;
-			dir.Normalize();
-
-			rocket.rigidbody.AddForce((dir * rocket.ProjVel * rocket.rigidbody.mass));
-
-			Destroy(rocket, fuelPerRocket + 8);
+			FireRocket(firePoint, targetScanDir);
 		}
 	}
 
+	public void FireRocket(Vector3 firePoint = default(Vector3), Vector3 targetScanDir = default(Vector3))
+	{
+		//Debug.Log("Weapon hitscan'd something else\n");
+		//Do something like play a 'bullet hitting metal wall' audio.
+		GameObject go = (GameObject)GameObject.Instantiate(rocketPrefab, firePoint, Quaternion.identity);
+		Rocket rocket = go.GetComponent<Rocket>();
+
+		rocket.Faction = Faction;
+		rocket.Shooter = Carrier;
+
+		rocket.rigidbody.drag = 0;
+		rocket.target = null;
+		rocket.homing = false;
+
+		//Debug.DrawLine(firePoint, targetScanDir, Color.red, 5.0f);
+		Vector3 dir = targetScanDir - firePoint;
+		dir.Normalize();
+
+		rocket.rigidbody.AddForce((dir * rocket.ProjVel * rocket.rigidbody.mass));
+
+		Destroy(rocket, fuelPerRocket + 8);
+	}
+
 	#region Static Functions
-	public static RocketLauncher New()
+	public new static RocketLauncher New()
 	{
 		RocketLauncher w = ScriptableObject.CreateInstance<RocketLauncher>();
 		w.AbilityName = RocketLauncher.GetWeaponName();
@@ -109,9 +117,9 @@ public class RocketLauncher : Weapon
 
 	static string[] adj = { "Basic", "Bulky", "Hasty", "Deadly", "Steel", "Vampiric", "Anachronic", "Violent", "Nimble", "Strange" };
 	static string weaponName = "Rocket Launcher";
-	public static string GetWeaponName()
+	public new static string GetWeaponName()
 	{
-		int rndA = Random.Range(0, adj.Length);
+		//int rndA = Random.Range(0, adj.Length);
 
 		return (/*adj[rndA] + " " +*/ weaponName);
 	}

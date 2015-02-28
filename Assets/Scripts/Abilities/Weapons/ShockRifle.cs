@@ -51,7 +51,7 @@ public class ShockRifle : Weapon
 		}
 		if (targType != null)
 		{
-			if (targType.IsSubclassOf(typeof(Enemy)) || targType.IsAssignableFrom(typeof(Enemy)))
+			if (targType.IsSubclassOf(typeof(Enemy)) || targType == typeof(Enemy))
 			{
 				{
 					//Debug.Log("Used Weapon on Enemy\n");

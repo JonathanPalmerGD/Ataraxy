@@ -72,7 +72,7 @@ public class Dagger : Weapon
 	}
 
 	#region Static Functions
-	public static Dagger New()
+	public new static Dagger New()
 	{
 		Dagger w = ScriptableObject.CreateInstance<Dagger>();
 		w.AbilityName = Dagger.GetWeaponName();
@@ -87,9 +87,9 @@ public class Dagger : Weapon
 
 	static string[] adj = { "Basic", "Bulky", "Hasty", "Deadly", "Steel", "Vampiric", "Anachronic", "Violent", "Nimble", "Strange" };
 	static string weaponName = "Dagger";
-	public static string GetWeaponName()
+	public new static string GetWeaponName()
 	{
-		int rndA = Random.Range(0, adj.Length);
+		//int rndA = Random.Range(0, adj.Length);
 
 		return (/*adj[rndA] + " " + */weaponName);
 	}

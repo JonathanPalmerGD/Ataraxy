@@ -95,7 +95,7 @@ public class Rapier : Weapon
 	}
 
 	#region Static Functions
-	public static Rapier New()
+	public new static Rapier New()
 	{
 		Rapier w = ScriptableObject.CreateInstance<Rapier>();
 		w.AbilityName = Rapier.GetWeaponName();
@@ -110,9 +110,9 @@ public class Rapier : Weapon
 
 	static string[] adj = { "Basic", "Bulky", "Hasty", "Deadly", "Steel", "Vampiric", "Anachronic", "Violent", "Nimble", "Strange" };
 	static string weaponName = "Rapier";
-	public static string GetWeaponName()
+	public new static string GetWeaponName()
 	{
-		int rndA = Random.Range(0, adj.Length);
+		//int rndA = Random.Range(0, adj.Length);
 
 		return (/*adj[rndA] + " " + */weaponName);
 	}

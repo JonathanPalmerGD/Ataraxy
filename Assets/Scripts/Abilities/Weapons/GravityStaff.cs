@@ -43,7 +43,7 @@ public class GravityStaff : Weapon
 	}
 
 	#region Static Functions
-	public static GravityStaff New()
+	public new static GravityStaff New()
 	{
 		GravityStaff gs = ScriptableObject.CreateInstance<GravityStaff>();
 		gs.AbilityName = GravityStaff.GetWeaponName();
@@ -58,9 +58,9 @@ public class GravityStaff : Weapon
 
 	static string[] adj = { "Basic", "Bulky", "Hasty", "Deadly", "Steel", "Vampiric", "Anachronic", "Violent", "Nimble", "Strange" };
 	static string weaponName = "Gravity Staff";
-	public static string GetWeaponName()
+	public new static string GetWeaponName()
 	{
-		int rndA = Random.Range(0, adj.Length);
+		//int rndA = Random.Range(0, adj.Length);
 
 		return (/*adj[rndA] + " " + */weaponName);
 	}

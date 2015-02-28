@@ -16,7 +16,7 @@ public class Rocket : Projectile
 	public Detonator explosive;
 	public GameObject body;
 
-	void Start()
+	public override void Start()
 	{
 		Damage = 5;
 		blastRadius = 5;
@@ -26,7 +26,7 @@ public class Rocket : Projectile
 		//explosive = transform.FindChild("Detonator-Rocket").GetComponent<Detonator>();
 	}
 
-	void Update()
+	public override void Update()
 	{
 		if (fuelRemaining > 0)
 		{

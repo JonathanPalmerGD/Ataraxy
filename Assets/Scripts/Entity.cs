@@ -215,6 +215,16 @@ public class Entity : MonoBehaviour
 			Health += amount;
 		}
 
+		UpdateHealthUI();
+
+		if (Health <= 0 && !isDead)
+		{
+			KillEntity();
+		}
+	}
+
+	public virtual void UpdateHealthUI()
+	{
 		if (HealthSlider != null)
 		{
 			HealthSlider.maxValue = MaxHealth;
@@ -223,11 +233,6 @@ public class Entity : MonoBehaviour
 		if (HealthText != null)
 		{
 			HealthText.text = ((int)Health).ToString();
-		}
-
-		if (Health <= 0 && !isDead)
-		{
-			KillEntity();
 		}
 	}
 
@@ -295,14 +300,7 @@ public class Entity : MonoBehaviour
 		{
 			XP += xpValue * xpMultiplier;
 
-			if (XPSlider != null)
-			{
-				XPSlider.value = XP;
-			}
-			if (XPText != null)
-			{
-				XPText.text = XP.ToString();
-			}
+			UpdateXPUI();
 
 			if (XP > XPNeeded)
 			{
@@ -311,13 +309,28 @@ public class Entity : MonoBehaviour
 		}
 	}
 
+	public virtual void UpdateXPUI()
+	{
+		if (XPSlider != null)
+		{
+			XPSlider.value = XP;
+		}
+		if (XPText != null)
+		{
+			XPText.text = XP.ToString();
+		}
+	}
+
 	public virtual void GainLevel()
 	{
 		XP -= XPNeeded;
 		Level++;
 
-		
+		UpdateLevelUI();
+	}
 
+	public virtual void UpdateLevelUI()
+	{
 		if (LevelText != null)
 		{
 			LevelText.text = Level.ToString();

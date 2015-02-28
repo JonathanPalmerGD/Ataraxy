@@ -149,7 +149,7 @@ public class Weapon : Ability
 
 		if (targType != null)
 		{
-			if (targType.IsSubclassOf(typeof(Enemy)) || targType.IsAssignableFrom(typeof(Enemy)))
+			if (targType.IsSubclassOf(typeof(Enemy)) || targType == typeof(Enemy))
 			{
 				//Debug.Log("Used Weapon on Enemy\n");
 				Enemy e = target.GetComponent<Enemy>();
@@ -163,7 +163,7 @@ public class Weapon : Ability
 					e.AdjustHealth(-PrimaryDamage * (1 + Carrier.Level * .1f));
 				}
 			}
-			if (targType.IsSubclassOf(typeof(NPC)) || targType.IsAssignableFrom(typeof(NPC)))
+			if (targType.IsSubclassOf(typeof(NPC)) || targType == typeof(NPC))
 			{
 				//Debug.Log("Used Weapon on NPC\n");
 
@@ -187,7 +187,7 @@ public class Weapon : Ability
 
 		if (targType != null)
 		{
-			if (targType.IsSubclassOf(typeof(Enemy)) || targType.IsAssignableFrom(typeof(Enemy)))
+			if (targType.IsSubclassOf(typeof(Enemy)) || targType == typeof(Enemy))
 			{
 				//Debug.Log("Used Weapon on Enemy\n");
 				Enemy e = target.GetComponent<Enemy>();

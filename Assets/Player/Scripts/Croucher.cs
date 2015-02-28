@@ -16,7 +16,7 @@ public class Croucher : MonoBehaviour {
     //The root object that contains all graphical elements of the player
 	public Transform character;
     //The root object that contains the camera
-	public Transform camera;
+	public Transform mCamera;
 
     //The global position regardless of the crouching state
     public float globalYPosition = 0f;
@@ -35,7 +35,7 @@ public class Croucher : MonoBehaviour {
 	{
 		capsule = GetComponent<CapsuleCollider>();
 
-        defCameraY = camera.localPosition.y;
+        defCameraY = mCamera.localPosition.y;
 		defHeight = capsule.height;
 		defCenterY = capsule.center.y;
 		defCharacterY = character.localPosition.y;
@@ -45,7 +45,7 @@ public class Croucher : MonoBehaviour {
 		if(crouching)
         {
             globalYPosition = Mathf.Lerp(globalYPosition, capsule.transform.position.y + amountGoingToCrouch, Time.deltaTime * crouchSmooth);
-            camera.localPosition = Vector3.Lerp(camera.localPosition, new Vector3(0f, defCameraY + crouchedCharacterY, 0f), Time.deltaTime * crouchSmooth);
+            mCamera.localPosition = Vector3.Lerp(mCamera.localPosition, new Vector3(0f, defCameraY + crouchedCharacterY, 0f), Time.deltaTime * crouchSmooth);
 
 			character.localPosition = Vector3.Lerp(character.localPosition, new Vector3(0f,crouchedCharacterY,0f), Time.deltaTime*crouchSmooth);
 			capsule.height = Mathf.Lerp(capsule.height, capsuleHeight, Time.deltaTime*crouchSmooth);
@@ -54,7 +54,7 @@ public class Croucher : MonoBehaviour {
 		else
         {
             globalYPosition = Mathf.Lerp(globalYPosition, capsule.transform.position.y, Time.deltaTime * crouchSmooth);
-            camera.localPosition = Vector3.Lerp(camera.localPosition, new Vector3(0f, defCameraY, 0f), Time.deltaTime * crouchSmooth);
+            mCamera.localPosition = Vector3.Lerp(mCamera.localPosition, new Vector3(0f, defCameraY, 0f), Time.deltaTime * crouchSmooth);
 
 			character.localPosition = Vector3.Lerp(character.localPosition, new Vector3(0f,defCharacterY,0f), Time.deltaTime*crouchSmooth);
 			capsule.height = Mathf.Lerp(capsule.height, defHeight, Time.deltaTime*crouchSmooth);

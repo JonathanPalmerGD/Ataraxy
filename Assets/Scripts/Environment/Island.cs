@@ -103,18 +103,22 @@ public class Island : WorldObject
 							//If we hit something with the raycast, it is not a valid ray.
 							bool forRayCheck = !Physics.Raycast(ray, out hit, Vector3.Distance(myNode.transform.position, neighborNode.transform.position));
 
+							#if UNITY_EDITOR
 							if (TerrainManager.drawDebug && !forRayCheck)
 							{
 								Debug.DrawLine(myNode.transform.position, hit.point, Color.red, 5.0f);
 							}
-				
+							#endif
+
 							//If we hit something with the raycast, it is not a valid ray.
 							bool revRayCheck = !Physics.Raycast(revRay, out hit, Vector3.Distance(myNode.transform.position, neighborNode.transform.position));
 
+							#if UNITY_EDITOR
 							if (TerrainManager.drawDebug && !revRayCheck)
 							{
 								Debug.DrawLine(neighborNode.transform.position, hit.point, Color.red, 5.0f);
 							}
+							#endif
 
 							validRay = forRayCheck && revRayCheck;
 						}
