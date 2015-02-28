@@ -12,7 +12,7 @@ public class Rocket : Projectile
 	public float blastRadius;
 	public Vector3 dirToTarget;
 	private float fuelRemaining;
-	private bool detonateOnAnything = false;
+	//private bool detonateOnAnything = false;
 	public Detonator explosive;
 	public GameObject body;
 

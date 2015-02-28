@@ -52,7 +52,7 @@ public class MonkStaff : Weapon
 		//Vector3 quatRot = Quaternion.Euler(Random.Range(0, 360) + dir.x, 0, Random.Range(0, 360) + dir.z) * firstPoint;
 		//Vector3 quatRot2 = Quaternion.Euler(Random.Range(0, 360) + dir.x, 0, Random.Range(0, 360) + dir.z) * thirdPoint;
 		Vector3 quatRot = Quaternion.Euler(90 + dir.x, 0, 90 + dir.z) * firstPoint;
-		Vector3 quatRot2 = Quaternion.Euler(90 + dir.x, 0, 90 + dir.z) * thirdPoint;
+		//Vector3 quatRot2 = Quaternion.Euler(90 + dir.x, 0, 90 + dir.z) * thirdPoint;
 
 		Vector3 diff = quatRot - secondPoint;
 		Vector3 opp = secondPoint - diff;
@@ -73,7 +73,7 @@ public class MonkStaff : Weapon
 		//MoveCarrier(movementDir, lungeVel, Vector3.up, 3, true);
 	}
 
-	public virtual void AngleCollider(MeleeProjectile proj, Vector3 target, Vector3 axis)
+	public override void AngleCollider(MeleeProjectile proj, Vector3 target, Vector3 axis)
 	{
 		proj.projectileCollider.transform.LookAt(target, axis);
 	}
@@ -126,13 +126,10 @@ public class MonkStaff : Weapon
 		return w;
 	}
 
-	static string[] adj = { "Basic", "Bulky", "Hasty", "Deadly", "Steel", "Vampiric", "Anachronic", "Violent", "Nimble", "Strange" };
 	static string weaponName = "Monk's Staff";
 	public new static string GetWeaponName()
 	{
-		//int rndA = Random.Range(0, adj.Length);
-
-		return (/*adj[rndA] + " " + */weaponName);
+		return (weaponName);
 	}
 	#endregion
 }

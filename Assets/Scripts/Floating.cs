@@ -56,7 +56,7 @@ public class Floating : MonoBehaviour
 		yFromHome = transform.position.y - homeRegion.y;
 		//transform.eulerAngles = Vector3.Slerp(transform.eulerAngles, targetRotation, Time.deltaTime * directionChangeInterval);
 
-		Vector3 homeDir = transform.position - homeRegion;
+		//Vector3 homeDir = transform.position - homeRegion;
 
 		//rigidbody.AddForce(homeDir * (distFromHome / (distFromHome - wanderBound)) * rigidbody.mass);
 		

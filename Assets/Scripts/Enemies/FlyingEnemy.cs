@@ -6,9 +6,10 @@ public class FlyingEnemy : Enemy
 	public enum FlyingMotion { Floating, Circling, Hover, Overhead };
 	public FlyingMotion airState = FlyingMotion.Floating;
 
-	void Start() 
+	public override void Start() 
 	{
 		//Depending on the state, enable or disable the flying motion behavior?
+		this.Start();
 	}
 	
 	public override void Update() 

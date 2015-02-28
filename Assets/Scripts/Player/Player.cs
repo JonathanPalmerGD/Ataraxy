@@ -244,9 +244,9 @@ public class Player : Entity
 	#region Update, MaintainAbilities
 	public override void Update()
 	{
-		Vector3 wFor = new Vector3((transform.position + transform.forward * 10).x, transform.position.y, (transform.position + transform.forward * 10).z);
-		Vector3 wCamFor = new Vector3((transform.position + GetForward() * 10).x, transform.position.y, (transform.position + GetForward() * 10).z);
-		Vector3 wVel = new Vector3((transform.position + rigidbody.velocity * 10).x, transform.position.y, (transform.position + rigidbody.velocity * 10).z);
+		//Vector3 wFor = new Vector3((transform.position + transform.forward * 10).x, transform.position.y, (transform.position + transform.forward * 10).z);
+		//Vector3 wCamFor = new Vector3((transform.position + GetForward() * 10).x, transform.position.y, (transform.position + GetForward() * 10).z);
+		//Vector3 wVel = new Vector3((transform.position + rigidbody.velocity * 10).x, transform.position.y, (transform.position + rigidbody.velocity * 10).z);
 		//Vector3 wScan = new Vector3(targetScanDir.x, transform.position.y, targetScanDir.z);
 
 		//Debug.DrawLine(transform.position, wFor, Color.blue, .02f);

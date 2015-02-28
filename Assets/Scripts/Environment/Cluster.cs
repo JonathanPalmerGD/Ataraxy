@@ -18,11 +18,11 @@ public class Cluster : WorldObject
 	public float sizeBonus = 0;
 	public GameObject clusterContents;
 
-	private Vector3 start;
+	//private Vector3 start;
 	public bool inPlace = false;
 
 	public float riseCounter = 0;
-	private float riseDuration = 6.0f;
+	private float riseSpeed = 35.0f;
 
 	public float tiltDeviation;
 
@@ -35,7 +35,7 @@ public class Cluster : WorldObject
 	public override void Start()
 	{
 		clusterContents = transform.FindChild("Contents").gameObject;
-		start = clusterContents.transform.position;
+		//start = clusterContents.transform.position;
 
 		transform.FindChild("Cylinder").gameObject.renderer.enabled = false;
 		TerrainManager.Instance.RegisterCluster(this);
@@ -67,7 +67,7 @@ public class Cluster : WorldObject
 		
 		base.Start();
 		gameObject.tag = "Cluster";
-		iTween.MoveBy(clusterContents, iTween.Hash("y", TerrainManager.underworldYOffset, "easeType", "easeOutCirc", "speed", 35, "loopType", "none", "delay", .1));
+		iTween.MoveBy(clusterContents, iTween.Hash("y", TerrainManager.underworldYOffset, "easeType", "easeOutCirc", "speed", riseSpeed, "loopType", "none", "delay", .1));
 		//iTween.MoveBy(clusterContents, iTween.Hash("y", TerrainManager.underworldYOffset, "easeType", "easeOutBounce", "speed", 50, "loopType", "none", "delay", .1));
 	}
 	

@@ -96,7 +96,7 @@ public class ShockRifle : Weapon
 	}
 
 	#region Static Functions
-	public static ShockRifle New()
+	public new static ShockRifle New()
 	{
 		ShockRifle w = ScriptableObject.CreateInstance<ShockRifle>();
 		w.AbilityName = ShockRifle.GetWeaponName();
@@ -109,13 +109,10 @@ public class ShockRifle : Weapon
 		return w;
 	}
 
-	static string[] adj = { "Basic", "Bulky", "Hasty", "Deadly", "Steel", "Vampiric", "Anachronic", "Violent", "Nimble", "Strange" };
 	static string weaponName = "Shock Rifle";
-	public static string GetWeaponName()
+	public new static string GetWeaponName()
 	{
-		int rndA = Random.Range(0, adj.Length);
-
-		return (/*adj[rndA] + " " + */weaponName);
+		return (weaponName);
 	}
 	#endregion
 }

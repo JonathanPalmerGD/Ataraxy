@@ -12,10 +12,10 @@ public class Dimensions : MonoBehaviour
 	{
 		float x = renderer.bounds.extents.x;
 		float z = renderer.bounds.extents.z;
-		float renderRadius = Mathf.Sqrt (x * x + z * z);
+		//float renderRadius = Mathf.Sqrt (x * x + z * z);
 		//Debug.Log ("renderRadius = " + renderRadius);
 		
-		Mesh mesh = GetComponent<MeshFilter> ().mesh;
+		Mesh mesh = GetComponent<MeshFilter>().mesh;
 		x = mesh.bounds.extents.x * transform.localScale.x;
 		z = mesh.bounds.extents.z * transform.localScale.z;
 		float meshRadius = Mathf.Sqrt (x * x + z * z);

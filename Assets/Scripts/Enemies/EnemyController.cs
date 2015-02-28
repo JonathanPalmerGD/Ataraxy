@@ -27,7 +27,7 @@ public class EnemyController : MonoBehaviour
 	public PathNode lastNode;
 
 	public bool controllerAble = true;
-	public Transform camera;    //The root object that contains the camera
+	public Transform mCamera;    //The root object that contains the camera
 	public float checksPerSecond = 10f; //The amount of times per second to run IsGrounded(), CanStand() and IsMoving()
 
 	#region Falling
@@ -639,7 +639,7 @@ public class EnemyController : MonoBehaviour
 					if (GameManager.Instance.player.GetComponent<Controller>().lastLocation != lastLocation)
 					{
 						//Find our nearest node.
-						PathNode pathStartLocation = lastLocation.NearestNode(transform.position);
+						//PathNode pathStartLocation = lastLocation.NearestNode(transform.position);
 
 						//Find a path from current location to the target.
 						Stack<PathNode> newPath = TerrainManager.Instance.PathToIsland(lastLocation, GameManager.Instance.player.GetComponent<Controller>().lastLocation, 120);
@@ -901,7 +901,6 @@ public class EnemyController : MonoBehaviour
 
 		Vector3 start = transform.position - transform.up * (transform.localScale.y / 5) + transform.right * (transform.localScale.y / 2 + .5f);
 		Vector3 dir = transform.forward * (transform.localScale.y / 2 + 2);
-		Ray r = new Ray(start, dir);
 		Debug.DrawRay(start, dir, Color.cyan, 1 / checksPerSecond);
 		if (Physics.Raycast(start, dir, out hit, (transform.localScale.y / 2 + 2)))
 		{
@@ -921,7 +920,6 @@ public class EnemyController : MonoBehaviour
 
 		start = transform.position - transform.up * (transform.localScale.y / 5) - transform.right * (transform.localScale.y / 2 + .5f);
 		dir = transform.forward * (transform.localScale.y / 2 + 2);
-		r = new Ray(start, dir);
 		Debug.DrawRay(start, dir, Color.cyan, 1 / checksPerSecond);
 		if (Physics.Raycast(start, dir, out hit, (transform.localScale.y / 2 + 2)))
 		{
@@ -950,11 +948,9 @@ public class EnemyController : MonoBehaviour
 	public bool CheckEdge()
 	{
 		RaycastHit hit;	
-		Ray r;
 
 		Vector3 start = transform.position + transform.forward * checkDist + transform.right * (transform.localScale.y / 2 + .5f);
 		Vector3 dir = -transform.up * (transform.localScale.y / 2 + checkHeight);
-		r = new Ray(start, dir);
 		Debug.DrawRay(start, dir, Color.green, 1 / checksPerSecond);
 		if (Physics.Raycast(start, dir, out hit, (transform.localScale.y / 2 + checkHeight)))
 		{
@@ -966,7 +962,6 @@ public class EnemyController : MonoBehaviour
 		}
 
 		start = transform.position + transform.forward * checkDist - transform.right * (transform.localScale.y / 2 + .5f);
-		r = new Ray(start, dir);
 		Debug.DrawRay(start, dir, Color.green, 1 / checksPerSecond);
 		if (Physics.Raycast(start, dir, out hit, (transform.localScale.y / 2 + checkHeight)))
 		{
@@ -1097,7 +1092,6 @@ public class EnemyController : MonoBehaviour
 
 		Vector3 start = transform.position;
 		Vector3 dir = -transform.up * (capsule.height + 2.2f);
-		Ray r = new Ray(start, dir);
 		Debug.DrawRay(start, dir, Color.magenta, 1 / checksPerSecond);
 		if (Physics.Raycast(start, dir, out hit, (capsule.height + 2.2f)))
 		{

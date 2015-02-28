@@ -58,13 +58,10 @@ public class BoundingStaff : Weapon
 		return bs;
 	}
 
-	static string[] adj = { "Basic", "Bulky", "Hasty", "Deadly", "Steel", "Vampiric", "Anachronic", "Violent", "Nimble", "Strange" };
 	static string weaponName = "Bounding Staff";
 	public new static string GetWeaponName()
 	{
-		//int rndA = Random.Range(0, adj.Length);
-
-		return (/*adj[rndA] + " " + */weaponName);
+		return (weaponName);
 	}
 	#endregion
 }

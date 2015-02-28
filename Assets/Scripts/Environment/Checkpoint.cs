@@ -9,7 +9,7 @@ public class Checkpoint : MonoBehaviour
 	private ParticleSystem partSys;
 	private TeleTarget playerTarg;
 
-	private float collisionRadius = 3.0f;
+	//private float collisionRadius = 3.0f;
 	//Don't forget to face the checkpoint
 
 	// Use this for initialization

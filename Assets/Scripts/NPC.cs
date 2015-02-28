@@ -67,7 +67,6 @@ public class NPC : Entity
 	{
 		if (InfoHUD != null)
 		{
-			Debug.Log("My name: " + name + "\nTarg: " + GameManager.Instance.player.targetedEntity);
 			if(GameManager.Instance.player.targetedEntity == this)
 			{
 				GameManager.Instance.player.targetedEntity = null;

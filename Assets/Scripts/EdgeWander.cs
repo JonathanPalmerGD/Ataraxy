@@ -137,7 +137,7 @@ public class EdgeWander : MonoBehaviour
 
 	private void CalcSteeringForce()
 	{
-		Vector3 steeringForce = Vector3.zero;
+		//Vector3 steeringForce = Vector3.zero;
 		//Avoid the obstacles?
 
 		//If our distance from our target is greater than 27
@@ -276,19 +276,19 @@ public class EdgeWander : MonoBehaviour
 
 	void TurnNewHeading()
 	{
-		float rotAmt = 15;
+		float rotAmt = 35;
 		switch (Random.Range(0, 1))
 		{
 			case 0:
 				if (turnLeft)
 				{
 					//heading -= Random.Range(3, rotAmt); 
-					heading -= 35;
+					heading -= rotAmt;
 				}
 				else if (turnRight)
 				{
 					//heading += Random.Range(3, rotAmt);
-					heading += 35;
+					heading += rotAmt;
 				}
 				else
 				{
@@ -299,12 +299,12 @@ public class EdgeWander : MonoBehaviour
 				if (turnRight)
 				{
 					//heading += Random.Range(3, rotAmt);
-					heading += 35;
+					heading += rotAmt;
 				}
 				else if (turnLeft)
 				{
 					//heading -= Random.Range(3, rotAmt);
-					heading -= 35;
+					heading -= rotAmt;
 				}
 				else
 				{
@@ -329,7 +329,6 @@ public class EdgeWander : MonoBehaviour
 
 			Vector3 start = transform.position - transform.up * (transform.localScale.y / 5) + transform.right * (transform.localScale.y / 2 + .5f);
 			Vector3 dir = transform.forward * (transform.localScale.y / 2 + 2);
-			Ray r = new Ray(start, dir);
 			Debug.DrawRay(start, dir, Color.cyan);
 			if (Physics.Raycast(start, dir, out hit, (transform.localScale.y / 2 + 2)))
 			{
@@ -349,7 +348,6 @@ public class EdgeWander : MonoBehaviour
 
 			start = transform.position - transform.up * (transform.localScale.y / 5) - transform.right * (transform.localScale.y / 2 + .5f);
 			dir = transform.forward * (transform.localScale.y / 2 + 2);
-			r = new Ray(start, dir);
 			Debug.DrawRay(start, dir, Color.cyan);
 			if (Physics.Raycast(start, dir, out hit, (transform.localScale.y / 2 + 2)))
 			{
@@ -380,7 +378,6 @@ public class EdgeWander : MonoBehaviour
 
 			Vector3 start = transform.position;
 			Vector3 dir = transform.forward * (transform.localScale.y / 2 + 5);
-			Ray r = new Ray(start, dir);
 			Debug.DrawRay(start, dir, Color.cyan, .1f);
 			if (Physics.Raycast(start, dir, out hit, (transform.localScale.y / 2 + 5)))
 			{
@@ -410,7 +407,6 @@ public class EdgeWander : MonoBehaviour
 
 		Vector3 start = transform.position;
 		Vector3 dir = -transform.up * (transform.localScale.y / 2 + .5f);
-		Ray r = new Ray(start, dir);
 		Debug.DrawRay(start, dir, Color.magenta, .1f);
 		if (Physics.Raycast(start, dir, out hit, (transform.localScale.y / 2 + .5f)))
 		{
@@ -433,11 +429,8 @@ public class EdgeWander : MonoBehaviour
 
 		if (expensiveWallCheck)
 		{
-			Ray r;
-
 			Vector3 start = transform.position + transform.forward * checkDist + transform.right * (transform.localScale.y / 2 + .5f);
 			Vector3 dir = -transform.up * (transform.localScale.y / 2 + checkHeight);
-			r = new Ray(start, dir);
 			Debug.DrawRay(start, dir, Color.green);
 			if (Physics.Raycast(start, dir, out hit, (transform.localScale.y / 2 + checkHeight)))
 			{
@@ -449,7 +442,6 @@ public class EdgeWander : MonoBehaviour
 			}
 
 			start = transform.position + transform.forward * checkDist - transform.right * (transform.localScale.y / 2 + .5f);
-			r = new Ray(start, dir);
 			Debug.DrawRay(start, dir, Color.green);
 			if (Physics.Raycast(start, dir, out hit, (transform.localScale.y / 2 + checkHeight)))
 			{
@@ -472,7 +464,6 @@ public class EdgeWander : MonoBehaviour
 
 			Vector3 start = transform.position + transform.forward * checkDist;
 			Vector3 dir = -transform.up * (transform.localScale.y / 2 + checkHeight);
-			Ray r = new Ray(start, dir);
 			//Debug.DrawRay(start, dir, Color.green);
 			hits = Physics.RaycastAll(start, dir, (transform.localScale.y / 2 + checkHeight));
 			for (int i = 0; i < hits.Length; i++)

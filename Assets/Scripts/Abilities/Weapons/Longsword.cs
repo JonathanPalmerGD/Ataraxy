@@ -49,8 +49,8 @@ public class Longsword : Weapon
 		slashPoints.Add(-1 * (slash.transform.position - firePoints[3].transform.position + 2 * LeftVector));
 
 		SetupMeleeProjectile(slash, dir, slashPoints, new Vector2(.2f, .6f));
-		float lungeVel = 20;
-		Vector3 movementDir = Vector3.Cross(dir, Vector3.up);
+		//float lungeVel = 20;
+		//Vector3 movementDir = Vector3.Cross(dir, Vector3.up);
 		//MoveCarrier(movementDir, lungeVel, Vector3.up, 3, true);
 	}
 
@@ -76,8 +76,8 @@ public class Longsword : Weapon
 
 		SetupMeleeProjectile(slash, dir, slashPoints, new Vector2( .2f, .6f));
 
-		float lungeVel = 20;
-		Vector3 movementDir = -Vector3.Cross(dir, Vector3.up);
+		//float lungeVel = 20;
+		//Vector3 movementDir = -Vector3.Cross(dir, Vector3.up);
 		//MoveCarrier(movementDir, lungeVel, Vector3.up, 3, true);
 	}
 
@@ -95,13 +95,10 @@ public class Longsword : Weapon
 		return w;
 	}
 
-	static string[] adj = { "Basic", "Bulky", "Hasty", "Deadly", "Steel", "Vampiric", "Anachronic", "Violent", "Nimble", "Strange" };
 	static string weaponName = "Longsword";
 	public new static string GetWeaponName()
 	{
-		//int rndA = Random.Range(0, adj.Length);
-
-		return (/*adj[rndA] + " " + */weaponName);
+		return (weaponName);
 	}
 	#endregion
 }

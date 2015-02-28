@@ -52,7 +52,6 @@ public class Island : WorldObject
 
 	public void ConfigureNodes()
 	{
-		string output = "";
 		if(islandConnections == null)
 		{
 			islandConnections = new Dictionary<Island,DestinationConnection>();

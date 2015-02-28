@@ -45,7 +45,7 @@ public class Floatation : MonoBehaviour
 			distFromHome = Vector3.Distance(transform.position, homeRegion);
 			yFromHome = transform.position.y - homeRegion.y;
 
-			Vector3 homeDir = transform.position - homeRegion;
+			//Vector3 homeDir = transform.position - homeRegion;
 
 			//Debug.Log(vertPush + " " + yChange + " ");
 			if (verticalWander)

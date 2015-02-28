@@ -344,7 +344,7 @@ public class GrapplingHookProj : Projectile
 		timeRemaining = 0;
 	}
 
-	public virtual void Collide()
+	public override void Collide()
 	{
 		//Stop moving and change state.
 		

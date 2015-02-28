@@ -20,13 +20,13 @@ public class ShockBall : Projectile
 
 	public override void Update()
 	{
-		if (((SphereCollider)collider).radius < 4)
+		if (((SphereCollider)collider).radius < maxShockBallSize)
 		{
 			((SphereCollider)collider).radius += shockBallGrowthRate * Time.deltaTime / 2;
 			blastRadius += shockBallGrowthRate * Time.deltaTime;
 			explosiveDamage += shockBallGrowthRate * Time.deltaTime / 2;
 		}
-		if (particleSystem.startSize < 4)
+		if (particleSystem.startSize < maxShockBallSize)
 		{
 			//particleSystem.startLifetime += shockBallGrowthRate * Time.deltaTime;
 			particleSystem.startSize += shockBallGrowthRate * Time.deltaTime;
