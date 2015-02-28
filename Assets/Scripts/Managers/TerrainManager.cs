@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿
+using UnityEngine;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -28,6 +29,7 @@ public class TerrainManager : Singleton<TerrainManager>
 	public static float IslandNeighborDist = 10;
 	public static bool RaycastToNodeChecking = true;
 	public static int underworldYOffset = 80;
+	public static bool CreateIslandFeatures = false;
 	#endregion
 
 	#region Prefabs & Lists of Prefabs

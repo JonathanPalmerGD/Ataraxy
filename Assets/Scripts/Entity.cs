@@ -240,7 +240,7 @@ public class Entity : MonoBehaviour
 	{
 		if (rigidbody != null)
 		{
-			Debug.DrawLine(transform.position, transform.position + direction * force * 10, Color.gray, 2f);
+			//Debug.DrawLine(transform.position, transform.position + direction * force * 10, Color.gray, 2f);
 			rigidbody.AddForce(direction * force, fMode);
 		}
 	}

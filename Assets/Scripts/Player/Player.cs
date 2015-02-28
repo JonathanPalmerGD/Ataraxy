@@ -249,9 +249,9 @@ public class Player : Entity
 		Vector3 wVel = new Vector3((transform.position + rigidbody.velocity * 10).x, transform.position.y, (transform.position + rigidbody.velocity * 10).z);
 		//Vector3 wScan = new Vector3(targetScanDir.x, transform.position.y, targetScanDir.z);
 
-		Debug.DrawLine(transform.position, wFor, Color.blue, .02f);
-		Debug.DrawLine(transform.position, wCamFor, Color.yellow, .02f);
-		Debug.DrawLine(transform.position, wVel, Color.cyan, .02f);
+		//Debug.DrawLine(transform.position, wFor, Color.blue, .02f);
+		//Debug.DrawLine(transform.position, wCamFor, Color.yellow, .02f);
+		//Debug.DrawLine(transform.position, wVel, Color.cyan, .02f);
 		//Debug.DrawLine(transform.position, wScan, Color.magenta, .02f);
 
 		GetInput();

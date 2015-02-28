@@ -99,13 +99,16 @@ public class Cluster : WorldObject
 			ConfigureIsland(platforms[i]);
 		}
 
-		//To check if we're making progression impossible clusters.
-		if(encounterCounter == 0)
-		{
-			//Select the largest island, make an encounter there
-			//Debug.Log("Forcing Random Encounter");
-			platforms[Random.Range(0, platforms.Count)].PlaceRandomEncounter(true);
-			//Debug.Log("Cluster generated with 0 valid encounters\n");
+		if (TerrainManager.CreateIslandFeatures)
+		{ 
+			//To check if we're making progression impossible clusters.
+			if(encounterCounter == 0)
+			{
+				//Select the largest island, make an encounter there
+				//Debug.Log("Forcing Random Encounter");
+				platforms[Random.Range(0, platforms.Count)].PlaceRandomEncounter(true);
+				//Debug.Log("Cluster generated with 0 valid encounters\n");
+			}
 		}
 	}
 
@@ -158,10 +161,13 @@ public class Cluster : WorldObject
 		//Debug.Log("Finished Island (" + island.name + ") Configuration.\nI have " + island.nearIslands.Count + " neighbors\n");
 
 		island.ConfigureNodes();
-
-		island.PlaceRandomEncounter();
-		//island.PlaceRandomEnemy();
-		island.PlaceRandomObject();
+		
+		if (TerrainManager.CreateIslandFeatures)
+		{
+			island.PlaceRandomEncounter();
+			//island.PlaceRandomEnemy();
+			island.PlaceRandomObject();
+		}
 	}
 	#endregion
 

@@ -717,8 +717,8 @@ public class EnemyController : MonoBehaviour
 				Vector3 firstPos = pnList[i - 1].transform.position;
 				Vector3 secondPos = pnList[i].transform.position;
 				//Debug.DrawLine(pnList[i - 1].transform.position + Vector3.up * i * 2, pnList[i].transform.position + Vector3.up * i * 2, Color.green, 15.0f);
-				Debug.DrawLine(firstPos + Vector3.up * i * 2, secondPos + Vector3.up * i * 2, Color.green);
-				Debug.DrawLine(firstPos + Vector3.up * i * 2, firstPos + Vector3.up * (i-1) * 2, Color.red);
+				Debug.DrawLine(firstPos + Vector3.up * i * .7f, secondPos + Vector3.up * i * .7f, Color.blue);
+				Debug.DrawLine(firstPos + Vector3.up * i * .7f, firstPos + Vector3.up * (i - 1) * .7f, Color.red);
 				
 			}
 		}

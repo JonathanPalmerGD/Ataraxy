@@ -94,17 +94,27 @@ public class Island : WorldObject
 					{
 						bool validRay = true;
 						#region Raycast Handling
-						if(TerrainManager.RaycastToNodeChecking)
+						if(TerrainManager.RaycastToNodeChecking && Vector3.Distance(myNode.transform.position, neighborNode.transform.position) < 40)
 						{
 							RaycastHit hit;
 							Ray ray = new Ray(myNode.transform.position, neighborNode.transform.position - myNode.transform.position);
-							Ray revRay = new Ray(myNode.transform.position, myNode.transform.position - neighborNode.transform.position);
+							Ray revRay = new Ray(neighborNode.transform.position, myNode.transform.position - neighborNode.transform.position);
 
 							//If we hit something with the raycast, it is not a valid ray.
 							bool forRayCheck = !Physics.Raycast(ray, out hit, Vector3.Distance(myNode.transform.position, neighborNode.transform.position));
 
+							if (TerrainManager.drawDebug && !forRayCheck)
+							{
+								Debug.DrawLine(myNode.transform.position, hit.point, Color.red, 5.0f);
+							}
+				
 							//If we hit something with the raycast, it is not a valid ray.
 							bool revRayCheck = !Physics.Raycast(revRay, out hit, Vector3.Distance(myNode.transform.position, neighborNode.transform.position));
+
+							if (TerrainManager.drawDebug && !revRayCheck)
+							{
+								Debug.DrawLine(neighborNode.transform.position, hit.point, Color.red, 5.0f);
+							}
 
 							validRay = forRayCheck && revRayCheck;
 						}
@@ -130,7 +140,7 @@ public class Island : WorldObject
 						}
 						else
 						{
-							//Debug.DrawRay(myNode.transform.position, neighborNode.transform.position - myNode.transform.position, Color.magenta, 5.0f);
+							//Debug.DrawRay(myNode.transform.position, neighborNode.transform.position - myNode.transform.position, Color.red, 5.0f);
 						}
 					}
 				}
