@@ -9,7 +9,7 @@ public class FlyingEnemy : Enemy
 	public override void Start() 
 	{
 		//Depending on the state, enable or disable the flying motion behavior?
-		this.Start();
+		base.Start();
 	}
 	
 	public override void Update() 
