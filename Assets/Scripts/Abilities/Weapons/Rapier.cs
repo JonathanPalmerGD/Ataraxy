@@ -77,7 +77,7 @@ public class Rapier : Weapon
 
 		List<Vector3> stabPoints = new List<Vector3>();
 
-		stab.lrColor = Color.red;
+		stab.lineColor = Color.red;
 		stab.ProjVel = stab.ProjVel * 4;
 		stab.rigidbody.drag -= 2;
 		stab.Damage = SpecialDamage;

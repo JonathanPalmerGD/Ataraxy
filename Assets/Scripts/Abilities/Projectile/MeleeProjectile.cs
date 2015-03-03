@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 public class MeleeProjectile : Projectile 
 {
-	public LineRenderer lr;
-	public List<Vector3> lrPoints;
-	public Color lrColor;
+	public LineRenderer lineRenderer;
+	public List<Vector3> lineRendPoints;
+	public Color lineColor;
 	public float movementDecay;
 	public float visualDecay;
 	public float counter;
@@ -28,12 +28,12 @@ public class MeleeProjectile : Projectile
 			}
 		}
 
-		if (lr == null)
+		if (lineRenderer == null)
 		{
-			lr = GetComponent<LineRenderer>();
-			if (lr == null)
+			lineRenderer = GetComponent<LineRenderer>();
+			if (lineRenderer == null)
 			{
-				lr = gameObject.AddComponent<LineRenderer>();
+				lineRenderer = gameObject.AddComponent<LineRenderer>();
 			}
 		}
 	}
@@ -52,7 +52,7 @@ public class MeleeProjectile : Projectile
 			float percentageFade = (visualDecay - counter) / visualDecay;
 
 			Color fadedColor = GetLineColor(percentageFade);
-			lr.SetColors(fadedColor, fadedColor);
+			lineRenderer.SetColors(fadedColor, fadedColor);
 
 			if (percentageFade < .3f)
 			{
@@ -64,15 +64,15 @@ public class MeleeProjectile : Projectile
 			}
 		}
 
-		for (int i = 0; i < lrPoints.Count; i++)
+		for (int i = 0; i < lineRendPoints.Count; i++)
 		{
-			lr.SetPosition(i, transform.position + lrPoints[i]);
+			lineRenderer.SetPosition(i, transform.position + lineRendPoints[i]);
 		}
 	}
 
 	public virtual Color GetLineColor(float percentageFade)
 	{
-		return new Color(lrColor.r, lrColor.b, lrColor.g, lrColor.a * percentageFade);
+		return new Color(lineColor.r, lineColor.b, lineColor.g, lineColor.a * percentageFade);
 	}
 
 	public override void Collide()

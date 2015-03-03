@@ -287,18 +287,18 @@ public class Weapon : Ability
 	/// <param name="specialVelocity">For when a projectile needs a separate velocity for special attacks.</param>
 	public virtual void SetupMeleeProjectile(MeleeProjectile proj, Vector3 velocityDirection, List<Vector3> linePoints, Vector2 lineWidth, float specialVelocity = 0)
 	{
-		proj.lr.material = new Material(Shader.Find("Particles/Additive"));
+		proj.lineRenderer.material = new Material(Shader.Find("Particles/Additive"));
 
 		//This could be changed to take linePoints.Count.
-		proj.lr.SetVertexCount(3);
+		proj.lineRenderer.SetVertexCount(3);
 		//Beam Color is a characteristic of a weapon, as the weapon doesn't usually change color.
-		proj.lrColor = BeamColor;
-		proj.lr.SetWidth(lineWidth.x, lineWidth.y);
+		proj.lineColor = BeamColor;
+		proj.lineRenderer.SetWidth(lineWidth.x, lineWidth.y);
 
-		proj.lrPoints = new List<Vector3>();
+		proj.lineRendPoints = new List<Vector3>();
 		for (int i = 0; i < linePoints.Count; i++)
 		{
-			proj.lrPoints.Add(linePoints[i]);
+			proj.lineRendPoints.Add(linePoints[i]);
 		}
 
 		//Friendly fire stub for determining who should and shouldn't be affected.
