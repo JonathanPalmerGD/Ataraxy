@@ -365,7 +365,7 @@ public class Player : Entity
 			float halfScreen = Screen.width / 2;
 			float wC = (weapons.Count - 1) * 67 / 2;
 			float wI = (WeaponIndex) * 67;
-			SelectorUI.rectTransform.position = new Vector3(halfScreen - wC + wI, 35);
+			SelectorUI.rectTransform.position = new Vector3(halfScreen - wC + wI, 35 + 20);
 			//SelectorUI.rectTransform.position = new Vector3((Screen.width / 2) - ((weapons.Count / 2 - WeaponIndex / 2) * 67) / 2, 35);
 			//(1 + WeaponIndex) * 67 - 32, 35);
 			int index = SelectorUI.transform.GetSiblingIndex();

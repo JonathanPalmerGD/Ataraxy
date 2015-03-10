@@ -54,6 +54,11 @@ public class UIManager : Singleton<UIManager>
 		{
 			ScreenSpaceOverlayPrefab = Resources.Load<GameObject>("UI/SS - Overlay");
 		}
+		GameObject go = GameObject.Find("SS - Overlay");
+		if(go != null)
+		{
+			UIROOT = go.GetComponent<Canvas>();
+		}
 		if (UIROOT == null)
 		{
 			UIROOT = ((GameObject)GameObject.Instantiate(ScreenSpaceOverlayPrefab, Vector3.zero, Quaternion.identity)).GetComponent<Canvas>();

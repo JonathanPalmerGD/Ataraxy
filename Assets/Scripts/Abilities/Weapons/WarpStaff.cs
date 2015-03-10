@@ -27,8 +27,6 @@ public class WarpStaff : Weapon {
 		
 		ExplosionPrefab = Resources.Load<GameObject>("Detonator-Telefrag01");
 		
-		Debug.Log(ExplosionPrefab == null);
-		
 		//UI Elements:
 		// Sets up Weapon's Icon.
 		Icon = UIManager.Instance.Icons[IconIndex];
@@ -157,10 +155,10 @@ public class WarpStaff : Weapon {
 						Vector3 TeleDir =
 						new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(-1.0f, 1.0f));
 						TeleDir.Normalize();
-						Debug.Log(TeleDir);
+						//Debug.Log(TeleDir);
 
 						Vector3 NewTargPosition = CurrTargPos + EnemyTeleMag * TeleDir;
-						Debug.Log(NewTargPosition);
+						//Debug.Log(NewTargPosition);
 						e.transform.localPosition = NewTargPosition;
 
 
