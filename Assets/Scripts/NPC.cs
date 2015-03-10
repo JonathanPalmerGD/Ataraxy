@@ -56,7 +56,6 @@ public class NPC : Entity
 
 	public override void UpdateLevelUI()
 	{
-		Debug.Log(name + " leveled up\n");
 		//Only update our UI if we're targeted.
 		if (GameManager.Instance.player.targetedEntity == this)
 		{

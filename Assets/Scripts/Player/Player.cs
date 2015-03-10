@@ -178,6 +178,7 @@ public class Player : Entity
 		SetupAbility(Rapier.New());
 		SetupAbility(Dagger.New());
 		SetupAbility(RocketLauncher.New());
+		SetupAbility(Hemotick.New());
 		SetupAbility(ShockRifle.New());*/
 		//SetupAbility(Passive.New());
 		//SetupAbility(Passive.New());
@@ -616,6 +617,7 @@ public class Player : Entity
 				SetupAbility(Dagger.New());
 				SetupAbility(RocketLauncher.New());
 				SetupAbility(ShockRifle.New());
+				SetupAbility(Hemotick.New());
 			}
 			if (Input.GetKeyDown(KeyCode.H))
 			{
