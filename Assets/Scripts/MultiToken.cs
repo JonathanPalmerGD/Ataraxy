@@ -180,6 +180,8 @@ public class MultiToken : MonoBehaviour
 				return WingedSandals.New();
 			case 8:
 				return GrapplingHook.New();
+			case 9:
+				return Hemotick.New();
 			//case 5:
 			//	return Dagger.New();
 			default:
