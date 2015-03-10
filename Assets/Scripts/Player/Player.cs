@@ -169,10 +169,11 @@ public class Player : Entity
 	public void GiveStartingItems()
 	{
 		#if UNITY_EDITOR
-		//SetupAbility(WarpStaff.New());
+		
 		SetupAbility(GravityStaff.New());
 		//SetupAbility(BoundingStaff.New());
 		SetupAbility(GrapplingHook.New());
+		SetupAbility(WarpStaff.New());
 		/*SetupAbility(WingedSandals.New());
 		SetupAbility(Longsword.New());
 		SetupAbility(Rapier.New());
@@ -715,7 +716,7 @@ public class Player : Entity
 			else if (hit.collider.gameObject.tag == "WorldObject")
 			{
 				//Island e = hit.collider.gameObject.GetComponent<Island>();
-				//CheckNewTarget((Entity)e);
+				//CheckNewTarget((Island)e);
 			}
 			else if (hit.collider.gameObject.tag == "Projectile")
 			{
