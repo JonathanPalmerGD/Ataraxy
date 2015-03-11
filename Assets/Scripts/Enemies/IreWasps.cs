@@ -7,10 +7,12 @@ public class IreWasps : FlyingEnemy
 	public float attackDuration = 0;
 	public float attackDamage;
 	private Vector3 chargeTargetLocation;
-	private Color prepareColor = new Color(.90f, .58f, 0.0f, .7f);
-	private Color passiveColor = new Color(.97f, 1.0f, 0.0f, .7f);
-	private Color attackColor = new Color(.87f, .1f, 0.1f, .7f);
+	private Color prepareColor = new Color(.70f, .45f, 0.1f, .9f);
+	private Color passiveColor = new Color(.7f, 0.7f, 0.3f, .9f);
+	private Color attackColor = new Color(.87f, .1f, 0.1f, .9f);
 	private Vector3 home;
+	private ParticleSystem waspPartSys;
+	ParticleSystem.Particle[] m_Particles;
 
 	float distFromPlayer;
 
@@ -203,7 +205,8 @@ public class IreWasps : FlyingEnemy
 			case EnemyState.Idle:
 				state = EnemyState.Idle;
 				stateTimer = 0;
-				particleSystem.startColor = passiveColor;
+				//particleSystem.startColor = passiveColor;
+				UpdateParticleColor(passiveColor);
 				rigidbody.velocity = Vector3.zero;
 				break;
 			case EnemyState.Searching:
@@ -212,14 +215,45 @@ public class IreWasps : FlyingEnemy
 				break;
 			case EnemyState.Preparing:
 
-				particleSystem.startColor = prepareColor;
+				//particleSystem.startColor = prepareColor;
+				UpdateParticleColor(prepareColor);
 				state = EnemyState.Preparing;
 				break;
 			case EnemyState.Attacking:
 
-				particleSystem.startColor = attackColor;
+				//particleSystem.startColor = attackColor;
+				UpdateParticleColor(attackColor);
 				state = EnemyState.Attacking;
 				break;
+		}
+	}
+
+	void UpdateParticleColor(Color newColor)
+	{
+		InitializeIfNeeded();
+
+		particleSystem.startColor = newColor;
+
+		int numParticlesAlive = waspPartSys.GetParticles(m_Particles);
+
+		// Change only the particles that are alive
+		for (int i = 0; i < numParticlesAlive; i++)
+		{
+			m_Particles[i].color = newColor;
+		}
+
+		// Apply the particle changes to the particle system
+		waspPartSys.SetParticles(m_Particles, numParticlesAlive);
+	}
+	void InitializeIfNeeded()
+	{
+		if (waspPartSys == null)
+		{
+			waspPartSys = GetComponent<ParticleSystem>();
+		}
+		if (m_Particles == null || m_Particles.Length < waspPartSys.maxParticles)
+		{
+			m_Particles = new ParticleSystem.Particle[waspPartSys.maxParticles];
 		}
 	}
 

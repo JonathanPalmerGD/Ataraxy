@@ -68,6 +68,8 @@ public class UIManager : Singleton<UIManager>
 		pause_Menu = GameObject.Find("Pause Menu").GetComponent<Canvas>();
 
 		target_HUD = GameObject.Find("Target_HUD").GetComponent<Canvas>();
+		target_HUD.gameObject.SetActive(false);
+		target_HUD.gameObject.SetActive(true);
 		target_Name = GameObject.Find("Target_Name").GetComponent<Text>();
 		target_HP = GameObject.Find("Target_HP").GetComponent<Slider>();
 		target_XP = GameObject.Find("Target_XP").GetComponent<Slider>();
