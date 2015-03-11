@@ -64,9 +64,9 @@ public class RocketLauncher : Weapon
 					}
 				}
 			}
-			else if (targType == typeof(NPC))
+			else if (targType.IsSubclassOf(typeof(NPC)) || targType == typeof(NPC))
 			{
-				//Debug.Log("Used Weapon on NPC\n");
+				Debug.Log("Used Weapon on NPC\n");
 				FireRocket(firePoint, targetScanDir);
 
 			}
