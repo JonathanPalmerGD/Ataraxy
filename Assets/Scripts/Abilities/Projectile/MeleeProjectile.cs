@@ -79,6 +79,7 @@ public class MeleeProjectile : Projectile
 	{
 		rigidbody.drag = 50;
 		projectileCollider.enabled = false;
+		fizzled = true;
 	}
 
 	public override void Collide()

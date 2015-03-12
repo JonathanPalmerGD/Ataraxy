@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class Projectile : MonoBehaviour 
 {
+	protected bool fizzled = false;
+
 	private bool awardXPOnHit = false;
 	public bool AwardXPOnHit
 	{
@@ -78,7 +80,7 @@ public class Projectile : MonoBehaviour
 	{
 		if (enabled)
 		{
-			if(collider.tag == "ProjectileFizzler")
+			if (collider.tag == "ProjectileFizzler")
 			{
 				Fizzle();
 			}
@@ -129,7 +131,10 @@ public class Projectile : MonoBehaviour
 						}
 					}
 				}
-				//Clean up the bullet. This should be updated to add it to an object pool
+			}
+			//Clean up the bullet. This should be updated to add it to an object pool
+			if (!fizzled)
+			{
 				Collide();
 			}
 		}
@@ -137,6 +142,7 @@ public class Projectile : MonoBehaviour
 
 	public virtual void Fizzle()
 	{
+		fizzled = true;
 		GameObject.Destroy(gameObject, .02f);
 	}
 

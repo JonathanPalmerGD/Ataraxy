@@ -351,6 +351,7 @@ public class GrapplingHookProj : Projectile
 
 	public override void Fizzle()
 	{
+		fizzled = true;
 		Retract();
 	}
 

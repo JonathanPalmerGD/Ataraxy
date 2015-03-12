@@ -3,6 +3,7 @@ using System.Collections;
 
 public class NPC : Entity 
 {
+	[Header("Targeting Shader Info")]
 	public Shader outline;
 	public Shader outlineOnly;
 	public Shader diffuse;
