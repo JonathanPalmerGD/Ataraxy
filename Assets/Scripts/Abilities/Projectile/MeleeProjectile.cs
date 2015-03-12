@@ -6,6 +6,9 @@ public class MeleeProjectile : Projectile
 {
 	public LineRenderer lineRenderer;
 	public List<Vector3> lineRendPoints;
+	/// <summary>
+	/// Used to handle the fading of the line's alpha over time. Assigned during SetupMeleeProjectile() in Weapon.cs
+	/// </summary>
 	public Color lineColor;
 	public float movementDecay;
 	public float visualDecay;

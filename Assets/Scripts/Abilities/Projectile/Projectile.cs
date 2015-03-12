@@ -80,6 +80,7 @@ public class Projectile : MonoBehaviour
 	{
 		if (enabled)
 		{
+			//Debug.Log(name + " - collided with " + collider.name + "\n");
 			if (collider.tag == "ProjectileFizzler")
 			{
 				Fizzle();
@@ -98,6 +99,7 @@ public class Projectile : MonoBehaviour
 					}
 					else
 					{
+						//Debug.Log(name + " - Inside Projectile Damage Handling\n");
 						//Debug.Log("F" + Faction + " " + atObj.Faction + "\n");
 						//If the projectile is from the Player
 						if (Faction == Allegiance.Player && atObj.Faction == Allegiance.Enemy)
