@@ -75,6 +75,12 @@ public class MeleeProjectile : Projectile
 		return new Color(lineColor.r, lineColor.b, lineColor.g, lineColor.a * percentageFade);
 	}
 
+	public override void Fizzle()
+	{
+		rigidbody.drag = 50;
+		projectileCollider.enabled = false;
+	}
+
 	public override void Collide()
 	{
 		//rigidbody.drag += 2;

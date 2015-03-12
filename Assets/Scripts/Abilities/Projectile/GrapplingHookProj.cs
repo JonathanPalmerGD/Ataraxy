@@ -132,6 +132,11 @@ public class GrapplingHookProj : Projectile
 	{
 		if (enabled)
 		{
+			if(collider.tag == "ProjectileFizzler")
+			{
+				Fizzle();
+			}
+
 			//Debug.Log("Projectile collided with: " + collider.gameObject.name + "\n" + collider.gameObject.tag + " Faction: " + Faction + " " + Damage);
 			string cTag = collider.gameObject.tag;
 			if (cTag == "Enemy" || cTag == "Player")// || cTag == "Entity" || cTag == "Island")
@@ -342,6 +347,11 @@ public class GrapplingHookProj : Projectile
 			}
 		} 
 		timeRemaining = 0;
+	}
+
+	public override void Fizzle()
+	{
+		Retract();
 	}
 
 	public override void Collide()
