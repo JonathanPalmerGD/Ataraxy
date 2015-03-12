@@ -38,6 +38,7 @@ public class Enemy : NPC
 	#endregion
 
 	#region Projectile Attack Variables
+	public Weapon weapon;
 	public GameObject projectilePrefab;
 	public GameObject gunMuzzle;
 

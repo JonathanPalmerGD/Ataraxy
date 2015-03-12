@@ -26,8 +26,7 @@ public class Rapier : Weapon
 #else
 
 #endif
-		BeamColor = Color.white;
-		//BeamColor = new Color(1f, .85f, .65f);
+		BeamColor = new Color(.7f, .45f, .35f);
 	}
 
 	public override void UseWeapon(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 targetScanDir = default(Vector3), bool lockOn = false)
@@ -77,7 +76,6 @@ public class Rapier : Weapon
 
 		List<Vector3> stabPoints = new List<Vector3>();
 
-		stab.lineColor = Color.red;
 		stab.ProjVel = stab.ProjVel * 4;
 		stab.rigidbody.drag -= 2;
 		stab.Damage = SpecialDamage;

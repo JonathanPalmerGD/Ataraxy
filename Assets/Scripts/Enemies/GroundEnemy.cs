@@ -7,6 +7,7 @@ using System.Linq;
 
 public class GroundEnemy : Enemy
 {
+	#region Variables
 	[Header("Ground Pathing")]
 	//public GameObject target;
 	public Vector3 targetPosition;
@@ -117,6 +118,7 @@ public class GroundEnemy : Enemy
 	[HideInInspector]
 	public float speedMultiplier = 1f;
 	#endregion
+	#endregion
 
 	#region Movement Methods
 	public void Jump()
@@ -216,13 +218,40 @@ public class GroundEnemy : Enemy
 		//people with a !networkView.isMine (myRB.isKinematic = true;)
 
 		base.Start();
+
+		Longsword ls = Longsword.New();
+		ls.Init();
+
+		ls.DurCost = 0;
+		ls.Faction = Faction;
+		ls.bladeSlashPrefab = Resources.Load<GameObject>("Projectiles/Evil BladeSlash");
+		ls.NormalCooldown = 0;
+		ls.primaryFirePointIndex = 0;
+		ls.BeamColor = Color.black;
+		ls.Carrier = this;
+		//ls.BeamColor = Color.black;
+		
+		weapon = ls;
+
 	}
 	public override void Update()
 	{
 		base.Update();
+
+		foreach(GameObject fp in FirePoints)
+		{
+			Debug.DrawLine(transform.position, fp.transform.position, Color.yellow);
+		}
 		if (Input.GetKeyDown(KeyCode.Insert))
 		{
 			toggleView = !toggleView;
+		}
+		if(Input.GetKeyDown(KeyCode.Slash))
+		{
+			//Vector3 dir = GameManager.Instance.playerGO.transform.position;
+			Vector3 dir = transform.position + (transform.forward * 500);
+			Debug.DrawLine(transform.position, transform.position + dir, Color.green, 5.0f);
+			weapon.UseWeapon(null, null, FirePoints, dir, false);
 		}
 		#region When to Check
 		if (Time.time > nextCheck)
@@ -620,7 +649,7 @@ public class GroundEnemy : Enemy
 	bool toggleView = true;
 	void UpdateTarget()
 	{
-		if (toggleView)
+		if (toggleView || CanSeePlayer)
 		{
 			if (curPath.Count < 1)
 			{

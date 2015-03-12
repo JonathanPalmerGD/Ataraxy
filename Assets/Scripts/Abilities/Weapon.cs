@@ -225,7 +225,8 @@ public class Weapon : Ability
 				lr = Carrier.gameObject.AddComponent<LineRenderer>();
 			}
 
-			lr.material = new Material(Shader.Find("Particles/Additive"));
+			//lr.material = new Material(Shader.Find("Particles/Additive"));
+			lr.material = new Material(Shader.Find("Particles/Alpha Blended"));
 
 			lr.SetVertexCount(2);
 			lr.SetColors(colors[0], colors[1]);
@@ -287,12 +288,14 @@ public class Weapon : Ability
 	/// <param name="specialVelocity">For when a projectile needs a separate velocity for special attacks.</param>
 	public virtual void SetupMeleeProjectile(MeleeProjectile proj, Vector3 velocityDirection, List<Vector3> linePoints, Vector2 lineWidth, float specialVelocity = 0)
 	{
-		proj.lineRenderer.material = new Material(Shader.Find("Particles/Additive"));
+		//proj.lineRenderer.material = new Material(Shader.Find("Particles/Additive"));
+		proj.lineRenderer.material = new Material(Shader.Find("Particles/Alpha Blended"));
 
 		//This could be changed to take linePoints.Count.
 		proj.lineRenderer.SetVertexCount(3);
 		//Beam Color is a characteristic of a weapon, as the weapon doesn't usually change color.
 		proj.lineColor = BeamColor;
+		proj.lineRenderer.SetColors(BeamColor, BeamColor);
 		proj.lineRenderer.SetWidth(lineWidth.x, lineWidth.y);
 
 		proj.lineRendPoints = new List<Vector3>();

@@ -4,7 +4,11 @@ using System.Collections;
 public class NullShield : MonoBehaviour 
 {
 	//Reference to parent
-	//public Entity Carrier
+	public Entity Carrier;
+
+	//A reference to our faction so we don't fizzle our own projectiles?
+	//It'd be good to design to avoid doing this, but we want the fizzlers to be faction-caring.
+	public Allegiance Faction;
 
 	void OnTriggerEnter(Collider other) 
 	{
