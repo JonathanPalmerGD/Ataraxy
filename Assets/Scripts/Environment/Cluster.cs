@@ -167,6 +167,7 @@ public class Cluster : WorldObject
 			island.PlaceRandomEncounter();
 			//island.PlaceRandomEnemy();
 			island.PlaceRandomObject();
+			island.PlaceCosmeticObjects();
 		}
 	}
 	#endregion

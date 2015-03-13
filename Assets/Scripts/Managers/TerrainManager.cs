@@ -30,6 +30,7 @@ public class TerrainManager : Singleton<TerrainManager>
 	public static bool RaycastToNodeChecking = true;
 	public static int underworldYOffset = 80;
 	public static bool CreateIslandFeatures = true;
+	public static bool CreateCosmeticFeatures = true;
 	#endregion
 
 	#region Prefabs & Lists of Prefabs
@@ -38,6 +39,7 @@ public class TerrainManager : Singleton<TerrainManager>
 	public List<Cluster> clusters;
 	public List<Texture2D> textures;
 	public List<GameObject> terrainFeatures;
+	public List<GameObject> cosmeticFeatures;
 	public List<GameObject> enemyPrefabs;
 	public List<GameObject> encounterPrefabs;
 	public List<GameObject> islandPrefabs;
@@ -55,6 +57,7 @@ public class TerrainManager : Singleton<TerrainManager>
 		islandPrefabs = Resources.LoadAll<GameObject>("Islands").ToList();
 		landmarkPrefabs = Resources.LoadAll<GameObject>("Landmarks").ToList();
 		terrainFeatures = Resources.LoadAll<GameObject>("TerrainFeatures").ToList();
+		terrainFeatures = Resources.LoadAll<GameObject>("TerrainCosmetics").ToList();
 		enemyPrefabs = Resources.LoadAll<GameObject>("Enemies").ToList();
 		encounterPrefabs = Resources.LoadAll<GameObject>("Encounters").ToList();
 	}

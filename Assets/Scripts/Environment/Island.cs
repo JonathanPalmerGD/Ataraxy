@@ -333,6 +333,30 @@ public class Island : WorldObject
 			newFeature.transform.SetParent(transform.parent);
 		}
 	}
+	
+	public void PlaceCosmeticObjects()
+	{
+		if (Random.Range(0, 100) > 60)
+		{
+			int numCosmetics = Random.Range(1, 3);
+			for(int i = 0; i < numCosmetics; i++)
+			{
+				Vector3 featurePosition = transform.position + Vector3.up * transform.localScale.y / 2;
+				float xRnd = Random.Range(-transform.localScale.x / 2, transform.localScale.x / 2);
+				float zRnd = Random.Range(-transform.localScale.z / 2, transform.localScale.z / 2);
+
+
+				featurePosition = new Vector3(transform.position.x + xRnd * .8f, transform.position.y + transform.localScale.y / 2 + .2f, transform.position.z + zRnd * .8f);
+
+				GameObject newFeature = (GameObject)GameObject.Instantiate(TerrainManager.Instance.terrainFeatures[Random.Range(0, TerrainManager.Instance.terrainFeatures.Count)], Vector3.zero, transform.rotation);
+
+				newFeature.transform.position = featurePosition;
+				newFeature.transform.Rotate(Vector3.up, Random.Range(0,360));
+
+				newFeature.transform.SetParent(transform.parent);
+			}
+		}
+	}
 
 	public void PlaceRandomEncounter(bool force = false)
 	{
