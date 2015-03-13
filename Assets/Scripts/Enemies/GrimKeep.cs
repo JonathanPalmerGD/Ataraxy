@@ -29,8 +29,6 @@ public class GrimKeep : Enemy
 		}
 	}
 
-
-
 	public override void Untarget()
 	{
 		base.Untarget();

@@ -7,11 +7,13 @@ public class TargetingVisual : MonoBehaviour
 
 	//Targetting Display
 	Vector3 startPoint;
-	Vector3 targetingDir = Vector3.zero;
+	public Vector3 targetingDir = Vector3.zero;
 	public Vector3 currentTrackPos;
 	private GameObject trackingObject;
 
 	GameObject target;
+
+	bool leadTarget = false;
 
 	//% of target's velocity to consider
 	float LeadPercentage = 0.0f;
@@ -25,9 +27,26 @@ public class TargetingVisual : MonoBehaviour
 	//How quickly the targetting follows.
 	float trackingStrength = 8f;
 
-	public Color startLineColor;
-	public Color endLineColor;
+	public Color startLineColor = Color.black;
+	public Color endLineColor = Color.red;
 	public LineRenderer lineRend;
+
+	public bool lockedOn = false;
+
+	/// <summary>
+	/// Move the tracking object towards the player
+	/// </summary>
+	public bool UpdateTracking = true;
+
+	/// <summary>
+	/// Move closer to the player or return home.
+	/// </summary>
+	public bool KnowledgeOfPlayer = true;
+	/*public bool DisableTrack
+	{
+		set { disableTrack = value; }
+		get { return disableTrack; }
+	}*/
 
 	void Start()
 	{
@@ -37,7 +56,7 @@ public class TargetingVisual : MonoBehaviour
 			lineRend = gameObject.AddComponent<LineRenderer>();
 		}
 
-		lineRend.material = new Material(Shader.Find("Particles/Additive"));
+		lineRend.material = new Material(Shader.Find("Particles/Alpha Blended"));
 
 		lineRend.SetVertexCount(2);
 		lineRend.SetWidth(.05f, .05f);
@@ -62,8 +81,23 @@ public class TargetingVisual : MonoBehaviour
 
 	void Update()
 	{
+		if (UpdateTracking)
+			Debug.DrawLine(transform.position + Vector3.up * 5, transform.position + Vector3.up * 8, Color.blue, .1f);
+		if (KnowledgeOfPlayer)
+			Debug.DrawLine(transform.position + Vector3.up * 8, transform.position + Vector3.up * 11, Color.cyan, .1f);
+
+		if(Input.GetKeyDown(KeyCode.Period))
+		{
+			Debug.Log("Toggle " + KnowledgeOfPlayer + " \n");
+			KnowledgeOfPlayer = !KnowledgeOfPlayer;
+		}
+
+		startPoint = transform.position;
+	}
+
+	void FixedUpdate()
+	{
 		UpdateLinePoints();
-		//SetupLineRenderer(startPoint, startPoint+targettingDir*lineDistance)
 	}
 
 	public float counter = 0;
@@ -107,14 +141,35 @@ public class TargetingVisual : MonoBehaviour
 		Vector3 dirFromTrackPosToTarget = targetToFace - targPos;
 		dirFromTrackPosToTarget.Normalize();
 
-		//Every frame, move the current position at speed of N towards the target.
-		trackingObject.transform.position += dirFromTrackPosToTarget * trackingStrength * Time.deltaTime;
+		Vector3 futurePos = trackingObject.transform.position + dirFromTrackPosToTarget * trackingStrength * Time.deltaTime;
+
+		float futureDistToTarget = Vector3.Distance(targetToFace, futurePos);
+		float curDistToTarget = Vector3.Distance(targetToFace, trackingObject.transform.position);
+
+		if (futureDistToTarget < curDistToTarget)
+		{
+			//Every frame, move the current position at speed of N towards the target.
+			trackingObject.transform.position += dirFromTrackPosToTarget * trackingStrength * Time.deltaTime;
+		}
+		else
+		{
+			trackingObject.transform.position = targetToFace;
+			lockedOn = true;
+		}
 		//Draw line to the current position.
 
-		Vector3 dirToTarget = transform.position - (trackingObject.transform.position);
-		dirToTarget.Normalize();
+		targetingDir = transform.position - (trackingObject.transform.position);
+		float targetDist = targetingDir.magnitude;
+		targetingDir.Normalize();
 
-		lineRend.SetPosition(1, transform.position - dirToTarget * lineDistance);
+		if (targetDist > lineDistance)
+		{
+			lineRend.SetPosition(1, transform.position - targetingDir * lineDistance);
+		}
+		else
+		{
+			lineRend.SetPosition(1, transform.position - targetingDir * (targetDist));
+		}
 		#endregion
 
 		#region Constant Locking Speed Attempt
@@ -157,19 +212,40 @@ public class TargetingVisual : MonoBehaviour
 
 	void UpdateLinePoints()
 	{
+		//We always want to update this because it is based on our position.
 		lineRend.SetPosition(0, startPoint);
 
-		Vector3 targPos = target.transform.position;
-		if (target.rigidbody != null)
+		if (UpdateTracking)
 		{
-			targPos += target.rigidbody.velocity * 3f;
-		}
+			Vector3 targPos = target.transform.position;
 
-		AdvanceTargeting(targPos);
+			if (leadTarget)
+			{
+				if (target.rigidbody != null)
+				{
+					targPos += target.rigidbody.velocity * 3f;
+				}
+			}
+			if (KnowledgeOfPlayer)
+			{
+				AdvanceTargeting(targPos);
+			}
+			else
+			{
+				AdvanceTargeting(transform.position);
+			}
+		}
 	}
 
-	void UpdateLineColor()
+	public void UpdateLineColor()
 	{
 		lineRend.SetColors(startLineColor, endLineColor);
+	}
+
+	public void UpdateLineColor(Color newStartColor, Color newEndColor)
+	{
+		startLineColor = newStartColor;
+		endLineColor = newEndColor;
+		UpdateLineColor();
 	}
 }

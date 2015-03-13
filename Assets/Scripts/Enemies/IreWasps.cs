@@ -9,6 +9,7 @@ public class IreWasps : FlyingEnemy
 	private Vector3 chargeTargetLocation;
 	private Color prepareColor = new Color(.70f, .45f, 0.1f, .9f);
 	private Color passiveColor = new Color(.7f, 0.7f, 0.3f, .9f);
+	private Color passiveColorLighter = new Color(.9f, 0.9f, 0.4f, .9f);
 	private Color attackColor = new Color(.87f, .1f, 0.1f, .9f);
 	private Vector3 home;
 	private ParticleSystem waspPartSys;
@@ -23,7 +24,6 @@ public class IreWasps : FlyingEnemy
 		attackDamage = .01f;
 		name = "Ire Wasps";
 		FiringTimer = Random.Range(0, FiringCooldown);
-		//GetComponent<Floatation>().homeRegion = transform.position + Vector3.up * 20;
 		projectilePrefab = Resources.Load<GameObject>("Projectiles/Projectile");
 	}
 
@@ -66,10 +66,13 @@ public class IreWasps : FlyingEnemy
 	}
 
 	public override void HandleAggression()
-	{		
+	{
+		#region Attacking Player
 		//If we're inside the player
 		if (attackingPlayer)
 		{
+			targVisual.KnowledgeOfPlayer = true;
+
 			//Record that to increase intensity of attack
 			attackDuration += Time.deltaTime;
 
@@ -97,12 +100,16 @@ public class IreWasps : FlyingEnemy
 				}
 			}
 		}
+		#endregion
+		#region Else Not Attacking Player
 		else
 		{
 			#region Update Knowledge of Player
 			if (distFromPlayer < 50)
 			{
 				CanSeePlayer = true;
+				targVisual.KnowledgeOfPlayer = true;
+				targVisual.UpdateTracking = true;
 			}
 			else
 			{
@@ -112,6 +119,8 @@ public class IreWasps : FlyingEnemy
 					ChangeState(EnemyState.Idle);
 				}
 				CanSeePlayer = false;
+				targVisual.KnowledgeOfPlayer = false;
+				targVisual.UpdateTracking = true;
 			}
 			#endregion
 
@@ -122,6 +131,9 @@ public class IreWasps : FlyingEnemy
 				//Change particles to much more aggitated.
 				if (state == EnemyState.Idle)
 				{
+					targVisual.KnowledgeOfPlayer = true;
+					targVisual.UpdateTracking = true;
+
 					if (stateTimer > 0)
 					{
 						stateTimer -= Time.deltaTime;
@@ -143,6 +155,7 @@ public class IreWasps : FlyingEnemy
 				#region Preparing State
 				else if (state == EnemyState.Preparing)
 				{
+					targVisual.UpdateTracking = false;
 					//Count up for a second or so
 					if (stateTimer > 0)
 					{
@@ -167,6 +180,7 @@ public class IreWasps : FlyingEnemy
 				#region Attacking State
 				else if (state == EnemyState.Attacking)
 				{
+					targVisual.UpdateTracking = false;
 					//Let us charge for a bit
 					if (stateTimer > 0)
 					{
@@ -190,12 +204,13 @@ public class IreWasps : FlyingEnemy
 				{
 					Vector3 dirToHome = (home - transform.position);
 					dirToHome.Normalize();
-					Debug.DrawLine(transform.position, transform.position + dirToHome, Color.red);
+					//Debug.DrawLine(transform.position, transform.position + dirToHome, Color.red);
 					rigidbody.AddForce(dirToHome * rigidbody.mass * 15);
 				}
 			}
 			#endregion
 		}
+		#endregion
 	}
 
 	void ChangeState(EnemyState targetState)
@@ -207,22 +222,24 @@ public class IreWasps : FlyingEnemy
 				stateTimer = 0;
 				//particleSystem.startColor = passiveColor;
 				UpdateParticleColor(passiveColor);
+				targVisual.UpdateLineColor(passiveColorLighter, passiveColorLighter);
 				rigidbody.velocity = Vector3.zero;
 				break;
 			case EnemyState.Searching:
-
 				state = EnemyState.Searching;
 				break;
 			case EnemyState.Preparing:
 
 				//particleSystem.startColor = prepareColor;
 				UpdateParticleColor(prepareColor);
+				targVisual.UpdateLineColor(prepareColor, prepareColor);
 				state = EnemyState.Preparing;
 				break;
 			case EnemyState.Attacking:
 
 				//particleSystem.startColor = attackColor;
 				UpdateParticleColor(attackColor);
+				targVisual.UpdateLineColor(attackColor, attackColor);
 				state = EnemyState.Attacking;
 				break;
 		}

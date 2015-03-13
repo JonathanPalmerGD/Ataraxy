@@ -41,6 +41,7 @@ public class Enemy : NPC
 	public Weapon weapon;
 	public GameObject projectilePrefab;
 	public GameObject gunMuzzle;
+	public TargetingVisual targVisual;
 
 	private float firingTimer;
 	public float FiringTimer
@@ -160,6 +161,11 @@ public class Enemy : NPC
 	public override void Start()
 	{
 		base.Start();
+		targVisual = GetComponent<TargetingVisual>();
+		if (targVisual == null)
+		{
+			targVisual = gameObject.AddComponent<TargetingVisual>();
+		}
 		gameObject.tag = "Enemy";
 		FindFiringPositions();
 	}
@@ -239,9 +245,11 @@ public class Enemy : NPC
 	public virtual void HandleKnowledge()
 	{
 		//Set the direction to the player, can be updated to lead the player's movement.
-		dirToTarget = (GameManager.Instance.player.transform.position - gunMuzzle.transform.position);// +charMotor.movement.velocity * percentagePlayerVelLeading;
+		//dirToTarget = (GameManager.Instance.player.transform.position - gunMuzzle.transform.position);// +charMotor.movement.velocity * percentagePlayerVelLeading;
 
-		dirToTarget.Normalize();
+		//dirToTarget.Normalize();
+
+		dirToTarget = -targVisual.targetingDir;
 	}
 
 	public virtual void HandleAggression()
@@ -249,10 +257,14 @@ public class Enemy : NPC
 		if (Vector3.Distance(transform.position, GameManager.Instance.player.transform.position) < 50)
 		{
 			CanSeePlayer = true;
+			targVisual.KnowledgeOfPlayer = true;
+			targVisual.UpdateTracking = true;
 		}
 		else
 		{
 			CanSeePlayer = false;
+			targVisual.KnowledgeOfPlayer = false;
+			targVisual.UpdateTracking = true;
 		}
 
 		firing = CanSeePlayer;

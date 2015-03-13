@@ -113,7 +113,21 @@ public class GrapplingHookProj : Projectile
 		if (distance < 1.4f)
 		{
 			//Debug.LogWarning("Projectile collided with same Faction as firing source.\n");
-			if (hookState == GrapplingState.Attached || hookState == GrapplingState.Pulling)
+			if (hookState == GrapplingState.Attached)
+			{
+				//Exploration of gimping the grappling hook.
+				/*Debug.Log("Hit Grapple\n");
+				if(Creator.Carrier.rigidbody)
+				{
+					Debug.Log(Creator.Carrier.name + " " + Creator.Carrier.rigidbody.velocity + "\n");
+					//Creator.Carrier.ExternalMove(-Creator.Carrier.rigidbody.velocity.normalized, -Creator.Carrier.rigidbody.velocity.magnitude, ForceMode.Force);
+					Creator.Carrier.ExternalMove(Vector3.up, 50, ForceMode.VelocityChange);
+					Debug.Log(Creator.Carrier.name + " " + Creator.Carrier.rigidbody.velocity + "\n");
+				}*/
+
+				((GrapplingHook)Creator).RemoveProjectile(0);
+			}
+			else if(hookState == GrapplingState.Pulling)
 			{
 				((GrapplingHook)Creator).RemoveProjectile(0);
 			}
@@ -224,7 +238,12 @@ public class GrapplingHookProj : Projectile
 					RetractPullingTarget(collider.gameObject);
 				}
 			}
-			else if(collider.gameObject != Creator.Carrier.gameObject)
+			else if (collider.gameObject.rigidbody)
+			{
+				//Debug.Log("Pulling: " + collider.gameObject.name + "\n");
+				RetractPullingTarget(collider.gameObject);
+			}
+			else if (collider.gameObject != Creator.Carrier.gameObject)
 			{
 				BecomeAttached();
 			}

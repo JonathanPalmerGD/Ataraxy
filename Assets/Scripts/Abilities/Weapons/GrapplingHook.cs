@@ -25,7 +25,7 @@ public class GrapplingHook : Weapon
 		primaryFirePointIndex = 0;
 		specialFirePointIndex = 0;
 		PrimaryDamage = 0.4f;
-		NormalCooldown = Random.Range(.65f, 1.4f);
+		NormalCooldown = Random.Range(.95f, 1.2f);
 		SpecialCooldown = Random.Range(1.3f, 2);
 		DurSpecialCost = 0;
 		#if CHEAT
@@ -112,7 +112,8 @@ public class GrapplingHook : Weapon
 	public override void UseWeaponSpecial(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 targetScanDir = default(Vector3), bool lockOn = false)
 	{
 		//Destroy our projectile.
-		RemoveProjectile(0f);
+		//RemoveProjectile(0f);
+		currentProjectile.Retract();
 	}
 
 	public override bool HandleDurability(bool specialAttack = false, GameObject target = null, bool lockOn = false)
