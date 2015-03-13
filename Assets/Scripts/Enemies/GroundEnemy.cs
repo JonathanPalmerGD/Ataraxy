@@ -33,9 +33,12 @@ public class GroundEnemy : Enemy
 
 	#region [Mega Region] Footsteps, Speed, Running & Jumping Variables
 	#region Footsteps
-	[Header("Footsteps")]
+	//[Header("Footsteps")]
+	[HideInInspector]
 	public AudioSource audioSource;
+	[HideInInspector]
 	public AudioClip footstepSound;
+	[HideInInspector]
 	public float footstepSpeed = 1.5f;
 	#endregion
 
@@ -44,7 +47,7 @@ public class GroundEnemy : Enemy
 	public float currentSpeed;
 	public float rotationSpeed;
 	[Space(10f)]
-	public float walkSpeed = 5f;
+	public float walkSpeed = 10f;
 	public float crouchSpeed = 2.5f;
 	public float climbSpeed = 5.5f;
 	public float runSpeed = 7.5f;
@@ -63,9 +66,9 @@ public class GroundEnemy : Enemy
 	#region Jumping
 	[Header("Jumping")]
 	public bool canJump = true;
-	public float jumpHeight = 2f;   //in unity units
+	public float jumpHeight = 7f;   //in unity units
 	public int maxJumps = 2;
-	public float airAccelerator = 0.5f;
+	public float airAccelerator = 3f;
 	public float groundAccelerator = 1.5f;
 	#endregion
 	#endregion
@@ -77,14 +80,14 @@ public class GroundEnemy : Enemy
 	public bool turnRight = true;
 	public bool turnLeft = true;
 	private Vector3 checkDistance;
-	public float checkHeight;
-	public float checkDist;
+	public float checkHeight = 3;
+	public float checkDist = 5;
 	public float destDistance = 5;
 	public enum GroundState { Falling, OnGround, Turning, Jumping, Stopped };
 	public GroundState navState;
 	public bool haveNewHeading = false;
 
-	public bool ignoreJumpHeight;
+	public bool ignoreJumpHeight = true;
 	#endregion
 
 	#region Player Knowledge
@@ -250,8 +253,8 @@ public class GroundEnemy : Enemy
 		{
 			//Vector3 dir = GameManager.Instance.playerGO.transform.position;
 			Vector3 dir = transform.position + (transform.forward * 500);
-			Debug.DrawLine(transform.position, transform.position + dir, Color.green, 5.0f);
-			weapon.UseWeapon(null, null, FirePoints, dir, false);
+			Debug.DrawLine(transform.position, transform.position - targVisual.targetingDir, Color.green, 5.0f);
+			weapon.UseWeapon(null, null, FirePoints, transform.position - transform.forward, false);
 		}
 		#region When to Check
 		if (Time.time > nextCheck)

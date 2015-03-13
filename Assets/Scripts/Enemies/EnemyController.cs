@@ -42,9 +42,12 @@ public class EnemyController : MonoBehaviour
 
 	#region [Mega Region] Footsteps, Speed, Running & Jumping Variables
 	#region Footsteps
-	[Header("Footsteps")]
+	//[Header("Footsteps")]
+	[HideInInspector]
 	public AudioSource audioSource;
+	[HideInInspector]
 	public AudioClip footstepSound;
+	[HideInInspector]
 	public float footstepSpeed = 1.5f;
 	#endregion
 

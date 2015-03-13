@@ -33,6 +33,7 @@ public class Longsword : Weapon
 		Vector3 firePoint = firePoints[0].transform.position;
 
 		Vector3 dir = targetScanDir - firePoint;
+		//Debug.DrawLine(Carrier.transform.position + Vector3.up * 10, Carrier.transform.position + Vector3.up * 10 + dir, Color.magenta, 5.0f);
 		dir.Normalize();
 
 		GameObject go = (GameObject)GameObject.Instantiate(bladeSlashPrefab, firePoint, Quaternion.identity);

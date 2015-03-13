@@ -81,10 +81,10 @@ public class TargetingVisual : MonoBehaviour
 
 	void Update()
 	{
-		if (UpdateTracking)
+		/*if (UpdateTracking)
 			Debug.DrawLine(transform.position + Vector3.up * 5, transform.position + Vector3.up * 8, Color.blue, .1f);
 		if (KnowledgeOfPlayer)
-			Debug.DrawLine(transform.position + Vector3.up * 8, transform.position + Vector3.up * 11, Color.cyan, .1f);
+			Debug.DrawLine(transform.position + Vector3.up * 8, transform.position + Vector3.up * 11, Color.cyan, .1f);*/
 
 		if(Input.GetKeyDown(KeyCode.Period))
 		{

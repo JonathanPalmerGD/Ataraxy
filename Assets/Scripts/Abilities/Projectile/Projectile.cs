@@ -83,7 +83,13 @@ public class Projectile : MonoBehaviour
 			//Debug.Log(name + " - collided with " + collider.name + "\n");
 			if (collider.tag == "ProjectileFizzler")
 			{
-				Fizzle();
+				if(collider.name == "NullShield")
+				{
+					if (Faction != collider.gameObject.GetComponent<NullShield>().Faction)
+					{	
+						Fizzle();
+					}
+				}
 			}
 			//Debug.Log("Projectile collided with: " + collider.gameObject.name + "\n" + collider.gameObject.tag + " Faction: " + Faction + " " + Damage);
 			string cTag = collider.gameObject.tag;
