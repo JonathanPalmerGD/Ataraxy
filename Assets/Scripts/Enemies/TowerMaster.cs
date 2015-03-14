@@ -45,8 +45,8 @@ public class TowerMaster : Enemy
 	{
 		EvilHand.UpdateWeapon(Time.deltaTime);
 
-		HandleKnowledge();
-		HandleAggression();
+
+		base.Update();
 	}
 	#endregion
 

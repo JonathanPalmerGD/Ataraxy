@@ -34,7 +34,7 @@ public class NPC : Entity
 
 	public override void Update() 
 	{
-	
+		base.Update();
 	}
 
 	public override void UpdateHealthUI()

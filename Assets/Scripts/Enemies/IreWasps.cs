@@ -71,7 +71,7 @@ public class IreWasps : FlyingEnemy
 		//If we're inside the player
 		if (attackingPlayer)
 		{
-			targVisual.KnowledgeOfPlayer = true;
+			TargVisualKnowledgeOfPlayer(true);
 
 			//Record that to increase intensity of attack
 			attackDuration += Time.deltaTime;
@@ -108,8 +108,11 @@ public class IreWasps : FlyingEnemy
 			if (distFromPlayer < 50)
 			{
 				CanSeePlayer = true;
-				targVisual.KnowledgeOfPlayer = true;
-				targVisual.UpdateTracking = true;
+				if (targVisual != null)
+				{
+					TargVisualKnowledgeOfPlayer(true);
+					TargVisualUpdateTracking(true);
+				}
 			}
 			else
 			{
@@ -119,8 +122,9 @@ public class IreWasps : FlyingEnemy
 					ChangeState(EnemyState.Idle);
 				}
 				CanSeePlayer = false;
-				targVisual.KnowledgeOfPlayer = false;
-				targVisual.UpdateTracking = true;
+				TargVisualKnowledgeOfPlayer(false);
+				TargVisualUpdateTracking(true);
+				
 			}
 			#endregion
 
@@ -131,8 +135,8 @@ public class IreWasps : FlyingEnemy
 				//Change particles to much more aggitated.
 				if (state == EnemyState.Idle)
 				{
-					targVisual.KnowledgeOfPlayer = true;
-					targVisual.UpdateTracking = true;
+					TargVisualKnowledgeOfPlayer(true);
+					TargVisualUpdateTracking(true);
 
 					if (stateTimer > 0)
 					{
@@ -155,7 +159,7 @@ public class IreWasps : FlyingEnemy
 				#region Preparing State
 				else if (state == EnemyState.Preparing)
 				{
-					targVisual.UpdateTracking = false;
+					TargVisualUpdateTracking(false);
 					//Count up for a second or so
 					if (stateTimer > 0)
 					{
@@ -180,7 +184,8 @@ public class IreWasps : FlyingEnemy
 				#region Attacking State
 				else if (state == EnemyState.Attacking)
 				{
-					targVisual.UpdateTracking = false;
+					TargVisualUpdateTracking(false);
+					
 					//Let us charge for a bit
 					if (stateTimer > 0)
 					{
@@ -222,7 +227,7 @@ public class IreWasps : FlyingEnemy
 				stateTimer = 0;
 				//particleSystem.startColor = passiveColor;
 				UpdateParticleColor(passiveColor);
-				targVisual.UpdateLineColor(passiveColorLighter, passiveColorLighter);
+				TargVisualUpdateLineColor(passiveColorLighter, passiveColorLighter);
 				rigidbody.velocity = Vector3.zero;
 				break;
 			case EnemyState.Searching:
@@ -232,14 +237,14 @@ public class IreWasps : FlyingEnemy
 
 				//particleSystem.startColor = prepareColor;
 				UpdateParticleColor(prepareColor);
-				targVisual.UpdateLineColor(prepareColor, prepareColor);
+				TargVisualUpdateLineColor(prepareColor, prepareColor);
 				state = EnemyState.Preparing;
 				break;
 			case EnemyState.Attacking:
 
 				//particleSystem.startColor = attackColor;
 				UpdateParticleColor(attackColor);
-				targVisual.UpdateLineColor(attackColor, attackColor);
+				TargVisualUpdateLineColor(attackColor, attackColor);
 				state = EnemyState.Attacking;
 				break;
 		}

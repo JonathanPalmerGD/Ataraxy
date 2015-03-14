@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Enemy : NPC
 {
+	public static bool EnableTargetVisuals = false;
 	/// <summary>
 	/// A Vector3 that tracks the muzzle to the player (for firing projectiles)
 	/// </summary>
@@ -161,10 +162,13 @@ public class Enemy : NPC
 	public override void Start()
 	{
 		base.Start();
-		targVisual = GetComponent<TargetingVisual>();
-		if (targVisual == null)
+		if (EnableTargetVisuals)
 		{
-			targVisual = gameObject.AddComponent<TargetingVisual>();
+			targVisual = GetComponent<TargetingVisual>();
+			if (targVisual == null)
+			{
+				targVisual = gameObject.AddComponent<TargetingVisual>();
+			}
 		}
 		gameObject.tag = "Enemy";
 		FindFiringPositions();
@@ -204,8 +208,6 @@ public class Enemy : NPC
 		{
 			GainExperience(Time.deltaTime * xpRateOverTime);
 		}
-
-		
 	}
 
 	public override void GainLevel()
@@ -249,7 +251,10 @@ public class Enemy : NPC
 
 		//dirToTarget.Normalize();
 
-		dirToTarget = -targVisual.targetingDir;
+		if (targVisual != null)
+		{
+			dirToTarget = -targVisual.targetingDir;
+		}
 	}
 
 	public virtual void HandleAggression()
@@ -257,14 +262,16 @@ public class Enemy : NPC
 		if (Vector3.Distance(transform.position, GameManager.Instance.player.transform.position) < 50)
 		{
 			CanSeePlayer = true;
-			targVisual.KnowledgeOfPlayer = true;
-			targVisual.UpdateTracking = true;
+
+			TargVisualKnowledgeOfPlayer(true);
+			TargVisualUpdateTracking(true);
 		}
 		else
 		{
 			CanSeePlayer = false;
-			targVisual.KnowledgeOfPlayer = false;
-			targVisual.UpdateTracking = true;
+
+			TargVisualKnowledgeOfPlayer(false);
+			TargVisualUpdateTracking(true);
 		}
 
 		firing = CanSeePlayer;
@@ -317,4 +324,27 @@ public class Enemy : NPC
 	}
 	#endregion
 
+	#region Target Visuals
+	public void TargVisualUpdateTracking(bool newState)
+	{
+		if (targVisual != null)
+		{
+			targVisual.UpdateTracking = newState;
+		}
+	}
+	public void TargVisualKnowledgeOfPlayer(bool newState)
+	{
+		if (targVisual != null)
+		{
+			targVisual.KnowledgeOfPlayer = newState;
+		}
+	}
+	public void TargVisualUpdateLineColor(Color newStartColor, Color newEndColor)
+	{
+		if (targVisual != null)
+		{
+			targVisual.UpdateLineColor(newStartColor, newEndColor);
+		}
+	}
+	#endregion
 }

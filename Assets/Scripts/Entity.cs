@@ -38,6 +38,14 @@ public class Entity : MonoBehaviour
 		set { health = value; }
 	}
 
+	private float healthToAdjust;
+	public float HealthToAdjust
+	{
+		get { return healthToAdjust; }
+		set { healthToAdjust = value; }
+	}
+
+
 	private float maxHealth = 8;
 	public float MaxHealth
 	{
@@ -50,6 +58,13 @@ public class Entity : MonoBehaviour
 	{
 		get { return xP; }
 		set { xP = value; }
+	}
+
+	private float xPToGain;
+	public float XPToGain
+	{
+		get { return xPToGain; }
+		set { xPToGain = value; }
 	}
 	private float xPNeeded = 100;
 	public float XPNeeded
@@ -196,7 +211,88 @@ public class Entity : MonoBehaviour
 	
 	public virtual void Update()
 	{
-	
+		UpdateHealth();
+		UpdateHealthUI();
+		UpdateXP();
+		UpdateXPUI();
+	}
+
+	/// <summary>
+	/// Animated Healthbars Handling.
+	/// Converts HealthToAdjust into actual health/damage.
+	/// </summary>
+	public virtual void UpdateHealth()
+	{
+		//If our displayed health value isn't correct
+		if (HealthToAdjust != 0)
+		{
+			Debug.Log(name + "\t" + HealthToAdjust + "\n");
+			float rate = Time.deltaTime * 8;
+			float gainThisFrame = 0;
+			if (HealthToAdjust < 0)
+			{
+				if (Health + HealthToAdjust < 0)
+				{
+					rate *= 10;
+				}
+
+				//If the health left to adjust is LESS than the rate, just lose the remaining debt.
+				gainThisFrame = HealthToAdjust > -rate ? HealthToAdjust : -rate;
+			}
+			else
+			{
+				if (Health + HealthToAdjust >= MaxHealth)
+				{
+					rate *= 4;
+				}
+
+				//If the health left to adjust is greater than the rate, use the rate.
+				gainThisFrame = HealthToAdjust > rate ? rate : HealthToAdjust;
+			}
+
+			//Note this damage as taken, pay off our debt
+			HealthToAdjust -= gainThisFrame;
+
+			//Add it to displayed HP
+			Health += gainThisFrame;
+
+			if (Health <= 0 && !isDead)
+			{
+				KillEntity();
+			}
+		}
+
+	}
+
+	/// <summary>
+	/// Animated XPBar Handling.
+	/// Converts XPToGain into actual XP/Leveling.
+	/// </summary>
+	public virtual void UpdateXP()
+	{
+		if (XPToGain > 0)
+		{
+			//If it is enough to level, increase our rate
+			float rate = Time.deltaTime * 8;
+			if (XP + XPToGain > XPNeeded)
+			{
+				rate *= (1 + (XP + XPToGain) / XPNeeded);
+			}
+
+			//Drain our XP from the pool. Don't overdraw.
+			float gainThisFrame = XPToGain > rate ? rate : XPToGain;
+
+			//Subtract it from the pool
+			XPToGain -= gainThisFrame;
+
+			//Add it to the real XP
+			XP += gainThisFrame;
+
+			if (XP > XPNeeded)
+			{
+				GainLevel();
+			}
+		}
 	}
 
 	public virtual void AdjustHealth(float amount)
@@ -208,31 +304,40 @@ public class Entity : MonoBehaviour
 		}
 		if (Health + amount >= MaxHealth)
 		{
-			Health = MaxHealth;
+			HealthToAdjust += MaxHealth - Health;
+			//Health = MaxHealth;
 		}
 		else
 		{
-			Health += amount;
+			HealthToAdjust += amount;
+			//Health += amount;
 		}
 
-		UpdateHealthUI();
+		//UpdateHealthUI();
 
-		if (Health <= 0 && !isDead)
+		/*if (Health <= 0 && !isDead)
 		{
 			KillEntity();
-		}
+		}*/
 	}
 
-	public virtual void UpdateHealthUI()
+	public void GainExperience(float xpValue, int xpMultiplier = 1)
 	{
-		if (HealthSlider != null)
+		if (xpValue < 0)
 		{
-			HealthSlider.maxValue = MaxHealth;
-			HealthSlider.value = Health;
+			Debug.LogError("Negative Experience value (" + xpValue + ")  provided to : " + gameObject.name + "\n");
 		}
-		if (HealthText != null)
+		if (Level < GameManager.Instance.player.Level + 4)
 		{
-			HealthText.text = ((int)Health).ToString();
+			//XP += xpValue * xpMultiplier;
+			XPToGain += xpValue * xpMultiplier;
+
+			//UpdateXPUI();
+
+			/*if (XP > XPNeeded)
+			{
+				GainLevel();
+			}*/
 		}
 	}
 
@@ -290,22 +395,24 @@ public class Entity : MonoBehaviour
 		}
 	}
 
-	public void GainExperience(float xpValue, int xpMultiplier = 1)
+	public virtual void GainLevel()
 	{
-		if (xpValue < 0)
+		XP -= XPNeeded;
+		Level++;
+
+		UpdateLevelUI();
+	}
+
+	public virtual void UpdateHealthUI()
+	{
+		if (HealthSlider != null)
 		{
-			Debug.LogError("Negative Experience value (" + xpValue + ")  provided to : " + gameObject.name + "\n");
+			HealthSlider.maxValue = MaxHealth;
+			HealthSlider.value = Health;
 		}
-		if(Level < GameManager.Instance.player.Level + 4)
+		if (HealthText != null)
 		{
-			XP += xpValue * xpMultiplier;
-
-			UpdateXPUI();
-
-			if (XP > XPNeeded)
-			{
-				GainLevel();
-			}
+			HealthText.text = ((int)Health).ToString();
 		}
 	}
 
@@ -314,19 +421,12 @@ public class Entity : MonoBehaviour
 		if (XPSlider != null)
 		{
 			XPSlider.value = XP;
+			XPSlider.maxValue = XPNeeded;
 		}
 		if (XPText != null)
 		{
 			XPText.text = XP.ToString();
 		}
-	}
-
-	public virtual void GainLevel()
-	{
-		XP -= XPNeeded;
-		Level++;
-
-		UpdateLevelUI();
 	}
 
 	public virtual void UpdateLevelUI()

@@ -15,7 +15,7 @@ public class Crosshair : MonoBehaviour
 		get {return crosshairIndex;}
 		set
 		{
-			if (value < crosshairs.Length && value > 0)
+			if (value < crosshairs.Length && value >= 0)
 			{
 				crosshairIndex = value;
 				RefreshCrosshair();
@@ -88,7 +88,7 @@ public class Crosshair : MonoBehaviour
 	/// </summary>
 	public void RefreshCrosshair()
 	{
-		if (crosshairIndex < crosshairs.Length && crosshairIndex > 0)
+		if (crosshairIndex < crosshairs.Length && crosshairIndex >= 0)
 		{
 			Image img = this.GetComponent<Image>();
 			img.sprite = crosshairs[crosshairIndex];

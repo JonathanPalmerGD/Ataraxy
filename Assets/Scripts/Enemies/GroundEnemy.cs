@@ -253,7 +253,10 @@ public class GroundEnemy : Enemy
 		{
 			//Vector3 dir = GameManager.Instance.playerGO.transform.position;
 			Vector3 dir = transform.position + (transform.forward * 500);
-			Debug.DrawLine(transform.position, transform.position - targVisual.targetingDir, Color.green, 5.0f);
+			if (targVisual != null)
+			{
+				Debug.DrawLine(transform.position, transform.position - targVisual.targetingDir, Color.green, 5.0f);
+			}
 			weapon.UseWeapon(null, null, FirePoints, transform.position - transform.forward, false);
 		}
 		#region When to Check
