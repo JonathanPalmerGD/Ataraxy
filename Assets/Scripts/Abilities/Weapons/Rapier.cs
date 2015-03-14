@@ -14,6 +14,7 @@ public class Rapier : Weapon
 		daggerStabPrefab = Resources.Load<GameObject>("Projectiles/RapierStab");
 		Icon = UIManager.Instance.Icons[IconIndex];
 
+		PrimaryDamage = 3;
 		crosshairIndex = 3;
 		SpecialDamage = 9;
 		DurSpecialCost = 5;
@@ -41,6 +42,7 @@ public class Rapier : Weapon
 
 		stab.Init();
 		stab.Shooter = Carrier;
+		stab.Damage = PrimaryDamage;
 
 		List<Vector3> stabPoints = new List<Vector3>();
 

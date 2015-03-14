@@ -7,6 +7,7 @@ public class RocketLauncher : Weapon
 	public GameObject rocketPrefab;
 	public float homingVelocity;
 	public float fuelPerRocket;
+	public float rocketBlastRadius;
 
 	public override void Init()
 	{
@@ -17,6 +18,11 @@ public class RocketLauncher : Weapon
 		crosshairIndex = 5;
 		crosshairColor = Color.red;
 		specialCrosshairColor = Color.yellow;
+		PrimaryDamage = 3.5f;
+		SpecialDamage = 2.5f;
+		fuelPerRocket = 5;
+		rocketBlastRadius = 2;
+		homingVelocity = 30;
 
 		primaryFirePointIndex = 1;
 		specialFirePointIndex = 1;
@@ -49,6 +55,11 @@ public class RocketLauncher : Weapon
 					rocket.Shooter = Carrier;
 
 					rocket.Faction = Faction;
+
+					rocket.explosiveDamage = SpecialDamage;
+					rocket.blastRadius = rocketBlastRadius;
+					rocket.fuelRemaining = fuelPerRocket;
+					rocket.homingVelocity = homingVelocity;
 
 					if (lockOn)
 					{
@@ -91,6 +102,11 @@ public class RocketLauncher : Weapon
 		rocket.rigidbody.drag = 0;
 		rocket.target = null;
 		rocket.homing = false;
+
+		rocket.explosiveDamage = PrimaryDamage;
+		rocket.blastRadius = rocketBlastRadius;
+		rocket.fuelRemaining = fuelPerRocket;
+		rocket.homingVelocity = homingVelocity;
 
 		//Debug.DrawLine(firePoint, targetScanDir, Color.red, 5.0f);
 		Vector3 dir = targetScanDir - firePoint;

@@ -110,26 +110,30 @@ public class Projectile : MonoBehaviour
 						//If the projectile is from the Player
 						if (Faction == Allegiance.Player && atObj.Faction == Allegiance.Enemy)
 						{
+							ProjectileHitTarget(atObj);
+							
 							//Deal damage to the enemy
-							atObj.GetComponent<Enemy>().AdjustHealth(-Damage * (1 + Shooter.Level * .1f));
+							//atObj.GetComponent<Enemy>().AdjustHealth(-Damage * (1 + Shooter.Level * .1f));
 
 							//Apply AbilityEffect to the target.
-							for (int i = 0; i < projectileEffects.Count; i++)
-							{
-								atObj.GetComponent<Enemy>().ApplyAbilityEffect(projectileEffects[i]);
-							}
+							//for (int i = 0; i < projectileEffects.Count; i++)
+							//{
+							//	atObj.GetComponent<Enemy>().ApplyAbilityEffect(projectileEffects[i]);
+							//}
 						}
 						//Else if it is from an Enemy
 						else if (Faction == Allegiance.Enemy && atObj.Faction == Allegiance.Player)
 						{
+							ProjectileHitTarget(GameManager.Instance.player);
+							
 							//Deal damage to the enemy
-							GameManager.Instance.player.AdjustHealth(-Damage * (1 + Shooter.Level * .1f));
+							//GameManager.Instance.player.AdjustHealth(-Damage);
 
 							//Apply AbilityEffect to the target.
-							for (int i = 0; i < projectileEffects.Count; i++)
-							{
-								GameManager.Instance.player.ApplyAbilityEffect(projectileEffects[i]);
-							}
+							//for (int i = 0; i < projectileEffects.Count; i++)
+							//{
+							//	GameManager.Instance.player.ApplyAbilityEffect(projectileEffects[i]);
+							//}
 
 							//Award experience to the enemy who fired it.
 							if (AwardXPOnHit && Shooter != null)
@@ -145,6 +149,17 @@ public class Projectile : MonoBehaviour
 			{
 				Collide();
 			}
+		}
+	}
+
+	public virtual void ProjectileHitTarget(Entity target)
+	{
+		target.AdjustHealth(-Damage * (1 + Shooter.Level * .1f));
+
+		//Apply AbilityEffect to the target.
+		for (int i = 0; i < projectileEffects.Count; i++)
+		{
+			target.ApplyAbilityEffect(projectileEffects[i]);
 		}
 	}
 

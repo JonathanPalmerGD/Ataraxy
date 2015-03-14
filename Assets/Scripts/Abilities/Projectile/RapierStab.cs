@@ -8,8 +8,6 @@ public class RapierStab : MeleeProjectile
 	{
 		ColliderName = "StabCollider";
 		base.Init();
-
-		Damage = 3;
 		
 		ProjVel = 1900;
 		movementDecay = 0f;

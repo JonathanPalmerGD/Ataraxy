@@ -8,22 +8,17 @@ public class Rocket : Projectile
 	public bool homing = true;
 	public float explosiveDamage;
 
-	public float homingVelocity = 1200;
+	public float homingVelocity;
 	public float blastRadius;
+	public float fuelRemaining;
 	public Vector3 dirToTarget;
-	private float fuelRemaining;
 	//private bool detonateOnAnything = false;
 	public Detonator explosive;
 	public GameObject body;
 
 	public override void Start()
 	{
-		Damage = 5;
-		blastRadius = 5;
-		explosiveDamage = 1;
-		fuelRemaining = 5f;
 		body = transform.FindChild("Rocket Body").gameObject;
-		//explosive = transform.FindChild("Detonator-Rocket").GetComponent<Detonator>();
 	}
 
 	public override void Update()
@@ -62,6 +57,11 @@ public class Rocket : Projectile
 		transform.LookAt(transform.position + rigidbody.velocity * 3);
 	}
 
+	public override void ProjectileHitTarget(Entity target)
+	{
+
+	}
+
 	public override void Collide()
 	{
 		rigidbody.drag += 2;
@@ -85,6 +85,7 @@ public class Rocket : Projectile
 			float distFromBlast = Vector3.Distance(hitColliders[i].transform.position, transform.position);
 			float parameterForMessage = -(explosiveDamage * blastRadius / distFromBlast);
 
+			//Debug.Log("Dealing Damage to : " + hitColliders[i].name + "\t" + parameterForMessage + "\n");
 			hitColliders[i].gameObject.SendMessage("AdjustHealth", parameterForMessage, SendMessageOptions.DontRequireReceiver);
 			i++;
 		}

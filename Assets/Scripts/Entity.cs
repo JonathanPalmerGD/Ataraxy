@@ -226,7 +226,6 @@ public class Entity : MonoBehaviour
 		//If our displayed health value isn't correct
 		if (HealthToAdjust != 0)
 		{
-			Debug.Log(name + "\t" + HealthToAdjust + "\n");
 			float rate = Time.deltaTime * 8;
 			float gainThisFrame = 0;
 			if (HealthToAdjust < 0)
@@ -261,7 +260,6 @@ public class Entity : MonoBehaviour
 				KillEntity();
 			}
 		}
-
 	}
 
 	/// <summary>
@@ -297,7 +295,7 @@ public class Entity : MonoBehaviour
 
 	public virtual void AdjustHealth(float amount)
 	{
-		//Debug.Log("I AM HURT " + gameObject.name + " " + amount);
+		//Debug.Log(name + " is hurt\t" + amount + "\n");
 		if (amount < 0)
 		{
 			damaged = true;
@@ -305,20 +303,11 @@ public class Entity : MonoBehaviour
 		if (Health + amount >= MaxHealth)
 		{
 			HealthToAdjust += MaxHealth - Health;
-			//Health = MaxHealth;
 		}
 		else
 		{
 			HealthToAdjust += amount;
-			//Health += amount;
 		}
-
-		//UpdateHealthUI();
-
-		/*if (Health <= 0 && !isDead)
-		{
-			KillEntity();
-		}*/
 	}
 
 	public void GainExperience(float xpValue, int xpMultiplier = 1)
@@ -329,15 +318,7 @@ public class Entity : MonoBehaviour
 		}
 		if (Level < GameManager.Instance.player.Level + 4)
 		{
-			//XP += xpValue * xpMultiplier;
 			XPToGain += xpValue * xpMultiplier;
-
-			//UpdateXPUI();
-
-			/*if (XP > XPNeeded)
-			{
-				GainLevel();
-			}*/
 		}
 	}
 
