@@ -85,6 +85,7 @@ public class GroundEnemy : Enemy
 	public float destDistance = 5;
 	public enum GroundState { Falling, OnGround, Turning, Jumping, Stopped };
 	public GroundState navState;
+	public bool AdvanceOnLocalTarget = true;
 	public bool haveNewHeading = false;
 
 	public bool ignoreJumpHeight = true;
@@ -241,7 +242,8 @@ public class GroundEnemy : Enemy
 	{
 		base.Update();
 
-		foreach(GameObject fp in FirePoints)
+		#region [Editor] Debug Lines. Dev Buttons (Insert & Forward Slash)
+		foreach (GameObject fp in FirePoints)
 		{
 			Debug.DrawLine(transform.position, fp.transform.position, Color.yellow);
 		}
@@ -251,14 +253,15 @@ public class GroundEnemy : Enemy
 		}
 		if(Input.GetKeyDown(KeyCode.Slash))
 		{
-			//Vector3 dir = GameManager.Instance.playerGO.transform.position;
-			Vector3 dir = transform.position + (transform.forward * 500);
+			Vector3 dir = Vector3.zero;
+			
 			if (targVisual != null)
 			{
 				Debug.DrawLine(transform.position, transform.position - targVisual.targetingDir, Color.green, 5.0f);
 			}
-			weapon.UseWeapon(null, null, FirePoints, transform.position - transform.forward, false);
+			weapon.UseWeapon(null, null, FirePoints, transform.position + transform.forward * 500, false);
 		}
+		#endregion
 		#region When to Check
 		if (Time.time > nextCheck)
 		{
@@ -449,6 +452,10 @@ public class GroundEnemy : Enemy
 		#endregion
 
 		#region Rotation of Enemy
+		if (AdvanceOnLocalTarget && GameManager.Instance.playerCont.lastLocation == lastLocation)
+		{
+			FaceTarget(GameManager.Instance.playerGO.transform.position);
+		}
 		if (nextNode != null)
 		{
 			FaceTarget(nextNode.transform.position);
@@ -538,7 +545,7 @@ public class GroundEnemy : Enemy
 	#region Pathing
 	Vector3 CalcSteering()
 	{
-		//Debug.Log
+		Debug.Log(navState.ToString() + "\n");
 		Vector3 steering = Vector3.forward;
 		if (navState == GroundState.OnGround || navState == GroundState.Jumping)
 		{
@@ -641,6 +648,15 @@ public class GroundEnemy : Enemy
 
 	float CheckDestinationDistance()
 	{
+		GameObject playerGO = GameManager.Instance.playerGO;
+		if (AdvanceOnLocalTarget && GameManager.Instance.playerCont.lastLocation == lastLocation)
+		{
+			Vector2 posFlat = new Vector2(transform.position.x, transform.position.z);
+			Vector2 nodePosFlat = new Vector2(playerGO.transform.position.x, playerGO.transform.position.z);
+
+			//Find distance to the position.
+			return Vector2.Distance(posFlat, nodePosFlat);
+		}
 		if (nextNode != null)
 		{
 			Vector2 posFlat = new Vector2(transform.position.x, transform.position.z);
@@ -661,16 +677,16 @@ public class GroundEnemy : Enemy
 			{
 				//curPath = TerrainManager.Instance.FindPathToRandomNeighborIsland(lastLocation, lastLocation.NearestNode(transform.position));
 
-				if (GameManager.Instance.player.GetComponent<Controller>().lastLocation != null)
+				if (GameManager.Instance.playerCont.lastLocation != null)
 				{
 					//Debug.Log(GameManager.Instance.player.GetComponent<Controller>().lastLocation + "\n" + lastLocation);
-					if (GameManager.Instance.player.GetComponent<Controller>().lastLocation != lastLocation)
+					if (GameManager.Instance.playerCont.lastLocation != lastLocation)
 					{
 						//Find our nearest node.
 						//PathNode pathStartLocation = lastLocation.NearestNode(transform.position);
 
 						//Find a path from current location to the target.
-						Stack<PathNode> newPath = TerrainManager.Instance.PathToIsland(lastLocation, GameManager.Instance.player.GetComponent<Controller>().lastLocation, 120);
+						Stack<PathNode> newPath = TerrainManager.Instance.PathToIsland(lastLocation, GameManager.Instance.playerCont.lastLocation, 120);
 
 						//Stack<PathNode> newPath = TerrainManager.Instance.FindPathToIsland(pathStartLocation, GameManager.Instance.player.GetComponent<Controller>().lastLocation, 90);
 
@@ -716,12 +732,6 @@ public class GroundEnemy : Enemy
 		{
 			UpdateTarget();
 		}
-	}
-
-	void GetNewPath()
-	{
-		//Get a random adjacent island.
-		//Ask TerrainManager for a path to that island?
 	}
 
 	void DisplayPath(Stack<PathNode> p)

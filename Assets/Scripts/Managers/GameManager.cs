@@ -8,6 +8,7 @@ public class GameManager : Singleton<GameManager>
 {
 	public GameObject playerGO;
 	public Player player;
+	public Controller playerCont;
 	public GameObject tokenPrefab;
 	public GameObject repairTokenPrefab;
 	public GameObject xpHomePrefab;
@@ -30,6 +31,7 @@ public class GameManager : Singleton<GameManager>
 		if (playerGO != null)
 		{
 			player = playerGO.GetComponent<Player>();
+			playerCont = playerGO.GetComponent<Controller>();
 		}
 
 #if !UNITY_EDITOR
