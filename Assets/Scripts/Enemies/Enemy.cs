@@ -255,6 +255,12 @@ public class Enemy : NPC
 		{
 			dirToTarget = -targVisual.targetingDir;
 		}
+        else
+        {
+            dirToTarget = (GameManager.Instance.player.transform.position - gunMuzzle.transform.position);// +charMotor.movement.velocity * percentagePlayerVelLeading;
+
+            dirToTarget.Normalize();
+        }
 	}
 
 	public virtual void HandleAggression()
@@ -309,6 +315,7 @@ public class Enemy : NPC
 	/// </summary>
 	public void AttackPlayer()
 	{
+        //Debug.Log(name + " is attacking the player\n");
 		GameObject projectile = (GameObject)GameObject.Instantiate(projectilePrefab, gunMuzzle.transform.position, Quaternion.identity);
 
 		Projectile proj = projectile.GetComponent<Projectile>();
