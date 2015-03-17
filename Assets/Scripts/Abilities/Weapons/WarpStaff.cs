@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class WarpStaff : Weapon {
+public class WarpStaff : Weapon
+{
 
-#region Class Variables
+	#region Class Variables
 	public static int IconIndex = 37;
-	
+
 	public GameObject TeleDestPrefab;
 	public GameObject ExplosionPrefab;
 
@@ -14,19 +15,22 @@ public class WarpStaff : Weapon {
 	public float SelfTeleMag = 30;
 
 	// Explosive Prefab
-	public float blastRadius;
-	public float explosiveDamage;
+	public float InnerBlastSphere = 2.0f;
+	public float blastRadius = 8.0f;
+	public float MaxExplosiveDmg = 3.5f;
+	public float MinExplosiveDmg = 0.3f;
 
-#endregion
 
-#region Initialization
+	#endregion
+
+	#region Initialization
 	public override void Init()
 	{
 		// Loads the Teleport Destination Prefab.
 		TeleDestPrefab = Resources.Load<GameObject>("Projectiles/TeleDestPrefab");
-		
+
 		ExplosionPrefab = Resources.Load<GameObject>("Detonator-Telefrag01");
-		
+
 		//UI Elements:
 		// Sets up Weapon's Icon.
 		Icon = UIManager.Instance.Icons[IconIndex];
@@ -50,89 +54,62 @@ public class WarpStaff : Weapon {
 		DurSpecialCost = 1;
 		Durability = 50;
 
-		// Explosion Stats
-		blastRadius = 15;
-		explosiveDamage = 2;
-		
-		/*
-#if CHEAT
-		NormalCooldown = .7f;
-		SpecialCooldown = 0.5f;
-		Durability = 100;
-
-		Durability = 999;
-		DurCost = 0;
-		DurCost = 1;
-		DurSpecialCost = 2;
-#else
-		NormalCooldown = 10.0f;
-		SpecialCooldown = 3.0f;
-		CdLeft = 0.0f;
-
-		DurCost = 1;
-		DurSpecialCost = 2;
-		Durability = 50;
-#endif*/
-
-/*
-#if UNITY_EDITOR
-		NormalCooldown = 0.5f;
-		SpecialCooldown = 0.5f;
-		CdLeft = 0.0f;
-
-		DurCost = 1;
-		DurSpecialCost = 1;
-		Durability = 999;
-#endif
- * */
-
-		
 		// Colors the beam
 		BeamColor = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
 	}
-#endregion
+	#endregion
 
-#region Fire Weapon
+	#region Fire Weapon
 	// Primary Fire
 	public override void UseWeapon(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 targetScanDir = default(Vector3), bool lockOn = false)
-{
-		// Get direction Player is poiting at.
+	{
+		// Get direction Player is poiting at and Normalize it.
 		Vector3 firePoint = firePoints[0].transform.position;
 		Vector3 dir = targetScanDir - firePoint;
-		Debug.DrawLine(Carrier.transform.position, Carrier.transform.position + dir, Color.red,15);
-		
 		Vector3 movementDir = dir;
 		movementDir.Normalize();
 
-		Vector3 TelePosition = Carrier.transform.localPosition;
-		TelePosition += movementDir * SelfTeleMag;
 
-		Carrier.transform.localPosition = TelePosition;
-		
+		// Teleports player to targeted position.
+		Vector3 TelePosition = Carrier.transform.position;
+		TelePosition += movementDir * SelfTeleMag;
+		Carrier.transform.position = TelePosition;
+
 		// Stops Players momentum
-		Carrier.transform.rigidbody.velocity = new Vector3 (0, 0, 0);
-		 
+		Carrier.transform.rigidbody.velocity = new Vector3(0, 0, 0);
+
 		// Creates Explosion.
 		if (ExplosionPrefab != null)
 		{
 			GameObject.Instantiate(ExplosionPrefab, Carrier.transform.position, Quaternion.identity);
 		}
 
-		// Creates overlap sphere and aplies damage.
+		// Creates overlap sphere and aplies damage to Enemies.
 		Collider[] hitColliders = Physics.OverlapSphere(Carrier.transform.position, blastRadius);
 		int i = 0;
+
+		float distFromBlast;
+		float parameterForMessage;
+
 		while (i < hitColliders.Length)
 		{
-			float distFromBlast = Vector3.Distance(hitColliders[i].transform.position, Carrier.transform.position);
-			float parameterForMessage = -(explosiveDamage * blastRadius / distFromBlast);
-
+			distFromBlast = Vector3.Distance(hitColliders[i].transform.position, Carrier.transform.position);
+			// Aplies Damage
 			if (hitColliders[i].gameObject != this.Carrier.gameObject)
 			{
-				hitColliders[i].gameObject.SendMessage("AdjustHealth", parameterForMessage, SendMessageOptions.DontRequireReceiver);
+				// Calculate Explosion Damage.
+				// Linear Equation ax +b = y where x = distFromBlast and y = parameterForMessage
+				//		y			=					a									*	x			+									b
+				parameterForMessage = (-MaxExplosiveDmg / (blastRadius - InnerBlastSphere)) * distFromBlast + ((blastRadius / (blastRadius - InnerBlastSphere)) * MaxExplosiveDmg);
+
+				// Caps Damage:
+				if (parameterForMessage > MaxExplosiveDmg) parameterForMessage = MaxExplosiveDmg;
+				else if (parameterForMessage < MinExplosiveDmg) parameterForMessage = MinExplosiveDmg;
+				hitColliders[i].gameObject.SendMessage("AdjustHealth", -parameterForMessage, SendMessageOptions.DontRequireReceiver);
 			}
 			i++;
 		}
-}
+	}
 
 	public override void UseWeaponSpecial(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 targetScanDir = default(Vector3), bool lockOn = false)
 	{
@@ -149,66 +126,103 @@ public class WarpStaff : Weapon {
 
 					if (e.gameObject.rigidbody != null)
 					{	//If target has a rigidBody
-						Vector3 CurrTargPos = e.transform.localPosition;
+						Vector3 CurrTargPos = e.transform.position;
 
 						// Gets Ramdom direction and normalize.
 						Vector3 TeleDir =
 						new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(-1.0f, 1.0f));
 						TeleDir.Normalize();
-						//Debug.Log(TeleDir);
 
 						Vector3 NewTargPosition = CurrTargPos + EnemyTeleMag * TeleDir;
 						//Debug.Log(NewTargPosition);
-						e.transform.localPosition = NewTargPosition;
+						e.transform.position = NewTargPosition;
 
 
 						// Creates Sparks.
 						if (ExplosionPrefab != null)
 						{
-							GameObject.Instantiate(ExplosionPrefab, e.transform.localPosition, Quaternion.identity);
+							GameObject.Instantiate(ExplosionPrefab, CurrTargPos, Quaternion.identity);
+							GameObject.Instantiate(ExplosionPrefab, e.transform.position, Quaternion.identity);
 						}
 
+						//Aplies Damage
+
+						//Normal Damge
+						e.AdjustHealth(-MinExplosiveDmg);
+
+						//Explosion Damage:
+						/*
+						// Creates overlap sphere and aplies damage to Enemies.
+						Collider[] hitColliders = Physics.OverlapSphere(e.transform.position, blastRadius);
+						int i = 0;
+
+						float distFromBlast;
+						float parameterForMessage;
+
+						while (i < hitColliders.Length)
+						{
+							distFromBlast = Vector3.Distance(hitColliders[i].transform.position, e.transform.position);
+							// Aplies Damage
+							if (hitColliders[i].gameObject != this.Carrier.gameObject)
+							{
+								// Calculate Explosion Damage.
+								// Linear Equation ax +b = y where x = distFromBlast and y = parameterForMessage
+								//		y			=					a									*	x			+									b
+								parameterForMessage = (-MaxExplosiveDmg / (blastRadius - InnerBlastSphere)) * distFromBlast + ((blastRadius / (blastRadius - InnerBlastSphere)) * MaxExplosiveDmg);
+
+								// Caps Damage:
+								// Max Damage
+								if (parameterForMessage > MaxExplosiveDmg) parameterForMessage = MaxExplosiveDmg;
+								//Minimum Damage
+								else if (parameterForMessage < MinExplosiveDmg) parameterForMessage = MinExplosiveDmg;
+
+								hitColliders[i].gameObject.SendMessage("AdjustHealth", -parameterForMessage, SendMessageOptions.DontRequireReceiver);
+							}
+							i++;
+						}
+						 */
 					}
 					else
 					{	// Target has NO rigidBody
 						// Creates Explosion.
 						if (ExplosionPrefab != null)
 						{
-							GameObject.Instantiate(ExplosionPrefab, e.transform.localPosition, Quaternion.identity);
+							GameObject.Instantiate(ExplosionPrefab, e.transform.position, Quaternion.identity);
+
 						}
 
-						// Creates overlap sphere and aplies damage.
-						Collider[] hitColliders = Physics.OverlapSphere(e.transform.localPosition, blastRadius);
+						// Creates overlap sphere and aplies damage to Enemies.
+						Collider[] hitColliders = Physics.OverlapSphere(e.transform.position, blastRadius);
 						int i = 0;
+
+						float distFromBlast;
+						float parameterForMessage;
+
 						while (i < hitColliders.Length)
 						{
-							float distFromBlast = Vector3.Distance(hitColliders[i].transform.position, e.transform.localPosition);
-							float parameterForMessage = -(explosiveDamage * blastRadius / distFromBlast);
-
+							distFromBlast = Vector3.Distance(hitColliders[i].transform.position, e.transform.position);
+							// Aplies Damage
 							if (hitColliders[i].gameObject != this.Carrier.gameObject)
 							{
-								hitColliders[i].gameObject.SendMessage("AdjustHealth", parameterForMessage, SendMessageOptions.DontRequireReceiver);
+								// Calculate Explosion Damage.
+								// Linear Equation ax +b = y where x = distFromBlast and y = parameterForMessage
+								//		y			=					a									*	x			+									b
+								parameterForMessage = (-MaxExplosiveDmg / (blastRadius - InnerBlastSphere)) * distFromBlast + ((blastRadius / (blastRadius - InnerBlastSphere)) * MaxExplosiveDmg);
+
+								// Caps Damage:
+								if (parameterForMessage > MaxExplosiveDmg) parameterForMessage = MaxExplosiveDmg;
+								else if (parameterForMessage < MinExplosiveDmg) parameterForMessage = MinExplosiveDmg;
+								hitColliders[i].gameObject.SendMessage("AdjustHealth", -parameterForMessage, SendMessageOptions.DontRequireReceiver);
 							}
 							i++;
 						}
 					}
 				}
 			}
-			/*
-			else if (targType == typeof(NPC))
-			{
-				Debug.Log("You hit a NPC\n");
-
-			}
-			else
-			{
-				Debug.Log("You nothing son!\n");
-			}
-			*/
 		}
 	}
 
-#endregion
+	#endregion
 
 	#region Static Functions
 	// Sets Up weapon initialization on New() call. Also Sets up descriptions
