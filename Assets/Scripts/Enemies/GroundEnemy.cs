@@ -83,16 +83,21 @@ public class GroundEnemy : Enemy
 	public float checkHeight = 3;
 	public float checkDist = 5;
 	public float destDistance = 5;
+	#endregion
 
+	#region Player Detection & Tracking
+	[Header("Player Detection & Tracking")]
 	public bool SameIsland = false;
 	public bool CloseQuarters = false;
 	public bool FacingPlayer = false;
-
+	public float facingDifference = .8f;
 	public float closeQuartersDist = 5;
+	#endregion
+	
+	#region Ground State & Navigational
 	public enum GroundState { Falling, OnGround, Turning, Jumping, Stopped, Following };
 	public GroundState navState;
 	public bool AdvanceOnLocalTarget = true;
-	public bool haveNewHeading = false;
 
 	public bool ignoreJumpHeight = true;
 	#endregion
@@ -275,6 +280,13 @@ public class GroundEnemy : Enemy
 			}
 			weapon.UseWeapon(null, null, FirePoints, transform.position + transform.forward * 500, false);
 		}
+
+		//Island targNearIsland = TerrainManager.Instance.FindIslandNearTarget(target);
+		/*
+		if (targNearIsland != null)
+		{
+			Debug.DrawLine(target.transform.position, targNearIsland.transform.position);
+		}*/
 		#endregion
 		#region When to Check
 		if (Time.time > nextCheck)
@@ -378,15 +390,8 @@ public class GroundEnemy : Enemy
 		}
 		#endif
 		#endregion
-		//Island targNearIsland = TerrainManager.Instance.FindIslandNearTarget(target);
-		/*
-		if (targNearIsland != null)
-		{
-			Debug.DrawLine(target.transform.position, targNearIsland.transform.position);
-		}*/
 	}
 
-	
 	void FixedUpdate ()
 	{
 		currentSpeed = Mathf.Round(myRB.velocity.magnitude);
@@ -910,11 +915,6 @@ public class GroundEnemy : Enemy
 					else
 					{
 						navState = GroundState.Turning;
-						if (!haveNewHeading)
-						{
-							//Say to get one based on the edges in front of us.
-							//TurnNewHeading();
-						}
 					}
 
 					#endregion
@@ -1153,7 +1153,7 @@ public class GroundEnemy : Enemy
 				CloseQuarters = false;
 			}
 
-			if (dotProduct > .8f)
+			if (dotProduct > facingDifference)
 			{
 				FacingPlayer = true;
 			}
