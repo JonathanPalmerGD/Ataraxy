@@ -6,6 +6,7 @@ public class Longsword : Weapon
 {
 	public static int IconIndex = 39;
 	public GameObject bladeSlashPrefab;
+	public float slashDrag = 8;
 	Vector3 movementVector;
 
 	public override void Init()
@@ -41,6 +42,8 @@ public class Longsword : Weapon
 		slash.Init();
 		slash.Shooter = Carrier;
 
+		slash.rigidbody.drag = slashDrag;
+
 		slash.Damage = PrimaryDamage;
 
 		//Slash Edge Extend direction
@@ -68,6 +71,8 @@ public class Longsword : Weapon
 		BladeSlash slash = go.GetComponent<BladeSlash>();
 		slash.Init();
 		slash.Shooter = Carrier;
+
+		slash.rigidbody.drag = slashDrag;
 
 		slash.Damage = SpecialDamage;
 

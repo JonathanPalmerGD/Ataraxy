@@ -38,6 +38,7 @@ public class TerrainManager : Singleton<TerrainManager>
 	public GameObject pathNodePrefab;
 	public List<Cluster> clusters;
 	public List<Texture2D> textures;
+	public List<Material> terrainMats;
 	public List<GameObject> terrainFeatures;
 	public List<GameObject> cosmeticFeatures;
 	public List<GameObject> enemyPrefabs;
@@ -54,6 +55,7 @@ public class TerrainManager : Singleton<TerrainManager>
 		clusterPrefab = Resources.Load<GameObject>("Cluster");
 		pathNodePrefab = Resources.Load<GameObject>("PathNode");
 		textures = Resources.LoadAll<Texture2D>("Terrain").ToList();
+		terrainMats = Resources.LoadAll<Material>("TerrainMaterials").ToList();
 		islandPrefabs = Resources.LoadAll<GameObject>("Islands").ToList();
 		landmarkPrefabs = Resources.LoadAll<GameObject>("Landmarks").ToList();
 		terrainFeatures = Resources.LoadAll<GameObject>("TerrainFeatures").ToList();

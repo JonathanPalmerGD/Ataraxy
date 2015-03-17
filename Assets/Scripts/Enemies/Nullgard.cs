@@ -24,6 +24,7 @@ public class Nullgard : GroundEnemy
 		nullShields = new List<NullShield>();
 		nullShields = GetComponentsInChildren<NullShield>().ToList();
 		base.Start();
+		name = "Nullgard";
 	}
 
 	public override void Update()

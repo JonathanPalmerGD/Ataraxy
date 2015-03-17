@@ -255,6 +255,7 @@ public class GroundEnemy : Enemy
 		ls.primaryFirePointIndex = 0;
 		ls.BeamColor = Color.black;
 		ls.Carrier = this;
+		ls.slashDrag = 5;
 		//ls.BeamColor = Color.black;
 		
 		weapon = ls;
@@ -486,15 +487,18 @@ public class GroundEnemy : Enemy
 		#region Rotation of Enemy
 		if (AdvanceOnLocalTarget && GameManager.Instance.playerCont.lastLocation == lastLocation)
 		{
+			//Debug.DrawLine(transform.position, transform.position + Vector3.right * 3, Color.blue, 2);
 			SameIsland = true;
 			FaceTarget(GameManager.Instance.playerGO.transform.position);
 		}
 		if (nextNode != null)
 		{
+			//Debug.DrawLine(transform.position, transform.position + Vector3.left * 3, Color.blue, 2);
 			FaceTarget(nextNode.transform.position);
 		}
 		else
 		{
+			//Debug.DrawLine(transform.position, transform.position + Vector3.up * 15, Color.blue, 2);
 			GetNewDestination();
 		}
 		#endregion
@@ -583,7 +587,7 @@ public class GroundEnemy : Enemy
 		if (navState == GroundState.OnGround || navState == GroundState.Jumping)
 		{
 			float distFromDest = CheckDestinationDistance();
-			
+
 			steering = Vector3.forward;
 
 			//Check distance to destination. If less distance, dampen this
@@ -711,14 +715,14 @@ public class GroundEnemy : Enemy
 	float CheckDestinationDistance()
 	{
 		GameObject playerGO = GameManager.Instance.playerGO;
-		if (AdvanceOnLocalTarget && GameManager.Instance.playerCont.lastLocation == lastLocation)
+		/*if (AdvanceOnLocalTarget && GameManager.Instance.playerCont.lastLocation == lastLocation)
 		{
 			Vector2 posFlat = new Vector2(transform.position.x, transform.position.z);
 			Vector2 nodePosFlat = new Vector2(playerGO.transform.position.x, playerGO.transform.position.z);
 
 			//Find distance to the position.
 			return Vector2.Distance(posFlat, nodePosFlat);
-		}
+		}*/
 		if (nextNode != null)
 		{
 			Vector2 posFlat = new Vector2(transform.position.x, transform.position.z);
@@ -772,7 +776,7 @@ public class GroundEnemy : Enemy
 		}
 		if (curPath.Count > 0)
 		{
-			
+			//Debug.Log("Cur Path " + curPath.Count + "\t" + "\n" + nearDestination);
 			//Update the last node we were at.
 			lastNode = nextNode;
 
@@ -781,12 +785,11 @@ public class GroundEnemy : Enemy
 
 			//Say we aren't near a node anymore.
 			nearDestination = false;
+			//Debug.Log("Cur Path " + curPath.Count + "\t" +  "\n" + nearDestination);
 		}
 		else
 		{
 			nextNode = null;
-
-			
 		}
 	}
 
@@ -836,6 +839,7 @@ public class GroundEnemy : Enemy
 		if (nextNode != null)
 		{
 			Debug.DrawLine(transform.position + Vector3.up * 3, nextNode.transform.position + Vector3.up * 3, Color.magenta);
+			Debug.DrawLine(nextNode.transform.position + Vector3.up * 3, nextNode.transform.position + Vector3.up * 10, Color.magenta);
 		}
 	}
 
