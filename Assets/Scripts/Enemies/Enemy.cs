@@ -27,7 +27,7 @@ public class Enemy : NPC
 	private bool gainXpWhenHit = false;
 	private float xpGainWhenHit = .5f;
 
-	private float expGainPerShot = 5;
+	public float expGainPerShot = 5;
 
 	private float alertRadius = 50;
 	private float mentorModifier = 15.0f;
@@ -187,8 +187,7 @@ public class Enemy : NPC
 	{
 		if (!UIManager.Instance.paused)
 		{
-			firingTimer -= Time.deltaTime;
-			//If we know where the player is, update them as the target.
+			HandleFiringTimer();
 
 			HandleExperience();
 
@@ -200,6 +199,11 @@ public class Enemy : NPC
 		}
 	}
 	#endregion
+
+	public virtual void HandleFiringTimer()
+	{
+		FiringTimer -= Time.deltaTime;
+	}
 
 	#region Enemy Behavior Functions
 	public void HandleExperience()
