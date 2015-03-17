@@ -36,6 +36,8 @@ public class Nullgard : GroundEnemy
 			}
 		}
 
+		#region [Editor] Forced State Adjustment
+		#if UNITY_EDITOR
 		if (Input.GetKeyDown(KeyCode.Z))
 		{
 			if (state == EnemyState.Idle)
@@ -51,6 +53,8 @@ public class Nullgard : GroundEnemy
 				ChangeState(EnemyState.Idle);
 			}
 		}
+		#endif
+		#endregion
 
 		base.Update();
 	}
