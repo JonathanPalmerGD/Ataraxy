@@ -287,20 +287,20 @@ public class Cluster : WorldObject
 
 	public void ApplyRandomTexturing(GameObject island)
 	{
-		if (RandomTexture)
+		/*if (RandomTexture)
 		{
 			island.renderer.material = TerrainManager.Instance.terrainMats[Random.Range(0, TerrainManager.Instance.terrainMats.Count)];
 			/*island.renderer.material.mainTextureScale = new Vector2(Random.Range(5, 25), Random.Range(5, 25));
 			island.renderer.material.color = new Color(Random.Range(.7f, 1f), Random.Range(.7f, 1f), Random.Range(.7f, 1f));*/
-		}
+		//}
 
-		/*
+		
 		if (RandomTexture)
 		{
 			island.renderer.material.mainTexture = TerrainManager.Instance.textures[Random.Range(0, TerrainManager.Instance.textures.Count)];
 			island.renderer.material.mainTextureScale = new Vector2(Random.Range(5, 25), Random.Range(5, 25));
 			island.renderer.material.color = new Color(Random.Range(.7f, 1f), Random.Range(.7f, 1f), Random.Range(.7f, 1f));
-		}*/
+		}
 	}
 
 	public void ApplyIslandParent(GameObject island)
