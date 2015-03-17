@@ -88,10 +88,16 @@ public class GroundEnemy : Enemy
 	#region Player Detection & Tracking
 	[Header("Player Detection & Tracking")]
 	public bool SameIsland = false;
-	public bool CloseQuarters = false;
+	//public bool CloseQuarters = false;
 	public bool FacingPlayer = false;
 	public float facingDifference = .8f;
-	public float closeQuartersDist = 5;
+	public float closeQuartersDist = 4;
+	public float mediumQuartersDist = 10;
+
+	public enum PlayerDistState { Far, Medium, Close };
+	public PlayerDistState distState;
+
+	public float distStateCounter = 0;
 	#endregion
 	
 	#region Ground State & Navigational
@@ -237,6 +243,11 @@ public class GroundEnemy : Enemy
 		Longsword ls = Longsword.New();
 		ls.Init();
 
+		#if UNITY_EDITOR
+		ls.PrimaryDamage = .5f;
+		#endif
+
+		//ls.proj
 		ls.DurCost = 0;
 		ls.Faction = Faction;
 		ls.bladeSlashPrefab = Resources.Load<GameObject>("Projectiles/Evil BladeSlash");
@@ -258,7 +269,7 @@ public class GroundEnemy : Enemy
 		{
 			Debug.DrawLine(transform.position, fp.transform.position, Color.yellow);
 		}
-		if (CloseQuarters)
+		if (distState == PlayerDistState.Close)
 		{
 			Debug.DrawLine(transform.position + transform.up * 5, transform.position + transform.up * 5 + transform.forward * 5, Color.black);
 		}
@@ -974,7 +985,7 @@ public class GroundEnemy : Enemy
 		{
 			CheckCloseQuarter();
 
-			if(CloseQuarters)
+			if(distState == PlayerDistState.Close)
 			{
 				navState = GroundState.Stopped;
 			}
@@ -984,6 +995,7 @@ public class GroundEnemy : Enemy
 				bool edge = CheckEdge();
 				if (edge)
 				{
+					SetDistState(PlayerDistState.Far);
 					navState = GroundState.Stopped;
 				}
 				else if (wall)
@@ -1123,10 +1135,8 @@ public class GroundEnemy : Enemy
 	
 		return true;
 	}
-	public bool CheckCloseQuarter()
+	public void CheckCloseQuarter()
 	{
-		CloseQuarters = false;
-
 		Vector3 playerPos = GameManager.Instance.playerGO.transform.position;
 
 		Vector3 forward = transform.TransformDirection(Vector3.forward);
@@ -1142,16 +1152,23 @@ public class GroundEnemy : Enemy
 
 		if (lastLocation == GameManager.Instance.playerCont.lastLocation)
 		{
+			#region Close Quarters State Machine
+			//public enum PlayerDistState { Far, Medium, Close };
+			//public PlayerDistState distState;
+			
 			if (distToPlayer < closeQuartersDist)
 			{
-				
-				CloseQuarters = true;
+				SetDistState(PlayerDistState.Close);
+			}
+			else if (distToPlayer < mediumQuartersDist)
+			{
+				SetDistState(PlayerDistState.Medium);
 			}
 			else
 			{
-				//Otherwise advance unless a wall or edge impedes up.
-				CloseQuarters = false;
+				SetDistState(PlayerDistState.Far);
 			}
+			#endregion
 
 			if (dotProduct > facingDifference)
 			{
@@ -1160,10 +1177,9 @@ public class GroundEnemy : Enemy
 			else
 			{
 				FacingPlayer = false;
+				SetDistState(PlayerDistState.Far);
 			}
 		}
-
-		return CloseQuarters;
 	}
 	public bool isNearDestination()
 	{
@@ -1174,6 +1190,15 @@ public class GroundEnemy : Enemy
 		return false;
 	}
 	#endregion
+
+	public void SetDistState(PlayerDistState targetState)
+	{
+		if (distState != targetState)
+		{
+			distState = targetState;
+			distStateCounter = 0;
+		}
+	}
 
 	#region Moving, Standing, Grounded checking
 	public bool IsMoving()

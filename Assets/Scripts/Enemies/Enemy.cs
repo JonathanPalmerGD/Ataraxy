@@ -7,7 +7,7 @@ public class Enemy : NPC
 	/// <summary>
 	/// A Vector3 that tracks the muzzle to the player (for firing projectiles)
 	/// </summary>
-	private Vector3 dirToTarget;
+	public Vector3 dirToTarget;
 	#region Combat State Information
 	public bool CanSeePlayer = false;
 	public enum EnemyState { Idle, Searching, Preparing, Attacking };

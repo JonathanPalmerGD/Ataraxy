@@ -9,12 +9,18 @@ public class Nullgard : GroundEnemy
 	//Reference to the shield
 	public List<NullShield> nullShields;
 	float distFromPlayer;
+	public float storingShieldDur = 1.25f;
+	public float drawShieldDur = 0.35f;
+	float shieldCounter = 0;
+	bool stored = false;
 
 	public enum ShieldState { Down, Storing, Drawing, Up }
 	public ShieldState shieldState;
 
 	public override void Start()
 	{
+		closeQuartersDist = 8;
+		
 		nullShields = new List<NullShield>();
 		nullShields = GetComponentsInChildren<NullShield>().ToList();
 		base.Start();
@@ -24,7 +30,11 @@ public class Nullgard : GroundEnemy
 	{
 		//Debug.Log(shieldCounter + "\n" + shieldState.ToString());
 		shieldCounter -= Time.deltaTime;
-		if(shieldCounter < 0)
+
+		distStateCounter += Time.deltaTime;
+
+		#region Shield Counter
+		if (shieldCounter < 0)
 		{
 			if(shieldState == ShieldState.Storing)
 			{
@@ -35,9 +45,10 @@ public class Nullgard : GroundEnemy
 				ChangeShieldState(ShieldState.Down);
 			}
 		}
+		#endregion
 
 		#region [Editor] Forced State Adjustment
-		#if UNITY_EDITOR
+#if UNITY_EDITOR
 		if (Input.GetKeyDown(KeyCode.Z))
 		{
 			if (state == EnemyState.Idle)
@@ -62,21 +73,27 @@ public class Nullgard : GroundEnemy
 			case EnemyState.Idle:
 				if (CanSeePlayer)
 				{
-
-				}
-				else
-				{
-
+					if (distState == PlayerDistState.Close)
+					{
+						ChangeState(EnemyState.Preparing);
+					}
 				}
 				break;
 			case EnemyState.Preparing:
-				if (FacingPlayer && CloseQuarters)
+				if (FacingPlayer && distState == PlayerDistState.Close)
 				{
 					ChangeState(EnemyState.Attacking);
 				}
+				if (distState == PlayerDistState.Far)
+				{
+					ChangeState(EnemyState.Idle);
+				}
 				break;
 			case EnemyState.Attacking:
-
+				if (distState == PlayerDistState.Far)
+				{
+					ChangeState(EnemyState.Idle);
+				}
 				break;
 		}
 		#endregion
@@ -112,6 +129,8 @@ public class Nullgard : GroundEnemy
 		}
 
 		firing = CanSeePlayer;
+
+		base.HandleKnowledge();
 	}
 
 	public override void HandleAggression()
@@ -124,14 +143,7 @@ public class Nullgard : GroundEnemy
 		switch (state)
 		{
 			case EnemyState.Idle:
-				if(CanSeePlayer)
-				{
-					
-				}
-				else
-				{
-
-				}
+				
 				break;
 			case EnemyState.Preparing:
 				
@@ -142,18 +154,18 @@ public class Nullgard : GroundEnemy
 					//Raycast to the player, if it is a clear shot, fire in that direction.
 					if (FiringTimer <= 0)
 					{
-						if (FacingPlayer && CloseQuarters)
+						if (FacingPlayer && distState == PlayerDistState.Close)
 						{
 							//Fire at the player
 							AttackPlayer();
 
-#if UNITY_EDITOR
-							FiringTimer = 2.5f;
-#else
+							#if UNITY_EDITOR
+							FiringTimer = 0.5f;
+							#else
 							//Set ourselves on cooldown
 							FiringTimer = FiringCooldown;
-#endif
-							ChangeState(EnemyState.Idle);
+							#endif
+							ChangeState(EnemyState.Preparing);
 
 							//Learn from the experience. Leveling up is checked earlier in the update loop.
 							GainExperience(expGainPerShot);
@@ -187,13 +199,9 @@ public class Nullgard : GroundEnemy
 
 	public override void AttackPlayer()
 	{
-		weapon.UseWeapon(null, null, FirePoints, transform.position - transform.up * .5f + transform.forward * 500, false);
+		weapon.UseWeapon(null, null, FirePoints, transform.position + dirToTarget * 500, false);
+		//weapon.UseWeapon(null, null, FirePoints, transform.position - transform.up * .5f + transform.forward * 500, false);
 	}
-
-	public float storingShieldDur = 1.25f;
-	public float drawShieldDur = 0.35f;
-	float shieldCounter = 0;
-	bool stored = false;
 
 	public void ChangeShieldState(ShieldState targetState)
 	{
@@ -246,7 +254,7 @@ public class Nullgard : GroundEnemy
 
 	void ChangeState(EnemyState targetState)
 	{
-		Debug.Log("\t" + name + " target state: " + targetState.ToString() + "\n");
+		//Debug.Log("\t" + name + " target state: " + targetState.ToString() + "\n");
 		switch (targetState)
 		{
 			//Put shield in front of self

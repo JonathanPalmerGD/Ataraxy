@@ -41,6 +41,8 @@ public class Longsword : Weapon
 		slash.Init();
 		slash.Shooter = Carrier;
 
+		slash.Damage = PrimaryDamage;
+
 		//Slash Edge Extend direction
 		Vector3 LeftVector = Vector3.Cross(dir, Vector3.up);
 
@@ -66,6 +68,8 @@ public class Longsword : Weapon
 		BladeSlash slash = go.GetComponent<BladeSlash>();
 		slash.Init();
 		slash.Shooter = Carrier;
+
+		slash.Damage = SpecialDamage;
 
 		//Slash Edge Extend direction
 		Vector3 LeftVector = Vector3.Cross(dir, Vector3.up);
