@@ -12,7 +12,7 @@ public class BoundingStaff : Weapon
 		base.Init();
 		Icon = UIManager.Instance.Icons[IconIndex];
 
-		DurCost = 4;
+		DurCost = 6;
 		crosshairIndex = 4;
 		DurSpecialCost = 1;
 		NormalCooldown = .9f;
@@ -25,6 +25,15 @@ public class BoundingStaff : Weapon
 		
 #endif
 		BeamColor = Color.white;
+	}
+	
+	public override void UpdateWeapon(float time)
+	{
+		if (IconUI != null)
+		{
+			IconUI.color = new Color(.88f, .87f, .27f, IconUI.color.a);
+		}
+		base.UpdateWeapon(time);
 	}
 
 	public override void UseWeaponSpecial(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 targetScanDir = default(Vector3), bool lockOn = false)
@@ -41,7 +50,7 @@ public class BoundingStaff : Weapon
 		//Carrier.gameObject.GetComponent<Controller>().speedMultiplier = 3f;
 
 		//MoveCarrier(movementDir, 1.8f, Vector3.up, 0.05f, true);
-		Carrier.ExternalMove(movementDir, 100.5f, ForceMode.Acceleration);
+		Carrier.ExternalMove(movementDir, 175.0f, ForceMode.Acceleration);
 	}
 
 	#region Static Functions
@@ -49,7 +58,7 @@ public class BoundingStaff : Weapon
 	{
 		BoundingStaff bs = ScriptableObject.CreateInstance<BoundingStaff>();
 		bs.AbilityName = BoundingStaff.GetWeaponName();
-		bs.Durability = Random.Range(80, 99);
+		bs.Durability = Random.Range(140, 160);
 		bs.NormalCooldown = 1;
 		bs.SpecialCooldown = .08f;
 		bs.CdLeft = 0;

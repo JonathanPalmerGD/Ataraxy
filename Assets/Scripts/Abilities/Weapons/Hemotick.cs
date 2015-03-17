@@ -45,6 +45,10 @@ public class Hemotick : Weapon
 	public override void UpdateWeapon(float time)
 	{
 		base.UpdateWeapon(time);
+		if (IconUI != null)
+		{
+			IconUI.color = new Color(.9f, .2f, .2f, IconUI.color.a);
+		}
 	}
 	
 	public override bool CheckAbility()
@@ -102,6 +106,13 @@ public class Hemotick : Weapon
 			Durability += Mathf.Min(tickLevel * 5, 50);
 
 			PrimaryDamage += 0.03f;
+			hazeDur += 0.08f;
+
+			if (NormalCooldown > .02f)
+			{
+				NormalCooldown -= .005f;
+			}
+
 			AbilityName = Hemotick.modifier[(tickLevel >= Hemotick.modifier.Length) ? Hemotick.modifier.Length - 1 : tickLevel] + " " + Hemotick.GetWeaponName();
 			HandleVisuals();
 		#if !UNITY_EDITOR
