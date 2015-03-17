@@ -18,8 +18,8 @@ public class RocketLauncher : Weapon
 		crosshairIndex = 5;
 		crosshairColor = Color.red;
 		specialCrosshairColor = Color.yellow;
-		PrimaryDamage = 3.5f;
-		SpecialDamage = 2.5f;
+		PrimaryDamage = 4.5f;
+		SpecialDamage = 3.5f;
 		fuelPerRocket = 5;
 		rocketBlastRadius = 2;
 		homingVelocity = 30;

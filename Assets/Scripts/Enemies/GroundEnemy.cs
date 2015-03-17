@@ -83,10 +83,21 @@ public class GroundEnemy : Enemy
 	public float checkHeight = 3;
 	public float checkDist = 5;
 	public float destDistance = 5;
-	public enum GroundState { Falling, OnGround, Turning, Jumping, Stopped };
+	#endregion
+
+	#region Player Detection & Tracking
+	[Header("Player Detection & Tracking")]
+	public bool SameIsland = false;
+	public bool CloseQuarters = false;
+	public bool FacingPlayer = false;
+	public float facingDifference = .8f;
+	public float closeQuartersDist = 5;
+	#endregion
+	
+	#region Ground State & Navigational
+	public enum GroundState { Falling, OnGround, Turning, Jumping, Stopped, Following };
 	public GroundState navState;
 	public bool AdvanceOnLocalTarget = true;
-	public bool haveNewHeading = false;
 
 	public bool ignoreJumpHeight = true;
 	#endregion
@@ -247,6 +258,14 @@ public class GroundEnemy : Enemy
 		{
 			Debug.DrawLine(transform.position, fp.transform.position, Color.yellow);
 		}
+		if (CloseQuarters)
+		{
+			Debug.DrawLine(transform.position + transform.up * 5, transform.position + transform.up * 5 + transform.forward * 5, Color.black);
+		}
+		else
+		{
+			Debug.DrawLine(transform.position + transform.up * 5, transform.position + transform.up * 5 + transform.forward * 5, Color.white);
+		}
 		if (Input.GetKeyDown(KeyCode.Insert))
 		{
 			toggleView = !toggleView;
@@ -261,6 +280,13 @@ public class GroundEnemy : Enemy
 			}
 			weapon.UseWeapon(null, null, FirePoints, transform.position + transform.forward * 500, false);
 		}
+
+		//Island targNearIsland = TerrainManager.Instance.FindIslandNearTarget(target);
+		/*
+		if (targNearIsland != null)
+		{
+			Debug.DrawLine(target.transform.position, targNearIsland.transform.position);
+		}*/
 		#endregion
 		#region When to Check
 		if (Time.time > nextCheck)
@@ -346,13 +372,13 @@ public class GroundEnemy : Enemy
 			Footstep();
 		}
 		#endregion
-		#region Where the jump function happens
+		#region [Disabled] Jump Button
 		if (Input.GetButtonDown("Jump") && controllerAble)
 		{
 			//Jump();
 		}
 		#endregion
-		#region Pathing Dev Keys
+		#region [Editor] Pathing Dev Keys
 		#if UNITY_EDITOR
 		if (Input.GetKeyDown(KeyCode.I))
 		{
@@ -364,13 +390,8 @@ public class GroundEnemy : Enemy
 		}
 		#endif
 		#endregion
-		//Island targNearIsland = TerrainManager.Instance.FindIslandNearTarget(target);
-		/*
-		if (targNearIsland != null)
-		{
-			Debug.DrawLine(target.transform.position, targNearIsland.transform.position);
-		}*/
 	}
+
 	void FixedUpdate ()
 	{
 		currentSpeed = Mathf.Round(myRB.velocity.magnitude);
@@ -454,6 +475,7 @@ public class GroundEnemy : Enemy
 		#region Rotation of Enemy
 		if (AdvanceOnLocalTarget && GameManager.Instance.playerCont.lastLocation == lastLocation)
 		{
+			SameIsland = true;
 			FaceTarget(GameManager.Instance.playerGO.transform.position);
 		}
 		if (nextNode != null)
@@ -545,7 +567,7 @@ public class GroundEnemy : Enemy
 	#region Pathing
 	Vector3 CalcSteering()
 	{
-		Debug.Log(navState.ToString() + "\n");
+		//Debug.Log(navState.ToString() + "\n");
 		Vector3 steering = Vector3.forward;
 		if (navState == GroundState.OnGround || navState == GroundState.Jumping)
 		{
@@ -604,11 +626,40 @@ public class GroundEnemy : Enemy
 				steering += Vector3.back * 2;
 			}
 		}
-		else if(navState == GroundState.Stopped)
+		else if (navState == GroundState.Following)
+		{
+
+			if (!FacingPlayer)
+			{
+				steering = Vector3.zero;
+			}
+
+			#region Old Code
+			/*
+			if(SameIsland)
+			{
+				if(!FacingPlayer)
+				{
+					steering = Vector3.zero;
+				}
+				else
+				{
+					Debug.Log("Else\n");
+				}
+				
+			}
+			else
+			{
+				Debug.LogError("In following state & not on the same island?!\n");
+				steering = Vector3.zero;
+				//Dont be in this state
+			}*/
+			#endregion
+		}
+		else if (navState == GroundState.Stopped)
 		{
 			steering = Vector3.zero;
 		}
-
 
 		return steering.normalized;
 	}
@@ -723,6 +774,8 @@ public class GroundEnemy : Enemy
 		else
 		{
 			nextNode = null;
+
+			
 		}
 	}
 
@@ -733,7 +786,9 @@ public class GroundEnemy : Enemy
 			UpdateTarget();
 		}
 	}
+	#endregion
 
+	#region Display Pathing Elements
 	void DisplayPath(Stack<PathNode> p)
 	{
 		if (p != null && p.Count > 0)
@@ -757,7 +812,7 @@ public class GroundEnemy : Enemy
 				//Debug.DrawLine(pnList[i - 1].transform.position + Vector3.up * i * 2, pnList[i].transform.position + Vector3.up * i * 2, Color.green, 15.0f);
 				Debug.DrawLine(firstPos + Vector3.up * i * .7f, secondPos + Vector3.up * i * .7f, Color.blue);
 				Debug.DrawLine(firstPos + Vector3.up * i * .7f, firstPos + Vector3.up * (i - 1) * .7f, Color.red);
-				
+
 			}
 		}
 	}
@@ -804,6 +859,7 @@ public class GroundEnemy : Enemy
 		}*/
 		#endregion
 
+		#region If we have the next node
 		//If we have a next node we're going to
 		if (nextNode != null)
 		{
@@ -818,11 +874,6 @@ public class GroundEnemy : Enemy
 				if (wall)
 				{
 					navState = GroundState.Turning;
-					if (!haveNewHeading)
-					{
-						//Say to get one based on the edges in front of us.
-						//TurnNewHeading();
-					}
 				}
 				#endregion
 				#region Edge Check
@@ -864,15 +915,9 @@ public class GroundEnemy : Enemy
 					else
 					{
 						navState = GroundState.Turning;
-						if (!haveNewHeading)
-						{
-							//Say to get one based on the edges in front of us.
-							//TurnNewHeading();
-						}
 					}
 
 					#endregion
-
 
 					#region [Old Code] Single Path Node Setup
 					/*
@@ -923,12 +968,71 @@ public class GroundEnemy : Enemy
 			}
 			#endregion
 		}
-		#region If nextNode == Null - Enter Stopped GroundState
+		#endregion
+		#region If(nextNode == null) -> Close Quarters & Stopping
 		else
 		{
-			//Try to acquire new destination?
-			//GetNewDestination();
-			navState = GroundState.Stopped;
+			CheckCloseQuarter();
+
+			if(CloseQuarters)
+			{
+				navState = GroundState.Stopped;
+			}
+			else
+			{
+				bool wall = CheckWall();
+				bool edge = CheckEdge();
+				if (edge)
+				{
+					navState = GroundState.Stopped;
+				}
+				else if (wall)
+				{
+					navState = GroundState.Turning;
+				}
+				else
+				{
+					navState = GroundState.Following;
+				}
+			}
+			#region Old Code
+			/*
+			if (lastLocation == GameManager.Instance.playerCont.lastLocation)
+			{
+				if(distToPlayer < closeQuartersDist)
+				{
+					//Stop near the player. CloseQuarters is for melee subchildren to use.
+					CloseQuarters = true;
+					navState = GroundState.Stopped;
+				}
+				else
+				{
+					//Otherwise advance unless a wall or edge impedes up.
+					CloseQuarters = false;
+				
+					bool wall = CheckWall();
+					bool edge = CheckEdge();
+					if (edge)
+					{
+						navState = GroundState.Stopped;
+					}
+					else if(wall)
+					{
+						navState = GroundState.Turning;
+					}
+					else
+					{
+						navState = GroundState.Following;
+					}
+				}
+			}
+			else
+			{
+				navState = GroundState.Stopped;
+			}
+		
+			*/
+			#endregion
 		}
 		#endregion
 	}
@@ -1018,6 +1122,48 @@ public class GroundEnemy : Enemy
 		}
 	
 		return true;
+	}
+	public bool CheckCloseQuarter()
+	{
+		CloseQuarters = false;
+
+		Vector3 playerPos = GameManager.Instance.playerGO.transform.position;
+
+		Vector3 forward = transform.TransformDirection(Vector3.forward);
+		Vector3 toPlayer = transform.position - playerPos;
+
+		Vector3 targetHeightless = new Vector3(playerPos.x, transform.position.y, playerPos.z);
+
+		toPlayer = targetHeightless - transform.position;
+
+		float dotProduct = Vector3.Dot(forward.normalized, toPlayer.normalized);
+
+		float distToPlayer = Vector3.Distance(transform.position, targetHeightless);
+
+		if (lastLocation == GameManager.Instance.playerCont.lastLocation)
+		{
+			if (distToPlayer < closeQuartersDist)
+			{
+				
+				CloseQuarters = true;
+			}
+			else
+			{
+				//Otherwise advance unless a wall or edge impedes up.
+				CloseQuarters = false;
+			}
+
+			if (dotProduct > facingDifference)
+			{
+				FacingPlayer = true;
+			}
+			else
+			{
+				FacingPlayer = false;
+			}
+		}
+
+		return CloseQuarters;
 	}
 	public bool isNearDestination()
 	{
@@ -1119,37 +1265,5 @@ public class GroundEnemy : Enemy
 			jumpedYPos = what.transform.position.y;
 		}
 	}
-	#endregion
-
-	#region Dead Code
-	/// <summary>
-	/// This is now obsolete. IsGrounded does this better.
-	/// </summary>
-	/// <returns></returns>
-	public bool CheckFloor()
-	{
-		RaycastHit hit;
-
-		Vector3 start = transform.position;
-		Vector3 dir = -transform.up * (capsule.height + 2.2f);
-		Debug.DrawRay(start, dir, Color.magenta, 1 / checksPerSecond);
-		if (Physics.Raycast(start, dir, out hit, (capsule.height + 2.2f)))
-		{
-			if (hit.collider.gameObject.tag == "Island")
-			{
-				lastLocation = hit.collider.gameObject.GetComponent<Island>();
-				return true;
-			}
-			else
-			{
-				lastLocation = null;
-				return true;
-				//Debug.Log("Raycasted something besides island.\n");
-			}
-		}
-
-		return false;
-	}
-
 	#endregion
 }

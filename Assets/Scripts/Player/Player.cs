@@ -583,7 +583,7 @@ public class Player : Entity
 				ExternalMove(newVel, 30, ForceMode.VelocityChange);
 			}
 			//Go Forward
-			if (Input.GetKeyDown(KeyCode.LeftShift))
+			if (Input.GetKey(KeyCode.LeftShift))
 			{
 				Vector3 newVel = new Vector3(GetForward().x, 0, GetForward().z);
 				newVel.Normalize();
@@ -618,12 +618,17 @@ public class Player : Entity
 				SetupAbility(Dagger.New());
 				SetupAbility(RocketLauncher.New());
 				SetupAbility(ShockRifle.New());
+			}
+			if (Input.GetKeyDown(KeyCode.N))
+			{
 				SetupAbility(Hemotick.New());
+				SetupAbility(TransmuterKit.New());
 			}
 			if (Input.GetKeyDown(KeyCode.H))
 			{
 				SetupAbility(GravityStaff.New());
 				SetupAbility(BoundingStaff.New());
+				SetupAbility(WarpStaff.New());
 				SetupAbility(GrapplingHook.New());
 				SetupAbility(WingedSandals.New());
 			}

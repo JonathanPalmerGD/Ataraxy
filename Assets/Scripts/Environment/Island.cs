@@ -348,7 +348,7 @@ public class Island : WorldObject
 
 				featurePosition = new Vector3(transform.position.x + xRnd * .8f, transform.position.y + transform.localScale.y / 2 + .2f, transform.position.z + zRnd * .8f);
 
-				GameObject newFeature = (GameObject)GameObject.Instantiate(TerrainManager.Instance.terrainFeatures[Random.Range(0, TerrainManager.Instance.terrainFeatures.Count)], Vector3.zero, transform.rotation);
+				GameObject newFeature = (GameObject)GameObject.Instantiate(TerrainManager.Instance.cosmeticFeatures[Random.Range(0, TerrainManager.Instance.cosmeticFeatures.Count)], Vector3.zero, transform.rotation);
 
 				newFeature.transform.position = featurePosition;
 				newFeature.transform.Rotate(Vector3.up, Random.Range(0,360));

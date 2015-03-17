@@ -3,12 +3,19 @@ using System.Collections;
 
 public class NullShield : MonoBehaviour 
 {
+	public GameObject fizzlePrefab;
+
 	//Reference to parent
 	public Entity Carrier;
 
 	//A reference to our faction so we don't fizzle our own projectiles?
 	//It'd be good to design to avoid doing this, but we want the fizzlers to be faction-caring.
 	public Allegiance Faction;
+
+	void Start()
+	{
+		fizzlePrefab = Resources.Load<GameObject>("Projectiles/FizzledProjectile");
+	}
 
 	void OnTriggerEnter(Collider other) 
 	{
@@ -17,14 +24,20 @@ public class NullShield : MonoBehaviour
 			Projectile proj = other.GetComponent<Projectile>();
 			if(proj != null)
 			{
+				GameObject fizzler = (GameObject)GameObject.Instantiate(fizzlePrefab, proj.transform.position, Quaternion.identity);
+				GameObject.Destroy(fizzler, 1);
+				
 				//Destroy it
 				DestroyProjectile(proj);
+
 			}
 			else
 			{
 				proj = other.transform.parent.GetComponent<Projectile>();
 				if(proj != null)
 				{
+					GameObject fizzler = (GameObject)GameObject.Instantiate(fizzlePrefab, proj.transform.position, Quaternion.identity);
+					GameObject.Destroy(fizzler, 1);
 					DestroyProjectile(proj);
 				}
 				else

@@ -57,7 +57,7 @@ public class TerrainManager : Singleton<TerrainManager>
 		islandPrefabs = Resources.LoadAll<GameObject>("Islands").ToList();
 		landmarkPrefabs = Resources.LoadAll<GameObject>("Landmarks").ToList();
 		terrainFeatures = Resources.LoadAll<GameObject>("TerrainFeatures").ToList();
-		terrainFeatures = Resources.LoadAll<GameObject>("TerrainCosmetics").ToList();
+		cosmeticFeatures = Resources.LoadAll<GameObject>("TerrainCosmetics").ToList();
 		enemyPrefabs = Resources.LoadAll<GameObject>("Enemies").ToList();
 		encounterPrefabs = Resources.LoadAll<GameObject>("Encounters").ToList();
 	}

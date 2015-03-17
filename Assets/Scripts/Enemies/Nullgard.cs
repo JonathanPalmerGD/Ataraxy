@@ -36,6 +36,8 @@ public class Nullgard : GroundEnemy
 			}
 		}
 
+		#region [Editor] Forced State Adjustment
+		#if UNITY_EDITOR
 		if (Input.GetKeyDown(KeyCode.Z))
 		{
 			if (state == EnemyState.Idle)
@@ -51,16 +53,65 @@ public class Nullgard : GroundEnemy
 				ChangeState(EnemyState.Idle);
 			}
 		}
+		#endif
+		#endregion
+
+		#region Update State
+		switch (state)
+		{
+			case EnemyState.Idle:
+				if (CanSeePlayer)
+				{
+
+				}
+				else
+				{
+
+				}
+				break;
+			case EnemyState.Preparing:
+				if (FacingPlayer && CloseQuarters)
+				{
+					ChangeState(EnemyState.Attacking);
+				}
+				break;
+			case EnemyState.Attacking:
+
+				break;
+		}
+		#endregion
 
 		base.Update();
 	}
 
-	//Track shield
+	public override void HandleFiringTimer()
+	{
+		//if(CloseQuarters && FacingPlayer)
+		//{
+			FiringTimer -= Time.deltaTime;
+		//}
+	}
 
-	//Turn shield around
 	public override void HandleKnowledge()
 	{
 		distFromPlayer = Vector3.Distance(transform.position, GameManager.Instance.player.transform.position);
+
+		if (distFromPlayer < 50)
+		{
+			CanSeePlayer = true;
+
+			TargVisualKnowledgeOfPlayer(true);
+			TargVisualUpdateTracking(true);
+		}
+		else
+		{
+			CanSeePlayer = false;
+
+			TargVisualKnowledgeOfPlayer(false);
+			TargVisualUpdateTracking(true);
+		}
+
+		firing = CanSeePlayer;
 	}
 
 	public override void HandleAggression()
@@ -75,10 +126,7 @@ public class Nullgard : GroundEnemy
 			case EnemyState.Idle:
 				if(CanSeePlayer)
 				{
-					if(lastLocation == GameManager.Instance.playerGO.GetComponent<Controller>().lastLocation)
-					{
-						ChangeState(EnemyState.Searching);
-					}
+					
 				}
 				else
 				{
@@ -86,9 +134,36 @@ public class Nullgard : GroundEnemy
 				}
 				break;
 			case EnemyState.Preparing:
-
+				
 				break;
 			case EnemyState.Attacking:
+				if (firing)
+				{
+					//Raycast to the player, if it is a clear shot, fire in that direction.
+					if (FiringTimer <= 0)
+					{
+						if (FacingPlayer && CloseQuarters)
+						{
+							//Fire at the player
+							AttackPlayer();
+
+#if UNITY_EDITOR
+							FiringTimer = 2.5f;
+#else
+							//Set ourselves on cooldown
+							FiringTimer = FiringCooldown;
+#endif
+							ChangeState(EnemyState.Idle);
+
+							//Learn from the experience. Leveling up is checked earlier in the update loop.
+							GainExperience(expGainPerShot);
+						}
+					}
+					else
+					{
+						//Debug.Log("Cooldown Remaining: " + Counter + "\n");
+					}
+				}
 
 				break;
 		}
@@ -108,6 +183,11 @@ public class Nullgard : GroundEnemy
 			//Are we close to player
 				//Attack
 				//Switch to Idle Mode
+	}
+
+	public override void AttackPlayer()
+	{
+		weapon.UseWeapon(null, null, FirePoints, transform.position - transform.up * .5f + transform.forward * 500, false);
 	}
 
 	public float storingShieldDur = 1.25f;
@@ -166,7 +246,7 @@ public class Nullgard : GroundEnemy
 
 	void ChangeState(EnemyState targetState)
 	{
-		//Debug.Log("\t" + name + " target state: " + targetState.ToString() + "\n");
+		Debug.Log("\t" + name + " target state: " + targetState.ToString() + "\n");
 		switch (targetState)
 		{
 			//Put shield in front of self
