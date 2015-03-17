@@ -114,6 +114,11 @@ public class Nullgard : GroundEnemy
 				//Switch to Idle Mode
 	}
 
+	public override void AttackPlayer()
+	{
+		weapon.UseWeapon(null, null, FirePoints, transform.position + transform.forward * 500, false);
+	}
+
 	public float storingShieldDur = 1.25f;
 	public float drawShieldDur = 0.35f;
 	float shieldCounter = 0;

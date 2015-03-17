@@ -313,7 +313,7 @@ public class Enemy : NPC
 	/// <summary>
 	/// Basic projectile attack. Creates, pushes and initializes projectile.
 	/// </summary>
-	public void AttackPlayer()
+	public virtual void AttackPlayer()
 	{
         //Debug.Log(name + " is attacking the player\n");
 		GameObject projectile = (GameObject)GameObject.Instantiate(projectilePrefab, gunMuzzle.transform.position, Quaternion.identity);
