@@ -143,13 +143,16 @@ public class EnemyController : MonoBehaviour
 			//Normal jumping if the player can stand
 			if(canStand)
 			{
-				if (nextNode.transform.position.y - 3 > transform.position.y)
+				if (nextNode != null)
 				{
-					ApplyJump(true);
-				}
-				else
-				{
-					ApplyJump(false);
+					if (nextNode.transform.position.y - 3 > transform.position.y)
+					{
+						ApplyJump(true);
+					}
+					else
+					{
+						ApplyJump(false);
+					}
 				}
 			}
 		}
