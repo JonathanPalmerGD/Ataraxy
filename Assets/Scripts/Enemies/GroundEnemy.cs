@@ -103,7 +103,6 @@ public class GroundEnemy : Enemy
 	#region Ground State & Navigational
 	public enum GroundState { Falling, OnGround, Turning, Jumping, Stopped, Following };
 	public GroundState navState;
-	public bool AdvanceOnLocalTarget = true;
 
 	public bool ignoreJumpHeight = true;
 	#endregion
@@ -485,8 +484,9 @@ public class GroundEnemy : Enemy
 		#endregion
 
 		#region Rotation of Enemy
-		if (AdvanceOnLocalTarget && GameManager.Instance.playerCont.lastLocation == lastLocation)
+		if (GameManager.Instance.playerCont.lastLocation == lastLocation)
 		{
+			curPath = new Stack<PathNode>();
 			//Debug.DrawLine(transform.position, transform.position + Vector3.right * 3, Color.blue, 2);
 			SameIsland = true;
 			FaceTarget(GameManager.Instance.playerGO.transform.position);

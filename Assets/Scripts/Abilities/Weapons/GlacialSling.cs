@@ -21,12 +21,12 @@ public class GlacialSling : Weapon
 		crosshairColor = new Color(.6f, .6f, .9f);
 
 		crosshairIndex = 4;
-		PrimaryDamage = .3f;
-		SpecialDamage = 2.7f;
-		DurSpecialCost = 2;
+		PrimaryDamage = .15f;
+		SpecialDamage = 1.5f;
+		DurSpecialCost = 5;
 		NormalCooldown = .20f;
 		shatterRadius = 5;
-		SpecialCooldown = Random.Range(6f, 8f);
+		SpecialCooldown = Random.Range(1.0f, 1.5f);
 #if CHEAT
 		NormalCooldown = .3f;
 		SpecialCooldown = 1f;
@@ -44,6 +44,18 @@ public class GlacialSling : Weapon
 			IconUI.color = new Color(.5f, .5f, 1f, IconUI.color.a);
 		}
 		base.UpdateWeapon(time);
+	}
+
+	public override bool HandleDurability(bool specialAttack = false, GameObject target = null, bool lockOn = false)
+	{
+		//Don't let them waste ammo detonating nothing.
+		if (specialAttack && gDisks.Count == 0)
+		{
+			return false;
+		}
+		
+		//Otherwise we'll check the normal conditions.
+		return base.HandleDurability(specialAttack, target, lockOn);
 	}
 
 	public override void UseWeapon(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 targetScanDir = default(Vector3), bool lockOn = false)
@@ -84,7 +96,10 @@ public class GlacialSling : Weapon
 
 	public void RemoveDisk(GlacialDisk removed)
 	{
-		gDisks.Remove(removed);
+		if(gDisks.Contains(removed))
+		{
+			gDisks.Remove(removed);
+		}
 	}
 
 	#region Static Functions
@@ -92,12 +107,12 @@ public class GlacialSling : Weapon
 	{
 		GlacialSling gs = ScriptableObject.CreateInstance<GlacialSling>();
 		gs.AbilityName = GlacialSling.GetWeaponName();
-		gs.Durability = Random.Range(80, 95);
+		gs.Durability = Random.Range(140, 190);
 		gs.NormalCooldown = .3f;
 		gs.SpecialCooldown = 4;
 		gs.CdLeft = 0;
-		gs.PrimaryDesc = "[Damage] [Combo]\nFling a slow moving glacial disk.";
-		gs.SecondaryDesc = "[Damage], [Combo], [Explosive]\nCause all glacial disks to shatter.";
+		gs.PrimaryDesc = "[Damage] [Combo]\nFling an arcing glacial disk.\nDisks do minimal impact damage.";
+		gs.SecondaryDesc = "[Damage], [Combo], [Explosive]\nShatter all active glacial disks.\nArcing disks by, over or under an enemy allows a combo to deal more damage.";
 		return gs;
 	}
 

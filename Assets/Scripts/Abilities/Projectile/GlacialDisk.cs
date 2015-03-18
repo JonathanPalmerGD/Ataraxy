@@ -10,9 +10,7 @@ public class GlacialDisk : Projectile
 
 	public override void Start()
 	{
-		Damage = 1;
 		ProjVel = 1;
-		explosiveDamage = 3;
 	}
 
 	public override void Update()
@@ -32,11 +30,22 @@ public class GlacialDisk : Projectile
 
 	public override void Collide()
 	{
+		CreateExplosion(true);
+
 		((GlacialSling)Creator).RemoveDisk(this);
  		base.Collide();
 	}
 
-	public void Shatter()
+
+	void OnDestroy()
+	{
+		if (Creator != null)
+		{
+			((GlacialSling)Creator).RemoveDisk(this);
+		}
+	}
+
+	private void CreateExplosion(bool impact = false)
 	{
 		if (!shattered)
 		{
@@ -47,28 +56,44 @@ public class GlacialDisk : Projectile
 			{
 				det = (Detonator)GameObject.Instantiate(explosive, transform.position, Quaternion.identity);
 
+				if (impact)
+				{
+					det.size = det.size / 2;
+				}
+
 				det.Explode();
 			}
 			gameObject.particleSystem.enableEmission = false;
 			gameObject.collider.enabled = false;
 			gameObject.renderer.enabled = false;
 
-			Destroy(rigidbody);
+			if (rigidbody)
+			{
+				Destroy(rigidbody);
+			}
 			enabled = false;
 
-			Collider[] hitColliders = Physics.OverlapSphere(transform.position, shatterRadius);
-			int i = 0;
-			while (i < hitColliders.Length)
+			if (!impact)
 			{
-				float distFromBlast = Vector3.Distance(hitColliders[i].transform.position, transform.position);
-				float parameterForMessage = -(explosiveDamage * shatterRadius / distFromBlast);
+				Collider[] hitColliders = Physics.OverlapSphere(transform.position, shatterRadius);
+				int i = 0;
+				while (i < hitColliders.Length)
+				{
+					float distFromBlast = Vector3.Distance(hitColliders[i].transform.position, transform.position);
+					float parameterForMessage = -(explosiveDamage * shatterRadius / distFromBlast);
 
-				hitColliders[i].gameObject.SendMessage("AdjustHealth", parameterForMessage, SendMessageOptions.DontRequireReceiver);
-				i++;
+					hitColliders[i].gameObject.SendMessage("AdjustHealth", parameterForMessage, SendMessageOptions.DontRequireReceiver);
+					i++;
+				}
 			}
 
 
 			Destroy(gameObject, 5.0f);
 		}
+	}
+
+	public void Shatter()
+	{
+		CreateExplosion(false);
 	}
 }

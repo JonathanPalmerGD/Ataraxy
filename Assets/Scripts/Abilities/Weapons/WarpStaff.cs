@@ -243,8 +243,8 @@ public class WarpStaff : Weapon
 		// Weapon Name
 		ws.AbilityName = WarpStaff.GetWeaponName();
 		// Weapon Description on Pause Menu
-		ws.PrimaryDesc = "[Damage], [Utility]\nShort Teleport\n Causes an explosion on arrivals.";
-		ws.SecondaryDesc = "[Utility]\nTeleport enemies in ramdom direction.";
+		ws.PrimaryDesc = "[Damage], [Utility]\nShort Teleport\nCreates an explosion at the destination.";
+		ws.SecondaryDesc = "[Damage], [Utility]\nTeleport enemies in random direction.\nEnemies that can't be teleported will be dimensionally torn.";
 		return ws;
 	}
 

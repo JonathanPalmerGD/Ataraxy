@@ -9,7 +9,6 @@ public class PrefController : MonoBehaviour
 
 	void Start()
 	{
-		Debug.Log(nameDisplay.text + "\n");
 		if(inputField != null)	
 		{
 			inputField.text = PlayerPrefs.GetString("PlayerName", "Vant");
@@ -18,8 +17,6 @@ public class PrefController : MonoBehaviour
 		}
 		//string namestr = PlayerPrefs.GetString("PlayerName", "Vant");
 		nameDisplay.text = PlayerPrefs.GetString("PlayerName", "Vant");
-
-		Debug.Log(nameDisplay.text + "\n");
 	}
 	
 	void OnDestroy()

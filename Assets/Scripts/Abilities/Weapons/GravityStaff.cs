@@ -48,7 +48,7 @@ public class GravityStaff : Weapon
 
 		//Debug.Log(dir + "\n" + movementDir + "\n");
 		//MoveCarrier(movementDir, 0, Vector3.up, 1.5f, true);
-		MoveCarrier(movementDir, .2f, Vector3.up, 0.45f, true);
+		MoveCarrier(movementDir, .1f, Vector3.up, 0.75f, true);
 	}
 
 	#region Static Functions
