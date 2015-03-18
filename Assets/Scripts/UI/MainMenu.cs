@@ -3,6 +3,10 @@ using System.Collections;
 
 public class MainMenu : MonoBehaviour 
 {
+	public void Update()
+	{
+	}
+
 	public void NextScene()
 	{
 		Application.LoadLevel(Application.loadedLevel + 1);
