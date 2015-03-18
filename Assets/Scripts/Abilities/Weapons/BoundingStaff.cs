@@ -31,7 +31,7 @@ public class BoundingStaff : Weapon
 	{
 		if (IconUI != null)
 		{
-			IconUI.color = new Color(.88f, .87f, .27f, IconUI.color.a);
+			IconUI.color = new Color(.72f, .62f, .37f, IconUI.color.a);
 		}
 		base.UpdateWeapon(time);
 	}

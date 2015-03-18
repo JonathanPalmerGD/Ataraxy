@@ -27,6 +27,15 @@ public class GravityStaff : Weapon
 		BeamColor = Color.white;
 	}
 
+	public override void UpdateWeapon(float time)
+	{
+		if (IconUI != null)
+		{
+			IconUI.color = new Color(.65f, .13f, .89f, IconUI.color.a);
+		}
+		base.UpdateWeapon(time);
+	}
+
 	public override void UseWeaponSpecial(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 targetScanDir = default(Vector3), bool lockOn = false)
 	{
 		Vector3 firePoint = firePoints[0].transform.position;

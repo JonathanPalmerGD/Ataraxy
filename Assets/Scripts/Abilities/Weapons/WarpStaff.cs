@@ -59,6 +59,17 @@ public class WarpStaff : Weapon
 	}
 	#endregion
 
+	#region Update Weapon
+	public override void UpdateWeapon(float time)
+	{
+		if (IconUI != null)
+		{
+			IconUI.color = new Color(.19f, .7f, .95f, IconUI.color.a);
+		}
+		base.UpdateWeapon(time);
+	}
+	#endregion
+
 	#region Fire Weapon
 	// Primary Fire
 	public override void UseWeapon(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 targetScanDir = default(Vector3), bool lockOn = false)

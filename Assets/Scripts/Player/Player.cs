@@ -79,6 +79,11 @@ public class Player : Entity
 
 	}
 
+	public override void SetupNameUI()
+	{
+		
+	}
+
 	void ManageResourceSystem()
 	{
 		switch (rSystem)
@@ -155,7 +160,7 @@ public class Player : Entity
 		//Set the values for all the different UI elements.
 		SetupHealthUI();
 		SetupResourceUI();
-		SetupNameUI();
+		//SetupNameUI();
 		SetupXPUI();
 
 		DamageImage = UIManager.Instance.damage_Indicator;
@@ -169,11 +174,11 @@ public class Player : Entity
 	public void GiveStartingItems()
 	{
 		#if UNITY_EDITOR
-		
 		SetupAbility(GravityStaff.New());
 		//SetupAbility(BoundingStaff.New());
 		SetupAbility(GrapplingHook.New());
 		SetupAbility(WarpStaff.New());
+		SetupAbility(GlacialSling.New());
 		/*SetupAbility(WingedSandals.New());
 		SetupAbility(Longsword.New());
 		SetupAbility(Rapier.New());

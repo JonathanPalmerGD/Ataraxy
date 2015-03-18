@@ -32,6 +32,16 @@ public class ShockRifle : Weapon
 		BeamColor = new Color(.75f, .14f, .77f);
 	}
 
+	public override void UpdateWeapon(float time)
+	{
+		if (IconUI != null)
+		{
+			IconUI.color = new Color(.7f, .2f, .95f, IconUI.color.a);
+			//IconUI.color = new Color(.65f, .13f, .89f, IconUI.color.a);
+		}
+		base.UpdateWeapon(time);
+	}
+
 	public override void UseWeapon(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 targetScanDir = default(Vector3), bool lockOn = false)
 	{
 		Color[] lrColors = new Color[2];
@@ -92,7 +102,7 @@ public class ShockRifle : Weapon
 
 		shock.rigidbody.AddForce(dir * shock.ProjVel * shock.rigidbody.mass);
 
-		Destroy(shock, 20);
+		Destroy(go, 20);
 	}
 
 	#region Static Functions

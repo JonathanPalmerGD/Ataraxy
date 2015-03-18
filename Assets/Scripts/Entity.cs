@@ -432,7 +432,7 @@ public class Entity : MonoBehaviour
 		}
 	}
 
-	public void SetupNameUI()
+	public virtual void SetupNameUI()
 	{
 		if (nameText != null)
 		{
