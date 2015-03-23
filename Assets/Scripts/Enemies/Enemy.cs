@@ -152,7 +152,7 @@ public class Enemy : NPC
 
 	public virtual void ThrowToken(GameObject newToken)
 	{
-		float randBound = 4000;
+		float randBound = 500;
 		newToken.rigidbody.AddForce(newToken.rigidbody.mass * (Vector3.up * Random.Range(.8f, 1.5f) * randBound / 8) + new Vector3(Random.Range(-randBound, randBound), 0, Random.Range(-randBound, randBound)));
 	}
 

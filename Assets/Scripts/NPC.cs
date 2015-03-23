@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class NPC : Entity 
 {
+	public List<Modifier> modifiers;
+
 	[Header("Targeting Shader Info")]
 	public Shader outline;
 	public Shader outlineOnly;
@@ -27,9 +30,11 @@ public class NPC : Entity
 		NameText = UIManager.Instance.target_Name;
 		LevelText = UIManager.Instance.target_LevelText;
 		InfoHUD = UIManager.Instance.target_HUD;
+		ModHUD = UIManager.Instance.ModifierRoot;
 
 		Untarget();
 		SetupXPUI();
+		InitModifiers();
 	}
 
 	public override void Update() 
@@ -63,6 +68,7 @@ public class NPC : Entity
 			base.UpdateLevelUI();
 		}
 	}
+
 	public virtual void Untarget()
 	{
 		if (InfoHUD != null)
@@ -87,6 +93,31 @@ public class NPC : Entity
 			SetupResourceUI();
 			SetupNameUI();
 			SetupXPUI();
+			SetupModifiersUI();
 		}
+	}
+
+	public virtual void InitModifiers()
+	{
+		modifiers = new List<Modifier>();
+
+		for (int i = 0; i < Random.Range(1,3); i++)
+		{
+			Modifier m = Modifier.New();
+			m.Init();
+			modifiers.Add(m);
+		}
+		//Debug.Log(name + " has " + modifiers.Count + " modifiers\n");
+	}
+
+	public override void SetupModifiersUI()
+	{
+		if (ModHUD != null)
+		{
+			//Debug.Log("Configuring Modifiers with " + modifiers.Count + " entries\n");
+			UIManager.Instance.ConfigureModifiers(modifiers);
+		}
+
+		base.SetupModifiersUI();
 	}
 }

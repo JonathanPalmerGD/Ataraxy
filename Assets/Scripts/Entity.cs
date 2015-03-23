@@ -102,6 +102,12 @@ public class Entity : MonoBehaviour
 		get { return infoHUD; }
 		set { infoHUD = value; }
 	}
+	private Canvas modHUD;
+	public Canvas ModHUD
+	{
+		get { return modHUD; }
+		set { modHUD = value; }
+	}
 	private Slider healthSlider;
 	public Slider HealthSlider
 	{
@@ -368,7 +374,15 @@ public class Entity : MonoBehaviour
 			GainExperience(e.XpReward * e.MentorModifier);
 
 			//Get alerted of the perceived player's location
-			
+			//Debug.Log("Dying entity had: " + e.modifiers.Count + " modifiers\n");
+
+			if (e.modifiers.Count > 0)
+			{
+				Enemy self = (Enemy)this;
+				self.modifiers.Add(e.modifiers[Random.Range(0, e.modifiers.Count)]);
+
+				SetupModifiersUI();
+			}
 
 			//Gain relevant death effects
 			//For each e.DeathEffect
@@ -467,6 +481,11 @@ public class Entity : MonoBehaviour
 		{
 			resourceText.text = Resource.ToString();
 		}
+	}
+
+	public virtual void SetupModifiersUI()
+	{
+
 	}
 	#endregion
 }

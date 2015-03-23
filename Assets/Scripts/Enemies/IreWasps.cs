@@ -304,6 +304,7 @@ public class IreWasps : FlyingEnemy
 			SetupHealthUI();
 			SetupResourceUI();
 			SetupNameUI();
+			SetupModifiersUI();
 		}
 	}
 }
