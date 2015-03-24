@@ -2,33 +2,39 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class RapidFire : Modifier
+public class Berserk : Modifier
 {
-	public new static string[] modNames = { "Rapid-Fire" };
+	public new static string[] modNames = { "Berserk" };
 
-	public new static RapidFire New()
+	public new static Berserk New()
 	{
-		RapidFire newMod = ScriptableObject.CreateInstance<RapidFire>();
+		Berserk newMod = ScriptableObject.CreateInstance<Berserk>();
 		return newMod;
 	}
 	public override void Init()
 	{
 		ModifierName = modNames[Random.Range(0, modNames.Length - 1)];
-		Stacks = Random.Range(1, 5);
+		Stacks = Random.Range(1, 3);
 		UIColor = new Color(Random.Range(0, .999f), Random.Range(0, .999f), Random.Range(0, .999f), .4f);
 	}
 
 	public override void Gained(int stacksGained = 0, bool newStack = false)
 	{
-		if (Carrier.FiringCooldown - stacksGained * .75f > 2)
+		Carrier.DamageAmplification += .08f * stacksGained;
+		Carrier.DamageMultiplier += stacksGained * .05f;
+
+		Carrier.ProjSpeedAmp += .05f * stacksGained;
+
+		if (Carrier.FiringCooldown - stacksGained * .5f > 2)
 		{
-			Carrier.FiringCooldown -= stacksGained * .75f;
+			Carrier.FiringCooldown -= stacksGained * .55f;
 		}
 		else
 		{
 			Debug.LogWarning(Carrier.name + "Firing Cooldown capped\n");
 			Carrier.FiringCooldown = 2;
 		}
+
 		base.Gained(stacksGained, newStack);
 	}
 

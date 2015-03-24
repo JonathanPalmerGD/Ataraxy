@@ -2,25 +2,26 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class Vampiric : Modifier
+public class Fragile : Modifier
 {
-	public new static string[] modNames = { "Vampiric" };
+	public new static string[] modNames = { "Fragile" };
 
-	public new static Vampiric New()
+	public new static Fragile New()
 	{
-		Vampiric newMod = ScriptableObject.CreateInstance<Vampiric>();
+		Fragile newMod = ScriptableObject.CreateInstance<Fragile>();
 		return newMod;
 	}
 	public override void Init()
 	{
 		ModifierName = modNames[Random.Range(0, modNames.Length - 1)];
-		Stacks = Random.Range(1, 5);
+		Stacks = Random.Range(3, 5);
 		UIColor = new Color(Random.Range(0, .999f), Random.Range(0, .999f), Random.Range(0, .999f), .4f);
 	}
 
 	public override void Gained(int stacksGained = 0, bool newStack = false)
 	{
-		Carrier.LifeStealPer += .2f * stacksGained;
+		Carrier.DamageMultiplier += stacksGained * .05f;
+		
 		base.Gained(stacksGained, newStack);
 	}
 

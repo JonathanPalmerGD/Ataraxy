@@ -4,9 +4,9 @@ using System.Collections;
 
 public class Clumsy : Modifier
 {
-	public static string[] modNames = { "Clumsy" };
+	public new static string[] modNames = { "Clumsy" };
 
-	public static Clumsy New()
+	public new static Clumsy New()
 	{
 		Clumsy newMod = ScriptableObject.CreateInstance<Clumsy>();
 		return newMod;

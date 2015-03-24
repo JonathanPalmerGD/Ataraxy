@@ -11,9 +11,11 @@ public class ModifierUI : MonoBehaviour
 	public Image namePlate;
 	public Image multiplierPlate;
 
-	public void SetPlateColor(Color newPlateColor)
+	public void SetPlateColor(Color newPlateColor, Color newTextColor)
 	{
 		namePlate.color = newPlateColor;
 		multiplierPlate.color = newPlateColor;
+		nameText.color = newTextColor;
+		multiplierText.color = newTextColor;
 	}
 }

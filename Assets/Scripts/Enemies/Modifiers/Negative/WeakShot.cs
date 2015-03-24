@@ -4,9 +4,9 @@ using System.Collections;
 
 public class WeakShot : Modifier
 {
-	public static string[] modNames = { "Weak Shot" };
+	public new static string[] modNames = { "Weak Shot" };
 
-	public static WeakShot New()
+	public new static WeakShot New()
 	{
 		WeakShot newMod = ScriptableObject.CreateInstance<WeakShot>();
 		return newMod;

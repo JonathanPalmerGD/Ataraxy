@@ -4,9 +4,9 @@ using System.Collections;
 
 public class Regenerating : Modifier
 {
-	public static string[] modNames = { "Regenerating" };
+	public new static string[] modNames = { "Regenerating" };
 
-	public static Regenerating New()
+	public new static Regenerating New()
 	{
 		Regenerating newMod = ScriptableObject.CreateInstance<Regenerating>();
 		return newMod;

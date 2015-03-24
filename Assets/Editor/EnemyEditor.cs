@@ -51,6 +51,6 @@ public class EnemyEditor :  Editor
 		enemy.stateTimer = EditorGUILayout.FloatField("State Timer", enemy.stateTimer);
 		enemy.XpReward = EditorGUILayout.FloatField("XP Reward", enemy.XpReward);
 		enemy.CanSeePlayer = AtSt.DrawToggle(enemy.CanSeePlayer, "Can See Player");
-		enemy.weapon = (Weapon)EditorGUILayout.ObjectField("Weapon", enemy.weapon, typeof(Weapon));
+		//enemy.weapon = (Weapon)EditorGUILayout.ObjectField("Weapon", enemy.weapon, typeof(Weapon));
 	}
 }

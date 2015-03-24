@@ -6,11 +6,11 @@ public class ModifierManager : Singleton<ModifierManager>
 {
 	public Modifier GainNewModifier(int level)
 	{
-		//return Regenerating.New();
+		//return Elite.New();
 
 		Modifier m; //= Bolstered.New();
 
-		int n = Random.Range(0, 19);
+		int n = Random.Range(0, 22);
 		//Debug.Log("Index of new modifier: " + n + "\n");
 		switch (n)
 		{
@@ -71,6 +71,15 @@ public class ModifierManager : Singleton<ModifierManager>
 			case 18:
 				//Debug.Log("An elite has spawned\n");
 				m = Elite.New();
+				break;
+			case 19:
+				m = Durable.New();
+				break;
+			case 20:
+				m = Fragile.New();
+				break;
+			case 21:
+				m = Berserk.New();
 				break;
 
 

@@ -8,7 +8,7 @@ public class NullgardEditor : Editor
 	bool CustomView = false;
 	public override void OnInspectorGUI()
 	{
-		Nullgard nullgard = (Nullgard)target;
+		//Nullgard nullgard = (Nullgard)target;
 
 		CustomView = EditorGUILayout.Foldout(CustomView, "Nullgard Custom Inspector");
 		if(CustomView)

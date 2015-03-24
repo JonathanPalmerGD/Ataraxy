@@ -4,9 +4,9 @@ using System.Collections;
 
 public class Elite : Modifier
 {
-	public static string[] modNames = { "Elite" };
+	public new static string[] modNames = { "Elite" };
 
-	public static Elite New()
+	public new static Elite New()
 	{
 		Elite newMod = ScriptableObject.CreateInstance<Elite>();
 		return newMod;
@@ -15,7 +15,8 @@ public class Elite : Modifier
 	{
 		ModifierName = modNames[Random.Range(0, modNames.Length - 1)];
 		Stacks = 5;
-		UIColor = new Color(1, 1, 1, .4f);
+		UIColor = new Color(0, 0, 0, .4f);
+		TextColor = Color.white;
 	}
 
 	public override void Gained(int stacksGained = 0, bool newStack = false)

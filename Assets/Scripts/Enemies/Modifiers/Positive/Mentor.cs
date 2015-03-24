@@ -4,9 +4,9 @@ using System.Collections;
 
 public class Mentor : Modifier
 {
-	public static string[] modNames = { "Mentor" };
+	public new static string[] modNames = { "Mentor" };
 
-	public static Mentor New()
+	public new static Mentor New()
 	{
 		Mentor newMod = ScriptableObject.CreateInstance<Mentor>();
 		return newMod;

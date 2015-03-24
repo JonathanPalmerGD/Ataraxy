@@ -4,9 +4,9 @@ using System.Collections;
 
 public class Rare : Modifier
 {
-	public static string[] modNames = { "Rare" };
+	public new static string[] modNames = { "Rare" };
 
-	public static Rare New()
+	public new static Rare New()
 	{
 		Rare newMod = ScriptableObject.CreateInstance<Rare>();
 		return newMod;

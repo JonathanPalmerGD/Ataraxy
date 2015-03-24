@@ -2,13 +2,13 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class Vampiric : Modifier
+public class Durable : Modifier
 {
-	public new static string[] modNames = { "Vampiric" };
+	public new static string[] modNames = { "Durable" };
 
-	public new static Vampiric New()
+	public new static Durable New()
 	{
-		Vampiric newMod = ScriptableObject.CreateInstance<Vampiric>();
+		Durable newMod = ScriptableObject.CreateInstance<Durable>();
 		return newMod;
 	}
 	public override void Init()
@@ -20,7 +20,15 @@ public class Vampiric : Modifier
 
 	public override void Gained(int stacksGained = 0, bool newStack = false)
 	{
-		Carrier.LifeStealPer += .2f * stacksGained;
+		if (Carrier.DamageMultiplier - stacksGained * .05f > .3f)
+		{
+			Carrier.DamageMultiplier -= stacksGained * .75f;
+		}
+		else
+		{
+			Debug.LogWarning(Carrier.name + "Durability Mitigation capped\n");
+			Carrier.DamageMultiplier = .3f;
+		}
 		base.Gained(stacksGained, newStack);
 	}
 

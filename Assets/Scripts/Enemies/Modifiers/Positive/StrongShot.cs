@@ -4,9 +4,9 @@ using System.Collections;
 
 public class StrongShot : Modifier
 {
-	public static string[] modNames = { "Strong Shot" };
+	public new static string[] modNames = { "Strong Shot" };
 
-	public static StrongShot New()
+	public new static StrongShot New()
 	{
 		StrongShot newMod = ScriptableObject.CreateInstance<StrongShot>();
 		return newMod;

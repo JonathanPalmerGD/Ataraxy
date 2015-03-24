@@ -4,9 +4,9 @@ using System.Collections;
 
 public class Frail : Modifier
 {
-	public static string[] modNames = { "Frail" };
+	public new static string[] modNames = { "Frail" };
 
-	public static Frail New()
+	public new static Frail New()
 	{
 		Frail newMod = ScriptableObject.CreateInstance<Frail>();
 		return newMod;

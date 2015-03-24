@@ -4,9 +4,9 @@ using System.Collections;
 
 public class Oblivious : Modifier
 {
-	public static string[] modNames = { "Oblivious" };
+	public new static string[] modNames = { "Oblivious" };
 
-	public static Oblivious New()
+	public new static Oblivious New()
 	{
 		Oblivious newMod = ScriptableObject.CreateInstance<Oblivious>();
 		return newMod;

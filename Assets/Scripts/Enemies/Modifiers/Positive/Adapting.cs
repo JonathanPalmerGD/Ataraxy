@@ -4,9 +4,9 @@ using System.Collections;
 
 public class Adapting : Modifier
 {
-	public static string[] modNames = { "Adapting" };
+	public new static string[] modNames = { "Adapting" };
 
-	public static Adapting New()
+	public new static Adapting New()
 	{
 		Adapting newMod = ScriptableObject.CreateInstance<Adapting>();
 		return newMod;

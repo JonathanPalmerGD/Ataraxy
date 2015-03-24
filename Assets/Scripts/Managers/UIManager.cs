@@ -257,7 +257,7 @@ public class UIManager : Singleton<UIManager>
 				Modifiers[i].multiplierText.text = npcMods[i].Stacks + "x";
 				Modifiers[i].nameText.text = npcMods[i].ModifierName;
 				Modifiers[i].gameObject.SetActive(true);
-				Modifiers[i].SetPlateColor(npcMods[i].UIColor);
+				Modifiers[i].SetPlateColor(npcMods[i].UIColor, npcMods[i].TextColor);
 			}
 			else
 			{

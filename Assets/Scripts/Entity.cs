@@ -169,6 +169,7 @@ public class Entity : MonoBehaviour
 	public float ProjSpeedAmp = 1.0f;
 	public float LifeStealPer = 0.0f;
 	public float LuckFactor = 10.0f;
+	public float DamageMultiplier = 1.0f;
 	#endregion
 
 	#region State Tracking, definition bools, abilityEffects
@@ -319,7 +320,14 @@ public class Entity : MonoBehaviour
 		}
 		else
 		{
-			HealthToAdjust += amount;
+			if (amount < 0)
+			{
+				HealthToAdjust += amount * DamageMultiplier;
+			}
+			else
+			{
+				HealthToAdjust += amount;
+			}
 		}
 	}
 

@@ -4,9 +4,9 @@ using System.Collections;
 
 public class Kamikaze : Modifier
 {
-	public static string[] modNames = { "Kamikaze" };
+	public new static string[] modNames = { "Kamikaze" };
 
-	public static Kamikaze New()
+	public new static Kamikaze New()
 	{
 		Kamikaze newMod = ScriptableObject.CreateInstance<Kamikaze>();
 		return newMod;
@@ -22,6 +22,7 @@ public class Kamikaze : Modifier
 	{
 		Carrier.LifeStealPer -= .3f * stacksGained;
 		Carrier.DamageAmplification += .3f * stacksGained;
+		Carrier.DamageMultiplier -= stacksGained * .05f;
 		base.Gained(stacksGained, newStack);
 	}
 

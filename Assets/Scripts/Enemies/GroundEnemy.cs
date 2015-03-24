@@ -284,7 +284,7 @@ public class GroundEnemy : Enemy
 		}
 		if(Input.GetKeyDown(KeyCode.Slash))
 		{
-			Vector3 dir = Vector3.zero;
+			//Vector3 dir = Vector3.zero;
 			
 			if (targVisual != null)
 			{
@@ -715,7 +715,7 @@ public class GroundEnemy : Enemy
 
 	float CheckDestinationDistance()
 	{
-		GameObject playerGO = GameManager.Instance.playerGO;
+		//GameObject playerGO = GameManager.Instance.playerGO;
 		/*if (AdvanceOnLocalTarget && GameManager.Instance.playerCont.lastLocation == lastLocation)
 		{
 			Vector2 posFlat = new Vector2(transform.position.x, transform.position.z);

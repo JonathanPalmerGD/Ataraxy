@@ -12,7 +12,6 @@ public class Nullgard : GroundEnemy
 	public float storingShieldDur = 1.25f;
 	public float drawShieldDur = 0.35f;
 	float shieldCounter = 0;
-	bool stored = false;
 
 	public enum ShieldState { Down, Storing, Drawing, Up }
 	public ShieldState shieldState;

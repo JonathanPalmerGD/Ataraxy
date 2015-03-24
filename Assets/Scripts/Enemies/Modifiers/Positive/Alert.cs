@@ -4,9 +4,9 @@ using System.Collections;
 
 public class Alert : Modifier
 {
-	public static string[] modNames = { "Alert" };
+	public new static string[] modNames = { "Alert" };
 
-	public static Alert New()
+	public new static Alert New()
 	{
 		Alert newMod = ScriptableObject.CreateInstance<Alert>();
 		return newMod;
