@@ -189,7 +189,8 @@ public class TowerMaster : Enemy
 
 	public override void GainLevel()
 	{
-		XpReward += 5;
+		base.GainLevel();
+		/*XpReward += 5;
 		int randomBonuses = Random.Range(0, 4);
 		if (randomBonuses == 1)
 		{
@@ -223,7 +224,7 @@ public class TowerMaster : Enemy
 		if (LevelText != null)
 		{
 			LevelText.text = Level.ToString();
-		}
+		}*/
 	}
 
 

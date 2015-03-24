@@ -99,6 +99,7 @@ public class RocketLauncher : Weapon
 
 		rocket.Faction = Faction;
 		rocket.Shooter = Carrier;
+		rocket.Creator = this;
 
 		rocket.rigidbody.drag = 0;
 		rocket.target = null;
