@@ -164,6 +164,13 @@ public class Entity : MonoBehaviour
 	}
 	#endregion
 
+	#region Entity Combat variables
+	public float DamageAmplification = 1.0f;
+	public float ProjSpeedAmp = 1.0f;
+	public float LifeStealPer = 0.0f;
+	public float LuckFactor = 10.0f;
+	#endregion
+
 	#region State Tracking, definition bools, abilityEffects
 	public List<AbilityEffect> abilityEffects;
 
@@ -379,7 +386,8 @@ public class Entity : MonoBehaviour
 			if (e.modifiers.Count > 0)
 			{
 				Enemy self = (Enemy)this;
-				self.modifiers.Add(e.modifiers[Random.Range(0, e.modifiers.Count)]);
+				self.GainModifier(e.modifiers[Random.Range(0, e.modifiers.Count)]);
+				//self.modifiers.Add(e.modifiers[Random.Range(0, e.modifiers.Count)]);
 
 				SetupModifiersUI();
 			}

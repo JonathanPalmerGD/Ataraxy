@@ -72,8 +72,14 @@ public class ShockRifle : Weapon
 					{
 						//Display visual effect
 
+						float weaponDamage = PrimaryDamage;
+						weaponDamage = weaponDamage * Carrier.DamageAmplification;
+
+						//Heal carrier if they have lifesteal.
+						Carrier.AdjustHealth(weaponDamage * Carrier.LifeStealPer);
+
 						//Damage the enemy
-						e.AdjustHealth(-PrimaryDamage * (1 + Carrier.Level * .1f));
+						e.AdjustHealth(-weaponDamage);
 					}
 				}
 			}
@@ -100,7 +106,7 @@ public class ShockRifle : Weapon
 		Vector3 dir = targetScanDir - firePoint;
 		dir.Normalize();
 
-		shock.rigidbody.AddForce(dir * shock.ProjVel * shock.rigidbody.mass);
+		shock.rigidbody.AddForce(dir * shock.ProjVel * Carrier.ProjSpeedAmp * shock.rigidbody.mass);
 
 		Destroy(go, 20);
 	}

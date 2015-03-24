@@ -26,8 +26,9 @@ public class GrapplingHook : Weapon
 		specialFirePointIndex = 0;
 		PrimaryDamage = 0.4f;
 		NormalCooldown = Random.Range(.95f, 1.2f);
-		SpecialCooldown = Random.Range(1.3f, 2);
-		DurSpecialCost = 0;
+		SpecialCooldown = NormalCooldown;
+		//SpecialCooldown = Random.Range(.45f, .65f);
+		DurSpecialCost = 1;
 		#if CHEAT
 		NormalCooldown = .7f;
 		Durability = 100;
@@ -86,39 +87,76 @@ public class GrapplingHook : Weapon
 
 	public override void UseWeapon(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 targetScanDir = default(Vector3), bool lockOn = false)
 	{
-		Vector3 firePoint = firePoints[primaryFirePointIndex].transform.position;
+		if (weaponState == GrapplingHookWeaponState.Ready)
+		{
+			Vector3 firePoint = firePoints[primaryFirePointIndex].transform.position;
 
-		GameObject go = (GameObject)GameObject.Instantiate(hookPrefab, firePoint + firePointOffset, Quaternion.identity);
-		currentProjectile = go.GetComponent<GrapplingHookProj>();
-		currentProjectile.Shooter = Carrier;
+			GameObject go = (GameObject)GameObject.Instantiate(hookPrefab, firePoint + firePointOffset, Quaternion.identity);
+			currentProjectile = go.GetComponent<GrapplingHookProj>();
+			currentProjectile.Shooter = Carrier;
 
-		Vector3 dir = targetScanDir - firePoint;
-		dir.Normalize();
+			Vector3 dir = targetScanDir - firePoint;
+			dir.Normalize();
 
-		go.transform.LookAt(targetScanDir);
+			go.transform.LookAt(targetScanDir);
 
-		currentProjectile.Creator = this;
-		currentProjectile.rigidbody.AddForce((dir * assignedHookSpeed *(currentProjectile.ProjVel / 20) * currentProjectile.rigidbody.mass));
+			currentProjectile.Creator = this;
 
-		currentProjectile.Damage = PrimaryDamage;
+			currentProjectile.rigidbody.AddForce((dir * assignedHookSpeed * Carrier.ProjSpeedAmp * (currentProjectile.ProjVel / 20) * currentProjectile.rigidbody.mass));
 
-		currentProjectile.Faction = Faction;
+			currentProjectile.Damage = PrimaryDamage;
 
-		currentProjectile.timeRemaining = 2f;
+			currentProjectile.Faction = Faction;
 
-		weaponState = GrapplingHookWeaponState.Busy;
+			currentProjectile.timeRemaining = 2f;
+
+			weaponState = GrapplingHookWeaponState.Busy;
+		}
+		else
+		{
+			currentProjectile.Retract();
+		}
 	}
 
 	public override void UseWeaponSpecial(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 targetScanDir = default(Vector3), bool lockOn = false)
 	{
 		//Destroy our projectile.
-		//RemoveProjectile(0f);
-		currentProjectile.Retract();
+		if (weaponState == GrapplingHookWeaponState.Ready)
+		{
+			Vector3 firePoint = firePoints[primaryFirePointIndex].transform.position;
+
+			GameObject go = (GameObject)GameObject.Instantiate(hookPrefab, firePoint + firePointOffset, Quaternion.identity);
+			currentProjectile = go.GetComponent<GrapplingHookProj>();
+			currentProjectile.Shooter = Carrier;
+
+			Vector3 dir = targetScanDir - firePoint;
+			dir.Normalize();
+			dir = new Vector3(dir.x, .8f, dir.z);
+			dir.Normalize();
+			go.transform.LookAt(dir * 10000);
+
+			currentProjectile.Creator = this;
+			currentProjectile.rigidbody.useGravity = true;
+
+			currentProjectile.rigidbody.AddForce((dir * assignedHookSpeed * Carrier.ProjSpeedAmp * (currentProjectile.ProjVel / 20) * currentProjectile.rigidbody.mass));
+
+			currentProjectile.Damage = PrimaryDamage;
+
+			currentProjectile.Faction = Faction;
+
+			currentProjectile.timeRemaining = 3f;
+
+			weaponState = GrapplingHookWeaponState.Busy;
+		}
+		else
+		{
+			currentProjectile.Retract();
+		}
 	}
 
 	public override bool HandleDurability(bool specialAttack = false, GameObject target = null, bool lockOn = false)
 	{
-		if (specialAttack)
+		/*if (specialAttack)
 		{
 			if (weaponState == GrapplingHookWeaponState.Ready)
 			{
@@ -131,7 +169,7 @@ public class GrapplingHook : Weapon
 		if (weaponState == GrapplingHookWeaponState.Busy)
 		{
 			return false;
-		}
+		}*/
 		//Otherwise we'll check the normal conditions.
 		return base.HandleDurability(specialAttack, target, lockOn);
 	}
@@ -170,7 +208,7 @@ public class GrapplingHook : Weapon
 		g.SpecialCooldown = 0;
 		g.CdLeft = 0;
 		g.PrimaryDesc = "Fires a hook and chain that latches onto the first piece of terrain, token or enemy it hits.\nEnemies & tokens are pulled towards you.\nYou are pulled towards terrain at a ridiculous speed.\nExercise Caution.";
-		g.SecondaryDesc = "Disables and Retracts the current hook instantaneously.\nOnly one hook can be active at a time.";
+		g.SecondaryDesc = "[Utility]\nAn arcing grapple throw useful for recovering from a downward plummet.";
 		return g;
 	}
 	

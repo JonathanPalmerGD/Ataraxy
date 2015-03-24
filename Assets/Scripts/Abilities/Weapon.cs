@@ -159,8 +159,14 @@ public class Weapon : Ability
 				{
 					//Display visual effect
 
+					float weaponDamage = PrimaryDamage;
+					weaponDamage = weaponDamage * Carrier.DamageAmplification;
+
+					//Heal carrier if they have lifesteal.
+					Carrier.AdjustHealth(weaponDamage * Carrier.LifeStealPer);
+
 					//Damage the enemy
-					e.AdjustHealth(-PrimaryDamage * (1 + Carrier.Level * .1f));
+					e.AdjustHealth(-weaponDamage);
 				}
 			}
 			if (targType.IsSubclassOf(typeof(NPC)) || targType == typeof(NPC))
@@ -197,8 +203,14 @@ public class Weapon : Ability
 				{
 					//Display visual effect
 
+					float weaponDamage = SpecialDamage;
+					weaponDamage = weaponDamage * Carrier.DamageAmplification;
+
+					//Heal carrier if they have lifesteal.
+					Carrier.AdjustHealth(weaponDamage * Carrier.LifeStealPer);
+
 					//Damage the enemy
-					e.AdjustHealth(-SpecialDamage * (1 + Carrier.Level * .1f));
+					e.AdjustHealth(-weaponDamage);
 				}
 			}
 			else if (targType != null && targType.IsAssignableFrom(typeof(NPC)))
@@ -308,15 +320,15 @@ public class Weapon : Ability
 		proj.Faction = Faction;
 		//My Weapon's are Scriptable Objects. Some projectiles might influence their parent weapon by refunding health or ammo.
 		proj.Creator = this;
-		
+
 		//Give the projectile velocity. Melee projectiles generally have drag to slow them down quickly.
 		if (specialVelocity != 0)
 		{
-			proj.rigidbody.AddForce(velocityDirection * specialVelocity * proj.rigidbody.mass);
+			proj.rigidbody.AddForce(velocityDirection * specialVelocity * Carrier.ProjSpeedAmp * proj.rigidbody.mass);
 		}
 		else
 		{
-			proj.rigidbody.AddForce(velocityDirection * proj.ProjVel * proj.rigidbody.mass);
+			proj.rigidbody.AddForce(velocityDirection * proj.ProjVel * Carrier.ProjSpeedAmp * proj.rigidbody.mass);
 		}
 
 		//Target is ahead of the projectile (the 8 hard coded value is just enough to always be in front of the projectile

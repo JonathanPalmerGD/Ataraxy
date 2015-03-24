@@ -32,10 +32,13 @@ public class GrapplingHookProj : Projectile
 
 	public virtual void DrawChain()
 	{
-		Vector3 firstPos = Creator.Carrier.FirePoints[0].transform.position;
-		lr.SetPosition(0, firstPos);
-		lr.SetPosition(1, transform.position - transform.forward * transform.localScale.z/2);
-		lr.material.mainTextureScale = new Vector2(Vector3.Distance(firstPos, transform.position), 1);
+		if (Creator != null && Creator.Carrier)
+		{
+			Vector3 firstPos = Creator.Carrier.FirePoints[0].transform.position;
+			lr.SetPosition(0, firstPos);
+			lr.SetPosition(1, transform.position - transform.forward * transform.localScale.z / 2);
+			lr.material.mainTextureScale = new Vector2(Vector3.Distance(firstPos, transform.position), 1);
+		}
 	}
 
 	public override void Start() 
@@ -177,8 +180,20 @@ public class GrapplingHookProj : Projectile
 						//If the projectile is from the Player
 						if (Faction == Allegiance.Player && collidedEntity.Faction == Allegiance.Enemy)
 						{
+							float weaponDamage = Damage;
+							weaponDamage = weaponDamage * Creator.Carrier.DamageAmplification;
+
+							//Heal carrier if they have lifesteal.
+							Creator.Carrier.AdjustHealth(weaponDamage * Creator.Carrier.LifeStealPer);
+
+							//Damage the enemy
+							collidedEntity.AdjustHealth(-weaponDamage);
+
+
+
+							
 							//Deal damage to the enemy
-							collidedEntity.GetComponent<Enemy>().AdjustHealth(-Damage * (1 + Creator.Carrier.Level * .1f));
+							//collidedEntity.AdjustHealth(-Damage * (1 + Creator.Carrier.Level * .1f));
 
 							//Make ourself a child.
 							//gameObject.transform.SetParent(collidedEntity.transform);
@@ -202,9 +217,15 @@ public class GrapplingHookProj : Projectile
 						//Else if it is from an Enemy
 						else if (Faction == Allegiance.Enemy && collidedEntity.Faction == Allegiance.Player)
 						{
-							//Deal damage to the player
-							GameManager.Instance.player.AdjustHealth(-Damage);
+							float weaponDamage = Damage;
+							weaponDamage = weaponDamage * Creator.Carrier.DamageAmplification;
 
+							//Heal carrier if they have lifesteal.
+							Creator.Carrier.AdjustHealth(weaponDamage * Creator.Carrier.LifeStealPer);
+
+							//Deal damage to the player
+							GameManager.Instance.player.AdjustHealth(-weaponDamage);
+							
 							//Grab the player!
 							RetractPullingTarget(collidedEntity);
 
@@ -311,6 +332,7 @@ public class GrapplingHookProj : Projectile
 
 	public void Retract()
 	{
+		rigidbody.useGravity = false;
 		collidedYet = true;
 		rigidbody.velocity = Vector3.zero;
 		hookState = GrapplingState.Pulling;
@@ -329,6 +351,7 @@ public class GrapplingHookProj : Projectile
 			{
 			
 				rigidbody.velocity = Vector3.zero;
+				rigidbody.useGravity = false;
 				Creator.Carrier.rigidbody.useGravity = false;
 
 				hookState = GrapplingState.Attached;

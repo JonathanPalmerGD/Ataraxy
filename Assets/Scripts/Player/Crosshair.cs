@@ -71,6 +71,7 @@ public class Crosshair : MonoBehaviour
 
 	void Update()
 	{
+		#if UNITY_EDITOR
 		if (Input.GetKeyDown(KeyCode.Minus))
 		{
 			Image img = this.GetComponent<Image>();
@@ -81,6 +82,7 @@ public class Crosshair : MonoBehaviour
 			Image img = this.GetComponent<Image>();
 			img.rectTransform.sizeDelta = new Vector2(img.rectTransform.rect.width * 2, img.rectTransform.rect.height * 2);
 		}
+		#endif
 	}
 
 	/// <summary>

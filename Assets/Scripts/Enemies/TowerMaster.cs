@@ -55,7 +55,7 @@ public class TowerMaster : Enemy
 		distFromPlayer = Vector3.Distance(transform.position, GameManager.Instance.player.transform.position);
 
 		#region Update Knowledge of Player
-		if (distFromPlayer < 50)
+		if (distFromPlayer < AlertRadius)
 		{
 			CanSeePlayer = true;
 		}

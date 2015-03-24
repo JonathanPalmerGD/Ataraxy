@@ -55,7 +55,7 @@ public class ShockBall : Projectile
 			float distFromBlast = Vector3.Distance(hitColliders[i].transform.position, transform.position);
 			float parameterForMessage = -(explosiveDamage * blastRadius / distFromBlast);
 
-			hitColliders[i].gameObject.SendMessage("AdjustHealth", parameterForMessage, SendMessageOptions.DontRequireReceiver);
+			hitColliders[i].gameObject.SendMessage("AdjustHealth", parameterForMessage * Creator.Carrier.DamageAmplification, SendMessageOptions.DontRequireReceiver);
 			i++;
 		} 
 

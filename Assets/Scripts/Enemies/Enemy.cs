@@ -15,29 +15,6 @@ public class Enemy : NPC
 	public float stateTimer = 0;
 	#endregion
 
-	#region Experience Values
-	/// <summary>
-	/// The value this enemy provides when slain.
-	/// </summary>
-	public float XpReward = 5;
-
-	//private float xpRateOverTime = 25f;
-	private float xpRateOverTime = 1.5f;
-
-	private bool gainXpWhenHit = false;
-	private float xpGainWhenHit = .5f;
-
-	public float expGainPerShot = 5;
-
-	private float alertRadius = 50;
-	private float mentorModifier = 15.0f;
-	public float MentorModifier
-	{
-		get { return mentorModifier; }
-		set { mentorModifier = value; } 
-	}
-	#endregion
-
 	#region Projectile Attack Variables
 	public Weapon weapon;
 	public GameObject projectilePrefab;
@@ -50,14 +27,6 @@ public class Enemy : NPC
 		get { return firingTimer; }
 		set { firingTimer = value; }
 	}
-
-	private float firingCooldown;
-	public float FiringCooldown
-	{
-		get { return firingCooldown; }
-		set { firingCooldown = value; }
-	}
-
 	public bool firing = false;
 	#endregion
 
@@ -104,7 +73,7 @@ public class Enemy : NPC
 	public virtual void AlertAlliesOfDeath()
 	{
 		//We make a sphere with the alert radius.
-		Collider[] hitColliders = Physics.OverlapSphere(transform.position, alertRadius);
+		Collider[] hitColliders = Physics.OverlapSphere(transform.position, AlertRadius);
 		int i = 0;
 		while (i < hitColliders.Length)
 		{
@@ -187,6 +156,8 @@ public class Enemy : NPC
 	{
 		if (!UIManager.Instance.paused)
 		{
+			HandleModifiers();
+
 			HandleFiringTimer();
 
 			HandleExperience();
@@ -217,24 +188,35 @@ public class Enemy : NPC
 	public override void GainLevel()
 	{
 		XpReward += 5;
-		int randomBonuses = Random.Range(0, 3);
-		if(randomBonuses == 1)
+		bool gainNewModifier = false;
+		if (modifiers.Count > 0)
 		{
-			if(FiringCooldown > 3)
-			{
-				FiringCooldown -= 3f;
-			}
+			gainNewModifier = Random.Range(0.0f, .99f) > .3f ? true : false;
 		}
-		else if (randomBonuses == 2)
+
+		if (gainNewModifier)
 		{
-			projectilePrefab.GetComponent<Projectile>().Damage += 2;
+			Modifier m = ModifierManager.Instance.GainNewModifier(Level);
+			m.Init();
+			//Debug.Log("Gaining levelup modifier: " + m.ModifierName + " (" + m.Stacks + ")\n");
+			GainModifier(m);
 		}
 		else
 		{
-			//Health += 5;
-			AdjustHealth(5);
+			GainModifierStacks();
 		}
+
+		SetupModifiersUI();
+
 		base.GainLevel();
+	}
+
+	public void HandleModifiers()
+	{
+		for (int i = 0; i < modifiers.Count; i++)
+		{
+			modifiers[i].Update();
+		}
 	}
 
 	/// <summary>
@@ -269,7 +251,7 @@ public class Enemy : NPC
 
 	public virtual void HandleAggression()
 	{
-		if (Vector3.Distance(transform.position, GameManager.Instance.player.transform.position) < 50)
+		if (Vector3.Distance(transform.position, GameManager.Instance.player.transform.position) < AlertRadius)
 		{
 			CanSeePlayer = true;
 
@@ -329,7 +311,7 @@ public class Enemy : NPC
 			proj.Faction = Faction;
 			proj.Shooter = this;
 
-			projectile.rigidbody.AddForce(dirToTarget * proj.ProjVel * projectile.rigidbody.mass);
+			projectile.rigidbody.AddForce(dirToTarget * proj.ProjVel * ProjSpeedAmp * projectile.rigidbody.mass);
 			Destroy(projectile, proj.ProjLife);
 		}
 	}

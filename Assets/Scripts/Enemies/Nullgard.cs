@@ -49,7 +49,7 @@ public class Nullgard : GroundEnemy
 		#endregion
 
 		#region [Editor] Forced State Adjustment
-#if UNITY_EDITOR
+		#if UNITY_EDITOR
 		if (Input.GetKeyDown(KeyCode.Z))
 		{
 			if (state == EnemyState.Idle)
@@ -114,7 +114,7 @@ public class Nullgard : GroundEnemy
 	{
 		distFromPlayer = Vector3.Distance(transform.position, GameManager.Instance.player.transform.position);
 
-		if (distFromPlayer < 50)
+		if (distFromPlayer < AlertRadius)
 		{
 			CanSeePlayer = true;
 

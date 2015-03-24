@@ -15,8 +15,11 @@ public class PathNode : MonoBehaviour
 	
 	void Update() 
 	{
-		if (Input.GetKeyDown(KeyCode.M))
+		#if UNITY_EDITOR
+		if (Input.GetKeyDown(KeyCode.Home))
 		{
+			renderer.enabled = true;
 		}
+		#endif
 	}
 }

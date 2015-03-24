@@ -21,11 +21,12 @@ public class TelePlane : MonoBehaviour
 	void Start () 
 	{
 		//Fill our shoebox with a reference to the player.
-		player = GameObject.FindGameObjectWithTag("Player");
+		player = GameManager.Instance.playerGO;
 		if (player.GetComponent<TeleTarget>() == null)
 		{
 			player.AddComponent<TeleTarget>();
 		}
+
 		startPos = player.transform.position;
 		startRot = player.transform.rotation;
 	}
@@ -52,6 +53,9 @@ public class TelePlane : MonoBehaviour
 				//Stop their movement
 				player.rigidbody.velocity = Vector3.zero;
 				//player.GetComponent<CharacterMotor>().SetVelocity(new Vector3(0, 0, 0));
+
+
+				GameManager.Instance.player.FellBelow();
 			}
 			else
 			{
@@ -59,6 +63,9 @@ public class TelePlane : MonoBehaviour
 				player.transform.rotation = startRot;
 				player.rigidbody.velocity = Vector3.zero;
 				//player.GetComponent<CharacterMotor>().SetVelocity(new Vector3(0, 0, 0));
+
+
+				GameManager.Instance.player.FellBelow();
 			}
 		}
 	}

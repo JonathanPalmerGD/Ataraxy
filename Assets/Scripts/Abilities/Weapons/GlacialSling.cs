@@ -78,7 +78,7 @@ public class GlacialSling : Weapon
 		dir += Vector3.up * .25f;
 		dir.Normalize();
 
-		disk.rigidbody.AddForce(dir * disk.ProjVel * disk.rigidbody.mass);
+		disk.rigidbody.AddForce(dir * disk.ProjVel * Carrier.ProjSpeedAmp * disk.rigidbody.mass);
 
 		disk.transform.LookAt(dir, Vector3.Cross(dir, Carrier.transform.right));
 

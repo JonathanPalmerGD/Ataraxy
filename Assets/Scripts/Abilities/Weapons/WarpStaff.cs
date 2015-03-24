@@ -202,7 +202,7 @@ public class WarpStaff : Weapon
 				// Caps Damage:
 				if (parameterForMessage > MaxExplosiveDmg) parameterForMessage = MaxExplosiveDmg;
 				else if (parameterForMessage < MinExplosiveDmg) parameterForMessage = MinExplosiveDmg;
-				hitColliders[i].gameObject.SendMessage("AdjustHealth", -parameterForMessage, SendMessageOptions.DontRequireReceiver);
+				hitColliders[i].gameObject.SendMessage("AdjustHealth", -parameterForMessage * Carrier.DamageAmplification, SendMessageOptions.DontRequireReceiver);
 			}//if (hitColliders[i].gameObject != this.Carrier.gameObject)
 			i++;
 		}//while (i < hitColliders.Length)

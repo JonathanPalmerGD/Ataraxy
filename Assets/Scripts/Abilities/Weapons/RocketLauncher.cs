@@ -53,6 +53,7 @@ public class RocketLauncher : Weapon
 					GameObject go = (GameObject)GameObject.Instantiate(rocketPrefab, firePoint, Quaternion.identity);
 					Rocket rocket = go.GetComponent<Rocket>();
 					rocket.Shooter = Carrier;
+					rocket.Creator = this;
 
 					rocket.Faction = Faction;
 
@@ -71,7 +72,7 @@ public class RocketLauncher : Weapon
 						rocket.target = null;
 						rocket.homing = false;
 
-						rocket.rigidbody.AddForce((targetScanDir - firePoint) * rocket.ProjVel * rocket.rigidbody.mass);
+						rocket.rigidbody.AddForce((targetScanDir - firePoint) * rocket.ProjVel * Carrier.ProjSpeedAmp * rocket.rigidbody.mass);
 					}
 				}
 			}
@@ -112,7 +113,7 @@ public class RocketLauncher : Weapon
 		Vector3 dir = targetScanDir - firePoint;
 		dir.Normalize();
 
-		rocket.rigidbody.AddForce((dir * rocket.ProjVel * rocket.rigidbody.mass));
+		rocket.rigidbody.AddForce((dir * rocket.ProjVel * Carrier.ProjSpeedAmp * rocket.rigidbody.mass));
 
 		Destroy(rocket, fuelPerRocket + 8);
 	}

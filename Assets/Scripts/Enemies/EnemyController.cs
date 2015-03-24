@@ -233,10 +233,10 @@ public class EnemyController : MonoBehaviour
 	}
 	void Update()
 	{
-		if (Input.GetKeyDown(KeyCode.Insert))
+		/*if (Input.GetKeyDown(KeyCode.Insert))
 		{
 			toggleView = !toggleView;
-		}
+		}*/
 		#region When to Check
 		if (Time.time > nextCheck)
 		{

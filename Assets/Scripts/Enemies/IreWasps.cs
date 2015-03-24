@@ -78,7 +78,14 @@ public class IreWasps : FlyingEnemy
 
 			//Hurt the player
 			//Debug.Log("Dealing : " + attackDuration * attackDamage + " damage\n");
-			GameManager.Instance.player.AdjustHealth(-1 * attackDuration * attackDamage);
+
+			float damageAmount = 1 * attackDuration * attackDamage * DamageAmplification;
+			
+			//In case we life steal
+			AdjustHealth(damageAmount * LifeStealPer);
+
+			//Deal damage to the player
+			GameManager.Instance.player.AdjustHealth(-damageAmount);
 			GainExperience((attackDuration) / 6);
 
 			//Then check if the player got away
@@ -105,7 +112,7 @@ public class IreWasps : FlyingEnemy
 		else
 		{
 			#region Update Knowledge of Player
-			if (distFromPlayer < 50)
+			if (distFromPlayer < AlertRadius)
 			{
 				CanSeePlayer = true;
 				if (targVisual != null)
@@ -176,7 +183,7 @@ public class IreWasps : FlyingEnemy
 						//Debug.DrawLine(transform.position, chargeTargetLocation, Color.green, 5.0f);
 						Vector3 dirToPlayer = (chargeTargetLocation - transform.position + Vector3.up * .1f);
 						dirToPlayer.Normalize();
-						rigidbody.AddForce(dirToPlayer * rigidbody.mass * 2000);
+						rigidbody.AddForce(dirToPlayer * ProjSpeedAmp * rigidbody.mass * 2000);
 						particleSystem.startColor = attackColor;
 					}
 				}

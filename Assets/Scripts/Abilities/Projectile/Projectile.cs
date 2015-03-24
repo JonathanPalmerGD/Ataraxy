@@ -154,7 +154,32 @@ public class Projectile : MonoBehaviour
 
 	public virtual void ProjectileHitTarget(Entity target)
 	{
-		target.AdjustHealth(-Damage * (1 + Shooter.Level * .1f));
+		//Debug.Log("Projectile Hit Target\n");
+
+		float damageAmp = 1.0f;
+		float lifeStealPer = 0.0f;
+		if (Shooter != null)
+		{
+			damageAmp = Shooter.DamageAmplification;
+			lifeStealPer = Shooter.LifeStealPer;
+
+			Shooter.AdjustHealth(damage * damageAmp * lifeStealPer);
+		}
+		if (Creator != null)
+		{
+			damageAmp = Creator.Carrier.DamageAmplification;
+			lifeStealPer = Creator.Carrier.LifeStealPer;
+
+			Creator.Carrier.AdjustHealth(damage * damageAmp * lifeStealPer);
+		}
+
+		target.AdjustHealth(-Damage * damageAmp);
+		
+		//Is carrier an NPC
+		/*if ((typeof(Creator.Carrier)).IsSubclassOf(typeof(NPC)) || Creator.Carrier == typeof(NPC))
+		{
+
+		}*/
 
 		//Apply AbilityEffect to the target.
 		for (int i = 0; i < projectileEffects.Count; i++)

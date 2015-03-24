@@ -663,7 +663,7 @@ public class TerrainManager : Singleton<TerrainManager>
 	#region Update
 	void Update()
 	{
-#if UNITY_EDITOR
+		#if UNITY_EDITOR
 		if (Input.GetKeyDown(KeyCode.P))
 		{
 			string TerrainInfo = "";
@@ -689,7 +689,7 @@ public class TerrainManager : Singleton<TerrainManager>
 				"   # of Encounters: " + encCounter + "\n\n" + TerrainInfo;
 			Debug.Log(TerrainInfo + "\n\n\n\n");
 		}
-#endif
+		#endif
 	}
 	#endregion
 }

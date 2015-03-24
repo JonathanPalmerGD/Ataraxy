@@ -72,7 +72,7 @@ public class Hemotick : Weapon
 		go.transform.LookAt(targetScanDir);
 		
 		bh.Creator = this;
-		bh.rigidbody.AddForce((dir * hazeVelocity * (bh.ProjVel / 20) * bh.rigidbody.mass));
+		bh.rigidbody.AddForce((dir * hazeVelocity * Carrier.ProjSpeedAmp * (bh.ProjVel / 20) * bh.rigidbody.mass));
 		bh.ProjLife = hazeDur;
 		
 		bh.Damage = PrimaryDamage;

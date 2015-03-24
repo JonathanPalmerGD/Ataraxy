@@ -177,8 +177,6 @@ public class Player : Entity
 		SetupAbility(GravityStaff.New());
 		//SetupAbility(BoundingStaff.New());
 		SetupAbility(GrapplingHook.New());
-		SetupAbility(WarpStaff.New());
-		SetupAbility(GlacialSling.New());
 		/*SetupAbility(WingedSandals.New());
 		SetupAbility(Longsword.New());
 		SetupAbility(Rapier.New());
@@ -379,7 +377,10 @@ public class Player : Entity
 
 			//Try to find if our cursor is targetting something
 			hitscanTarget = TargetScan();
-
+			/*if (hitscanTarget != null)
+			{
+				Debug.Log(hitscanTarget.name);
+			}*/
 			UIManager.Instance.player_WeaponFolder.GetComponent<RectTransform>().anchoredPosition = new Vector2((Screen.width / 2) - ((weapons.Count) * 67) / 2, 0);
 		
 			HandleLoseTarget();
@@ -683,6 +684,18 @@ public class Player : Entity
 		Application.LoadLevel("GameOver");
 	}
 
+	public void FellBelow()
+	{
+		for (int i = 0; i < weapons.Count; i++)
+		{
+			if (weapons[i] is GrapplingHook)
+			{
+				((GrapplingHook)weapons[i]).RemoveProjectile(0);
+				//Debug.Log(i + " is a grappling hook\n");
+			}
+		}
+	}
+
 	public void AdjustActiveDurability(int amount)
 	{
 		if (weapons.Count > 0)
@@ -703,8 +716,11 @@ public class Player : Entity
 		//If we fire, set targetScanDir to someplace arbitrarily far away in the shooting. Even if we hit something, we want to target wherever the cursor pointed.
 		targetScanDir = transform.position + (ray.direction * 500);
 
+		//Mask so we don't consider targeting ourself.
+		LayerMask layerMask = ~(1 << LayerMask.NameToLayer ("Player"));
+
 		//If we hit something
-		if (Physics.Raycast(ray, out hit))
+		if (Physics.Raycast(ray, out hit, 1500, layerMask))
 		{
 			hitscanContact = hit.point;
 			//Handle cases for what we hit.

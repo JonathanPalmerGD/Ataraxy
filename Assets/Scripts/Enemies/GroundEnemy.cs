@@ -277,6 +277,7 @@ public class GroundEnemy : Enemy
 		{
 			Debug.DrawLine(transform.position + transform.up * 5, transform.position + transform.up * 5 + transform.forward * 5, Color.white);
 		}
+		#if UNITY_EDITOR
 		if (Input.GetKeyDown(KeyCode.Insert))
 		{
 			toggleView = !toggleView;
@@ -291,7 +292,7 @@ public class GroundEnemy : Enemy
 			}
 			weapon.UseWeapon(null, null, FirePoints, transform.position + transform.forward * 500, false);
 		}
-
+		#endif
 		//Island targNearIsland = TerrainManager.Instance.FindIslandNearTarget(target);
 		/*
 		if (targNearIsland != null)

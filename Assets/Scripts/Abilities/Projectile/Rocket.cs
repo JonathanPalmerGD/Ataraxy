@@ -86,7 +86,7 @@ public class Rocket : Projectile
 			float parameterForMessage = -(explosiveDamage * blastRadius / distFromBlast);
 
 			//Debug.Log("Dealing Damage to : " + hitColliders[i].name + "\t" + parameterForMessage + "\n");
-			hitColliders[i].gameObject.SendMessage("AdjustHealth", parameterForMessage, SendMessageOptions.DontRequireReceiver);
+			hitColliders[i].gameObject.SendMessage("AdjustHealth", parameterForMessage * Creator.Carrier.DamageAmplification, SendMessageOptions.DontRequireReceiver);
 			i++;
 		}
 		Destroy(gameObject, 3.0f);

@@ -86,12 +86,13 @@ public class TargetingVisual : MonoBehaviour
 		if (KnowledgeOfPlayer)
 			Debug.DrawLine(transform.position + Vector3.up * 8, transform.position + Vector3.up * 11, Color.cyan, .1f);*/
 
+		#if UNITY_EDITOR
 		if(Input.GetKeyDown(KeyCode.Period))
 		{
 			Debug.Log("Toggle " + KnowledgeOfPlayer + " \n");
 			KnowledgeOfPlayer = !KnowledgeOfPlayer;
 		}
-
+		#endif
 		startPoint = transform.position;
 	}
 
