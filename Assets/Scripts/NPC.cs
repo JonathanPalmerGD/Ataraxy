@@ -126,13 +126,16 @@ public class NPC : Entity
 
 	public override void SetupModifiersUI()
 	{
-		if (ModHUD != null)
+		if (GameManager.Instance.player.targetedEntity == this)
 		{
-			//Debug.Log("Configuring Modifiers with " + modifiers.Count + " entries\n");
-			UIManager.Instance.ConfigureModifiers(modifiers);
-		}
+			if (ModHUD != null)
+			{
+				//Debug.Log("Configuring Modifiers with " + modifiers.Count + " entries\n");
+				UIManager.Instance.ConfigureModifiers(modifiers);
+			}
 
-		base.SetupModifiersUI();
+			base.SetupModifiersUI();
+		}
 	}
 
 	public virtual void GainModifier(Modifier newModifier)

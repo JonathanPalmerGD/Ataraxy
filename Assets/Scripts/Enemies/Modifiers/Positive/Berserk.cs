@@ -16,6 +16,7 @@ public class Berserk : Modifier
 		ModifierName = modNames[Random.Range(0, modNames.Length - 1)];
 		Stacks = Random.Range(1, 3);
 		UIColor = new Color(Random.Range(0, .999f), Random.Range(0, .999f), Random.Range(0, .999f), .4f);
+		TextColor = new Color(.6f, .2f, .2f);
 	}
 
 	public override void Gained(int stacksGained = 0, bool newStack = false)
