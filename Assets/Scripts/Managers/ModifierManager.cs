@@ -6,7 +6,7 @@ public class ModifierManager : Singleton<ModifierManager>
 {
 	public Modifier GainNewModifier(int level)
 	{
-		//return Elite.New();
+		//return Durable.New();
 
 		Modifier m; //= Bolstered.New();
 

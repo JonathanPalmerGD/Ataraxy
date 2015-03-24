@@ -115,12 +115,12 @@ public class NPC : Entity
 	{
 		modifiers = new List<Modifier>();
 
-		for (int i = 0; i < Random.Range(1,3); i++)
-		{
+		//for (int i = 0; i < Random.Range(1,3); i++)
+		//{
 			Modifier m = ModifierManager.Instance.GainNewModifier(Level);
 			m.Init();
 			GainModifier(m);
-		}
+		//}
 		//Debug.Log(name + " has " + modifiers.Count + " modifiers\n");
 	}
 
@@ -183,7 +183,11 @@ public class NPC : Entity
 	{
 		int index = Random.Range(0, modifiers.Count);
 
-		int stacksGained = Random.Range(0, (int)(LuckFactor / 5));
+		int upperBound = Mathf.Max(1, (int)(LuckFactor / 2));
+
+		int stacksGained = Random.Range(1, upperBound);
+
+		Debug.Log("Gaining stacks in " + modifiers[index].ModifierName + " - " + stacksGained + "\n\tLuck Factor: " + LuckFactor);
 		modifiers[index].Stacks += stacksGained;
 
 		//So we never gain more than 20 of a stack.

@@ -15,15 +15,18 @@ public class Kamikaze : Modifier
 	{
 		ModifierName = modNames[Random.Range(0, modNames.Length - 1)];
 		Stacks = Random.Range(5, 8);
-		UIColor = new Color(Random.Range(0, .999f), Random.Range(0, .999f), Random.Range(0, .999f), .4f);
-		TextColor = Color.black;
+		//UIColor = new Color(.4f, 0.1f, 0.1f, .4f);
+		UIColor = new Color(0, 0, 0, .4f);
+		//TextColor = new Color(.8f, .2f, .2f);
+
+		TextColor = new Color(1.0f, 0.7f, 0.7f);
 	}
 
 	public override void Gained(int stacksGained = 0, bool newStack = false)
 	{
 		Carrier.LifeStealPer -= .3f * stacksGained;
 		Carrier.DamageAmplification += .3f * stacksGained;
-		Carrier.DamageMultiplier -= stacksGained * .05f;
+		Carrier.DamageMultiplier += stacksGained * .05f;
 		base.Gained(stacksGained, newStack);
 	}
 

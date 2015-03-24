@@ -102,6 +102,7 @@ public class ShockRifle : Weapon
 		GameObject go = (GameObject)GameObject.Instantiate(shockBallPrefab, firePoint, Quaternion.identity);
 		ShockBall shock = go.GetComponent<ShockBall>();
 		shock.Shooter = Carrier;
+		shock.Creator = this;
 		shock.Faction = Faction;
 		Vector3 dir = targetScanDir - firePoint;
 		dir.Normalize();

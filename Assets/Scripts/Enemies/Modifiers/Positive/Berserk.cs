@@ -26,7 +26,7 @@ public class Berserk : Modifier
 
 		Carrier.ProjSpeedAmp += .05f * stacksGained;
 
-		if (Carrier.FiringCooldown - stacksGained * .5f > 2)
+		if (Carrier.FiringCooldown - stacksGained * .55f > 2)
 		{
 			Carrier.FiringCooldown -= stacksGained * .55f;
 		}

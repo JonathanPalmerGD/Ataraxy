@@ -191,7 +191,7 @@ public class Enemy : NPC
 		bool gainNewModifier = false;
 		if (modifiers.Count > 0)
 		{
-			gainNewModifier = Random.Range(0.0f, .99f) > .3f ? true : false;
+			gainNewModifier = Random.Range(0.0f, .99f) > .6f ? true : false;
 		}
 
 		if (gainNewModifier)

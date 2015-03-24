@@ -23,7 +23,7 @@ public class Durable : Modifier
 	{
 		if (Carrier.DamageMultiplier - stacksGained * .05f > .3f)
 		{
-			Carrier.DamageMultiplier -= stacksGained * .75f;
+			Carrier.DamageMultiplier -= stacksGained * .05f;
 		}
 		else
 		{
