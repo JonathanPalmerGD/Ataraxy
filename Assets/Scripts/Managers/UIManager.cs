@@ -50,11 +50,11 @@ public class UIManager : Singleton<UIManager>
 
 	#region Pause Menu
 	public Canvas pause_Menu;
+	public GameObject modifier_Menu;
 	public Text item_NameText;
 	public Text item_PrimaryText;
 	public Text item_SecondaryText;
 	#endregion
-
 
 	public Sprite[] Icons;
 
@@ -84,6 +84,7 @@ public class UIManager : Singleton<UIManager>
 		#endregion
 
 		pause_Menu = GameObject.Find("Pause Menu").GetComponent<Canvas>();
+		modifier_Menu = GameObject.Find("Modifier Help");
 
 		#region Target UI
 		target_HUD = GameObject.Find("Target_HUD").GetComponent<Canvas>();
