@@ -239,7 +239,7 @@ public class GroundEnemy : Enemy
 
 		base.Start();
 
-		Longsword ls = Longsword.New();
+		Longsword ls = (Longsword)LootManager.NewWeapon("Longsword");
 		ls.Init();
 
 		#if UNITY_EDITOR

@@ -174,23 +174,20 @@ public class Player : Entity
 	public void GiveStartingItems()
 	{
 		#if UNITY_EDITOR
-		//SetupAbility(GravityStaff.New());
-		//SetupAbility(BoundingStaff.New());
-		//SetupAbility(GrapplingHook.New());
-		/*SetupAbility(WingedSandals.New());
-		SetupAbility(Longsword.New());
-		SetupAbility(Rapier.New());
-		SetupAbility(Dagger.New());
-		SetupAbility(RocketLauncher.New());
-		SetupAbility(Hemotick.New());
-		SetupAbility(ShockRifle.New());*/
-		//SetupAbility(Passive.New());
-		//SetupAbility(Passive.New());
-		//SetupAbility(Passive.New());
-		#else
-		SetupAbility(GravityStaff.New());
-		SetupAbility(GrapplingHook.New());
-		//SetupAbility(Passive.New());
+		SetupAbility(LootManager.NewWeapon("GravityStaff"));
+		SetupAbility(LootManager.NewWeapon("GrapplingHook"));
+		/*
+		SetupAbility(LootManager.NewWeapon("BoundingStaff"));
+		SetupAbility(LootManager.NewWeapon("WingedSandals"));
+		SetupAbility(LootManager.NewWeapon("Longsword"));
+		SetupAbility(LootManager.NewWeapon("Rapier"));
+		SetupAbility(LootManager.NewWeapon("Dagger"));
+		SetupAbility(LootManager.NewWeapon("RocketLauncher"));
+		SetupAbility(LootManager.NewWeapon("Hemotick"));
+		SetupAbility(LootManager.NewWeapon("ShockRifle"));*/
+#else
+		SetupAbility(LootManager.NewWeapon("GravityStaff"));
+		SetupAbility(LootManager.NewWeapon("GrapplingHook"));
 #endif
 	}
 
@@ -618,25 +615,28 @@ public class Player : Entity
 			#region Cheat Weapons
 			if (Input.GetKeyDown(KeyCode.M))
 			{
-				//SetupAbility(MonkStaff.New());
-				SetupAbility(Longsword.New());
-				SetupAbility(Rapier.New());
-				SetupAbility(Dagger.New());
-				SetupAbility(RocketLauncher.New());
-				SetupAbility(ShockRifle.New());
+				SetupAbility(LootManager.NewWeapon("Longsword"));
+				SetupAbility(LootManager.NewWeapon("Rapier"));
+				SetupAbility(LootManager.NewWeapon("Dagger"));
+				SetupAbility(LootManager.NewWeapon("RocketLauncher"));
+				SetupAbility(LootManager.NewWeapon("ShockRifle"));
 			}
 			if (Input.GetKeyDown(KeyCode.N))
 			{
-				SetupAbility(Hemotick.New());
-				SetupAbility(TransmuterKit.New());
+
+				SetupAbility(LootManager.NewWeapon("Hemotick"));
+				SetupAbility(LootManager.NewWeapon("GlacialSling"));
+				SetupAbility(LootManager.NewWeapon("TransmuterKit"));
+				SetupAbility(LootManager.NewWeapon("WingedSandals"));
+
 			}
 			if (Input.GetKeyDown(KeyCode.H))
 			{
-				SetupAbility(GravityStaff.New());
-				SetupAbility(BoundingStaff.New());
-				SetupAbility(WarpStaff.New());
-				SetupAbility(GrapplingHook.New());
-				SetupAbility(WingedSandals.New());
+				SetupAbility(LootManager.NewWeapon("GravityStaff"));
+				SetupAbility(LootManager.NewWeapon("BoundingStaff"));
+				SetupAbility(LootManager.NewWeapon("WarpStaff"));
+				SetupAbility(LootManager.NewWeapon("GrapplingHook"));
+				SetupAbility(LootManager.NewWeapon("ShockRifle"));
 			}
 			#endregion
 			#endif

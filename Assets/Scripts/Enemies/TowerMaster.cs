@@ -13,7 +13,7 @@ public class TowerMaster : Enemy
 	public override void Start () 
 	{
 
-		EvilHand = GrapplingHook.New();
+		EvilHand = (GrapplingHook)LootManager.NewWeapon("GrapplingHook");
 		EvilHand.Init();
 		EvilHand.DurCost = 0;
 		EvilHand.Faction = Faction;

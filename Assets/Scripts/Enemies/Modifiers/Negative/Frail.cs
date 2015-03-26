@@ -14,15 +14,15 @@ public class Frail : Modifier
 	public override void Init()
 	{
 		ModifierName = modNames[Random.Range(0, modNames.Length - 1)];
-		Stacks = Random.Range(1, 5);
+		Stacks = Random.Range(1, 4);
 		UIColor = new Color(Random.Range(0, .999f), Random.Range(0, .999f), Random.Range(0, .999f), .4f);
 		TextColor = Color.black;
 	}
 
 	public override void Gained(int stacksGained = 0, bool newStack = false)
 	{
-		Carrier.MaxHealth -= 2 * stacksGained;
-		Carrier.AdjustHealth(-2 * stacksGained);
+		Carrier.MaxHealth -= 1.5f * stacksGained;
+		Carrier.AdjustHealth(-1.5f * stacksGained);
 		base.Gained(stacksGained, newStack);
 	}
 

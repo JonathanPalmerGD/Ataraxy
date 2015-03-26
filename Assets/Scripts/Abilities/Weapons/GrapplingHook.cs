@@ -30,7 +30,7 @@ public class GrapplingHook : Weapon
 		primaryFirePointIndex = 0;
 		specialFirePointIndex = 0;
 		PrimaryDamage = 0.4f;
-		NormalCooldown = Random.Range(.95f, 1.2f);
+		NormalCooldown = Random.Range(.55f, .8f);
 		SpecialCooldown = NormalCooldown;
 		//SpecialCooldown = Random.Range(.45f, .65f);
 		DurSpecialCost = 1;
