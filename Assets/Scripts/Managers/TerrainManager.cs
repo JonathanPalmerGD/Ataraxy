@@ -85,36 +85,38 @@ public class TerrainManager : Singleton<TerrainManager>
 
 	public void CreateNewCluster(Cluster center)
 	{
-		//If the cluster's neighbors aren't full, make a new one.
-		if (center.neighborsPopulated < 8)
+		if (center != null)
 		{
-			Cluster c = null;
-			int tries = 0;
-			while (tries < 8)
+			//If the cluster's neighbors aren't full, make a new one.
+			if (center.neighborsPopulated < 8)
 			{
-				tries++;
-
-				int direction = Random.Range(0, center.neighborClusters.Length);
-
-				if (center.neighborClusters[direction] == null)
+				Cluster c = null;
+				int tries = 0;
+				while (tries < 8)
 				{
-					//We want to create a new cluster near an existing one. We use center.GetFinalPosition to avoid an incorrect target height.
-					c = ((GameObject)GameObject.Instantiate(clusterPrefab, center.transform.position, Quaternion.identity)).GetComponent<Cluster>();
+					tries++;
 
-					c.transform.position += FindOffsetOfDir(direction);
-					c.clusterContents.transform.position -= Vector3.up * underworldYOffset;
+					int direction = Random.Range(0, center.neighborClusters.Length);
 
-					c.RandomLandmarks = true;
+					if (center.neighborClusters[direction] == null)
+					{
+						//We want to create a new cluster near an existing one. We use center.GetFinalPosition to avoid an incorrect target height.
+						c = ((GameObject)GameObject.Instantiate(clusterPrefab, center.transform.position, Quaternion.identity)).GetComponent<Cluster>();
+
+						c.transform.position += FindOffsetOfDir(direction);
+						c.clusterContents.transform.position -= Vector3.up * underworldYOffset;
+
+						c.RandomLandmarks = true;
 
 
-					tries = 1000;
+						tries = 1000;
+					}
 				}
-			}
 
-			SetupNeighborClusters(c);
+				SetupNeighborClusters(c);
 
-			#region Setup Neighbor Clusters (Was exported)
-			/*if (c.neighborClusters != null)
+				#region Setup Neighbor Clusters (Was exported)
+				/*if (c.neighborClusters != null)
 			{
 				//Loop through all the potential neighbors.
 				for (int i = 0; i < c.neighborClusters.Length; i++)
@@ -143,12 +145,13 @@ public class TerrainManager : Singleton<TerrainManager>
 			{
 				Debug.LogError("Error with cluster neighbor generation\n");
 			}*/
-			#endregion
-		}
-		else
-		{
-			//This a debug error for troubleshooting cluster generation.
-			//Debug.LogError("All neighbor slots are filled. Cannot create cluster\n");
+				#endregion
+			}
+			else
+			{
+				//This a debug error for troubleshooting cluster generation.
+				//Debug.LogError("All neighbor slots are filled. Cannot create cluster\n");
+			}
 		}
 	}
 
