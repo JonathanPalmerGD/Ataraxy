@@ -13,6 +13,11 @@ public class WingedSandals : Weapon
 		//daggerStabPrefab = Resources.Load<GameObject>("DaggerStab");
 		Icon = UIManager.Instance.Icons[IconIndex];
 
+		AbilityName = WingedSandals.GetWeaponName();
+		Durability = Random.Range(35, 50);
+		PrimaryDesc = "[Utility]\nA small flap of the sandal's tiny wings.\nCan be chained to fly short distances.";
+		SecondaryDesc = "[Utility]\nA powerful ascending gust.";
+
 		crosshairIndex = 6;
 		crosshairColor = Color.black;
 		crosshairSize = new Vector2(128, 128);
@@ -80,9 +85,6 @@ public class WingedSandals : Weapon
 		WingedSandals ws = ScriptableObject.CreateInstance<WingedSandals>();
 		ws.AbilityName = WingedSandals.GetWeaponName();
 		ws.Durability = Random.Range(35, 50);
-		ws.NormalCooldown = .5f;
-		ws.SpecialCooldown = 12f;
-		ws.CdLeft = 0;
 		ws.PrimaryDesc = "[Utility]\nA small flap of the sandal's tiny wings.\nCan be chained to fly short distances.";
 		ws.SecondaryDesc = "[Utility]\nA powerful ascending gust.";
 		return ws;

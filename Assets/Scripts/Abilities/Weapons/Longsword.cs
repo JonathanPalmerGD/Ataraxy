@@ -15,6 +15,11 @@ public class Longsword : Weapon
 		bladeSlashPrefab = Resources.Load<GameObject>("Projectiles/BladeSlash");
 		Icon = UIManager.Instance.Icons[IconIndex];
 
+		AbilityName = Longsword.GetWeaponName();
+		Durability = Random.Range(10, 60);
+		PrimaryDesc = "[Damage]\nA left-to-right slash.";
+		SecondaryDesc = "[Damage]\nA right-to-left slash.\nStrangely similar to the primary fire...";
+
 		crosshairIndex = 7;
 		DurSpecialCost = 1;
 		NormalCooldown = Random.Range(.45f, .55f);
@@ -97,9 +102,6 @@ public class Longsword : Weapon
 		Longsword w = ScriptableObject.CreateInstance<Longsword>();
 		w.AbilityName = Longsword.GetWeaponName();
 		w.Durability = Random.Range(10, 60);
-		w.NormalCooldown = 1;
-		w.SpecialCooldown = 6;
-		w.CdLeft = 0;
 		w.PrimaryDesc = "[Damage]\nA left-to-right slash.";
 		w.SecondaryDesc = "[Damage]\nA right-to-left slash.\nStrangely similar to the primary fire...";
 		return w;

@@ -11,7 +11,10 @@ public class BoundingStaff : Weapon
 	{
 		base.Init();
 		Icon = UIManager.Instance.Icons[IconIndex];
-
+		AbilityName = BoundingStaff.GetWeaponName();
+		Durability = Random.Range(140, 160);
+		PrimaryDesc = "[Damage]\nA weak laser as a last resort.";
+		SecondaryDesc = "[Utility]\nHold: Invoke the God of Travel to boost your forward speed.\nUseful for long.";
 		DurCost = 6;
 		crosshairIndex = 4;
 		DurSpecialCost = 1;

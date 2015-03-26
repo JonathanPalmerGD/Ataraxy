@@ -6,6 +6,14 @@ public class MultiToken : MonoBehaviour
 	//Bunch of references to stats and such. We could trim this down honestly.
 	private Player player;
 
+	public bool grantSpecificWeapon = false;
+	public string specificWeaponName = "";
+
+	/// <summary>
+	/// Note: This is only set during Start().
+	/// </summary>
+	public string InGameName = "Essence of Treasure";
+
 	public bool createTerrain = true;
 	public bool healPlayer = true;
 	public bool grantWeapon = true;
@@ -25,6 +33,15 @@ public class MultiToken : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
+		if (grantSpecificWeapon)
+		{
+			name = "Treasure: " + specificWeaponName;
+		}
+		else
+		{
+			name = InGameName;
+		}
+
 		player = GameManager.Instance.player;
 		if (player == null)
 		{
@@ -103,7 +120,14 @@ public class MultiToken : MonoBehaviour
 	{
 		if (grantWeapon)
 		{
-			player.SetupAbility(NewWeapon());
+			if (grantSpecificWeapon)
+			{
+				player.SetupAbility(LootManager.NewWeapon(specificWeaponName));
+			}
+			else
+			{
+				player.SetupAbility(LootManager.NewWeapon());
+			}
 		}
 	}
 	#endregion
@@ -117,13 +141,13 @@ public class MultiToken : MonoBehaviour
 			if (nearest != null)
 			{
 				Debug.DrawLine(transform.position, nearest.transform.position, Color.cyan, 8.0f);
+				TerrainManager.Instance.CreateNewCluster(nearest);
 			}
 			else
 			{
-				Debug.LogError("Nearest cluster not found\n");
+				//Debug.LogError("Nearest cluster not found\n");
 			}
 
-			TerrainManager.Instance.CreateNewCluster(nearest);
 		}
 	}
 
@@ -155,41 +179,6 @@ public class MultiToken : MonoBehaviour
 		if (particleSystem != null)
 		{
 			particleSystem.enableEmission = false;
-		}
-	}
-
-	public static Ability NewWeapon()
-	{
-		switch(Random.Range(0, 12))
-		{
-			case 0:
-				return RocketLauncher.New();
-			case 1:
-				return ShockRifle.New();
-			case 2:
-				return Longsword.New();
-			case 3:
-				return Dagger.New();
-			case 4:
-				return Rapier.New();
-			case 5:
-				return GravityStaff.New();
-			case 6:
-				return BoundingStaff.New();
-			case 7:
-				return WingedSandals.New();
-			case 8:
-				return GrapplingHook.New();
-			case 9:
-				return Hemotick.New();
-			case 10:
-				return GlacialSling.New();
-			case 11:
-				return WarpStaff.New();
-			//case 5:
-			//	return Dagger.New();
-			default:
-				return Weapon.New();
 		}
 	}
 }

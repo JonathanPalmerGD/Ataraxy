@@ -52,6 +52,12 @@ public class WarpStaff : Weapon
 		//UI Elements:
 		// Sets up Weapon's Icon.
 		Icon = UIManager.Instance.Icons[IconIndex];
+
+		AbilityName = WarpStaff.GetWeaponName();
+		// Weapon Description on Pause Menu
+		PrimaryDesc = "[Damage], [Utility]\nShort Teleport\nCreates an explosion at the destination.";
+		SecondaryDesc = "[Damage], [Utility]\nTeleport enemies in random direction.\nEnemies that can't be teleported will be dimensionally torn.";
+
 		//Sets up Weapon's Crosshair
 		crosshairIndex = 1;
 		crosshairColor = Color.blue;
@@ -86,17 +92,20 @@ public class WarpStaff : Weapon
 		}
 		base.UpdateWeapon(time);
 
-		//If player has the WarpStaff Equipped:
-		if(GameManager.Instance.player.weapons[GameManager.Instance.player.WeaponIndex] == this)
+		if (GameManager.Instance.player.WeaponIndex >= 0)
 		{
-			// Enable the teleFragDestObj and keep it in front of the player
-			TeleDestObj.renderer.enabled = true;
-			TeleDestObj.particleSystem.enableEmission = true;
-			// Calculate where the player is poiting at:
-			AimDir = GameManager.Instance.player.targetScanDir - GameManager.Instance.player.FirePoints[0].transform.position;
-			AimDir.Normalize();
-			// Updates TeledestObj position:
-			TeleDestObj.transform.position = Carrier.transform.position + AimDir * SelfTeleMag;
+			//If player has the WarpStaff Equipped:
+			if (GameManager.Instance.player.weapons[GameManager.Instance.player.WeaponIndex] == this)
+			{
+				// Enable the teleFragDestObj and keep it in front of the player
+				TeleDestObj.renderer.enabled = true;
+				TeleDestObj.particleSystem.enableEmission = true;
+				// Calculate where the player is poiting at:
+				AimDir = GameManager.Instance.player.targetScanDir - GameManager.Instance.player.FirePoints[0].transform.position;
+				AimDir.Normalize();
+				// Updates TeledestObj position:
+				TeleDestObj.transform.position = Carrier.transform.position + AimDir * SelfTeleMag;
+			}
 		}
 		else
 		{

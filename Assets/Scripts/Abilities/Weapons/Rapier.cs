@@ -14,6 +14,12 @@ public class Rapier : Weapon
 		daggerStabPrefab = Resources.Load<GameObject>("Projectiles/RapierStab");
 		Icon = UIManager.Instance.Icons[IconIndex];
 
+
+		AbilityName = Rapier.GetWeaponName();
+		Durability = Random.Range(10, 60);
+		PrimaryDesc = "[Damage]\nA thin but powerful melee stab.";
+		SecondaryDesc = "[Damage], [Utility]\nA dashing lunge combined with a powerful stab!";
+
 		PrimaryDamage = 3;
 		crosshairIndex = 3;
 		SpecialDamage = 9;
@@ -98,11 +104,9 @@ public class Rapier : Weapon
 	public new static Rapier New()
 	{
 		Rapier w = ScriptableObject.CreateInstance<Rapier>();
+
 		w.AbilityName = Rapier.GetWeaponName();
 		w.Durability = Random.Range(10, 60);
-		w.NormalCooldown = 1;
-		w.SpecialCooldown = 6;
-		w.CdLeft = 0;
 		w.PrimaryDesc = "[Damage]\nA thin but powerful melee stab.";
 		w.SecondaryDesc = "[Damage], [Utility]\nA dashing lunge combined with a powerful stab!";
 		return w;

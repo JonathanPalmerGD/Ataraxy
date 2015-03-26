@@ -18,7 +18,13 @@ public class Hemotick : Weapon
 		base.Init();
 		hazePrefab = Resources.Load<GameObject>("Projectiles/BloodHaze");
 		Icon = UIManager.Instance.Icons[IconIndex];
-		
+
+		tickLevel = 0;
+		AbilityName = Hemotick.modifier[tickLevel] + " " + Hemotick.GetWeaponName();
+		Durability = Random.Range(200, 300);
+		PrimaryDesc = "[Damage]\nThe Hemotick expels a damaging blood haze.";
+		SecondaryDesc = "[Warning]\nFeed the Hemotick a portion of your health to empower it.\nBe careful, if hungry enough, it might kill you.";
+
 		crosshairIndex = 6;
 		crosshairColor = new Color(.66f, 0, 0);
 

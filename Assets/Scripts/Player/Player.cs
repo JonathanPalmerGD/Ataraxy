@@ -174,9 +174,9 @@ public class Player : Entity
 	public void GiveStartingItems()
 	{
 		#if UNITY_EDITOR
-		SetupAbility(GravityStaff.New());
+		//SetupAbility(GravityStaff.New());
 		//SetupAbility(BoundingStaff.New());
-		SetupAbility(GrapplingHook.New());
+		//SetupAbility(GrapplingHook.New());
 		/*SetupAbility(WingedSandals.New());
 		SetupAbility(Longsword.New());
 		SetupAbility(Rapier.New());
@@ -392,7 +392,7 @@ public class Player : Entity
 		else
 		{
 			//This would ideally only be set when the player pauses. Not an important optimization.
-			if (weapons.Count > 0)
+			if (weapons.Count > 0 && weaponIndex >= 0)
 			{
 				UIManager.Instance.item_NameText.text = weapons[weaponIndex].AbilityName;
 				UIManager.Instance.item_PrimaryText.text = weapons[weaponIndex].PrimaryDesc;

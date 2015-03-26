@@ -12,6 +12,11 @@ public class ShockRifle : Weapon
 		shockBallPrefab = Resources.Load<GameObject>("Projectiles/ShockBall");
 		Icon = UIManager.Instance.Icons[IconIndex];
 
+		AbilityName = ShockRifle.GetWeaponName();
+		Durability = Random.Range(80, 95);
+		PrimaryDesc = "[Damage] [Combo]\nA fast firing shocking laser.\nWarning: Laser discharge explodes static orbs.";
+		SecondaryDesc = "[Damage], [Combo], [Explosive]\nAn growing orb of static.";
+
 		primaryFirePointIndex = 1;
 		specialFirePointIndex = 1;
 		crosshairColor = new Color(.7f, .6f, .95f);
@@ -118,9 +123,6 @@ public class ShockRifle : Weapon
 		ShockRifle w = ScriptableObject.CreateInstance<ShockRifle>();
 		w.AbilityName = ShockRifle.GetWeaponName();
 		w.Durability = Random.Range(80, 95);
-		w.NormalCooldown = .3f;
-		w.SpecialCooldown = 4;
-		w.CdLeft = 0;
 		w.PrimaryDesc = "[Damage] [Combo]\nA fast firing shocking laser.\nWarning: Laser discharge explodes static orbs.";
 		w.SecondaryDesc = "[Damage], [Combo], [Explosive]\nAn growing orb of static.";
 		return w;

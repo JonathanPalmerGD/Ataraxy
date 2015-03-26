@@ -14,6 +14,9 @@ public class MonkStaff : Weapon
 		bladeSlashPrefab = Resources.Load<GameObject>("Projectiles/StaffThwack");
 		Icon = UIManager.Instance.Icons[IconIndex];
 
+		AbilityName = MonkStaff.GetWeaponName();
+		Durability = Random.Range(10, 60);
+
 		DurSpecialCost = 1;
 #if CHEAT
 		NormalCooldown = .5f;
@@ -120,9 +123,6 @@ public class MonkStaff : Weapon
 		MonkStaff w = ScriptableObject.CreateInstance<MonkStaff>();
 		w.AbilityName = MonkStaff.GetWeaponName();
 		w.Durability = Random.Range(10, 60);
-		w.NormalCooldown = 1;
-		w.SpecialCooldown = 6;
-		w.CdLeft = 0;
 		return w;
 	}
 

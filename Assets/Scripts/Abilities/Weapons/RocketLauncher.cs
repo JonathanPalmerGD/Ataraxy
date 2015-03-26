@@ -15,6 +15,11 @@ public class RocketLauncher : Weapon
 		rocketPrefab = Resources.Load<GameObject>("Projectiles/Rocket");
 		Icon = UIManager.Instance.Icons[IconIndex];
 
+		AbilityName = RocketLauncher.GetWeaponName();
+		Durability = Random.Range(10, 60);
+		PrimaryDesc = "[Damage], [Explosive]\nAn explosive rocket. Homing if you fire when targetting an enemy.";
+		SecondaryDesc = "[Damage]\nNot yet implemented!";
+
 		crosshairIndex = 5;
 		crosshairColor = Color.red;
 		specialCrosshairColor = Color.yellow;
@@ -125,9 +130,6 @@ public class RocketLauncher : Weapon
 		RocketLauncher w = ScriptableObject.CreateInstance<RocketLauncher>();
 		w.AbilityName = RocketLauncher.GetWeaponName();
 		w.Durability = Random.Range(10, 60);
-		w.NormalCooldown = 1;
-		w.SpecialCooldown = 6;
-		w.CdLeft = 0;
 		w.PrimaryDesc = "[Damage], [Explosive]\nAn explosive rocket. Homing if you fire when targetting an enemy.";
 		w.SecondaryDesc = "[Damage]\nNot yet implemented!";
 		return w;

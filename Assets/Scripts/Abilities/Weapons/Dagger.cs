@@ -13,6 +13,11 @@ public class Dagger : Weapon
 		base.Init();
 		daggerStabPrefab = Resources.Load<GameObject>("Projectiles/DaggerStab");
 		Icon = UIManager.Instance.Icons[IconIndex];
+		
+		AbilityName = Dagger.GetWeaponName();
+		Durability = Random.Range(40, 70);
+		PrimaryDesc = "[Damage]\nA quick stab.\nBackstabs coming soon!";
+		SecondaryDesc = "[Utility]\nA quick dash forward.\nUseful for getaways or crossing length gaps.";
 
 		crosshairSize = new Vector2(128, 128);
 
@@ -77,9 +82,6 @@ public class Dagger : Weapon
 		Dagger w = ScriptableObject.CreateInstance<Dagger>();
 		w.AbilityName = Dagger.GetWeaponName();
 		w.Durability = Random.Range(40, 70);
-		w.NormalCooldown = 1;
-		w.SpecialCooldown = 6;
-		w.CdLeft = 0;
 		w.PrimaryDesc = "[Damage]\nA quick stab.\nBackstabs coming soon!";
 		w.SecondaryDesc = "[Utility]\nA quick dash forward.\nUseful for getaways or crossing length gaps.";
 		return w;

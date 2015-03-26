@@ -120,8 +120,15 @@ public class Weapon : Ability
 	public override void Init()
 	{
 		base.Init();
-		NormalCooldown = Random.Range(.01f, .7f);
-		SpecialCooldown = Random.Range(4, 16);
+
+		AbilityName = Weapon.GetWeaponName();
+		Durability = Random.Range(30, 60);
+		NormalCooldown = .5f;
+		SpecialCooldown = 3;
+		CdLeft = 0;
+		PrimaryDesc = "[Damage]\nDefault Hitscan Laser";
+		SecondaryDesc = "[Damage]\nA deadly laser.";
+
 		Icon = UIManager.Instance.Icons[Random.Range(1, UIManager.Instance.Icons.Length)];
 		BeamColor = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
 	}

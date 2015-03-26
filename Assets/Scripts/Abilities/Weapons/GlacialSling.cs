@@ -16,6 +16,11 @@ public class GlacialSling : Weapon
 		glacialDiskPrefab = Resources.Load<GameObject>("Projectiles/GlacialDisk");
 		Icon = UIManager.Instance.Icons[IconIndex];
 
+		AbilityName = GlacialSling.GetWeaponName();
+		Durability = Random.Range(140, 190);
+		PrimaryDesc = "[Damage] [Combo]\nFling an arcing glacial disk.\nDisks do minimal impact damage.";
+		SecondaryDesc = "[Damage], [Combo], [Explosive]\nShatter all active glacial disks.\nArcing disks by, over or under an enemy allows a combo to deal more damage.";
+
 		primaryFirePointIndex = 1;
 		specialFirePointIndex = 1;
 		crosshairColor = new Color(.6f, .6f, .9f);
@@ -108,9 +113,6 @@ public class GlacialSling : Weapon
 		GlacialSling gs = ScriptableObject.CreateInstance<GlacialSling>();
 		gs.AbilityName = GlacialSling.GetWeaponName();
 		gs.Durability = Random.Range(140, 190);
-		gs.NormalCooldown = .3f;
-		gs.SpecialCooldown = 4;
-		gs.CdLeft = 0;
 		gs.PrimaryDesc = "[Damage] [Combo]\nFling an arcing glacial disk.\nDisks do minimal impact damage.";
 		gs.SecondaryDesc = "[Damage], [Combo], [Explosive]\nShatter all active glacial disks.\nArcing disks by, over or under an enemy allows a combo to deal more damage.";
 		return gs;

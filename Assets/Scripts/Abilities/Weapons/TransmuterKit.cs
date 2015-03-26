@@ -13,7 +13,12 @@ public class TransmuterKit : Weapon
 		base.Init();
 		hazePrefab = Resources.Load<GameObject>("Projectiles/BloodHaze");
 		Icon = UIManager.Instance.Icons[IconIndex];
-		
+
+		AbilityName = TransmuterKit.GetWeaponName();
+		Durability = Random.Range(2, 3);
+		PrimaryDesc = "[Healing]\nHold: Transmute internal bleeding into NOT internal bleeding!\nMore Effective the more internal bleeding!";
+		SecondaryDesc = "[?????]\nThere is no telling what this might do.\nAt very least it'll have a long cooldown and use plenty of ammo.";
+
 		crosshairIndex = 0;
 		crosshairColor = new Color(.3f, 1f, .3f);
 

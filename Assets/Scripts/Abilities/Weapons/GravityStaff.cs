@@ -10,6 +10,13 @@ public class GravityStaff : Weapon
 	public override void Init()
 	{
 		base.Init();
+		AbilityName = GravityStaff.GetWeaponName();
+		Durability = Random.Range(140, 200);
+		NormalCooldown = 1;
+		SpecialCooldown = .08f;
+		PrimaryDesc = "[Damage]\nA weak laser as a last resort.";
+		SecondaryDesc = "[Utility]\nHold: Dampen gravity effects on you.\nUseful for long or high jumps.";
+
 		Icon = UIManager.Instance.Icons[IconIndex];
 
 		DurCost = 6;
@@ -57,9 +64,6 @@ public class GravityStaff : Weapon
 		GravityStaff gs = ScriptableObject.CreateInstance<GravityStaff>();
 		gs.AbilityName = GravityStaff.GetWeaponName();
 		gs.Durability = Random.Range(140, 200);
-		gs.NormalCooldown = 1;
-		gs.SpecialCooldown = .08f;
-		gs.CdLeft = 0;
 		gs.PrimaryDesc = "[Damage]\nA weak laser as a last resort.";
 		gs.SecondaryDesc = "[Utility]\nHold: Dampen gravity effects on you.\nUseful for long or high jumps.";
 		return gs;
