@@ -183,11 +183,11 @@ public class NPC : Entity
 	{
 		int index = Random.Range(0, modifiers.Count);
 
-		int upperBound = Mathf.Max(1, (int)(LuckFactor / 2));
+		int upperBound = Mathf.Max(1, (int)(LuckFactor / 3));
 
 		int stacksGained = Random.Range(1, upperBound);
 
-		Debug.Log("Gaining stacks in " + modifiers[index].ModifierName + " - " + stacksGained + "\n\tLuck Factor: " + LuckFactor);
+		Debug.Log("Gaining stacks in " + modifiers[index].ModifierName + "  (" + stacksGained + ")\n\tLuck Factor: " + LuckFactor);
 		modifiers[index].Stacks += stacksGained;
 
 		//So we never gain more than 20 of a stack.

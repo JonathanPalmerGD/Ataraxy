@@ -21,9 +21,9 @@ public class Unlucky : Modifier
 
 	public override void Gained(int stacksGained = 0, bool newStack = false)
 	{
-		if (Carrier.LuckFactor - 1f * stacksGained >= 0)
+		if (Carrier.LuckFactor - .35f * stacksGained >= 0)
 		{
-			Carrier.LuckFactor -= 1f * stacksGained;
+			Carrier.LuckFactor -= .35f * stacksGained;
 		}
 		else
 		{

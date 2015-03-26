@@ -21,7 +21,7 @@ public class Lucky : Modifier
 
 	public override void Gained(int stacksGained = 0, bool newStack = false)
 	{
-		Carrier.LuckFactor += 2f * stacksGained;
+		Carrier.LuckFactor += .5f * stacksGained;
 		base.Gained(stacksGained, newStack);
 	}
 

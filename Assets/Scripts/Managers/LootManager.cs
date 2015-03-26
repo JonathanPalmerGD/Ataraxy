@@ -16,7 +16,7 @@ public class LootManager : Singleton<LootManager>
 	{
 		if (weaponName == "")
 		{
-			weaponName = lootTable[Random.Range(0, 12)];
+			weaponName = lootTable[Random.Range(0, lootTable.Length)];
 		}
 		
 		for (int i = 0; i < nameTable.Length; i++)

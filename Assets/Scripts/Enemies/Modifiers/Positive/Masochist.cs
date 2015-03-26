@@ -2,13 +2,13 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class Masochism : Modifier
+public class Masochist : Modifier
 {
-	public new static string[] modNames = { "Masochism" };
+	public new static string[] modNames = { "Masochist" };
 
-	public new static Masochism New()
+	public new static Masochist New()
 	{
-		Masochism newMod = ScriptableObject.CreateInstance<Masochism>();
+		Masochist newMod = ScriptableObject.CreateInstance<Masochist>();
 		return newMod;
 	}
 	public override void Init()

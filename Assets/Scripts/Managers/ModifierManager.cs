@@ -4,7 +4,32 @@ using System.Collections.Generic;
 
 public class ModifierManager : Singleton<ModifierManager>
 {
-	public Modifier GainNewModifier(int level)
+	public static string[] modifiers = {
+			"Adapting", "Alert", "Berserk", "Bolstered", "Deadly", "Durable", "Elite", 
+			"Lucky", "Masochist", "Mentor", "RapidFire", "Regenerating", "StrongShot", "Vampiric", "Clumsy", "Fragile", "Frail", "Kamikaze", "Oblivious", "Rare", "Unlucky", 
+			"WeakShot"};
+
+	public Modifier GainNewModifier(int level, string modName = "")
+	{
+		if (modName == "")
+		{
+			modName = modifiers[Random.Range(0, modifiers.Length)];
+		}
+
+		try
+		{
+			Modifier newMod = (Modifier)ScriptableObject.CreateInstance(modName);
+			//Debug.Log(newMod.ToString());
+			return newMod;
+		}
+		catch
+		{
+			Debug.LogError("Failed to create modifier: " + modName + "\n");
+			return Modifier.New();
+		}
+	}
+
+	/*public Modifier GainNewModifier(int level)
 	{
 		//return Durable.New();
 
@@ -33,7 +58,7 @@ public class ModifierManager : Singleton<ModifierManager>
 				m = Vampiric.New();
 				break;
 			case 6:
-				m = Masochism.New();
+				m = Masochist.New();
 				break;
 			case 7:
 				m = Lucky.New();
@@ -92,5 +117,5 @@ public class ModifierManager : Singleton<ModifierManager>
 
 		//Debug.Log("Rnd N\t" + n + "\t\t(" + m.Stacks + "x) " + m.ModifierName + "\n");
 		return m;
-	}
+	}*/
 }
