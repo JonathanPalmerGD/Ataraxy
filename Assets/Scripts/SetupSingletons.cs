@@ -9,7 +9,8 @@ public class SetupSingletons : MonoBehaviour
 		TerrainManager.Instance.Awake();
 		GameManager.Instance.Awake();
 		UIManager.Instance.Awake();
-		TerrainManager.Instance.Awake();
+		LootManager.Instance.Awake();
+		ModifierManager.Instance.Awake();
 
 		Destroy(gameObject);
 	}

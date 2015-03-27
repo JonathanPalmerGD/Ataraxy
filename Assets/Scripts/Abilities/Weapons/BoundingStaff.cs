@@ -53,7 +53,7 @@ public class BoundingStaff : Weapon
 		//Carrier.gameObject.GetComponent<Controller>().speedMultiplier = 3f;
 
 		//MoveCarrier(movementDir, 1.8f, Vector3.up, 0.05f, true);
-		Carrier.ExternalMove(movementDir, 175.0f, ForceMode.Acceleration);
+		Carrier.ExternalMove(movementDir, 8.0f, ForceMode.VelocityChange);
 	}
 
 	#region Static Functions
@@ -65,7 +65,7 @@ public class BoundingStaff : Weapon
 		bs.NormalCooldown = 1;
 		bs.SpecialCooldown = .08f;
 		bs.CdLeft = 0;
-		bs.PrimaryDesc = "[Damage]\nA weak laser as a last resort.";
+		bs.PrimaryDesc = "[Damage]\nA weak beam discharge.";
 		bs.SecondaryDesc = "[Utility]\nHold: Invoke the God of Travel to boost your forward speed.\nUseful for long.";
 		return bs;
 	}

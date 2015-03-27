@@ -776,8 +776,8 @@ public class Player : Entity
 		if (targetedEntity != null)
 		{
 			//If our new target is different
-			if (newTarget != targetedEntity)
-			{
+			//if (newTarget != targetedEntity)
+			//{
 				//Untarget the old.
 				targetedEntity.Untarget();
 
@@ -786,7 +786,7 @@ public class Player : Entity
 
 				//Tell em they're fabulous
 				targetedEntity.Target();
-			}
+			//}
 		}
 		//If we had no target
 		else
