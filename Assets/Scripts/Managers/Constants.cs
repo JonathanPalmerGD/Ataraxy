@@ -7,6 +7,7 @@ public static class Constants : object
 	public static Color healthRemaining = new Color(.0f, .75f, .15f, 1.0f);
 
 	public static float targetFade = 3.0f;
+	public static Vector3 gravity = new Vector3(0, -15, 0);
 
 	public static float CheckXZDistance(Vector3 firstPos, Vector3 secondPos)
 	{

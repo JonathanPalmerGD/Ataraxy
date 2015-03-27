@@ -15,7 +15,10 @@ public class ModifierManager : Singleton<ModifierManager>
 		{
 			modName = modifiers[Random.Range(0, modifiers.Length)];
 		}
-
+		else
+		{
+			//Debug.Log("Trying to create: " + modName + "\n");
+		}
 		try
 		{
 			Modifier newMod = (Modifier)ScriptableObject.CreateInstance(modName);

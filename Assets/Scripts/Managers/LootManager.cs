@@ -6,11 +6,11 @@ public class LootManager : Singleton<LootManager>
 	public static string[] nameTable = {
 			"Rocket Launcher", "Shock Rifle", "Longsword", "Dagger",
 			"Rapier", "Gravity Staff", "Bounding Staff", "Winged Sandals",
-			"Grappling Hook", "Hemotick", "Glacial Sling", "Warp Staff" };
+			"Grappling Hook", "Hemotick", "Glacial Sling", "Warp Staff", "Transmuter's Kit"};
 	public static string[] lootTable = {
 			"RocketLauncher", "ShockRifle", "Longsword", "Dagger",
 			"Rapier", "GravityStaff", "BoundingStaff", "WingedSandals",
-			"GrapplingHook", "Hemotick", "GlacialSling", "WarpStaff" };
+			"GrapplingHook", "Hemotick", "GlacialSling", "WarpStaff", "TransmuterKit" };
 
 	public static Ability NewWeapon(string weaponName = "")
 	{

@@ -108,20 +108,24 @@ public class NPC : Entity
 			SetupNameUI();
 			SetupXPUI();
 			SetupModifiersUI();
+			UpdateLevelUI();
 		}
 	}
 
 	public virtual void InitModifiers()
 	{
-		modifiers = new List<Modifier>();
-
-		//for (int i = 0; i < Random.Range(1,3); i++)
-		//{
+		if (modifiers == null || modifiers.Count <= 0)
+		{
+			modifiers = new List<Modifier>();
+		
+			//for (int i = 0; i < Random.Range(1,3); i++)
+			//{
 			Modifier m = ModifierManager.Instance.GainNewModifier(Level);
 			m.Init();
 			GainModifier(m);
-		//}
-		//Debug.Log(name + " has " + modifiers.Count + " modifiers\n");
+			//}
+			//Debug.Log(name + " has " + modifiers.Count + " modifiers\n");
+		}
 	}
 
 	public override void SetupModifiersUI()

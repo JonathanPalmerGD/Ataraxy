@@ -69,12 +69,12 @@ public class WarpStaff : Weapon
 		specialFirePointIndex = 1;
 
 		// Cooldown Stats
-		NormalCooldown = 5.0f;
+		NormalCooldown = 3.0f;
 		SpecialCooldown = 2.50f;
 		CdLeft = 0.0f;
 
 		// Durability Stats
-		DurCost = 1;
+		DurCost = 3;
 		DurSpecialCost = 1;
 		Durability = 50;
 
@@ -106,14 +106,15 @@ public class WarpStaff : Weapon
 				// Updates TeledestObj position:
 				TeleDestObj.transform.position = Carrier.transform.position + AimDir * SelfTeleMag;
 			}
+			else
+			{
+				//Disable the TeleFrag Obj renderer and particle emiter.
+				TeleDestObj.renderer.enabled = false;
+				TeleDestObj.particleSystem.enableEmission = false;
+				TeleDestObj.particleSystem.Clear();
+			}
 		}
-		else
-		{
-			//Disable the TeleFrag Obj renderer and particle emiter.
-			TeleDestObj.renderer.enabled = false;
-			TeleDestObj.particleSystem.enableEmission = false;
-			TeleDestObj.particleSystem.Clear();
-		}
+		
 
 	}
 	#endregion

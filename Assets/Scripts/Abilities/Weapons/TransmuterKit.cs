@@ -6,12 +6,17 @@ public class TransmuterKit : Weapon
 {
 	public static int IconIndex = 21;
 	public GameObject hazePrefab;
+	public GameObject waspPrefab;
+	public GameObject beholderPrefab;
 	public Vector3 firePointOffset = Vector3.up;
+	public float gravityTimer;
 	
 	public override void Init()
 	{
 		base.Init();
 		hazePrefab = Resources.Load<GameObject>("Projectiles/BloodHaze");
+		waspPrefab = Resources.Load<GameObject>("Enemies/Ire Wasps");
+		beholderPrefab = Resources.Load<GameObject>("Enemies/Beholder");
 		Icon = UIManager.Instance.Icons[IconIndex];
 
 		AbilityName = TransmuterKit.GetWeaponName();
@@ -33,6 +38,7 @@ public class TransmuterKit : Weapon
 		
 		#if UNITY_EDITOR
 		SpecialCooldown = .5f;
+		DurSpecialCost = 0;
 		#endif
 
 		#if CHEAT
@@ -70,65 +76,104 @@ public class TransmuterKit : Weapon
 
 	public override void UseWeaponSpecial(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 targetScanDir = default(Vector3), bool lockOn = false)
 	{
+		
+		Vector3 firePoint = firePoints[0].transform.position;
+
+		Modifier newMod;
+		Vector3 dir = targetScanDir - firePoint;
+		dir.Normalize();
+
 		//The core goal for this effect is a very powerful, very random effect.
-		int selector = 1; //Random.Range(0, 15);
+		int selector = Random.Range(0, 15);
+		Debug.Log(selector + "\n");
 		switch(selector)
 		{
 			case 0:
 				//Effect 0: Bouncy Balls
-				Debug.Log("Effect 0:\nThe gift of bouncy balls!");
 				break;
 
 			case 1:
 				//Effect 1: Restore to full health
-				Debug.Log("Effect 1:\nGain max health & full heal");
 				Carrier.MaxHealth += 4;
 				Carrier.AdjustHealth(Carrier.MaxHealth);
 				break;
 
 			case 2:
 				//Effect 2: Gain a bunch of experience
-				Debug.Log("Effect 2:\nGain wisdom");
 				Carrier.GainExperience(Carrier.XPNeeded * 1.4f);
 				break;
 
 			case 3:
 				//Effect 3: Gain random weapon.
-				Debug.Log("Effect 3:\nGain random weapon.");
-
+				((Player)Carrier).SetupAbility(LootManager.NewWeapon());
 				break;
 			case 4:
-
+				IreWasps iWasp = ((GameObject)GameObject.Instantiate(waspPrefab, (Carrier.transform.position + dir * 20 + Vector3.up * 8), Quaternion.identity)).GetComponent<IreWasps>();
+				iWasp.belowStage = false;
+				
 				break;
 			case 5:
+				Beholder behold = ((GameObject)GameObject.Instantiate(beholderPrefab, (Carrier.transform.position + dir * 20 + Vector3.up * 8), Quaternion.identity)).GetComponent<Beholder>();
+				behold.belowStage = false;
 
 				break;
 			case 6:
-
+				((Player)Carrier).SetupAbility(LootManager.NewWeapon("GrapplingHook"));
 				break;
 			case 7:
+				Vector3 movementDir = dir;
+				movementDir = new Vector3(movementDir.x, 0, movementDir.z);
 
+				MoveCarrier(movementDir, 35, Vector3.up, 45f, false);
 				break;
 			case 8:
-
+				((Player)Carrier).AdjustActiveDurability(DurSpecialCost * 2 + 1);
+				SpecialCooldown = .75f;
 				break;
 			case 9:
-
+				Carrier.AdjustHealth(-Carrier.Health / 2);
 				break;
 			case 10:
-
+				Physics.gravity = Constants.gravity;
+				Physics.gravity = new Vector3(0, Physics.gravity.y / 2, 0);
 				break;
 			case 11:
-
+				Physics.gravity = Constants.gravity;
+				Physics.gravity = new Vector3(0, Physics.gravity.y - 3, 0);
 				break;
 			case 12:
+				//Try to create a new cluster
+				Cluster nearest = TerrainManager.Instance.FindNearestCluster(Carrier.transform.position);
 
+					if (nearest != null)
+					{
+						TerrainManager.Instance.CreateNewCluster(nearest);
+					}
+					else
+					{
+						//Otherwise Refund
+						((Player)Carrier).AdjustActiveDurability(DurSpecialCost);
+						SpecialCooldown = .75f;
+					}
 				break;
 			case 13:
-
+				behold = ((GameObject)GameObject.Instantiate(beholderPrefab, (Carrier.transform.position + dir * 20 + Vector3.up * 8), Quaternion.identity)).GetComponent<Beholder>();
+				behold.belowStage = false;
+				newMod = ModifierManager.Instance.GainNewModifier(behold.Level, "Elite");
+				newMod.Init();
+				behold.GainModifier(newMod);
+				newMod = ModifierManager.Instance.GainNewModifier(behold.Level, "Kamikaze");
+				newMod.Init();
+				behold.GainModifier(newMod);
+				behold.UpdateLevelUI();
 				break;
 			case 14:
-
+				iWasp = ((GameObject)GameObject.Instantiate(waspPrefab, (Carrier.transform.position + dir * 20 + Vector3.up * 8), Quaternion.identity)).GetComponent<IreWasps>();
+				iWasp.belowStage = false;
+				iWasp = ((GameObject)GameObject.Instantiate(waspPrefab, (Carrier.transform.position + dir * 25 + Vector3.up * 12), Quaternion.identity)).GetComponent<IreWasps>();
+				iWasp.belowStage = false;
+				iWasp = ((GameObject)GameObject.Instantiate(waspPrefab, (Carrier.transform.position + dir * 30 + Vector3.up * 6), Quaternion.identity)).GetComponent<IreWasps>();
+				iWasp.belowStage = false;
 				break;
 		}
 	}

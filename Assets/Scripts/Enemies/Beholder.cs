@@ -3,14 +3,20 @@ using System.Collections;
 
 public class Beholder : FlyingEnemy 
 {
-
 	public override void Start() 
 	{
 		base.Start();
 
 		name = "Beholder";
 		FiringTimer = Random.Range(0, FiringCooldown);
-		GetComponent<Floatation>().homeRegion = transform.position + Vector3.up * (20 + TerrainManager.underworldYOffset);
+		if (belowStage)
+		{
+			GetComponent<Floatation>().homeRegion = transform.position + Vector3.up * (15 + TerrainManager.underworldYOffset);
+		}
+		else
+		{
+			GetComponent<Floatation>().homeRegion = transform.position + Vector3.up * 15;
+		}
 		projectilePrefab = Resources.Load<GameObject>("Projectiles/Projectile");
 	}
 	

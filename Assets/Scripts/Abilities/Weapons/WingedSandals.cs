@@ -15,8 +15,8 @@ public class WingedSandals : Weapon
 
 		AbilityName = WingedSandals.GetWeaponName();
 		Durability = Random.Range(35, 50);
-		PrimaryDesc = "[Utility]\nA small flap of the sandal's tiny wings.\nCan be chained to fly short distances.";
-		SecondaryDesc = "[Utility]\nA powerful ascending gust.";
+		PrimaryDesc = "[Utility]\nA small flap of the sandal's tiny wings.\nCan be chained to fly distances.";
+		SecondaryDesc = "[Utility]\nA powerful ascending gust.\nGreat for avoiding a dreadful fall.";
 
 		crosshairIndex = 6;
 		crosshairColor = Color.black;
@@ -24,7 +24,7 @@ public class WingedSandals : Weapon
 
 		DurCost = 1;
 		DurSpecialCost = 6;
-		NormalCooldown = .8f;
+		NormalCooldown = .4f;
 		SpecialCooldown = 10f;
 #if CHEAT
 		//NormalCooldown = .30f;
@@ -54,12 +54,12 @@ public class WingedSandals : Weapon
 		Debug.DrawLine(GameManager.Instance.playerGO.transform.position, GameManager.Instance.playerGO.transform.position + dir * 10, Color.green, 2f);
 		Debug.DrawLine(GameManager.Instance.playerGO.transform.position, GameManager.Instance.playerGO.transform.position + GameManager.Instance.playerGO.transform.forward * 10, Color.black, 2f);
 		
-		float lungeVel = 4.2f;
+		float lungeVel = 4.5f;
 		Vector3 movementDir = dir;
 		movementDir = new Vector3(movementDir.x, 0, movementDir.z);
 		movementDir.Normalize();
 		
-		MoveCarrier(movementDir, lungeVel, Vector3.up * 1.2f, 5.5f, false);
+		MoveCarrier(movementDir, lungeVel, Vector3.up, 6.5f, false);
 	}
 
 	public override void UseWeaponSpecial(GameObject target = null, System.Type targType = null, GameObject[] firePoints = null, Vector3 targetScanDir = default(Vector3), bool lockOn = false)
@@ -71,7 +71,7 @@ public class WingedSandals : Weapon
 		Vector3 movementDir = dir;
 		movementDir = new Vector3(movementDir.x, 0, movementDir.z);
 
-		MoveCarrier(Vector3.zero, 0, Vector3.up, 19f, false);
+		MoveCarrier(Vector3.zero, 0, Vector3.up, 28f, false);
 	}
 
 	public override Vector3 AdjProjectileColliderPosition(MeleeProjectile proj)

@@ -5,6 +5,7 @@ public class FlyingEnemy : Enemy
 {
 	public enum FlyingMotion { Floating, Circling, Hover, Overhead };
 	public FlyingMotion airState = FlyingMotion.Floating;
+	public bool belowStage = true;
 
 	public override void Start() 
 	{

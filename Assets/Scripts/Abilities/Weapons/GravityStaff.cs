@@ -55,7 +55,7 @@ public class GravityStaff : Weapon
 
 		//Debug.Log(dir + "\n" + movementDir + "\n");
 		//MoveCarrier(movementDir, 0, Vector3.up, 1.5f, true);
-		MoveCarrier(movementDir, .1f, Vector3.up, 0.75f, true);
+		MoveCarrier(movementDir, .00f, Vector3.up, 1.05f, true);
 	}
 
 	#region Static Functions
@@ -63,7 +63,7 @@ public class GravityStaff : Weapon
 	{
 		GravityStaff gs = ScriptableObject.CreateInstance<GravityStaff>();
 		gs.AbilityName = GravityStaff.GetWeaponName();
-		gs.Durability = Random.Range(140, 200);
+		gs.Durability = Random.Range(170, 220);
 		gs.PrimaryDesc = "[Damage]\nA weak laser as a last resort.";
 		gs.SecondaryDesc = "[Utility]\nHold: Dampen gravity effects on you.\nUseful for long or high jumps.";
 		return gs;
