@@ -8,7 +8,8 @@ public class SetupSingletons : MonoBehaviour
 	{
 		TerrainManager.Instance.Awake();
 		GameManager.Instance.Awake();
-		UIManager.Instance.Awake();
+		//UIManager.Instance.Awake();
+		UIManager.Instance.Init();
 		LootManager.Instance.Awake();
 		ModifierManager.Instance.Awake();
 

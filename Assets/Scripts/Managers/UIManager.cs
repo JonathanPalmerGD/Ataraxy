@@ -63,7 +63,7 @@ public class UIManager : Singleton<UIManager>
 	public override void Awake()
 	{
 		base.Awake();
-
+		/*
 		//Load the UI element
 
 		#region Root Setup
@@ -127,6 +127,105 @@ public class UIManager : Singleton<UIManager>
 			//Debug.Log("Finished creating modifiers: " + Modifiers.Count + "\n");
 		}
 		#endregion
+
+		target_HUD.gameObject.SetActive(false);
+
+		#region Player UI
+		damage_Indicator = GameObject.Find("Damage_Indicator").GetComponent<Image>();
+
+		//player_HPText = GameObject.Find("player_HPText").GetComponent<Text>();
+		player_HP = GameObject.Find("Player_HP").GetComponent<Slider>();
+		//player_XPText = GameObject.Find("player_XPText").GetComponent<Text>();
+		player_LevelText = GameObject.Find("Player_LevelText").GetComponent<Text>();
+		player_XP = GameObject.Find("Player_XP").GetComponent<Slider>();
+		//player_ResourceText = GameObject.Find("player_ResourceText").GetComponent<Text>();
+		//player_Resource = GameObject.Find("player_Resource").GetComponent<Slider>();
+		player_Name = GameObject.Find("Player_Name").GetComponent<Text>();
+		player_WeaponText = GameObject.Find("WeaponText").GetComponent<Text>();
+		player_Selector = GameObject.Find("Selector").GetComponent<Image>();
+		player_Crosshair = GameObject.Find("Crosshair").GetComponent<Image>();
+		player_WeaponFolder = GameObject.Find("Weapons");
+		player_PassiveFolder = GameObject.Find("Passives");
+		#endregion
+
+		#region Items
+		item_NameText = GameObject.Find("Item Name Text").GetComponent<Text>();
+		item_PrimaryText = GameObject.Find("Item Primary Text").GetComponent<Text>();
+		item_SecondaryText = GameObject.Find("Item Secondary Text").GetComponent<Text>();
+
+		Icons = new Sprite[1];
+		Icons = Resources.LoadAll<Sprite>("Atlases/AtaraxyIconAtlas");
+		#endregion
+		*/
+	}
+
+	public void Init()
+	{
+		//Load the UI element
+
+		#region Root Setup
+		if (ScreenSpaceOverlayPrefab == null)
+		{
+			ScreenSpaceOverlayPrefab = Resources.Load<GameObject>("UI/SS - Overlay");
+		}
+		GameObject go = GameObject.Find("SS - Overlay");
+		if (go != null)
+		{
+			UIROOT = go.GetComponent<Canvas>();
+		}
+		if (UIROOT == null)
+		{
+			UIROOT = ((GameObject)GameObject.Instantiate(ScreenSpaceOverlayPrefab, Vector3.zero, Quaternion.identity)).GetComponent<Canvas>();
+			UIROOT.gameObject.name = ScreenSpaceOverlayPrefab.name;
+		}
+		#endregion
+
+		pause_Menu = GameObject.Find("Pause Menu").GetComponent<Canvas>();
+		modifier_Menu = GameObject.Find("Modifier Help");
+
+		#region Target UI
+		target_HUD = GameObject.Find("Target_HUD").GetComponent<Canvas>();
+		target_HUD.gameObject.SetActive(false);
+		target_HUD.gameObject.SetActive(true);
+		target_Name = GameObject.Find("Target_Name").GetComponent<Text>();
+		target_HP = GameObject.Find("Target_HP").GetComponent<Slider>();
+		target_XP = GameObject.Find("Target_XP").GetComponent<Slider>();
+		target_LevelText = GameObject.Find("Target_LevelText").GetComponent<Text>();
+		//target_Resource = GameObject.Find("Target_Resource").GetComponent<Slider>();
+		#endregion
+
+		#region Enemy Modifiers
+		ModifierRoot = GameObject.Find("Target_Modifiers").GetComponent<Canvas>();
+		ModifierTopRoot = ModifierRoot.transform.FindChild("Top").gameObject;
+		ModifierMiddleRoot = ModifierRoot.transform.FindChild("Middle").gameObject;
+
+		if (EnemyModifierPrefab == null)
+		{
+			EnemyModifierPrefab = Resources.Load<GameObject>("UI/Modifier_Root");
+		}
+
+		if (Modifiers == null)
+		{
+			Modifiers = new List<ModifierUI>();
+
+			ModifierUI newModifier;
+			for (int i = 0; i < 10; i++)
+			{
+				newModifier = ((GameObject)GameObject.Instantiate(EnemyModifierPrefab)).GetComponent<ModifierUI>();
+				newModifier.gameObject.name = "Modifier [" + i + "]";
+				newModifier.transform.SetParent(ModifierMiddleRoot.transform);
+				newModifier.rootBackground.rectTransform.offsetMin = new Vector2(5, 0);
+				newModifier.rootBackground.rectTransform.offsetMax = new Vector2(1, 1);
+				newModifier.rootBackground.rectTransform.sizeDelta = new Vector2(0, 25);
+				newModifier.rootBackground.rectTransform.anchoredPosition = new Vector2(0, -2.5f - i * 25);
+				newModifier.gameObject.SetActive(false);
+				Modifiers.Add(newModifier);
+			}
+			//Debug.Log("Finished creating modifiers: " + Modifiers.Count + "\n");
+		}
+		#endregion
+
+		target_HUD.enabled = false;
 
 		#region Player UI
 		damage_Indicator = GameObject.Find("Damage_Indicator").GetComponent<Image>();
