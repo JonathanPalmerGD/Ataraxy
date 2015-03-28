@@ -22,17 +22,25 @@ public class NullShield : MonoBehaviour
 		if(other.tag == "Projectile")
 		{
 			Projectile proj = other.GetComponent<Projectile>();
-			if (proj != null && proj.Faction != Faction)
+			if (proj != null)
 			{
-				
-				GameObject fizzler = (GameObject)GameObject.Instantiate(fizzlePrefab, proj.transform.position, Quaternion.identity);
-				GameObject.Destroy(fizzler, 1);
-				
-				//Destroy it
-				DestroyProjectile(proj);
+				if (proj.Faction != Faction)
+				{
 
+					GameObject fizzler = (GameObject)GameObject.Instantiate(fizzlePrefab, proj.transform.position, Quaternion.identity);
+					GameObject.Destroy(fizzler, 1);
+
+					//Destroy it
+					DestroyProjectile(proj);
+
+				}
+				//If it is on the same faction, do nothing.
+				else
+				{
+
+				}
 			}
-			else if (proj.Faction != Faction)
+			else
 			{
 				//Debug.LogWarning("Attempting to fizzle: " + proj.name + "\n");
 				proj = other.transform.parent.GetComponent<Projectile>();
@@ -44,7 +52,7 @@ public class NullShield : MonoBehaviour
 				}
 				//else
 				//{
-					//Debug.LogError("No Projectile parent with a Projectile Tag...?\n");
+				//Debug.LogError("No Projectile parent with a Projectile Tag...?\n");
 				//}
 			}
 			//Tell it to destroy itself?

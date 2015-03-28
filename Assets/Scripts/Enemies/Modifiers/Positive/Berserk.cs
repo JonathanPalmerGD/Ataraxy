@@ -32,7 +32,7 @@ public class Berserk : Modifier
 		}
 		else
 		{
-			Debug.LogWarning(Carrier.name + "Firing Cooldown capped\n");
+			//Debug.LogWarning(Carrier.name + "Firing Cooldown capped\n");
 			Carrier.FiringCooldown = 2;
 		}
 

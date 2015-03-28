@@ -182,6 +182,16 @@ public class Enemy : NPC
 		//If underleveled:  catch up in level
 		if(GameManager.Instance.player.Level > Level)
 		{
+			float levelDifference = GameManager.Instance.player.Level - Level;
+			float CatchupXPNeeded = levelDifference * 100 - (XP + XPToGain);
+
+			//Debug.Log(name + " is level " + Level + "\t\tCatchup XP Needed " + CatchupXPNeeded + "\nPlayer is level " + GameManager.Instance.player.Level);
+
+			if (levelDifference > 0 && CatchupXPNeeded > 0)
+			{
+				GainExperience(CatchupXPNeeded);
+			}
+
 			float result = XP + XPToGain;
 
 			if (result <= XPNeeded && Level + 1 <= GameManager.Instance.player.Level)

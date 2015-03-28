@@ -79,7 +79,7 @@ public class NPC : Entity
 		//Only update our UI if we're targeted.
 		if (GameManager.Instance.player.targetedEntity == this)
 		{
-			Debug.Log("Updating Level UI\n");
+			//Debug.Log("Updating Level UI\n");
 			base.UpdateLevelUI();
 		}
 	}
@@ -148,9 +148,21 @@ public class NPC : Entity
 		}
 	}
 
-	public virtual void GainModifier(Modifier newModifier)
+	public virtual void GainModifier(Modifier newModifier, bool fromSlainAlly = false)
 	{
 		newModifier.Carrier = this;
+
+		//We don't get a perfect transfer. We can get more if we have high luck.
+		if (fromSlainAlly)
+		{
+			int stacksWithLuck = (int)((newModifier.Stacks / 3) + (LuckFactor / 3));
+			int lowerBound = (int)(LuckFactor / 3) > 1 ? (int)(LuckFactor / 3) : 1;
+			int upperBound = Mathf.Max(1, stacksWithLuck);
+			int stacksTransfered = Random.Range(lowerBound, upperBound);
+			//Debug.Log("\t" + name + " gaining " + newModifier.ModifierName + " (" + stacksTransfered + ")\nPotential Upper BoundStacks with Luck: " + stacksWithLuck + " Luck: " + LuckFactor + "\t\tLower Bound: " + lowerBound);
+			newModifier.Stacks = stacksTransfered;
+		}
+
 		//Do we have that modifier yet
 		bool alreadyHave = false;
 		for (int i = 0; i < modifiers.Count; i++)

@@ -258,7 +258,7 @@ public class Player : Entity
 		GetInput();
 		if (!UIManager.Instance.paused)
 		{
-			Debug.Log("Target: " + targetedEntity + "\n");
+			//Debug.Log("Target: " + targetedEntity + "\n");
 			//Debug.DrawLine(transform.position,TerrainManager.Instance.clusters[ TerrainManager.Instance.FindNearestCluster(transform.position)].transform.position, Color.red);
 
 			/*if ((null != TerrainManager.Instance.FindNearestCluster(transform.position, 15)))
@@ -810,6 +810,7 @@ public class Player : Entity
 			targetFadeCounter -= Time.deltaTime;
 			if (targetFadeCounter <= 0)
 			{
+				//Debug.LogWarning("Dropping Target: Counter (" + targetFadeCounter + ")\n");
 				targetedEntity.Untarget();
 				targetedEntity = null;
 			}

@@ -288,8 +288,9 @@ public class Entity : MonoBehaviour
 			float rate = Time.deltaTime * 8;
 			if (XP + XPToGain > XPNeeded)
 			{
-				rate *= (1 + (XP + XPToGain) / XPNeeded);
+				rate *= 4 * (1 + (XP + XPToGain) / XPNeeded);
 			}
+			//Debug.Log("\t" + name + "\tRate " + rate + "\t\tTotalXP: " + (XP + XPToGain) + "\n\t\t\t" + (XP + XPToGain) / XPNeeded);
 
 			//Drain our XP from the pool. Don't overdraw.
 			float gainThisFrame = XPToGain > rate ? rate : XPToGain;
@@ -394,7 +395,9 @@ public class Entity : MonoBehaviour
 			if (e.modifiers.Count > 0)
 			{
 				Enemy self = (Enemy)this;
-				self.GainModifier(e.modifiers[Random.Range(0, e.modifiers.Count)]);
+
+				Modifier transferMod = e.modifiers[Random.Range(0, e.modifiers.Count)];
+				self.GainModifier(transferMod, true);
 				//self.modifiers.Add(e.modifiers[Random.Range(0, e.modifiers.Count)]);
 
 				SetupModifiersUI();
