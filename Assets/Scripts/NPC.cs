@@ -79,6 +79,7 @@ public class NPC : Entity
 		//Only update our UI if we're targeted.
 		if (GameManager.Instance.player.targetedEntity == this)
 		{
+			Debug.Log("Updating Level UI\n");
 			base.UpdateLevelUI();
 		}
 	}
@@ -114,7 +115,7 @@ public class NPC : Entity
 
 	public virtual void InitModifiers()
 	{
-		if (modifiers == null || modifiers.Count <= 0)
+		if (modifiers == null || modifiers.Count == 0)
 		{
 			modifiers = new List<Modifier>();
 		
@@ -130,6 +131,11 @@ public class NPC : Entity
 
 	public override void SetupModifiersUI()
 	{
+		if (modifiers == null)
+		{
+			InitModifiers();
+		}
+
 		if (GameManager.Instance.player.targetedEntity == this)
 		{
 			if (ModHUD != null)
@@ -191,7 +197,7 @@ public class NPC : Entity
 
 		int stacksGained = Random.Range(1, upperBound);
 
-		Debug.Log("Gaining stacks in " + modifiers[index].ModifierName + "  (" + stacksGained + ")\n\tLuck Factor: " + LuckFactor);
+		//Debug.Log("Gaining stacks in " + modifiers[index].ModifierName + "  (" + stacksGained + ")\n\tLuck Factor: " + LuckFactor);
 		modifiers[index].Stacks += stacksGained;
 
 		//So we never gain more than 20 of a stack.

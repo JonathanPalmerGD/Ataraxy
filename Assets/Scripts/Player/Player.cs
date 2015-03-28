@@ -64,14 +64,13 @@ public class Player : Entity
 	public override void GainLevel()
 	{
 		MaxHealth += 5;
-		AdjustHealth(MaxHealth);
+		AdjustHealth(5);
 		
 		base.GainLevel();
 
 		SetupHealthUI();
 		SetupXPUI();
-		XPNeeded += 20;
-
+		XPNeeded += 50;
 	}
 
 	void SetupResourceSystem()
@@ -259,6 +258,7 @@ public class Player : Entity
 		GetInput();
 		if (!UIManager.Instance.paused)
 		{
+			Debug.Log("Target: " + targetedEntity + "\n");
 			//Debug.DrawLine(transform.position,TerrainManager.Instance.clusters[ TerrainManager.Instance.FindNearestCluster(transform.position)].transform.position, Color.red);
 
 			/*if ((null != TerrainManager.Instance.FindNearestCluster(transform.position, 15)))

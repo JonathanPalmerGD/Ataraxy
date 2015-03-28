@@ -179,7 +179,18 @@ public class Enemy : NPC
 	#region Enemy Behavior Functions
 	public void HandleExperience()
 	{
-		if (CanSeePlayer)
+		//If underleveled:  catch up in level
+		if(GameManager.Instance.player.Level > Level)
+		{
+			float result = XP + XPToGain;
+
+			if (result <= XPNeeded && Level + 1 <= GameManager.Instance.player.Level)
+			{
+				GainExperience(XPNeeded - (XP + XPToGain) + .5f);
+			}
+		}
+		//Otherwise gain normal passive rate
+		else if (CanSeePlayer)
 		{
 			GainExperience(Time.deltaTime * xpRateOverTime);
 		}

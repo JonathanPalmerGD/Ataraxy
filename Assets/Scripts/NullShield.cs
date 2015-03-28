@@ -32,8 +32,9 @@ public class NullShield : MonoBehaviour
 				DestroyProjectile(proj);
 
 			}
-			else
+			else if (proj.Faction != Faction)
 			{
+				//Debug.LogWarning("Attempting to fizzle: " + proj.name + "\n");
 				proj = other.transform.parent.GetComponent<Projectile>();
 				if (proj != null && proj.Faction != Faction)
 				{
