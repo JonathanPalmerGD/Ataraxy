@@ -126,7 +126,7 @@ public class MultiToken : MonoBehaviour
 				Weapon newWeapon = (Weapon)LootManager.NewWeapon(specificWeaponName);
 				if (specificWeaponDurability > -1)
 				{
-					newWeapon.SetupDurability(specificWeaponDurability);
+					newWeapon.SetupDurability(specificWeaponDurability, -1, true);
 				}
 				player.SetupAbility(newWeapon);
 			}

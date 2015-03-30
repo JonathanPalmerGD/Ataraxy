@@ -123,7 +123,7 @@ public class Weapon : Ability
 		base.Init();
 
 		AbilityName = Weapon.GetWeaponName();
-		SetupDurability(30, 60);
+		SetupDurability(30, 60, false);
 		NormalCooldown = .5f;
 		SpecialCooldown = 3;
 		CdLeft = 0;
@@ -134,9 +134,15 @@ public class Weapon : Ability
 		BeamColor = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
 	}
 
-	public virtual void SetupDurability(int forceValue = -1, int upperBound = -1)
+    /// <summary>
+    /// Initializes the weapon's durability and marks it as initialized
+    /// </summary>
+    /// <param name="forceValue">Fill if you want only one value</param>
+    /// <param name="upperBound">Fill if you want to assign a random value between forceValue & upperBound</param>
+    /// <param name="forceSet">Override durability even if initialized.</param>
+	public virtual void SetupDurability(int forceValue = -1, int upperBound = -1, bool forceSet = true)
 	{
-		if (!durabilityInitialized)
+        if (forceSet && !durabilityInitialized)
 		{
 			if (forceValue > -1 && upperBound == -1)
 			{
