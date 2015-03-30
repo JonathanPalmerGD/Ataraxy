@@ -11,7 +11,7 @@ public class GravityStaff : Weapon
 	{
 		base.Init();
 		AbilityName = GravityStaff.GetWeaponName();
-		Durability = Random.Range(140, 200);
+		SetupDurability(140, 200);
 		NormalCooldown = 1;
 		SpecialCooldown = .08f;
 		PrimaryDesc = "[Damage]\nA weak laser as a last resort.";
@@ -63,7 +63,7 @@ public class GravityStaff : Weapon
 	{
 		GravityStaff gs = ScriptableObject.CreateInstance<GravityStaff>();
 		gs.AbilityName = GravityStaff.GetWeaponName();
-		gs.Durability = Random.Range(170, 220);
+		gs.SetupDurability(170, 220);
 		gs.PrimaryDesc = "[Damage]\nA weak laser as a last resort.";
 		gs.SecondaryDesc = "[Utility]\nHold: Dampen gravity effects on you.\nUseful for long or high jumps.";
 		return gs;

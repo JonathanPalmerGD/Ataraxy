@@ -21,7 +21,7 @@ public class Hemotick : Weapon
 
 		tickLevel = 0;
 		AbilityName = Hemotick.modifier[tickLevel] + " " + Hemotick.GetWeaponName();
-		Durability = Random.Range(200, 300);
+		SetupDurability(200, 300);
 		PrimaryDesc = "[Damage]\nThe Hemotick expels a damaging blood haze.";
 		SecondaryDesc = "[Warning]\nFeed the Hemotick a portion of your health to empower it.\nBe careful, if hungry enough, it might kill you.";
 
@@ -36,7 +36,6 @@ public class Hemotick : Weapon
 		SpecialCooldown = 3;
 		DurSpecialCost = 0;
 		hazeDur = .4f;
-		Durability = Random.Range(120, 160);
 		#if UNITY_EDITOR
 		SpecialCooldown = .5f;
 		#endif
@@ -133,7 +132,7 @@ public class Hemotick : Weapon
 		Hemotick ht = ScriptableObject.CreateInstance<Hemotick>();
 		ht.tickLevel = 0;
 		ht.AbilityName = Hemotick.modifier[ht.tickLevel] + " " + Hemotick.GetWeaponName();
-		ht.Durability = Random.Range(200, 300);
+		ht.SetupDurability(200, 300);
 		ht.PrimaryDesc = "[Damage]\nThe Hemotick expels a damaging blood haze.";
 		ht.SecondaryDesc = "[Warning]\nFeed the Hemotick a portion of your health to empower it.\nBe careful, if hungry enough, it might kill you.";
 		return ht;

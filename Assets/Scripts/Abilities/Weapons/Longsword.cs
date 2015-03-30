@@ -16,7 +16,7 @@ public class Longsword : Weapon
 		Icon = UIManager.Instance.Icons[IconIndex];
 
 		AbilityName = Longsword.GetWeaponName();
-		Durability = Random.Range(10, 60);
+		SetupDurability(40, 60);
 		PrimaryDesc = "[Damage]\nA left-to-right slash.";
 		SecondaryDesc = "[Damage]\nA right-to-left slash.\nStrangely similar to the primary fire...";
 
@@ -101,7 +101,7 @@ public class Longsword : Weapon
 	{
 		Longsword w = ScriptableObject.CreateInstance<Longsword>();
 		w.AbilityName = Longsword.GetWeaponName();
-		w.Durability = Random.Range(10, 60);
+		w.SetupDurability(40, 60);
 		w.PrimaryDesc = "[Damage]\nA left-to-right slash.";
 		w.SecondaryDesc = "[Damage]\nA right-to-left slash.\nStrangely similar to the primary fire...";
 		return w;

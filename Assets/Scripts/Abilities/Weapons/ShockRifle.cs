@@ -13,7 +13,7 @@ public class ShockRifle : Weapon
 		Icon = UIManager.Instance.Icons[IconIndex];
 
 		AbilityName = ShockRifle.GetWeaponName();
-		Durability = Random.Range(80, 95);
+		SetupDurability(80, 95);
 		PrimaryDesc = "[Damage] [Combo]\nA fast firing shocking laser.\nWarning: Laser discharge explodes static orbs.";
 		SecondaryDesc = "[Damage], [Combo], [Explosive]\nAn growing orb of static.";
 
@@ -122,7 +122,7 @@ public class ShockRifle : Weapon
 	{
 		ShockRifle w = ScriptableObject.CreateInstance<ShockRifle>();
 		w.AbilityName = ShockRifle.GetWeaponName();
-		w.Durability = Random.Range(80, 95);
+		w.SetupDurability(80, 95);
 		w.PrimaryDesc = "[Damage] [Combo]\nA fast firing shocking laser.\nWarning: Laser discharge explodes static orbs.";
 		w.SecondaryDesc = "[Damage], [Combo], [Explosive]\nAn growing orb of static.";
 		return w;

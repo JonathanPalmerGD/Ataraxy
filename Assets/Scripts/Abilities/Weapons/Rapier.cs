@@ -16,7 +16,7 @@ public class Rapier : Weapon
 
 
 		AbilityName = Rapier.GetWeaponName();
-		Durability = Random.Range(10, 60);
+		SetupDurability(10, 60);
 		PrimaryDesc = "[Damage]\nA thin but powerful melee stab.";
 		SecondaryDesc = "[Damage], [Utility]\nA dashing lunge combined with a powerful stab!";
 
@@ -106,7 +106,7 @@ public class Rapier : Weapon
 		Rapier w = ScriptableObject.CreateInstance<Rapier>();
 
 		w.AbilityName = Rapier.GetWeaponName();
-		w.Durability = Random.Range(10, 60);
+		w.SetupDurability(10, 60);
 		w.PrimaryDesc = "[Damage]\nA thin but powerful melee stab.";
 		w.SecondaryDesc = "[Damage], [Utility]\nA dashing lunge combined with a powerful stab!";
 		return w;

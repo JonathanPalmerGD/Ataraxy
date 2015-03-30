@@ -26,6 +26,10 @@ public class NPC : Entity
 	public float FiringCooldown = 7;
 	#endregion
 
+	#region Specific Modifiers
+	public string[] specificModifiers;
+	#endregion
+
 	public override Allegiance Faction
 	{
 		get { return Allegiance.Neutral; }
@@ -118,14 +122,24 @@ public class NPC : Entity
 		if (modifiers == null || modifiers.Count == 0)
 		{
 			modifiers = new List<Modifier>();
-		
-			//for (int i = 0; i < Random.Range(1,3); i++)
-			//{
-			Modifier m = ModifierManager.Instance.GainNewModifier(Level);
-			m.Init();
-			GainModifier(m);
-			//}
-			//Debug.Log(name + " has " + modifiers.Count + " modifiers\n");
+			Modifier m; 
+
+			if (specificModifiers.Length > 0)
+			{
+				for (int i = 0; i < specificModifiers.Length; i++)
+				{
+					m = ModifierManager.Instance.GainNewModifier(Level, specificModifiers[i]);
+					m.Init();
+					GainModifier(m);
+				}
+			}
+			else
+			{
+				m = ModifierManager.Instance.GainNewModifier(Level);
+				m.Init();
+				GainModifier(m);
+				//Debug.Log(name + " has " + modifiers.Count + " modifiers\n");
+			}
 		}
 	}
 

@@ -15,7 +15,7 @@ public class Dagger : Weapon
 		Icon = UIManager.Instance.Icons[IconIndex];
 		
 		AbilityName = Dagger.GetWeaponName();
-		Durability = Random.Range(40, 70);
+		SetupDurability(40, 70);
 		PrimaryDesc = "[Damage]\nA quick stab.\nBackstabs coming soon!";
 		SecondaryDesc = "[Utility]\nA quick dash forward.\nUseful for getaways or crossing length gaps.";
 
@@ -81,7 +81,7 @@ public class Dagger : Weapon
 	{
 		Dagger w = ScriptableObject.CreateInstance<Dagger>();
 		w.AbilityName = Dagger.GetWeaponName();
-		w.Durability = Random.Range(40, 70);
+		w.SetupDurability(40, 70);
 		w.PrimaryDesc = "[Damage]\nA quick stab.\nBackstabs coming soon!";
 		w.SecondaryDesc = "[Utility]\nA quick dash forward.\nUseful for getaways or crossing length gaps.";
 		return w;

@@ -14,7 +14,7 @@ public class WingedSandals : Weapon
 		Icon = UIManager.Instance.Icons[IconIndex];
 
 		AbilityName = WingedSandals.GetWeaponName();
-		Durability = Random.Range(35, 50);
+		SetupDurability(35, 50);
 		PrimaryDesc = "[Utility]\nA small flap of the sandal's tiny wings.\nCan be chained to fly distances.";
 		SecondaryDesc = "[Utility]\nA powerful ascending gust.\nGreat for avoiding a dreadful fall.";
 
@@ -84,7 +84,7 @@ public class WingedSandals : Weapon
 	{
 		WingedSandals ws = ScriptableObject.CreateInstance<WingedSandals>();
 		ws.AbilityName = WingedSandals.GetWeaponName();
-		ws.Durability = Random.Range(35, 50);
+		ws.SetupDurability(35, 50);
 		ws.PrimaryDesc = "[Utility]\nA small flap of the sandal's tiny wings.\nCan be chained to fly short distances.";
 		ws.SecondaryDesc = "[Utility]\nA powerful ascending gust.";
 		return ws;

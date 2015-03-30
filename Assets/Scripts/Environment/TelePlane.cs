@@ -44,11 +44,11 @@ public class TelePlane : MonoBehaviour
 			}
 
 			//If the target object exists
-			if (player.GetComponent<TeleTarget>() != null && player.GetComponent<TeleTarget>().teleTarget != null)
+			if (player.GetComponent<TeleTarget>() != null && player.GetComponent<TeleTarget>().lastCheckpoint != null)
 			{
 				//Put the player there.
-				player.transform.position = player.GetComponent<TeleTarget>().teleTarget.transform.position;
-				player.transform.rotation = player.GetComponent<TeleTarget>().teleTarget.transform.rotation;
+				player.transform.position = player.GetComponent<TeleTarget>().lastCheckpoint.transform.position;
+				player.transform.rotation = player.GetComponent<TeleTarget>().lastCheckpoint.transform.rotation;
 
 				//Stop their movement
 				player.rigidbody.velocity = Vector3.zero;

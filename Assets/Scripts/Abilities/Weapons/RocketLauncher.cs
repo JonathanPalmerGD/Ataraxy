@@ -16,7 +16,7 @@ public class RocketLauncher : Weapon
 		Icon = UIManager.Instance.Icons[IconIndex];
 
 		AbilityName = RocketLauncher.GetWeaponName();
-		Durability = Random.Range(10, 60);
+		SetupDurability(10, 60);
 		PrimaryDesc = "[Damage], [Explosive]\nAn explosive rocket. Homing if you fire when targetting an enemy.";
 		SecondaryDesc = "[Damage]\nNot yet implemented!";
 
@@ -129,7 +129,7 @@ public class RocketLauncher : Weapon
 	{
 		RocketLauncher w = ScriptableObject.CreateInstance<RocketLauncher>();
 		w.AbilityName = RocketLauncher.GetWeaponName();
-		w.Durability = Random.Range(10, 60);
+		w.SetupDurability(10, 60);
 		w.PrimaryDesc = "[Damage], [Explosive]\nAn explosive rocket. Homing if you fire when targetting an enemy.";
 		w.SecondaryDesc = "[Damage]\nNot yet implemented!";
 		return w;

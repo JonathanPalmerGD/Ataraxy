@@ -33,6 +33,8 @@ public class Player : Entity
 	public GameObject rightShFirePoint;
 	public GameObject leftHipFirePoint;
 	public GameObject rightHipFirePoint;
+
+	public TeleTarget teleTarget;
 	#endregion
 
 	#region Weapon Variables
@@ -163,6 +165,11 @@ public class Player : Entity
 		SetupXPUI();
 
 		DamageImage = UIManager.Instance.damage_Indicator;
+
+		if (teleTarget == null)
+		{
+			teleTarget = GetComponent<TeleTarget>();
+		}
 
 		base.Start();
 
@@ -677,11 +684,30 @@ public class Player : Entity
 		return mainCamera.transform.forward;
 	}
 
+	public void ResetToCheckPoint()
+	{
+		//Put the player there.
+		transform.position = teleTarget.lastCheckpoint.transform.position;
+		transform.rotation = teleTarget.lastCheckpoint.transform.rotation;
+
+		//Stop their movement
+		rigidbody.velocity = Vector3.zero;
+	}
+
 	public override void KillEntity()
 	{
-		base.KillEntity();
+		if (Constants.GameDifficulty == 0)
+		{
+			AdjustHealth(MaxHealth / 2);
+			ResetToCheckPoint();
+			FellBelow();
+		}
+		else
+		{
+			base.KillEntity();
 
-		Application.LoadLevel("GameOver");
+			Application.LoadLevel("GameOver");
+		}
 	}
 
 	public void FellBelow()

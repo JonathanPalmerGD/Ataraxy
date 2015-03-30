@@ -9,6 +9,14 @@ public static class Constants : object
 	public static float targetFade = 3.0f;
 	public static Vector3 gravity = new Vector3(0, -15, 0);
 
+	/// <summary>
+	/// 0 is Tutorial
+	/// 1 is Easy
+	/// 2 is Medium
+	/// 3 is Hard
+	/// </summary>
+	public static int GameDifficulty = 1;
+
 	public static float CheckXZDistance(Vector3 firstPos, Vector3 secondPos)
 	{
 		Vector2 posFlat = new Vector2(firstPos.x, firstPos.z);

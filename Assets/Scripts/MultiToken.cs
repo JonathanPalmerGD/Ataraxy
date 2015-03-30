@@ -8,6 +8,7 @@ public class MultiToken : MonoBehaviour
 
 	public bool grantSpecificWeapon = false;
 	public string specificWeaponName = "";
+	public int specificWeaponDurability = -1;
 
 	/// <summary>
 	/// Note: This is only set during Start().
@@ -54,7 +55,6 @@ public class MultiToken : MonoBehaviour
 		{
 			child.tag = "Token";
 		}
- 
 	}
 
 	void OnTriggerEnter(Collider collider)
@@ -116,13 +116,19 @@ public class MultiToken : MonoBehaviour
 	{
 		player.SetupAbility(Passive.New());
 	}
+
 	public void GrantWeapon()
 	{
 		if (grantWeapon)
 		{
 			if (grantSpecificWeapon)
 			{
-				player.SetupAbility(LootManager.NewWeapon(specificWeaponName));
+				Weapon newWeapon = (Weapon)LootManager.NewWeapon(specificWeaponName);
+				if (specificWeaponDurability > -1)
+				{
+					newWeapon.SetupDurability(specificWeaponDurability);
+				}
+				player.SetupAbility(newWeapon);
 			}
 			else
 			{

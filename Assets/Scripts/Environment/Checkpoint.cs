@@ -37,7 +37,7 @@ public class Checkpoint : MonoBehaviour
 	{
 		if (collider.gameObject.tag == "Player")
 		{
-			if (player.GetComponent<TeleTarget>().teleTarget != gameObject)
+			if (player.GetComponent<TeleTarget>().lastCheckpoint != gameObject)
 			{
 				if (partSys != null)
 				{
@@ -50,20 +50,20 @@ public class Checkpoint : MonoBehaviour
 				}
 				else
 				{
-					if (playerTarg.teleTarget == null)
+					if (playerTarg.lastCheckpoint == null)
 					{
 
 					}
 					else
 					{
-						Checkpoint c = playerTarg.teleTarget.GetComponent<Checkpoint>();
+						Checkpoint c = playerTarg.lastCheckpoint.GetComponent<Checkpoint>();
 
 						if (c != null)
 						{
 							c.Deactivate();
 						}
 					}
-					player.GetComponent<TeleTarget>().teleTarget = gameObject;
+					player.GetComponent<TeleTarget>().lastCheckpoint = gameObject;
 				}
 			}
 		}

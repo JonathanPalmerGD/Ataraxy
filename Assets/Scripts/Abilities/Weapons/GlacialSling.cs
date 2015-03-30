@@ -17,7 +17,7 @@ public class GlacialSling : Weapon
 		Icon = UIManager.Instance.Icons[IconIndex];
 
 		AbilityName = GlacialSling.GetWeaponName();
-		Durability = Random.Range(140, 190);
+		SetupDurability(140, 190);
 		PrimaryDesc = "[Damage] [Combo]\nFling an arcing glacial disk.\nDisks do minimal impact damage.";
 		SecondaryDesc = "[Damage], [Combo], [Explosive]\nShatter all active glacial disks.\nArcing disks by, over or under an enemy allows a combo to deal more damage.";
 
@@ -112,7 +112,7 @@ public class GlacialSling : Weapon
 	{
 		GlacialSling gs = ScriptableObject.CreateInstance<GlacialSling>();
 		gs.AbilityName = GlacialSling.GetWeaponName();
-		gs.Durability = Random.Range(140, 190);
+		gs.SetupDurability(140, 190);
 		gs.PrimaryDesc = "[Damage] [Combo]\nFling an arcing glacial disk.\nDisks do minimal impact damage.";
 		gs.SecondaryDesc = "[Damage], [Combo], [Explosive]\nShatter all active glacial disks.\nArcing disks by, over or under an enemy allows a combo to deal more damage.";
 		return gs;

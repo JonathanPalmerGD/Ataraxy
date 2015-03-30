@@ -20,7 +20,6 @@ public class TransmuterKit : Weapon
 		Icon = UIManager.Instance.Icons[IconIndex];
 
 		AbilityName = TransmuterKit.GetWeaponName();
-		Durability = Random.Range(2, 3);
 		PrimaryDesc = "[Healing]\nHold: Transmute internal bleeding into NOT internal bleeding!\nMore Effective the more internal bleeding!";
 		SecondaryDesc = "[?????]\nThere is no telling what this might do.\nAt very least it'll have a long cooldown and use plenty of ammo.";
 
@@ -34,7 +33,7 @@ public class TransmuterKit : Weapon
 		NormalCooldown = Random.Range(.15f, .25f);
 		SpecialCooldown = 15;
 		DurSpecialCost = 20;
-		Durability = Random.Range(55, 95);
+		SetupDurability(55, 95);
 		
 		#if UNITY_EDITOR
 		SpecialCooldown = .5f;
@@ -228,7 +227,7 @@ public class TransmuterKit : Weapon
 	{
 		TransmuterKit tk = ScriptableObject.CreateInstance<TransmuterKit>();
 		tk.AbilityName = TransmuterKit.GetWeaponName();
-		tk.Durability = Random.Range(2, 3);
+		tk.SetupDurability(2, 3);
 		tk.PrimaryDesc = "[Healing]\nHold: Transmute internal bleeding into NOT internal bleeding!\nMore Effective the more internal bleeding!";
 		tk.SecondaryDesc = "[?????]\nThere is no telling what this might do.\nAt very least it'll have a long cooldown and use plenty of ammo.";
 		return tk;

@@ -46,6 +46,7 @@ public class Weapon : Ability
 	}
 	#endregion
 	#region Durability & Use Costs
+	private bool durabilityInitialized = false;
 	private int durability;
 	public int Durability
 	{
@@ -122,7 +123,7 @@ public class Weapon : Ability
 		base.Init();
 
 		AbilityName = Weapon.GetWeaponName();
-		Durability = Random.Range(30, 60);
+		SetupDurability(30, 60);
 		NormalCooldown = .5f;
 		SpecialCooldown = 3;
 		CdLeft = 0;
@@ -131,6 +132,27 @@ public class Weapon : Ability
 
 		Icon = UIManager.Instance.Icons[Random.Range(1, UIManager.Instance.Icons.Length)];
 		BeamColor = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
+	}
+
+	public virtual void SetupDurability(int forceValue = -1, int upperBound = -1)
+	{
+		if (!durabilityInitialized)
+		{
+			if (forceValue > -1 && upperBound == -1)
+			{
+				Durability = forceValue;
+			}
+			else if (forceValue > -1 && upperBound > -1)
+			{
+				Durability = Random.Range(forceValue, upperBound);
+			}
+			else
+			{
+				Durability = Random.Range(30, 60);
+			}
+
+			durabilityInitialized = true;
+		}
 	}
 
 	public override void HandleVisuals()
@@ -423,7 +445,7 @@ public class Weapon : Ability
 	{
 		Weapon w = ScriptableObject.CreateInstance<Weapon>();
 		w.AbilityName = Weapon.GetWeaponName();
-		w.Durability = Random.Range(30, 60);
+		w.SetupDurability(30, 60);
 		w.NormalCooldown = 1;
 		w.SpecialCooldown = 6;
 		w.CdLeft = 0;

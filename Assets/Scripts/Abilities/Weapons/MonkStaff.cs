@@ -15,7 +15,7 @@ public class MonkStaff : Weapon
 		Icon = UIManager.Instance.Icons[IconIndex];
 
 		AbilityName = MonkStaff.GetWeaponName();
-		Durability = Random.Range(10, 60);
+		SetupDurability(10, 60);
 
 		DurSpecialCost = 1;
 #if CHEAT
@@ -122,7 +122,7 @@ public class MonkStaff : Weapon
 	{
 		MonkStaff w = ScriptableObject.CreateInstance<MonkStaff>();
 		w.AbilityName = MonkStaff.GetWeaponName();
-		w.Durability = Random.Range(10, 60);
+		w.SetupDurability(10, 60);
 		return w;
 	}
 

@@ -19,7 +19,7 @@ public class GrapplingHook : Weapon
 		Icon = UIManager.Instance.Icons[IconIndex];
 
 		AbilityName = GrapplingHook.GetWeaponName();
-		Durability = Random.Range(23, 35);
+		SetupDurability(23, 35);
 		PrimaryDesc = "Fires a hook and chain that latches onto the first piece of terrain, token or enemy it hits.\nEnemies & tokens are pulled towards you.\nYou are pulled towards terrain at a ridiculous speed.\nExercise Caution.";
 		SecondaryDesc = "[Utility]\nAn arcing grapple throw useful for recovering from a downward plummet.";
 
@@ -208,7 +208,7 @@ public class GrapplingHook : Weapon
 	{
 		GrapplingHook g = ScriptableObject.CreateInstance<GrapplingHook>();
 		g.AbilityName = GrapplingHook.GetWeaponName();
-		g.Durability = Random.Range(23, 35);
+		g.SetupDurability(23, 35);
 		g.PrimaryDesc = "Fires a hook and chain that latches onto the first piece of terrain, token or enemy it hits.\nEnemies & tokens are pulled towards you.\nYou are pulled towards terrain at a ridiculous speed.\nExercise Caution.";
 		g.SecondaryDesc = "[Utility]\nAn arcing grapple throw useful for recovering from a downward plummet.";
 		return g;

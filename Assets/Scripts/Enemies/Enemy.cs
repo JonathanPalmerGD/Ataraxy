@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Enemy : NPC
 {
+	public bool GiveSpecificLoot = false;
+	public GameObject specificLootPrefab;
 	public static bool EnableTargetVisuals = false;
 	/// <summary>
 	/// A Vector3 that tracks the muzzle to the player (for firing projectiles)
@@ -103,15 +105,23 @@ public class Enemy : NPC
 
 	public virtual GameObject SpawnToken()
 	{
-		GameObject tokenToSpawn = GameManager.Instance.tokenPrefab;
-		//Drop a token.
-		if (Random.Range(0, 10) < 8)
+		GameObject tokenToSpawn;
+		
+		if(GiveSpecificLoot)
 		{
-			tokenToSpawn = GameManager.Instance.tokenPrefab;
+			tokenToSpawn = specificLootPrefab;
 		}
 		else
 		{
-			tokenToSpawn = GameManager.Instance.repairTokenPrefab;
+			//Drop a token.
+			if (Random.Range(0, 10) < 8)
+			{
+				tokenToSpawn = GameManager.Instance.tokenPrefab;
+			}
+			else
+			{
+				tokenToSpawn = GameManager.Instance.repairTokenPrefab;
+			}
 		}
 
 		GameObject newToken = (GameObject)GameObject.Instantiate(tokenToSpawn, transform.position + Vector3.up * 2, Quaternion.identity);
