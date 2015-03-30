@@ -179,28 +179,42 @@ public class Player : Entity
 
 	public void GiveStartingItems()
 	{
-		#if UNITY_EDITOR
-		SetupAbility(LootManager.NewWeapon("GravityStaff"));
-		SetupAbility(LootManager.NewWeapon("GrapplingHook"));
-		/*
-		SetupAbility(LootManager.NewWeapon("BoundingStaff"));
-		SetupAbility(LootManager.NewWeapon("WingedSandals"));
-		SetupAbility(LootManager.NewWeapon("Longsword"));
-		SetupAbility(LootManager.NewWeapon("Rapier"));
-		SetupAbility(LootManager.NewWeapon("Dagger"));
-		SetupAbility(LootManager.NewWeapon("RocketLauncher"));
-		SetupAbility(LootManager.NewWeapon("Hemotick"));
-		SetupAbility(LootManager.NewWeapon("ShockRifle"));*/
+
+        if (Constants.GameDifficulty == 0)
+        {
+
+        }
+        else
+        {
+
+#if UNITY_EDITOR
+            SetupAbility(LootManager.NewWeapon("GravityStaff"));
+            SetupAbility(LootManager.NewWeapon("GrapplingHook"));
+            /*
+            SetupAbility(LootManager.NewWeapon("BoundingStaff"));
+            SetupAbility(LootManager.NewWeapon("WingedSandals"));
+            SetupAbility(LootManager.NewWeapon("Longsword"));
+            SetupAbility(LootManager.NewWeapon("Rapier"));
+            SetupAbility(LootManager.NewWeapon("Dagger"));
+            SetupAbility(LootManager.NewWeapon("RocketLauncher"));
+            SetupAbility(LootManager.NewWeapon("Hemotick"));
+            SetupAbility(LootManager.NewWeapon("ShockRifle"));*/
 #else
 		SetupAbility(LootManager.NewWeapon("GravityStaff"));
 		SetupAbility(LootManager.NewWeapon("GrapplingHook"));
 #endif
+        }
 	}
 
 	public void SetupAbility(Ability ToAdd)
 	{
 		if (ToAdd is Weapon)
 		{
+			if (weapons.Count == 0)
+			{
+				weaponIndex = 0;
+			}
+
 			Weapon w = (Weapon)ToAdd;
 
 			w.Init();
@@ -222,6 +236,7 @@ public class Player : Entity
 			w.IconUI = panel;
 			weapons.Add(w);
 			panel.rectTransform.anchoredPosition = new Vector2((weapons.Count - 1) * 67, 0);
+
 		}
 		else if (ToAdd is Passive)
 		{
@@ -308,51 +323,56 @@ public class Player : Entity
 			#endregion
 			#region Check Weapons for Removal
 
-			for (int i = 0; i < weapons.Count; i++)
-			{
-				if (weapons[i] != null)
-				{
-					if (weaponIndex == i)
-					{
-						WeaponText.text = weapons[i].AbilityName;
-						weapons[i].UpdateCrosshair(playerCrosshair, hitscanContact);
+            if (weapons.Count == 0)
+            {
+                WeaponText.text = "You are unarmed";
+				weaponIndex = 0;
+            }
+            else
+            {
+                for (int i = 0; i < weapons.Count; i++)
+                {
+                    if (weapons[i] != null)
+                    {
+                        if (weaponIndex == i)
+                        {
+                            WeaponText.text = weapons[i].AbilityName;
+                            weapons[i].UpdateCrosshair(playerCrosshair, hitscanContact);
 
-						if (weapons[i].CdLeft > 0)
-						{
-							SelectorUI.type = Image.Type.Filled;
-							SelectorUI.fillCenter = true;
-							float startCooldownAmt = 0;
-							if (weapons[i].UseSpecialCooldown)
-							{
-								startCooldownAmt = weapons[i].SpecialCooldown;
-							}
-							else
-							{
-								startCooldownAmt = weapons[i].NormalCooldown;
-							}
-							SelectorUI.fillAmount = 1 - (weapons[i].CdLeft / startCooldownAmt);
-						}
-						else
-						{
-							//SelectorUI.fillAmount = 1;
-							SelectorUI.type = Image.Type.Sliced;
-							SelectorUI.fillCenter = false;
-						}
-					}
-					weapons[i].UpdateWeapon(Time.deltaTime);
-					if (weapons[i].CheckAbility())
-					{
-						if (weapons.Count == 0)
-						{
-							WeaponText.text = "Unarmed!";
-						}
-						weapons[i].CleanUp();
-						weapons.RemoveAt(i);
-						i--;
-						dirtyAbilityBar = true;
-					}
-				}
-			}
+                            if (weapons[i].CdLeft > 0)
+                            {
+                                SelectorUI.type = Image.Type.Filled;
+                                SelectorUI.fillCenter = true;
+                                float startCooldownAmt = 0;
+                                if (weapons[i].UseSpecialCooldown)
+                                {
+                                    startCooldownAmt = weapons[i].SpecialCooldown;
+                                }
+                                else
+                                {
+                                    startCooldownAmt = weapons[i].NormalCooldown;
+                                }
+                                SelectorUI.fillAmount = 1 - (weapons[i].CdLeft / startCooldownAmt);
+                            }
+                            else
+                            {
+                                //SelectorUI.fillAmount = 1;
+                                SelectorUI.type = Image.Type.Sliced;
+                                SelectorUI.fillCenter = false;
+                            }
+                        }
+                        weapons[i].UpdateWeapon(Time.deltaTime);
+                        if (weapons[i].CheckAbility())
+                        {
+
+                            weapons[i].CleanUp();
+                            weapons.RemoveAt(i);
+                            i--;
+                            dirtyAbilityBar = true;
+                        }
+                    }
+                }
+            }
 
 			if (weaponIndex > weapons.Count - 1)
 			{
@@ -369,14 +389,21 @@ public class Player : Entity
 			// 1 = 64
 			// 64 * n + ((n-1)*3)
 			//WeaponUI.rectTransform.rect = new Rect(
-			float halfScreen = Screen.width / 2;
-			float wC = (weapons.Count - 1) * 67 / 2;
-			float wI = (WeaponIndex) * 67;
-			SelectorUI.rectTransform.position = new Vector3(halfScreen - wC + wI, 35 + 20);
-			//SelectorUI.rectTransform.position = new Vector3((Screen.width / 2) - ((weapons.Count / 2 - WeaponIndex / 2) * 67) / 2, 35);
-			//(1 + WeaponIndex) * 67 - 32, 35);
-			int index = SelectorUI.transform.GetSiblingIndex();
-			SelectorUI.transform.SetSiblingIndex(index + 1);
+            
+            float halfScreen = Screen.width / 2;
+            float wC = (weapons.Count - 1) * 67 / 2;
+            float wI = (WeaponIndex) * 67;
+            if (weapons.Count > 0)
+            {
+                SelectorUI.rectTransform.position = new Vector3(halfScreen - wC + wI, 35 + 20);
+            }
+            else
+            {
+                SelectorUI.rectTransform.position = new Vector3(halfScreen - wC + wI, -35 - 20);
+            }
+            int index = SelectorUI.transform.GetSiblingIndex();
+            SelectorUI.transform.SetSiblingIndex(index + 1);
+         
 			#endregion
 
 			//Try to find if our cursor is targetting something
