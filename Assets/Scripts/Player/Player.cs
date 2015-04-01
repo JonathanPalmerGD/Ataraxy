@@ -604,20 +604,20 @@ public class Player : Entity
 			}
 			
 			//Go up
-			if (Input.GetKeyDown(KeyCode.T))
+			if (Input.GetKey(KeyCode.T))
 			{
 				Vector3 newVel = new Vector3(0.0f, 1, 0.0f);
 				newVel.Normalize();
 				rigidbody.velocity = Vector3.zero;
-				ExternalMove(newVel, 20, ForceMode.VelocityChange);
+				ExternalMove(newVel, 30, ForceMode.VelocityChange);
 			}
 			//Go down
-			if (Input.GetKeyDown(KeyCode.G))
+			if (Input.GetKey(KeyCode.G))
 			{
 				Vector3 newVel = new Vector3(0.0f, -1, 0.0f);
 				newVel.Normalize();
 				rigidbody.velocity = Vector3.zero;
-				ExternalMove(newVel, 30, ForceMode.VelocityChange);
+				ExternalMove(newVel, 40, ForceMode.VelocityChange);
 			}
 			//Go Forward
 			if (Input.GetKey(KeyCode.LeftShift))
@@ -625,7 +625,7 @@ public class Player : Entity
 				Vector3 newVel = new Vector3(GetForward().x, 0, GetForward().z);
 				newVel.Normalize();
 				rigidbody.velocity = Vector3.zero;
-				ExternalMove(newVel, 80, ForceMode.VelocityChange);
+				ExternalMove(newVel, 110, ForceMode.VelocityChange);
 			}
 			//Stops all player movement.
 			if (Input.GetKeyDown(KeyCode.LeftControl))
@@ -770,7 +770,8 @@ public class Player : Entity
 		targetScanDir = transform.position + (ray.direction * 500);
 
 		//Mask so we don't consider targeting ourself.
-		LayerMask layerMask = ~(1 << LayerMask.NameToLayer ("Player"));
+		LayerMask layerMask = ~((1 << 2) | (1 << 8));
+		//LayerMask layerMask = ~(1 << LayerMask.NameToLayer ("Player"));
 
 		//If we hit something
 		if (Physics.Raycast(ray, out hit, 1500, layerMask))
