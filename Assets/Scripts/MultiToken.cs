@@ -29,7 +29,7 @@ public class MultiToken : MonoBehaviour
 
 	//Some audio info
 	public bool playOnPickup = true;
-	public AudioClip acquireClip;
+	public string acquireClipName;
 
 	// Use this for initialization
 	void Start () 
@@ -167,10 +167,9 @@ public class MultiToken : MonoBehaviour
 
 	public void PlayAudio()
 	{
-		if (playOnPickup && acquireClip != null)
+		if (playOnPickup)
 		{
-			player.gameObject.audio.clip = acquireClip;
-			player.gameObject.audio.Play();
+			AudioManager.Instance.MakeSource(acquireClipName).Play();
 		}
 	}
 

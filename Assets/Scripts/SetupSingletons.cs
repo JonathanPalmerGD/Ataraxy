@@ -12,6 +12,7 @@ public class SetupSingletons : MonoBehaviour
 		GameManager.Instance.Awake();
 		//UIManager.Instance.Awake();
 		UIManager.Instance.Init();
+		AudioManager.Instance.Init();
 		LootManager.Instance.Awake();
 		ModifierManager.Instance.Awake();
 
