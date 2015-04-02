@@ -72,6 +72,9 @@ public class Rocket : Projectile
 
 			det.Explode();
 		}
+
+		AudioManager.Instance.MakeSourceAtPos("NearExplosionB", transform.position).Play();
+
 		gameObject.particleSystem.enableEmission = false;
 		gameObject.collider.enabled = false;
 		body.renderer.enabled = false;

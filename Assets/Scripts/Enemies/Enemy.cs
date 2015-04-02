@@ -11,7 +11,21 @@ public class Enemy : NPC
 	/// </summary>
 	public Vector3 dirToTarget;
 	#region Combat State Information
-	public bool CanSeePlayer = false;
+	private bool canSeePlayer = false;
+	public bool CanSeePlayer
+	{
+		get { return canSeePlayer; }
+		set 
+		{
+			if (value != canSeePlayer)
+			{
+				GameManager.Instance.CanSeePlayer(this, value);
+			}
+			canSeePlayer = value; 
+		}
+	}
+
+
 	public enum EnemyState { Idle, Searching, Preparing, Attacking };
 	public EnemyState state;
 	public float stateTimer = 0;

@@ -292,6 +292,7 @@ public class Player : Entity
 			#region Handle Damage
 			if (Damaged)
 			{
+				//AudioManager.Instance.MakeSource("Hurt").Play();
 				DamageImage.color = flashColor;
 			}
 			else

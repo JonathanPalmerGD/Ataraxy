@@ -33,6 +33,7 @@ public class NullShield : MonoBehaviour
 					//Destroy it
 					DestroyProjectile(proj);
 
+					AudioManager.Instance.MakeSource("Reflect").Play();
 				}
 				//If it is on the same faction, do nothing.
 				else
@@ -49,6 +50,7 @@ public class NullShield : MonoBehaviour
 					GameObject fizzler = (GameObject)GameObject.Instantiate(fizzlePrefab, proj.transform.position, Quaternion.identity);
 					GameObject.Destroy(fizzler, 1);
 					DestroyProjectile(proj);
+					AudioManager.Instance.MakeSource("Reflect").Play();
 				}
 				//else
 				//{

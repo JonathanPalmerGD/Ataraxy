@@ -97,6 +97,7 @@ public class GlacialSling : Weapon
 			gDisks[i - 1].Shatter();
 			gDisks.RemoveAt(i - 1);
 		}
+
 	}
 
 	public void RemoveDisk(GlacialDisk removed)
