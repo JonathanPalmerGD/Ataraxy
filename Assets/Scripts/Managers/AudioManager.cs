@@ -24,7 +24,7 @@ public class AudioManager : Singleton<AudioManager>
 	[Header("Note: This variable is for display only")]
 	public int audioClipsLoaded;
 
-	public void Init()
+	public void Awake()
 	{
 		if (audioLib == null)
 		{
@@ -34,18 +34,18 @@ public class AudioManager : Singleton<AudioManager>
 		{
 			audioSourcePrefab = Resources.Load<GameObject>("Audio Source");
 		}
-		if (liveSources == null)
-		{
+		//if (liveSources == null)
+		//{
 			liveSources = new List<AudioSource>();
-		}
-		if (musicTracks == null)
-		{
+		//}
+		//if (musicTracks == null)
+		//{
 			musicTracks = new List<AudioSource>();
-		}
-		if (tracksActive == null)
-		{
+		//}
+		//if (tracksActive == null)
+		//{
 			tracksActive = new List<bool>();
-		}
+		//}
 	}
 
 	public void Update()
