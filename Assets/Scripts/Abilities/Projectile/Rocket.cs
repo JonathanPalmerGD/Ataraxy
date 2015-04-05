@@ -16,9 +16,16 @@ public class Rocket : Projectile
 	public Detonator explosive;
 	public GameObject body;
 
+	public AudioSource rocketThrust;
+
 	public override void Start()
 	{
 		body = transform.FindChild("Rocket Body").gameObject;
+		rocketThrust = AudioManager.Instance.MakeSource("iceSwish", transform.position, transform);
+
+		rocketThrust.loop = true;
+
+		rocketThrust.Play();
 	}
 
 	public override void Update()
@@ -31,6 +38,11 @@ public class Rocket : Projectile
 			{
 				if (target == null || !target.activeInHierarchy)
 				{
+					if (rocketThrust != null)
+					{
+						rocketThrust.Stop();
+					}
+
 					fuelRemaining = 0;
 				}
 				else
@@ -48,6 +60,10 @@ public class Rocket : Projectile
 		}
 		else
 		{
+			if (rocketThrust != null)
+			{
+				rocketThrust.Stop();
+			}
 			rigidbody.useGravity = true;
 			rigidbody.drag = .3f;
 			gameObject.particleSystem.enableEmission = false;
@@ -71,6 +87,11 @@ public class Rocket : Projectile
 			det = (Detonator)GameObject.Instantiate(explosive, transform.position, Quaternion.identity);
 
 			det.Explode();
+		}
+
+		if (rocketThrust != null)
+		{
+			rocketThrust.Stop();
 		}
 
 		AudioManager.Instance.MakeSourceAtPos("NearExplosionB", transform.position).Play();
