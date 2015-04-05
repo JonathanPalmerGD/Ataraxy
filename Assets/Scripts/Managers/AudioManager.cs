@@ -55,25 +55,35 @@ public class AudioManager : Singleton<AudioManager>
 		//We don't want to hold onto things forever. This could be udpated to object pooling
 		for (int i = 0; i < liveSources.Count; i++)
 		{
-			if(liveSources[i] == null)
+			if (liveSources[i] == null)
 			{
 				liveSources.RemoveAt(i);
 			}
-			if (liveSources[i].isPlaying == false)
+			else
 			{
-				Destroy(liveSources[i].gameObject, 3.5f);
-				liveSources.RemoveAt(i);
+				if (liveSources[i].isPlaying == false)
+				{
+					Destroy(liveSources[i].gameObject, 3.5f);
+					liveSources.RemoveAt(i);
+				}
 			}
 		}
 
 		//Clean up any null music tracks.
 		for (int i = 0; i < musicTracks.Count; i++)
 		{
-			if (musicTracks[i].isPlaying == false)
+			if (musicTracks[i] == null)
 			{
-				Destroy(musicTracks[i].gameObject, 3.5f);
-				tracksActive.RemoveAt(i);
 				musicTracks.RemoveAt(i);
+			}
+			else
+			{
+				if (musicTracks[i].isPlaying == false)
+				{
+					Destroy(musicTracks[i].gameObject, 3.5f);
+					tracksActive.RemoveAt(i);
+					musicTracks.RemoveAt(i);
+				}
 			}
 		}
 
