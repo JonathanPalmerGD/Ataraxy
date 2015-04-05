@@ -1,4 +1,10 @@
-﻿using UnityEngine;
+﻿//Written by Jonathan Palmer
+//Email: Jon@JonathanPalmerGD.com
+//Website: www.JonathanPalmerGD.com
+//Documentation: http://www.jonathanpalmergd.com/2015/04/05/unity-simple-audiomanager/
+//Feel free to use this script so long as you provide me credit and let me know you're using it!
+
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
