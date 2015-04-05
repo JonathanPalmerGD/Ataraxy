@@ -8,7 +8,7 @@ public class SetupSingletons : MonoBehaviour
 	void Awake()
 	{
 		Constants.GameDifficulty = SceneDifficulty;
-		AudioManager.Instance.Init();
+		AudioManager.Instance.Awake();
 		TerrainManager.Instance.Awake();
 		GameManager.Instance.Awake();
 		//UIManager.Instance.Awake();
