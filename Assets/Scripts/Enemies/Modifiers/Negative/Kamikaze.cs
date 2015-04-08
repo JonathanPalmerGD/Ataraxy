@@ -24,9 +24,9 @@ public class Kamikaze : Modifier
 
 	public override void Gained(int stacksGained = 0, bool newStack = false)
 	{
-		Carrier.LifeStealPer -= .3f * stacksGained;
-		Carrier.DamageAmplification += .3f * stacksGained;
-		Carrier.DamageMultiplier += stacksGained * .05f;
+		Carrier.LifeStealPer -= .1f * stacksGained;
+		Carrier.DamageAmplification += .05f * stacksGained;
+		Carrier.DamageMultiplier += stacksGained * .125f;
 		base.Gained(stacksGained, newStack);
 	}
 
