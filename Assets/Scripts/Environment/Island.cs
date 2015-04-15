@@ -226,6 +226,12 @@ public class Island : WorldObject
 		{
 			nearIslands = new List<Island>();
 		}
+
+		/* The idea here was to have individual islands tween in. This is scrapped for now.
+		GameObject go = new GameObject();
+		go.transform.SetParent(transform.parent);
+		transform.SetParent(go.transform);*/
+
 		gameObject.name = "Island: " + Nomenclature.GetName(Random.Range(0, 12), Random.Range(0, 12), Random.Range(0, 12), Random.Range(0, 12));
 
 		gameObject.tag = "Island";

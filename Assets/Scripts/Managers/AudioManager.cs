@@ -101,6 +101,17 @@ public class AudioManager : Singleton<AudioManager>
 	}
 
 	#region Music Management
+	public void SetTrackActivity(int trackNum, bool newState)
+	{
+		if (tracksActive.Count > trackNum)
+		{
+			tracksActive[trackNum] = newState;
+		}
+		else
+		{
+			Debug.LogWarning("[AudioManager]\n\tTried to alter a track that does not exist.\n");
+		}
+	}
 
 	public void AddMusicTrack(AudioSource audioSource, bool playing = false)
 	{
@@ -229,5 +240,4 @@ public class AudioManager : Singleton<AudioManager>
 		return null;
 	}
 	#endregion
-
 }

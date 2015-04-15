@@ -131,21 +131,30 @@ public class GameManager : Singleton<GameManager>
 			//This will be improved later with a state machine, but it is a simple approach.
 			if (enemiesEngaged.Count == 0)
 			{
-				AudioManager.Instance.tracksActive[0] = true;
-				AudioManager.Instance.tracksActive[1] = false;
-				AudioManager.Instance.tracksActive[2] = false;
+				AudioManager.Instance.SetTrackActivity(0, true);
+				AudioManager.Instance.SetTrackActivity(1, false);
+				AudioManager.Instance.SetTrackActivity(2, false);
+				//AudioManager.Instance.tracksActive[0] = true;
+				//AudioManager.Instance.tracksActive[1] = false;
+				//AudioManager.Instance.tracksActive[2] = false;
 			}
 			else if (enemiesEngaged.Count > 0 && enemiesEngaged.Count < 6)
 			{
-				AudioManager.Instance.tracksActive[0] = false;
-				AudioManager.Instance.tracksActive[1] = true;
-				AudioManager.Instance.tracksActive[2] = false;
+				AudioManager.Instance.SetTrackActivity(0, false);
+				AudioManager.Instance.SetTrackActivity(1, true);
+				AudioManager.Instance.SetTrackActivity(2, false);
+				//AudioManager.Instance.tracksActive[0] = false;
+				//AudioManager.Instance.tracksActive[1] = true;
+				//AudioManager.Instance.tracksActive[2] = false;
 			}
 			else
 			{
-				AudioManager.Instance.tracksActive[0] = false;
-				AudioManager.Instance.tracksActive[1] = false;
-				AudioManager.Instance.tracksActive[2] = true;
+				AudioManager.Instance.SetTrackActivity(0, false);
+				AudioManager.Instance.SetTrackActivity(1, false);
+				AudioManager.Instance.SetTrackActivity(2, true);
+				//AudioManager.Instance.tracksActive[0] = false;
+				//AudioManager.Instance.tracksActive[1] = false;
+				//AudioManager.Instance.tracksActive[2] = true;
 			}
 		}
 		else

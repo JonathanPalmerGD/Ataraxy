@@ -67,9 +67,13 @@ public class Cluster : WorldObject
 		
 		base.Start();
 		gameObject.tag = "Cluster";
-		iTween.MoveBy(clusterContents, iTween.Hash("y", TerrainManager.underworldYOffset, "easeType", "easeOutCirc", "speed", riseSpeed, "loopType", "none", "delay", .1));
+		//TweenInIslands();
+		float riseSpeedVariation = Random.Range(-(riseSpeed - 5), 115);
 
-		Invoke("ConfigureClusterNodes", 3.0f);
+		iTween.MoveBy(clusterContents, iTween.Hash("y", TerrainManager.underworldYOffset, "easeType", "easeOutCirc", "speed", riseSpeed + riseSpeedVariation, "loopType", "none", "delay", .1));
+
+		float timeDelay = TerrainManager.underworldYOffset / (riseSpeed + riseSpeedVariation);
+		Invoke("ConfigureClusterNodes", timeDelay);
 		//iTween.MoveBy(clusterContents, iTween.Hash("y", TerrainManager.underworldYOffset, "easeType", "easeOutBounce", "speed", 50, "loopType", "none", "delay", .1));
 	}
 	
@@ -90,7 +94,7 @@ public class Cluster : WorldObject
 		base.Update();
 	}
 	
-	#region Island Path Nodes
+	#region Island Configuration
 	#region Old Island Configuration
 	/// <summary>
 	/// Determines island neighbors for all existing islands.
@@ -186,6 +190,19 @@ public class Cluster : WorldObject
 		}
 	}
 
+	/// <summary>
+	/// For bringing in individual islands
+	/// </summary>
+	public void TweenInIslands()
+	{
+		//This has been scrapped for now given that the islands themselves would need parent objects to ensure island features & enemies rose with the island.
+		for (int i = 0; i < platforms.Count; i++)
+		{
+			float riseSpeedVariation = Random.Range(-15, 85);
+			iTween.MoveBy(platforms[i].gameObject.transform.parent.gameObject, iTween.Hash("y", TerrainManager.underworldYOffset, "easeType", "easeOutCirc", "speed", riseSpeed + riseSpeedVariation, "loopType", "none", "delay", .1));
+		}
+	}
+
 	public void ConfigureClusterNodes()
 	{
 		//inPlace is only set once we have finished rising.
@@ -228,7 +245,7 @@ public class Cluster : WorldObject
 					Island foundNeighbor = c[i].GetComponent<Island>();
 
 					//If the neighbor is valid & that cluster is in place
-					if (foundNeighbor != null && foundNeighbor.Family.inPlace)
+					if (foundNeighbor != null && foundNeighbor.Family && foundNeighbor.Family.inPlace)
 					{
 						//If we don't have that island registered
 						if (!island.nearIslands.Contains(foundNeighbor))
@@ -267,7 +284,6 @@ public class Cluster : WorldObject
 			GameObject newIsland = null;
 			if (TerrainManager.Instance.islandPrefabs.Count > 0)
 			{
-				
 				float yOffset = Random.Range(TerrainManager.minDistance.y, TerrainManager.maxDistance.y);
 
 				Vector3 newPosition = new Vector3(sample.x + transform.position.x, transform.position.y + yOffset, sample.y + transform.position.z);
