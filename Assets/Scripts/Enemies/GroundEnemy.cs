@@ -853,7 +853,10 @@ public class GroundEnemy : Enemy
 		{
 			PathNode n = lastLocation.NearestNode(transform.position);
 
-			Debug.DrawLine(transform.position, n.transform.position, Color.white);
+			if (n != null)
+			{
+				Debug.DrawLine(transform.position, n.transform.position, Color.white);
+			}
 		}
 	}
 	#endregion

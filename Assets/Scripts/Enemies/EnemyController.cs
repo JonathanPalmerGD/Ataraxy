@@ -750,7 +750,10 @@ public class EnemyController : MonoBehaviour
 		{
 			PathNode n = lastLocation.NearestNode(transform.position);
 
-			Debug.DrawLine(transform.position, n.transform.position, Color.white);
+			if (n != null)
+			{
+				Debug.DrawLine(transform.position, n.transform.position, Color.white);
+			}
 		}
 	}
 	#endregion

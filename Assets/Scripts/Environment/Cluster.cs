@@ -63,11 +63,13 @@ public class Cluster : WorldObject
 			//}
 		}
 
-		ConfigureIslands();
+		ConfigureClusterFeatures();
 		
 		base.Start();
 		gameObject.tag = "Cluster";
 		iTween.MoveBy(clusterContents, iTween.Hash("y", TerrainManager.underworldYOffset, "easeType", "easeOutCirc", "speed", riseSpeed, "loopType", "none", "delay", .1));
+
+		Invoke("ConfigureClusterNodes", 3.0f);
 		//iTween.MoveBy(clusterContents, iTween.Hash("y", TerrainManager.underworldYOffset, "easeType", "easeOutBounce", "speed", 50, "loopType", "none", "delay", .1));
 	}
 	
@@ -89,18 +91,19 @@ public class Cluster : WorldObject
 	}
 	
 	#region Island Path Nodes
+	#region Old Island Configuration
 	/// <summary>
 	/// Determines island neighbors for all existing islands.
 	/// </summary>
 	public void ConfigureIslands()
 	{
-		for (int i = 0; i < platforms.Count; i++)
+		/*for (int i = 0; i < platforms.Count; i++)
 		{
 			ConfigureIsland(platforms[i]);
-		}
+		}*/
 
 		if (TerrainManager.CreateIslandFeatures)
-		{ 
+		{
 			//To check if we're making progression impossible clusters.
 			if(encounterCounter == 0)
 			{
@@ -126,6 +129,7 @@ public class Cluster : WorldObject
 		//Debug.Log("Distance from island: " + island.name + "\n" + (int)dist + " units.\n");
 		Collider[] c = Physics.OverlapSphere(island.transform.position, dist);
 
+		#region Neighbor Overlap Spheres
 		//For each collider
 		for (int i = 0; i < c.Length; i++)
 		{
@@ -157,6 +161,7 @@ public class Cluster : WorldObject
 				}
 			}
 		}
+		#endregion
 
 		//Debug.Log("Finished Island (" + island.name + ") Configuration.\nI have " + island.nearIslands.Count + " neighbors\n");
 
@@ -169,6 +174,87 @@ public class Cluster : WorldObject
 			island.PlaceRandomObject();
 			island.PlaceCosmeticObjects();
 		}
+	}
+	#endregion
+
+	public void ConfigureClusterFeatures()
+	{
+		for (int i = 0; i < platforms.Count; i++)
+		{
+			platforms[i].Family = this;
+			ProcessFeatures(platforms[i]);
+		}
+	}
+
+	public void ConfigureClusterNodes()
+	{
+		//inPlace is only set once we have finished rising.
+		//It is checked when handling neighbor connection setup to avoid setting incorrect neighbors.
+		inPlace = true;
+
+		for (int i = 0; i < platforms.Count; i++)
+		{
+			ProcessNodes(platforms[i]);
+		}
+	}
+
+	public void ProcessFeatures(Island island)
+	{
+		if (TerrainManager.CreateIslandFeatures)
+		{
+			island.PlaceRandomEncounter();
+			//island.PlaceRandomEnemy();
+			island.PlaceRandomObject();
+			island.PlaceCosmeticObjects();
+		}
+	}
+
+	public void ProcessNodes(Island island)
+	{
+		island.CreatePathNodes();
+
+		float dist = Mathf.Max(island.transform.localScale.x, island.transform.localScale.z) + TerrainManager.IslandNeighborDist;
+		//Debug.Log("Distance from island: " + island.name + "\n" + (int)dist + " units.\n");
+		Collider[] c = Physics.OverlapSphere(island.transform.position, dist);
+
+		#region Neighbor Overlap Spheres
+		//For each collider
+		for (int i = 0; i < c.Length; i++)
+		{
+			if (c[i].gameObject != null && c[i].gameObject.tag == "Island")
+			{
+				if (island.gameObject != c[i].gameObject)
+				{
+					Island foundNeighbor = c[i].GetComponent<Island>();
+
+					//If the neighbor is valid & that cluster is in place
+					if (foundNeighbor != null && foundNeighbor.Family.inPlace)
+					{
+						//If we don't have that island registered
+						if (!island.nearIslands.Contains(foundNeighbor))
+						{
+							//I don't think we need to check if they have us registered, since neighbors always register both involved islands.
+
+							//Add us to both
+							island.nearIslands.Add(foundNeighbor);
+							foundNeighbor.nearIslands.Add(island);
+
+							//Debug.DrawLine(island.transform.position, foundNeighbor.transform.position, Color.blue, 36.0f);
+						}
+					}
+				}
+				else
+				{
+					//To make sure we are dodging illegal neighbors.
+					//Debug.Log(c[i].gameObject.name + "\nMy Name: " + island.name);
+				}
+			}
+		}
+		#endregion
+
+		//Debug.Log("Finished Island (" + island.name + ") Configuration.\nI have " + island.nearIslands.Count + " neighbors\n");
+
+		island.ConfigureNodes();
 	}
 	#endregion
 
