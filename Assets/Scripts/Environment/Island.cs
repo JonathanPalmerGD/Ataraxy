@@ -25,8 +25,10 @@ public class Island : WorldObject
 	//This is the connections that this island has to other islands.
 	public Dictionary<Island, DestinationConnection> islandConnections;
 	public List<PathNode> nodes;
+	public List<GameObject> assistingPlatforms;
 	public float connectionsInDictionary = 0;
 	public bool editorCreateNodes = false;
+	public bool specialIsland = false;
 
 	//This variable shouldnt get changed in the inspector.
 	[HideInInspector]
@@ -34,6 +36,10 @@ public class Island : WorldObject
 
 	public new void Start()
 	{
+		if (assistingPlatforms == null)
+		{
+			assistingPlatforms = new List<GameObject>();
+		}
 		/*nearIslands = new List<Island>();
 		gameObject.name = "Island: " + Nomenclature.GetName(Random.Range(0, 12), Random.Range(0, 12), Random.Range(0, 12), Random.Range(0, 12));
 
@@ -227,6 +233,11 @@ public class Island : WorldObject
 			nearIslands = new List<Island>();
 		}
 
+		if (assistingPlatforms == null)
+		{
+			assistingPlatforms = new List<GameObject>();
+		}
+
 		/* The idea here was to have individual islands tween in. This is scrapped for now.
 		GameObject go = new GameObject();
 		go.transform.SetParent(transform.parent);
@@ -236,6 +247,14 @@ public class Island : WorldObject
 
 		gameObject.tag = "Island";
 		//PlaceRandomObject();
+
+		//Set any children to the parent object.
+		for (int i = 0; i < transform.childCount; i++)
+		{
+			Transform childTransform = transform.GetChild(i);
+			childTransform.SetParent(transform.parent);
+			assistingPlatforms.Add(childTransform.gameObject);
+		}
 
 		//Used by special case debug platforms.
 		if (editorCreateNodes)

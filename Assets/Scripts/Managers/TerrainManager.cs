@@ -344,6 +344,7 @@ public class TerrainManager : Singleton<TerrainManager>
 		Stack<PathNode> path = new Stack<PathNode>();
 
 		//Are we connected to that island?
+		//if (destination.Family.inPlace && start.islandConnections.ContainsKey(destination))
 		if (start.islandConnections.ContainsKey(destination))
 		{
 			//If we are, get the connection.

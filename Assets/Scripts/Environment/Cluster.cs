@@ -70,9 +70,9 @@ public class Cluster : WorldObject
 		//TweenInIslands();
 		float riseSpeedVariation = Random.Range(-(riseSpeed - 5), 115);
 
-		iTween.MoveBy(clusterContents, iTween.Hash("y", TerrainManager.underworldYOffset, "easeType", "easeOutCirc", "speed", riseSpeed + riseSpeedVariation, "loopType", "none", "delay", .1));
+		iTween.MoveBy(clusterContents, iTween.Hash("y", TerrainManager.underworldYOffset, "easeType", "easeOutCirc", "speed", riseSpeed + riseSpeedVariation, "loopType", "none", "delay", .2));
 
-		float timeDelay = TerrainManager.underworldYOffset / (riseSpeed + riseSpeedVariation);
+		float timeDelay = .6f + TerrainManager.underworldYOffset / (riseSpeed + riseSpeedVariation);
 		Invoke("ConfigureClusterNodes", timeDelay);
 		//iTween.MoveBy(clusterContents, iTween.Hash("y", TerrainManager.underworldYOffset, "easeType", "easeOutBounce", "speed", 50, "loopType", "none", "delay", .1));
 	}
@@ -281,32 +281,40 @@ public class Cluster : WorldObject
 		PoissonDiscSampler pds = new PoissonDiscSampler(TerrainManager.clusterSize.x, TerrainManager.clusterSize.z, 16 + (sizeBonus * 1.2f), poissonKVal);
 		foreach (Vector2 sample in pds.Samples())
 		{
-			GameObject newIsland = null;
+			Island newIsland = null;
+			GameObject newIslandGO = null;
+			GameObject choosenIslandPrefab = null;
+			//Island newIsland
 			if (TerrainManager.Instance.islandPrefabs.Count > 0)
 			{
+				//Select an island prefab.
+				choosenIslandPrefab = TerrainManager.Instance.islandPrefabs[Random.Range(0, TerrainManager.Instance.islandPrefabs.Count)];
+				
 				float yOffset = Random.Range(TerrainManager.minDistance.y, TerrainManager.maxDistance.y);
 
 				Vector3 newPosition = new Vector3(sample.x + transform.position.x, transform.position.y + yOffset, sample.y + transform.position.z);
 				newPosition -= TerrainManager.clusterSize / 2;
 
-				newIsland = (GameObject)GameObject.Instantiate(
-					TerrainManager.Instance.islandPrefabs[Random.Range(0, TerrainManager.Instance.islandPrefabs.Count)], 
+				newIslandGO = (GameObject)GameObject.Instantiate(choosenIslandPrefab, 
 					newPosition, Quaternion.identity);
 
-				newIsland.GetComponent<Island>().Init();
+				newIsland = newIslandGO.GetComponent<Island>();
+
+				ApplyIslandParent(newIsland);
+
+				newIsland.Init();
 
 				ApplyRandomScale(newIsland, true);
 				ApplyRandomTexturing(newIsland);
-				ApplyIslandParent(newIsland);
 
 				//newIsland.GetComponent<Island>().CreatePathNodes();
 				//ApplyRandomRotation(newIsland);
 
-				platforms.Add(newIsland.GetComponent<Island>());
+				platforms.Add(newIslandGO.GetComponent<Island>());
 			}
 		}
 
-		CreateLargeIsland();
+		//CreateLargeIsland();
 	}
 
 	public void CreateLandmarksPoissonApproach()
@@ -327,9 +335,9 @@ public class Cluster : WorldObject
 					newPosition, Quaternion.identity);
 
 				//ApplyRandomScale(newLandmark, true);
-				ApplyRandomRotation(newLandmark);
+				//ApplyRandomRotation(newLandmark);
 				//ApplyRandomTexturing(newLandmark);
-				ApplyIslandParent(newLandmark);
+				//ApplyIslandParent(newLandmark);
 
 			}
 		}
@@ -337,9 +345,9 @@ public class Cluster : WorldObject
 	#endregion
 
 	#region Island Modification
-	public void ApplyRandomScale(GameObject island, bool poisson)
+	public void ApplyRandomScale(Island island, bool poisson)
 	{
-		if (RandomScale)
+		if (RandomScale && !island.specialIsland)
 		{
 			Vector3 scale = Vector3.zero;
 
@@ -374,9 +382,9 @@ public class Cluster : WorldObject
 		}
 	}
 
-	public void ApplyRandomRotation(GameObject island)
+	public void ApplyRandomRotation(Island island)
 	{
-		if (RandomRotation)
+		if (RandomRotation && !island.specialIsland)
 		{
 			Vector3 rndRotation = transform.eulerAngles;
 			rndRotation = new Vector3(
@@ -387,7 +395,7 @@ public class Cluster : WorldObject
 		}
 	}
 
-	public void ApplyRandomTexturing(GameObject island)
+	public void ApplyRandomTexturing(Island island)
 	{
 		/*if (RandomTexture)
 		{
@@ -396,8 +404,8 @@ public class Cluster : WorldObject
 			island.renderer.material.color = new Color(Random.Range(.7f, 1f), Random.Range(.7f, 1f), Random.Range(.7f, 1f));*/
 		//}
 
-		
-		if (RandomTexture)
+
+		if (RandomTexture/* && !island.specialIsland*/)
 		{
 			island.renderer.material.mainTexture = TerrainManager.Instance.textures[Random.Range(0, TerrainManager.Instance.textures.Count)];
 			island.renderer.material.mainTextureScale = new Vector2(Random.Range(5, 25), Random.Range(5, 25));
@@ -405,12 +413,12 @@ public class Cluster : WorldObject
 		}
 	}
 
-	public void ApplyIslandParent(GameObject island)
+	public void ApplyIslandParent(Island island)
 	{
 		island.transform.SetParent(clusterContents.transform);
 	}
 
-	public void CreateLargeIsland()
+	/*public void CreateLargeIsland()
 	{
 		if (LargeIsland)
 		{
@@ -467,7 +475,7 @@ public class Cluster : WorldObject
 			//Debug.Log("Distance from island: " + island.name + "\n" + (int)dist + " units.\n");
 			//Collider[] c = Physics.OverlapSphere(island.transform.position, dist);
 		}
-	}
+	}*/
 	#endregion
 
 	public void LocalizeNeighbors()
