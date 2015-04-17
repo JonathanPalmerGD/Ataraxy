@@ -377,6 +377,10 @@ public class Cluster : WorldObject
 				scale.z = scale.y;
 			}
 			scale.y = smallest;
+			if (island.miniIsland)
+			{
+				scale = new Vector3(scale.x / 2.5f, scale.y / 2.5f, scale.z / 2.5f);
+			}
 
 			island.transform.localScale = scale;
 		}

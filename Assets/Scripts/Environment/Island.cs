@@ -29,6 +29,7 @@ public class Island : WorldObject
 	public float connectionsInDictionary = 0;
 	public bool editorCreateNodes = false;
 	public bool specialIsland = false;
+	public bool miniIsland = false;
 
 	//This variable shouldnt get changed in the inspector.
 	[HideInInspector]
@@ -279,21 +280,24 @@ public class Island : WorldObject
 
 			nodes.Add(CreateNewNode(distAbovePlatform, adjustment));
 
-			//Forward Right
-			adjustment = Vector3.right * (transform.localScale.x / 2 * .90f) + Vector3.forward * (transform.localScale.z / 2 * .90f);
-			nodes.Add(CreateNewNode(distAbovePlatform, adjustment));
+			if (!miniIsland)
+			{
+				//Forward Right
+				adjustment = Vector3.right * (transform.localScale.x / 2 * .90f) + Vector3.forward * (transform.localScale.z / 2 * .90f);
+				nodes.Add(CreateNewNode(distAbovePlatform, adjustment));
 
-			//Backward Right
-			adjustment = Vector3.right * (transform.localScale.x / 2 * .90f) - Vector3.forward * (transform.localScale.z / 2 * .90f);
-			nodes.Add(CreateNewNode(distAbovePlatform, adjustment));
+				//Backward Right
+				adjustment = Vector3.right * (transform.localScale.x / 2 * .90f) - Vector3.forward * (transform.localScale.z / 2 * .90f);
+				nodes.Add(CreateNewNode(distAbovePlatform, adjustment));
 
-			//Backward Left
-			adjustment = -Vector3.right * (transform.localScale.x / 2 * .90f) - Vector3.forward * (transform.localScale.z / 2 * .90f);
-			nodes.Add(CreateNewNode(distAbovePlatform, adjustment));
+				//Backward Left
+				adjustment = -Vector3.right * (transform.localScale.x / 2 * .90f) - Vector3.forward * (transform.localScale.z / 2 * .90f);
+				nodes.Add(CreateNewNode(distAbovePlatform, adjustment));
 
-			//Forward Left
-			adjustment = -Vector3.right * (transform.localScale.x / 2 * .90f) + Vector3.forward * (transform.localScale.z / 2 * .90f);
-			nodes.Add(CreateNewNode(distAbovePlatform, adjustment));
+				//Forward Left
+				adjustment = -Vector3.right * (transform.localScale.x / 2 * .90f) + Vector3.forward * (transform.localScale.z / 2 * .90f);
+				nodes.Add(CreateNewNode(distAbovePlatform, adjustment));
+			}
 
 			//We have set up our nodes
 			nodesInitialized = true;

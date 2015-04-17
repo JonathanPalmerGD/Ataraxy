@@ -345,7 +345,20 @@ public class TerrainManager : Singleton<TerrainManager>
 
 		//Are we connected to that island?
 		//if (destination.Family.inPlace && start.islandConnections.ContainsKey(destination))
-		if (start.islandConnections.ContainsKey(destination))
+		/*if (start == null)
+		{
+			Debug.Log("Hit\n");
+		}
+		if (start.islandConnections != null)
+		{
+			Debug.Log("Hit\n");
+		}
+		if (destination != null)
+		{
+			Debug.Log("Hit\n");
+		}*/
+
+		if (start.islandConnections != null && start.islandConnections.ContainsKey(destination))
 		{
 			//If we are, get the connection.
 			DestinationConnection dc = start.islandConnections[destination];
@@ -443,7 +456,7 @@ public class TerrainManager : Singleton<TerrainManager>
 					}
 					else
 					{
-						Debug.LogWarning("Connection fizzled.\n");
+						//Debug.LogWarning("Connection fizzled.\n");
 						return new Stack<PathNode>();
 					}
 				}
