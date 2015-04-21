@@ -18,7 +18,7 @@ public class Cluster : WorldObject
 	#region Island Platform Information
 	public List<Island> platforms;
 	public GameObject clusterContents;
-
+	public bool generateIslands = true;
 	#endregion
 
 	#region Biome Properties
@@ -31,6 +31,8 @@ public class Cluster : WorldObject
 	public bool RandomRotation = true;
 	public bool RandomTexture = true;
 	public bool RandomLandmarks = true;
+
+	public List<Material> islandMaterials;
 	#endregion
 
 	#region Cluster Type
@@ -63,21 +65,27 @@ public class Cluster : WorldObject
 		RandomScale = Random.Range(0, 10) - sizeBonus / 10 < 7.5f;
 		
 		RandomRotation = Random.Range(0, 10) < 8;
-		RandomTexture = Random.Range(0, 10) < 8;
-		RandomLandmarks = Random.Range(0, 10) > 7;
+		RandomTexture = true;
 
-		CreateIslandsPoissonApproach();
-		if (RandomLandmarks)
+		if (islandMaterials == null)
 		{
-			//TerrainManager.Instance.CreateNewCluster(this, ClusterType.Landmark);
-			//if (Random.Range(0, 100) > 90)
-			//{
-			//CreateLandmarksPoissonApproach();
-			//}
+			ConfigureBiomeMaterials();
 		}
 
-		ConfigureClusterFeatures();
-		
+		//RandomTexture = Random.Range(0, 10) < 8;
+		RandomLandmarks = Random.Range(0, 10) > 7;
+
+		if (generateIslands)
+		{
+			CreateIslandsPoissonApproach();
+			ConfigureClusterFeatures();
+		}
+	
+		if (RandomLandmarks)
+		{
+			Invoke("CreateNeighborLandmark", 0.5f);
+		}
+
 		base.Start();
 		gameObject.tag = "Cluster";
 		//TweenInIslands();
@@ -89,7 +97,16 @@ public class Cluster : WorldObject
 		Invoke("ConfigureClusterNodes", timeDelay);
 		//iTween.MoveBy(clusterContents, iTween.Hash("y", TerrainManager.underworldYOffset, "easeType", "easeOutBounce", "speed", 50, "loopType", "none", "delay", .1));
 	}
-	
+
+	private void CreateNeighborLandmark()
+	{
+		RandomLandmarks = false; 
+		if (cType != ClusterType.Landmark)
+		{
+			TerrainManager.Instance.CreateNewCluster(this, ClusterType.Landmark);
+		}
+	}
+
 	public override void Update() 
 	{
 		//Replced by the iTween call.
@@ -200,6 +217,30 @@ public class Cluster : WorldObject
 		{
 			platforms[i].Family = this;
 			ProcessFeatures(platforms[i]);
+		}
+	}
+
+	public void ConfigureBiomeMaterials(List<Material> biomeMats = null)
+	{
+		if (biomeMats == null)
+		{
+			islandMaterials = new List<Material>();
+
+			for (int i = 0; i < 3; i++)
+			{
+				Material newMat = new Material(Shader.Find("Diffuse"));
+				newMat.mainTexture = TerrainManager.Instance.textures[Random.Range(0, TerrainManager.Instance.textures.Count)];
+				newMat.mainTextureScale = new Vector2(Random.Range(5, 25), Random.Range(5, 25));
+				newMat.color = new Color(Random.Range(.7f, 1f), Random.Range(.7f, 1f), Random.Range(.7f, 1f));
+				islandMaterials.Add(newMat);
+			}
+		}
+		else
+		{
+			for (int i = 0; i < biomeMats.Count; i++)
+			{
+				islandMaterials.Add(biomeMats[i]);
+			}
 		}
 	}
 
@@ -414,20 +455,28 @@ public class Cluster : WorldObject
 
 	public void ApplyRandomTexturing(Island island)
 	{
-		/*if (RandomTexture)
-		{
-			island.renderer.material = TerrainManager.Instance.terrainMats[Random.Range(0, TerrainManager.Instance.terrainMats.Count)];
-			/*island.renderer.material.mainTextureScale = new Vector2(Random.Range(5, 25), Random.Range(5, 25));
-			island.renderer.material.color = new Color(Random.Range(.7f, 1f), Random.Range(.7f, 1f), Random.Range(.7f, 1f));*/
+		//if (islandMaterials != null)
+		//{
+		//	island.renderer.material = islandMaterials[Random.Range(0, islandMaterials.Count)];
 		//}
+		//else
+		//{
+
+			/*if (RandomTexture)
+			{
+				island.renderer.material = TerrainManager.Instance.terrainMats[Random.Range(0, TerrainManager.Instance.terrainMats.Count)];
+				/*island.renderer.material.mainTextureScale = new Vector2(Random.Range(5, 25), Random.Range(5, 25));
+				island.renderer.material.color = new Color(Random.Range(.7f, 1f), Random.Range(.7f, 1f), Random.Range(.7f, 1f));*/
+			//}
 
 
-		if (RandomTexture/* && !island.specialIsland*/)
-		{
-			island.renderer.material.mainTexture = TerrainManager.Instance.textures[Random.Range(0, TerrainManager.Instance.textures.Count)];
-			island.renderer.material.mainTextureScale = new Vector2(Random.Range(5, 25), Random.Range(5, 25));
-			island.renderer.material.color = new Color(Random.Range(.7f, 1f), Random.Range(.7f, 1f), Random.Range(.7f, 1f));
-		}
+			if (RandomTexture/* && !island.specialIsland*/)
+			{
+				island.renderer.material.mainTexture = TerrainManager.Instance.textures[Random.Range(0, TerrainManager.Instance.textures.Count)];
+				island.renderer.material.mainTextureScale = new Vector2(Random.Range(5, 25), Random.Range(5, 25));
+				island.renderer.material.color = new Color(Random.Range(.7f, 1f), Random.Range(.7f, 1f), Random.Range(.7f, 1f));
+			}
+		//}
 	}
 
 	public void ApplyIslandParent(Island island)
