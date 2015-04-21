@@ -6,6 +6,7 @@ using System.Linq;
 public class Cluster : WorldObject
 {
 	public int encounterCounter = 0;
+	#region Neighbor Information
 	public Cluster[] neighborClusters = new Cluster[8];
 	//This variable exists because we use an array of clusters for storing neighbors. We need to 
 	/// <summary>
@@ -13,24 +14,37 @@ public class Cluster : WorldObject
 	/// Since order of the array matters, we have to track this ourself.
 	/// </summary>
 	public int neighborsPopulated = 0;
+	#endregion
+	#region Island Platform Information
 	public List<Island> platforms;
-	public int poissonKVal = 20;
-	public float sizeBonus = 0;
 	public GameObject clusterContents;
 
+	#endregion
+
+	#region Biome Properties
+	public int poissonKVal = 20;
+	public float sizeBonus = 0;
+
+	public float tiltDeviation;
+
+	public bool RandomScale = true;
+	public bool RandomRotation = true;
+	public bool RandomTexture = true;
+	public bool RandomLandmarks = true;
+	#endregion
+
+	#region Cluster Type
+	public enum ClusterType { Biome = 0, Boss, Rare, Landmark };
+	public ClusterType cType = ClusterType.Biome;
+	#endregion
+
+	#region Rising
 	//private Vector3 start;
 	public bool inPlace = false;
 
 	public float riseCounter = 0;
 	private float riseSpeed = 35.0f;
-
-	public float tiltDeviation;
-
-	public bool LargeIsland = true;
-	public bool RandomScale = true;
-	public bool RandomRotation = true;
-	public bool RandomTexture = true;
-	public bool RandomLandmarks = true;
+	#endregion
 
 	public override void Start()
 	{
@@ -44,12 +58,10 @@ public class Cluster : WorldObject
 		poissonKVal = Random.Range(TerrainManager.poissonMinK, TerrainManager.poissonMaxK);
 		sizeBonus = Random.Range(0, TerrainManager.minSizeHor);
 		tiltDeviation = Random.Range(TerrainManager.minTiltDeviation, TerrainManager.maxTiltDeviation);
-		//Debug.Log(tiltDeviation);
 
 		//This is to help ensure that clusters with large islands will always have random scale applied to avoid sparse terrain
 		RandomScale = Random.Range(0, 10) - sizeBonus / 10 < 7.5f;
-		//LargeIsland = Random.Range(0, 10) < 7;
-		LargeIsland = false;
+		
 		RandomRotation = Random.Range(0, 10) < 8;
 		RandomTexture = Random.Range(0, 10) < 8;
 		RandomLandmarks = Random.Range(0, 10) > 7;
@@ -57,6 +69,7 @@ public class Cluster : WorldObject
 		CreateIslandsPoissonApproach();
 		if (RandomLandmarks)
 		{
+			//TerrainManager.Instance.CreateNewCluster(this, ClusterType.Landmark);
 			//if (Random.Range(0, 100) > 90)
 			//{
 			//CreateLandmarksPoissonApproach();
@@ -421,65 +434,6 @@ public class Cluster : WorldObject
 	{
 		island.transform.SetParent(clusterContents.transform);
 	}
-
-	/*public void CreateLargeIsland()
-	{
-		if (LargeIsland)
-		{
-			Debug.Log("Creating Large Island\n");
-			float xPos = transform.position.x - Random.Range(-TerrainManager.clusterSize.x/2, TerrainManager.clusterSize.x/2);
-			float zPos = transform.position.z - Random.Range(-TerrainManager.clusterSize.z/2, TerrainManager.clusterSize.z/2);
-
-			Vector3 megaIslandPosition = new Vector3(xPos, transform.position.y, zPos);
-
-			Vector3 randomIslandPoint = megaIslandPosition;
-			
-			Vector3 scale = Vector3.zero;
-
-			scale = new Vector3(Random.Range(60, 75), Random.Range(5, 10), Random.Range(60, 75));
-
-			float dist = Mathf.Min(scale.x, scale.z);
-
-			Collider[] c = Physics.OverlapSphere(randomIslandPoint, dist);
-			for (int i = 0; i < c.Length; i++)
-			{
-				if (c[i].gameObject.tag == "Island")
-				{
-					platforms.Remove(c[i].GetComponent<Island>());
-					Destroy(c[i].gameObject);
-				}
-			}
-
-			
-			GameObject newIsland = (GameObject)GameObject.Instantiate(
-				TerrainManager.Instance.islandPrefabs[Random.Range(0, TerrainManager.Instance.islandPrefabs.Count)],
-				megaIslandPosition, Quaternion.identity);
-
-			newIsland.GetComponent<Island>().Init();
-
-
-			
-			newIsland.transform.localScale = scale;
-
-			ApplyRandomTexturing(newIsland);
-
-			ApplyIslandParent(newIsland);
-
-			newIsland.GetComponent<Island>().CreatePathNodes();
-			ApplyRandomRotation(newIsland);
-
-			platforms.Add(newIsland.GetComponent<Island>());
-
-			//Pick a random point within the area.
-			//Do a spherecast of that point
-			//Make an island slightly larger than that point (very flat)
-			//Delete all islands that touched that point.
-
-			//float dist = Mathf.Max(island.transform.localScale.x, island.transform.localScale.z) + TerrainManager.IslandNeighborDist;
-			//Debug.Log("Distance from island: " + island.name + "\n" + (int)dist + " units.\n");
-			//Collider[] c = Physics.OverlapSphere(island.transform.position, dist);
-		}
-	}*/
 	#endregion
 
 	public void LocalizeNeighbors()

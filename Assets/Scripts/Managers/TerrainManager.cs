@@ -45,6 +45,13 @@ public class TerrainManager : Singleton<TerrainManager>
 	public List<GameObject> encounterPrefabs;
 	public List<GameObject> islandPrefabs;
 	public List<GameObject> landmarkPrefabs;
+
+	#region Clusters
+	public List<GameObject> bossClusterPrefabs;
+	public List<GameObject> landmarkClusterPrefabs;
+	public List<GameObject> biomeClusterPrefabs;
+	public List<GameObject> rareClusterPrefabs;
+	#endregion
 	#endregion
 
 	public override void Awake()
@@ -62,6 +69,15 @@ public class TerrainManager : Singleton<TerrainManager>
 		cosmeticFeatures = Resources.LoadAll<GameObject>("TerrainCosmetics").ToList();
 		enemyPrefabs = Resources.LoadAll<GameObject>("Enemies").ToList();
 		encounterPrefabs = Resources.LoadAll<GameObject>("Encounters").ToList();
+
+		bossClusterPrefabs = new List<GameObject>();
+		landmarkClusterPrefabs = new List<GameObject>();
+		biomeClusterPrefabs = new List<GameObject>();
+		rareClusterPrefabs = new List<GameObject>();
+		bossClusterPrefabs = Resources.LoadAll<GameObject>("Clusters/Boss").ToList();
+		landmarkClusterPrefabs = Resources.LoadAll<GameObject>("Clusters/Landmark").ToList();
+		biomeClusterPrefabs = Resources.LoadAll<GameObject>("Clusters/Biomes").ToList();
+		rareClusterPrefabs = Resources.LoadAll<GameObject>("Clusters/Rare").ToList();
 	}
 	#region Cluster Setup
 	public void RegisterCluster(Cluster reportingCluster)
@@ -83,14 +99,16 @@ public class TerrainManager : Singleton<TerrainManager>
 		ResetClusters();
 	}
 
-	public void CreateNewCluster(Cluster center)
+	public void CreateNewCluster(Cluster center, Cluster.ClusterType newClusterType = default(Cluster.ClusterType))
 	{
 		if (center != null)
 		{
 			//If the cluster's neighbors aren't full, make a new one.
 			if (center.neighborsPopulated < 8)
 			{
-				Cluster c = null;
+				Cluster newCluster = null;
+				GameObject newClusterPrefab = GetClusterPrefab(newClusterType);
+
 				int tries = 0;
 				while (tries < 8)
 				{
@@ -100,59 +118,73 @@ public class TerrainManager : Singleton<TerrainManager>
 
 					if (center.neighborClusters[direction] == null)
 					{
-						//We want to create a new cluster near an existing one. We use center.GetFinalPosition to avoid an incorrect target height.
-						c = ((GameObject)GameObject.Instantiate(clusterPrefab, center.transform.position, Quaternion.identity)).GetComponent<Cluster>();
+						if (newClusterPrefab != null)
+						{
+							//We want to create a new cluster near an existing one. We use center.GetFinalPosition to avoid an incorrect target height.
+							newCluster = ((GameObject)GameObject.Instantiate(newClusterPrefab, center.transform.position, Quaternion.identity)).GetComponent<Cluster>();
 
-						c.transform.position += FindOffsetOfDir(direction);
-						c.clusterContents.transform.position -= Vector3.up * underworldYOffset;
+							newCluster.transform.position += FindOffsetOfDir(direction);
+							newCluster.clusterContents.transform.position -= Vector3.up * underworldYOffset;
 
-						c.RandomLandmarks = true;
+							newCluster.RandomLandmarks = true;
 
-
-						tries = 1000;
+							tries = 1000;
+						}
+						else
+						{
+							Debug.LogError("[TerrainManager]\tCould not create cluster of type " + newClusterType.ToString() + "\nCluster Prefab was null.");
+						}
 					}
 				}
 
-				SetupNeighborClusters(c);
-
-				#region Setup Neighbor Clusters (Was exported)
-				/*if (c.neighborClusters != null)
-			{
-				//Loop through all the potential neighbors.
-				for (int i = 0; i < c.neighborClusters.Length; i++)
+				if (newCluster != null)
 				{
-					//Try to find a cluster there.
-					Cluster neighborC = FindNearestCluster(c.transform.position + FindOffsetOfDir(i), 10);
-
-					//If we find one
-					if (neighborC != null)
-					{
-						//Debug.DrawLine(c.transform.position, neighborC.transform.position + Vector3.up * i, Color.green, 36.0f);
-
-						//Register ourselves with it. Use the opposite index of ourselves.
-						neighborC.neighborClusters[FindOppositeDirIndex(i)] = c;
-
-						//Set our neighbor as the newly found cluster.
-						c.neighborClusters[i] = c;
-
-						//Increase both's neighborCount.
-						c.neighborsPopulated++;
-						neighborC.neighborsPopulated++;
-					}
+					SetupNeighborClusters(newCluster);
 				}
-			}
-			else
-			{
-				Debug.LogError("Error with cluster neighbor generation\n");
-			}*/
-				#endregion
 			}
 			else
 			{
 				//This a debug error for troubleshooting cluster generation.
 				//Debug.LogError("All neighbor slots are filled. Cannot create cluster\n");
 			}
+				
 		}
+	}
+
+	private GameObject GetClusterPrefab(Cluster.ClusterType newClusterType)
+	{
+		GameObject prefabToCreate = null;	
+
+		if (newClusterType == Cluster.ClusterType.Biome)
+		{
+			if (biomeClusterPrefabs.Count > 0)
+			{
+				prefabToCreate = biomeClusterPrefabs[Random.Range(0, biomeClusterPrefabs.Count)];
+			}
+		}
+		else if (newClusterType == Cluster.ClusterType.Rare)
+		{
+			if (rareClusterPrefabs.Count > 0)
+			{
+				prefabToCreate = rareClusterPrefabs[Random.Range(0, rareClusterPrefabs.Count)];
+			}
+		}
+		else if (newClusterType == Cluster.ClusterType.Boss)
+		{
+			if (bossClusterPrefabs.Count > 0)
+			{
+				prefabToCreate = bossClusterPrefabs[Random.Range(0, bossClusterPrefabs.Count)];
+			}
+		}
+		else if (newClusterType == Cluster.ClusterType.Landmark)
+		{
+			if (landmarkClusterPrefabs.Count > 0)
+			{
+				prefabToCreate = landmarkClusterPrefabs[Random.Range(0, landmarkClusterPrefabs.Count)];
+			}
+		}
+
+		return prefabToCreate;
 	}
 
 	private void SetupNeighborClusters(Cluster center)
@@ -165,7 +197,7 @@ public class TerrainManager : Singleton<TerrainManager>
 #if UNITY_EDITOR
 				if (drawDebug)
 				{
-					Debug.DrawLine(center.transform.position, center.transform.position + FindOffsetOfDir(i) + Vector3.up * 220, Color.red, 10f);
+					Debug.DrawLine(center.transform.position, center.transform.position + FindOffsetOfDir(i) + Vector3.up * 220, Color.cyan, 10f);
 				}
 #endif
 
