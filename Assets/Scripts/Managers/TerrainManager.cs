@@ -387,10 +387,20 @@ public class TerrainManager : Singleton<TerrainManager>
 		return newPath;
 	}
 
+	public Stack<PathNode> FindPathToIslandEdge(PathNode start, PathNode destination)
+	{
+		Stack<PathNode> path = new Stack<PathNode>();
+
+		//We want to path from one node on an island to the next.
+
+		return path;
+	}
+
 	public Stack<PathNode> ConnectedToDestination(Island start, Island destination)
 	{
 		Stack<PathNode> path = new Stack<PathNode>();
 
+		#region Debug Logs
 		//Are we connected to that island?
 		//if (destination.Family.inPlace && start.islandConnections.ContainsKey(destination))
 		/*if (start == null)
@@ -405,6 +415,7 @@ public class TerrainManager : Singleton<TerrainManager>
 		{
 			Debug.Log("Hit\n");
 		}*/
+		#endregion
 
 		if (start.islandConnections != null && start.islandConnections.ContainsKey(destination))
 		{

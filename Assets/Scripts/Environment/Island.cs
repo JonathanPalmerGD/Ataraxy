@@ -24,6 +24,7 @@ public class Island : WorldObject
 	public List<Island> nearIslands;
 	//This is the connections that this island has to other islands.
 	public Dictionary<Island, DestinationConnection> islandConnections;
+	public List<NodeConnection> localConnections;
 	public List<PathNode> nodes;
 	public List<GameObject> assistingPlatforms;
 	public float connectionsInDictionary = 0;
@@ -64,6 +65,92 @@ public class Island : WorldObject
 			islandConnections = new Dictionary<Island,DestinationConnection>();
 		}
 
+		if (localConnections == null)
+		{
+			localConnections = new List<NodeConnection>();
+		}
+
+		#region Local Node Connections
+		//Debug.Log("Configuring local nodes\n");
+		//Set up our node connections within our own island.
+		for (int i = 0; i < nodes.Count; i++)
+		{
+			for (int j = 0; j < nodes.Count; j++)
+			{
+				if (i != j)
+				{
+					//Debug.Log("Configuring local nodes\n" + i + "    " + j);
+					bool validRay = true;
+					#region Raycast Handling
+					if (TerrainManager.RaycastToNodeChecking && Vector3.Distance(nodes[i].transform.position, nodes[j].transform.position) < 40)
+					{
+						//Debug.Log("Inside Ray Node checking\n");
+
+						RaycastHit hit;
+						Ray ray = new Ray(nodes[i].transform.position, nodes[j].transform.position - nodes[i].transform.position);
+						Ray revRay = new Ray(nodes[j].transform.position, nodes[i].transform.position - nodes[j].transform.position);
+
+						//If we hit something with the raycast, it is not a valid ray.
+						bool forRayCheck = !Physics.Raycast(ray, out hit, Vector3.Distance(nodes[i].transform.position, nodes[j].transform.position));
+
+						#if UNITY_EDITOR
+						if (TerrainManager.drawDebug && !forRayCheck)
+						{
+							Debug.DrawLine(nodes[i].transform.position, hit.point, Color.red, 5.0f);
+						}
+						#endif
+
+						//If we hit something with the raycast, it is not a valid ray.
+						bool revRayCheck = !Physics.Raycast(revRay, out hit, Vector3.Distance(nodes[i].transform.position, nodes[j].transform.position));
+
+						#if UNITY_EDITOR
+						if (TerrainManager.drawDebug && !revRayCheck)
+						{
+							Debug.DrawLine(nodes[j].transform.position, hit.point, Color.red, 5.0f);
+						}
+
+						if (revRayCheck && forRayCheck)
+						{
+							Debug.DrawLine(nodes[i].transform.position, nodes[j].transform.position, Color.cyan, 5.0f);
+						}
+						#endif
+
+						validRay = forRayCheck && revRayCheck;
+					}
+					#endregion
+
+					//Start at the path node. Fire to the other path node.
+					if (validRay)
+					{
+						#region NodeConnection Creation
+						//Find the distance between them
+						float dist = Constants.CheckXZDistance(nodes[i].transform.position, nodes[j].transform.position);
+						float height = nodes[i].transform.position.y - nodes[j].transform.position.y;
+
+						//Create a connection & a mirror connection
+						NodeConnection newNC = new NodeConnection(nodes[i], nodes[j], dist, height);
+						NodeConnection mirrowNewNC = new NodeConnection(nodes[j], nodes[i], dist, height);
+
+						localConnections.Add(newNC);
+						localConnections.Add(mirrowNewNC);
+
+						//We need to add the new node connection to both or destination grid
+						//selfToNeighborDC.AddConnection(newNC);
+						//And to our target.
+						//neighborToSelfDC.AddConnection(mirrowNewNC);
+						#endregion
+					}
+					else
+					{
+						//Debug.DrawRay(myNode.transform.position, neighborNode.transform.position - myNode.transform.position, Color.red, 5.0f);
+					}
+				}
+			}
+		}
+
+		#endregion
+
+		#region Connect to neighbors
 		//For every neighbor island
 		foreach (Island neighbor in nearIslands)
 		{
@@ -168,6 +255,7 @@ public class Island : WorldObject
 
 			}
 		}
+		#endregion
 
 		//Debug.Log(output);
 		//Debug.Log(islandConnections.Count + "\n");

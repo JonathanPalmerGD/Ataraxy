@@ -88,7 +88,7 @@ public class Cluster : WorldObject
 		base.Start();
 		gameObject.tag = "Cluster";
 		//TweenInIslands();
-		float riseSpeedVariation = Random.Range(-(riseSpeed - 5), 115);
+		float riseSpeedVariation = Random.Range(-(riseSpeed - 35), 115);
 
 		iTween.MoveBy(clusterContents, iTween.Hash("y", TerrainManager.underworldYOffset, "easeType", "easeOutCirc", "speed", riseSpeed + riseSpeedVariation, "loopType", "none", "delay", .2));
 
