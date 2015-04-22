@@ -67,12 +67,11 @@ public class Cluster : WorldObject
 		RandomRotation = Random.Range(0, 10) < 8;
 		RandomTexture = true;
 
-		if (islandMaterials == null)
+		if (islandMaterials == null || islandMaterials.Count < 1) 
 		{
 			ConfigureBiomeMaterials();
 		}
 
-		//RandomTexture = Random.Range(0, 10) < 8;
 		RandomLandmarks = Random.Range(0, 10) > 7;
 
 		if (generateIslands)
@@ -226,14 +225,53 @@ public class Cluster : WorldObject
 		{
 			islandMaterials = new List<Material>();
 
-			for (int i = 0; i < 3; i++)
+			Material newMat = new Material(Shader.Find("Diffuse"));
+
+			//Concoct the list of all untried neighbors.
+			List<int> potentialNeighbors = new List<int>();
+			for (int j = 0; j < neighborClusters.Length; j++)
 			{
-				Material newMat = new Material(Shader.Find("Diffuse"));
+				potentialNeighbors.Add(j);
+			}
+
+			//We want 2 of neighbor materials, 1 random.
+			for (int i = 0; i < 2; i++)
+			{
+				while (potentialNeighbors.Count > 0)
+				{
+					//Pick a random potential neighbor
+					int nextTry = potentialNeighbors[Random.Range(0, potentialNeighbors.Count)];
+					Cluster nextNeighbor = neighborClusters[nextTry];
+
+					if (nextNeighbor == null)
+					{
+						potentialNeighbors.Remove(nextTry);
+					}
+					else
+					{
+						islandMaterials.Add(nextNeighbor.islandMaterials[Random.Range(0, nextNeighbor.islandMaterials.Count)]);
+						potentialNeighbors.Remove(nextTry);
+					}
+
+					if (islandMaterials.Count >= 2)
+					{
+						potentialNeighbors.Clear();
+					}
+				}
+			}
+
+			int alreadySetMats = islandMaterials.Count;
+			//string report = alreadySetMats + " mats already set\n";
+			//Make a random mat. Make up to 3 if we had no neighbors
+			for (int i = 0; i < 3 - alreadySetMats; i++)
+			{
 				newMat.mainTexture = TerrainManager.Instance.textures[Random.Range(0, TerrainManager.Instance.textures.Count)];
 				newMat.mainTextureScale = new Vector2(Random.Range(5, 25), Random.Range(5, 25));
 				newMat.color = new Color(Random.Range(.7f, 1f), Random.Range(.7f, 1f), Random.Range(.7f, 1f));
 				islandMaterials.Add(newMat);
 			}
+
+			//Debug.Log(report + islandMaterials.Count + " after second loop\n");
 		}
 		else
 		{
@@ -455,13 +493,12 @@ public class Cluster : WorldObject
 
 	public void ApplyRandomTexturing(Island island)
 	{
-		//if (islandMaterials != null)
-		//{
-		//	island.renderer.material = islandMaterials[Random.Range(0, islandMaterials.Count)];
-		//}
-		//else
-		//{
-
+		if (islandMaterials != null)
+		{
+			island.renderer.material = islandMaterials[Random.Range(0, islandMaterials.Count)];
+		}
+		else
+		{
 			/*if (RandomTexture)
 			{
 				island.renderer.material = TerrainManager.Instance.terrainMats[Random.Range(0, TerrainManager.Instance.terrainMats.Count)];
@@ -469,14 +506,13 @@ public class Cluster : WorldObject
 				island.renderer.material.color = new Color(Random.Range(.7f, 1f), Random.Range(.7f, 1f), Random.Range(.7f, 1f));*/
 			//}
 
-
 			if (RandomTexture/* && !island.specialIsland*/)
 			{
 				island.renderer.material.mainTexture = TerrainManager.Instance.textures[Random.Range(0, TerrainManager.Instance.textures.Count)];
 				island.renderer.material.mainTextureScale = new Vector2(Random.Range(5, 25), Random.Range(5, 25));
 				island.renderer.material.color = new Color(Random.Range(.7f, 1f), Random.Range(.7f, 1f), Random.Range(.7f, 1f));
 			}
-		//}
+		}
 	}
 
 	public void ApplyIslandParent(Island island)

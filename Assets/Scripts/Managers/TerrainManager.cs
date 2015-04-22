@@ -99,7 +99,7 @@ public class TerrainManager : Singleton<TerrainManager>
 		ResetClusters();
 	}
 
-	public void CreateNewCluster(Cluster center, Cluster.ClusterType newClusterType = default(Cluster.ClusterType))
+	public void CreateNewCluster(Cluster center, Cluster.ClusterType newClusterType = default(Cluster.ClusterType), bool forceType = false)
 	{
 		if (center != null)
 		{
@@ -107,7 +107,7 @@ public class TerrainManager : Singleton<TerrainManager>
 			if (center.neighborsPopulated < 8)
 			{
 				Cluster newCluster = null;
-				GameObject newClusterPrefab = GetClusterPrefab(newClusterType);
+				GameObject newClusterPrefab = GetClusterPrefab(newClusterType, forceType);
 
 				int tries = 0;
 				while (tries < 8)
@@ -151,9 +151,25 @@ public class TerrainManager : Singleton<TerrainManager>
 		}
 	}
 
-	private GameObject GetClusterPrefab(Cluster.ClusterType newClusterType)
+	private GameObject GetClusterPrefab(Cluster.ClusterType newClusterType, bool forceType)
 	{
-		GameObject prefabToCreate = null;	
+		GameObject prefabToCreate = null;
+
+		if (!forceType)
+		{
+			if (newClusterType == Cluster.ClusterType.Biome)
+			{
+				if (Random.Range(0, 10) > 8)
+				{
+					newClusterType = Cluster.ClusterType.Rare;
+				}
+				if (Random.Range(0, 50) > 48)
+				{
+					newClusterType = Cluster.ClusterType.Boss;
+				}
+			}
+		}
+
 
 		if (newClusterType == Cluster.ClusterType.Biome)
 		{
@@ -713,6 +729,11 @@ public class TerrainManager : Singleton<TerrainManager>
 	void Update()
 	{
 		#if UNITY_EDITOR
+		if (Input.GetKey(KeyCode.LeftBracket))
+		{
+			CreateNewCluster(clusters[Random.Range(0, clusters.Count)]);
+		}
+
 		if (Input.GetKeyDown(KeyCode.P))
 		{
 			string TerrainInfo = "";
@@ -890,7 +911,7 @@ public class DestinationConnection
 				drawColor = new Color(drawColor.r - darken, drawColor.g - darken, drawColor.b - darken);
 			}
 
-			Debug.DrawLine(sPos + Vector3.up * 0, tPos + Vector3.up * 0, drawColor, 35.0f);
+			Debug.DrawLine(sPos + Vector3.up * 0, tPos + Vector3.up * 0, drawColor, 5.0f);
 		}
 	}
 
