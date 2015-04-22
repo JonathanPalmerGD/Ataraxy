@@ -111,7 +111,7 @@ public class Island : WorldObject
 
 						if (revRayCheck && forRayCheck)
 						{
-							Debug.DrawLine(nodes[i].transform.position, nodes[j].transform.position, Color.cyan, 5.0f);
+							//Debug.DrawLine(nodes[i].transform.position, nodes[j].transform.position, Color.cyan, 5.0f);
 						}
 						#endif
 
@@ -462,7 +462,6 @@ public class Island : WorldObject
 				float xRnd = Random.Range(-transform.localScale.x / 2, transform.localScale.x / 2);
 				float zRnd = Random.Range(-transform.localScale.z / 2, transform.localScale.z / 2);
 
-
 				featurePosition = new Vector3(transform.position.x + xRnd * .8f, transform.position.y + transform.localScale.y / 2 + .2f, transform.position.z + zRnd * .8f);
 
 				GameObject newFeature = (GameObject)GameObject.Instantiate(TerrainManager.Instance.cosmeticFeatures[Random.Range(0, TerrainManager.Instance.cosmeticFeatures.Count)], Vector3.zero, transform.rotation);
@@ -477,7 +476,7 @@ public class Island : WorldObject
 
 	public void PlaceRandomEncounter(bool force = false)
 	{
-		if (force || Random.Range(0, 100) > 85)
+		if (force || Random.Range(0, 100) + family.dangerLevel / 2 > 75)
 		{
 			Family.encounterCounter++;
 			Vector3 featurePosition = transform.position + (Vector3.up * (transform.localScale.y / 2 + .2f));

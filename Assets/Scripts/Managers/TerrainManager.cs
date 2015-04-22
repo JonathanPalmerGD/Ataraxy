@@ -31,6 +31,11 @@ public class TerrainManager : Singleton<TerrainManager>
 	public static int underworldYOffset = 80;
 	public static bool CreateIslandFeatures = true;
 	public static bool CreateCosmeticFeatures = true;
+
+	//How different two clusters can be in danger level to allow sharing of materials.
+	public static int ClusterInheritanceTolerance = 25;
+
+	public static int ClusterDangerRangeVariation = 25;
 	#endregion
 
 	#region Prefabs & Lists of Prefabs
@@ -753,11 +758,12 @@ public class TerrainManager : Singleton<TerrainManager>
 			int encCounter = 0;
 			foreach (Cluster c in clusters)
 			{
-				string islandName = c.name;
+				string clusterName = c.name;
+				string dangerLevel = "(" + ((int)c.dangerLevel).ToString() + ")";
 				string platformInfo = c.platforms.Count + " islands";
 				string encounterInfo = c.encounterCounter + " encounters";
 
-				TerrainInfo += string.Format("{0,30} {1,30} {2,30}", islandName, platformInfo, encounterInfo) + "\n";
+				TerrainInfo += string.Format("{0,30} {1,5} {2,30} {3,30}", clusterName, dangerLevel, platformInfo, encounterInfo) + "\n";
 					
 					//+ c.name + "\t\t" + c.platforms.Count + " islands\t\t" + c.encounterCounter + " encounters\n";
 				islandCount += c.platforms.Count;
@@ -771,6 +777,25 @@ public class TerrainManager : Singleton<TerrainManager>
 			Debug.Log(TerrainInfo + "\n\n\n\n");
 		}
 		#endif
+	}
+	#endregion
+
+	#region Cluster Helper Methods
+
+	public Material GetMaterial(float dangerLevel = 25)
+	{
+		float rangeRoot = 1 - dangerLevel / 100;
+		float lowerBound = Mathf.Clamp(rangeRoot - .15f, .05f, 1);
+		float upperBound = Mathf.Clamp(rangeRoot + .15f, .05f, 1);
+
+		//Debug.Log("Bounds: " + lowerBound + "  to   " + upperBound + "\n");
+		Material newMat = new Material(Shader.Find("Diffuse"));
+
+		newMat.mainTexture = TerrainManager.Instance.textures[Random.Range(0, TerrainManager.Instance.textures.Count)];
+		newMat.mainTextureScale = new Vector2(Random.Range(5, 25), Random.Range(5, 25));
+		newMat.color = new Color(Random.Range(lowerBound, upperBound), Random.Range(lowerBound, upperBound), Random.Range(lowerBound, upperBound));
+		//newMat.color = new Color(Random.Range(.7f, 1f), Random.Range(.7f, 1f), Random.Range(.7f, 1f));
+		return newMat;
 	}
 	#endregion
 }

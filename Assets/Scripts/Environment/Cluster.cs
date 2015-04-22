@@ -38,6 +38,8 @@ public class Cluster : WorldObject
 	#region Cluster Type
 	public enum ClusterType { Biome = 0, Boss, Rare, Landmark };
 	public ClusterType cType = ClusterType.Biome;
+
+	public float dangerLevel = 35;
 	#endregion
 
 	#region Rising
@@ -56,6 +58,8 @@ public class Cluster : WorldObject
 		transform.FindChild("Cylinder").gameObject.renderer.enabled = false;
 		TerrainManager.Instance.RegisterCluster(this);
 		gameObject.name = "Cluster: " + Nomenclature.GetName(Random.Range(0, 12), Random.Range(0, 12), Random.Range(0, 12), Random.Range(0, 12));
+
+		ConfigureBiomeDangerLevel();
 
 		poissonKVal = Random.Range(TerrainManager.poissonMinK, TerrainManager.poissonMaxK);
 		sizeBonus = Random.Range(0, TerrainManager.minSizeHor);
@@ -219,6 +223,35 @@ public class Cluster : WorldObject
 		}
 	}
 
+	public void ConfigureBiomeDangerLevel()
+	{
+		float dangerOfNeighbors = 0;
+
+		/*if (float.IsNaN(dangerLevel))
+		{
+			dangerLevel = 35;
+		}*/
+
+		//Look at all neighbors and add their danger levels up
+		for (int i = 0; i < neighborClusters.Length; i++)
+		{
+			if (neighborClusters[i] != null)
+			{
+				//if (float.IsNaN(neighborClusters[i].dangerLevel))
+				//{
+				//	neighborClusters[i].dangerLevel = 35;
+				//}
+
+				//Debug.Log("Danger of neighbor: " + neighborClusters[i].dangerLevel + "\n");
+				dangerOfNeighbors += neighborClusters[i].dangerLevel;
+			}
+		}
+
+		//Debug.Log("Danger Level before: " + dangerLevel + "\n" + dangerOfNeighbors);
+		//Average the danger level. Add/remove a slight element. Make sure it is between 0 and 100.
+		dangerLevel = Mathf.Clamp(dangerOfNeighbors / neighborsPopulated + Random.Range(-TerrainManager.ClusterDangerRangeVariation, TerrainManager.ClusterDangerRangeVariation), 0, 100);
+	}
+
 	public void ConfigureBiomeMaterials(List<Material> biomeMats = null)
 	{
 		if (biomeMats == null)
@@ -243,13 +276,20 @@ public class Cluster : WorldObject
 					int nextTry = potentialNeighbors[Random.Range(0, potentialNeighbors.Count)];
 					Cluster nextNeighbor = neighborClusters[nextTry];
 
+					//If no neighbor
 					if (nextNeighbor == null)
 					{
 						potentialNeighbors.Remove(nextTry);
 					}
-					else
+					//If that neighbor's danger level is similar to ours
+					else if (Mathf.Abs(nextNeighbor.dangerLevel - dangerLevel) < TerrainManager.ClusterInheritanceTolerance)
 					{
 						islandMaterials.Add(nextNeighbor.islandMaterials[Random.Range(0, nextNeighbor.islandMaterials.Count)]);
+						potentialNeighbors.Remove(nextTry);
+					}
+					//Disqualify our different neighbor.
+					else
+					{
 						potentialNeighbors.Remove(nextTry);
 					}
 
@@ -262,13 +302,18 @@ public class Cluster : WorldObject
 
 			int alreadySetMats = islandMaterials.Count;
 			//string report = alreadySetMats + " mats already set\n";
-			//Make a random mat. Make up to 3 if we had no neighbors
+			//Get an appropriate material. If we don't have any, get several
 			for (int i = 0; i < 3 - alreadySetMats; i++)
 			{
-				newMat.mainTexture = TerrainManager.Instance.textures[Random.Range(0, TerrainManager.Instance.textures.Count)];
-				newMat.mainTextureScale = new Vector2(Random.Range(5, 25), Random.Range(5, 25));
-				newMat.color = new Color(Random.Range(.7f, 1f), Random.Range(.7f, 1f), Random.Range(.7f, 1f));
-				islandMaterials.Add(newMat);
+				//The terrain Manager will give us one appropriate to our danger level.
+				//Currently randomly generates.
+				islandMaterials.Add(TerrainManager.Instance.GetMaterial(dangerLevel));
+
+				//Old random generation approach
+				//newMat.mainTexture = TerrainManager.Instance.textures[Random.Range(0, TerrainManager.Instance.textures.Count)];
+				//newMat.mainTextureScale = new Vector2(Random.Range(5, 25), Random.Range(5, 25));
+				//newMat.color = new Color(Random.Range(.7f, 1f), Random.Range(.7f, 1f), Random.Range(.7f, 1f));
+				//islandMaterials.Add(newMat);
 			}
 
 			//Debug.Log(report + islandMaterials.Count + " after second loop\n");
