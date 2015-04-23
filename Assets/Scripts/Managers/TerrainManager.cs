@@ -756,12 +756,19 @@ public class TerrainManager : Singleton<TerrainManager>
 			
 			int islandCount = 0;
 			int encCounter = 0;
+			float dangerSum = 0;
+			string clusterName, dangerLevel, platformInfo, encounterInfo;
 			foreach (Cluster c in clusters)
 			{
-				string clusterName = c.name;
-				string dangerLevel = "(" + ((int)c.dangerLevel).ToString() + ")";
-				string platformInfo = c.platforms.Count + " islands";
-				string encounterInfo = c.encounterCounter + " encounters";
+				clusterName = c.name;
+				dangerLevel = "(" + ((int)c.dangerLevel).ToString() + ")";
+				platformInfo = c.platforms.Count + " islands";
+				encounterInfo = c.encounterCounter + " encounters";
+
+				if (c.cType != Cluster.ClusterType.Landmark)
+				{
+					dangerSum += c.dangerLevel;
+				}
 
 				TerrainInfo += string.Format("{0,30} {1,5} {2,30} {3,30}", clusterName, dangerLevel, platformInfo, encounterInfo) + "\n";
 					
@@ -773,7 +780,10 @@ public class TerrainManager : Singleton<TerrainManager>
 			TerrainInfo = "TerrainManager Information Report:\n" +
 				"   # of Clusters: " + clusters.Count + "\t" +
 				"   # of Islands: " + islandCount + "\t" +
-				"   # of Encounters: " + encCounter + "\n\n" + TerrainInfo;
+				"   # of Encounters: " + encCounter + "\n" +
+				"   Avg Danger: " + (int)(dangerSum / clusters.Count) + "\t" +
+				"   Avg Enc: " + (int)(encCounter / islandCount) + "\t" +
+				"   " + "\n\n" + TerrainInfo;
 			Debug.Log(TerrainInfo + "\n\n\n\n");
 		}
 		#endif
@@ -781,7 +791,6 @@ public class TerrainManager : Singleton<TerrainManager>
 	#endregion
 
 	#region Cluster Helper Methods
-
 	public Material GetMaterial(float dangerLevel = 25)
 	{
 		float rangeRoot = 1 - dangerLevel / 100;

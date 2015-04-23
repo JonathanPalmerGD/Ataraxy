@@ -479,7 +479,7 @@ public class Island : WorldObject
 
 	public void PlaceRandomEncounter(bool force = false)
 	{
-		if (force || Random.Range(0, 100) + family.dangerLevel / 2 > 75)
+		if (force || Random.Range(0, 100) + family.dangerLevel / 2 > 80 + family.encounterCounter * 10)
 		{
 			Family.encounterCounter++;
 			Vector3 featurePosition = transform.position + (Vector3.up * (transform.localScale.y / 2 + .2f));

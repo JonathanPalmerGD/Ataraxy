@@ -57,7 +57,8 @@ public class Cluster : WorldObject
 
 		transform.FindChild("Cylinder").gameObject.renderer.enabled = false;
 		TerrainManager.Instance.RegisterCluster(this);
-		gameObject.name = "Cluster: " + Nomenclature.GetName(Random.Range(0, 12), Random.Range(0, 12), Random.Range(0, 12), Random.Range(0, 12));
+		string ct = cType.ToString();
+		gameObject.name = ct.Substring(0, 3) + " Cluster: " + Nomenclature.GetName(Random.Range(0, 12), Random.Range(0, 12), Random.Range(0, 12), Random.Range(0, 12));
 
 		ConfigureBiomeDangerLevel();
 
@@ -237,7 +238,7 @@ public class Cluster : WorldObject
 
 	public void ConfigureBiomeDangerLevel()
 	{
-		float dangerOfNeighbors = 0;
+		float dangerOfNeighbors = dangerLevel;
 
 		/*if (float.IsNaN(dangerLevel))
 		{
@@ -261,7 +262,7 @@ public class Cluster : WorldObject
 
 		//Debug.Log("Danger Level before: " + dangerLevel + "\n" + dangerOfNeighbors);
 		//Average the danger level. Add/remove a slight element. Make sure it is between 0 and 100.
-		dangerLevel = Mathf.Clamp(dangerOfNeighbors / neighborsPopulated + Random.Range(-TerrainManager.ClusterDangerRangeVariation, TerrainManager.ClusterDangerRangeVariation), 0, 100);
+		dangerLevel = Mathf.Clamp(dangerOfNeighbors / (neighborsPopulated + 1) + Random.Range(-TerrainManager.ClusterDangerRangeVariation, TerrainManager.ClusterDangerRangeVariation), 0, 100);
 	}
 
 	public void ConfigureBiomeMaterials(List<Material> biomeMats = null)
