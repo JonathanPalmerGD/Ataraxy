@@ -80,7 +80,19 @@ public class Cluster : WorldObject
 
 		if (generateIslands)
 		{
-			CreateIslandsPoissonApproach();
+			int islandApproach = Random.Range(0, 10);
+			if (islandApproach < 4)
+			{
+				CreateIslandsPoisson();
+			}
+			else if (islandApproach < 7)
+			{
+				CreateIslandsGrid();
+			}
+			else
+			{
+				CreateIslandsLayered();
+			}
 			ConfigureClusterFeatures();
 		}
 	
@@ -413,25 +425,32 @@ public class Cluster : WorldObject
 	#endregion
 
 	#region Approaches
-	public void CreateIslandsPoissonApproach()
+	public void CreateIslandsPoisson()
 	{
 		PoissonDiscSampler pds = new PoissonDiscSampler(TerrainManager.clusterSize.x, TerrainManager.clusterSize.z, 16 + (sizeBonus * 1.2f), poissonKVal);
+		
+		Island newIsland = null;
+		GameObject newIslandGO = null;
+		GameObject choosenIslandPrefab = null;
+		Vector3 newPosition;
+		float yOffset;
+
+		#region PD Sample Loop
 		foreach (Vector2 sample in pds.Samples())
 		{
-			Island newIsland = null;
-			GameObject newIslandGO = null;
-			GameObject choosenIslandPrefab = null;
 			//Island newIsland
 			if (TerrainManager.Instance.islandPrefabs.Count > 0)
 			{
 				//Select an island prefab.
 				choosenIslandPrefab = TerrainManager.Instance.islandPrefabs[Random.Range(0, TerrainManager.Instance.islandPrefabs.Count)];
 				
-				float yOffset = Random.Range(TerrainManager.minDistance.y, TerrainManager.maxDistance.y);
+				yOffset = Random.Range(TerrainManager.minDistance.y, TerrainManager.maxDistance.y);
 
-				Vector3 newPosition = new Vector3(sample.x + transform.position.x, transform.position.y + yOffset, sample.y + transform.position.z);
+				//Set the new position
+				newPosition = new Vector3(sample.x + transform.position.x, transform.position.y + yOffset, sample.y + transform.position.z);
 				newPosition -= TerrainManager.clusterSize / 2;
 
+				//Instantiate the new game object.
 				newIslandGO = (GameObject)GameObject.Instantiate(choosenIslandPrefab, 
 					newPosition, Quaternion.identity);
 
@@ -444,14 +463,113 @@ public class Cluster : WorldObject
 				ApplyRandomScale(newIsland, true);
 				ApplyRandomTexturing(newIsland);
 
-				//newIsland.GetComponent<Island>().CreatePathNodes();
-				//ApplyRandomRotation(newIsland);
+				platforms.Add(newIslandGO.GetComponent<Island>());
+			}
+		}
+		#endregion
+	}
+
+	public void CreateIslandsGrid()
+	{
+		Island newIsland = null;
+		GameObject newIslandGO = null;
+		GameObject choosenIslandPrefab = TerrainManager.Instance.islandPrefabs[Random.Range(0, TerrainManager.Instance.islandPrefabs.Count)];
+
+		float xDiv = Random.Range(1, 5);
+		float zDiv = Random.Range(1, 5);
+
+		float xOffset, yOffset, zOffset;
+
+		float spacing = Random.Range(0, 10);
+
+		Vector3 newPosition;
+		Vector3 scale = new Vector3(
+					(TerrainManager.clusterSize.x / xDiv) - spacing,
+					Random.Range(TerrainManager.minScale.y, TerrainManager.maxScale.y),
+					(TerrainManager.clusterSize.z / zDiv) - spacing);
+
+		#region Division Loops
+		for (int i = 0; i < xDiv; i++)
+		{
+			for (int j = 0; j < zDiv; j++)
+			{
+				xOffset = Random.Range(-2, 2);
+				yOffset = Random.Range(TerrainManager.minDistance.y, TerrainManager.maxDistance.y);
+				zOffset = Random.Range(-2, 2);
+
+				newPosition = new Vector3((TerrainManager.clusterSize.x / xDiv) * i + xOffset + transform.position.x, transform.position.y + yOffset, (TerrainManager.clusterSize.z / zDiv) * j + zOffset + transform.position.z);
+				newPosition -= TerrainManager.clusterSize / 2;
+
+				newIslandGO = (GameObject)GameObject.Instantiate(choosenIslandPrefab,
+					newPosition, Quaternion.identity);
+
+				newIsland = newIslandGO.GetComponent<Island>();
+
+				ApplyIslandParent(newIsland);
+
+				newIsland.Init();
+
+				ApplySpecificScale(newIsland, scale, true);
+				ApplyRandomTexturing(newIsland);
 
 				platforms.Add(newIslandGO.GetComponent<Island>());
 			}
 		}
+		#endregion
+	}
 
-		//CreateLargeIsland();
+	public void CreateIslandsLayered()
+	{
+		PoissonDiscSampler pds = new PoissonDiscSampler(TerrainManager.clusterSize.x, TerrainManager.clusterSize.z, 16 + (sizeBonus * 1.2f), poissonKVal);
+
+		Island newIsland = null;
+		GameObject newIslandGO = null;
+		GameObject choosenIslandPrefab = null;
+		Vector3 newPosition;
+		float yOffset, xOffset, zOffset;
+
+		#region PD Sample Loop
+		foreach(Vector2 sample in pds.Samples())
+		{
+			//Chance to outright skip this sample.
+			if (Random.Range(0, 10) < 5)
+			{
+				//Island newIsland
+				if (TerrainManager.Instance.islandPrefabs.Count > 0)
+				{
+					for (int i = 0; i < 2; i++)
+					{
+						xOffset = Random.Range(-3, 3);
+						yOffset = Random.Range(TerrainManager.minDistance.y, TerrainManager.maxDistance.y) + i * (20 + Random.Range(0, 25));
+						zOffset = Random.Range(-3, 3);
+
+						//Select an island prefab.
+						choosenIslandPrefab = TerrainManager.Instance.islandPrefabs[Random.Range(0, TerrainManager.Instance.islandPrefabs.Count)];
+
+						//Set the new position
+						newPosition = new Vector3(sample.x + transform.position.x, transform.position.y + yOffset, sample.y + transform.position.z);
+						newPosition -= TerrainManager.clusterSize / 2;
+
+						//Instantiate the new game object.
+						newIslandGO = (GameObject)GameObject.Instantiate(choosenIslandPrefab,
+							newPosition, Quaternion.identity);
+
+						newIsland = newIslandGO.GetComponent<Island>();
+
+						ApplyIslandParent(newIsland);
+
+						newIsland.Init();
+
+						ApplyRandomScale(newIsland, true);
+						ApplyRandomTexturing(newIsland);
+
+						platforms.Add(newIslandGO.GetComponent<Island>());
+
+					}
+				}
+			}
+		}
+		#endregion
 	}
 
 	public void CreateLandmarksPoissonApproach()
@@ -482,6 +600,14 @@ public class Cluster : WorldObject
 	#endregion
 
 	#region Island Modification
+	public void ApplySpecificScale(Island island, Vector3 scale, bool poisson)
+	{
+		if (RandomScale && !island.specialIsland)
+		{
+			island.transform.localScale = scale;
+		}
+	}
+	
 	public void ApplyRandomScale(Island island, bool poisson)
 	{
 		if (RandomScale && !island.specialIsland)

@@ -9,6 +9,7 @@ public class EncounterCreator : MonoBehaviour
 	public List<GameObject> enemies;
 	public Island location;
 	public bool initialized = false;
+	public bool nonRandomEncounter = false;
 
 	public void Init()
 	{
@@ -56,7 +57,11 @@ public class EncounterCreator : MonoBehaviour
 
 	void Start() 
 	{
-		//Init();
+		if (nonRandomEncounter)
+		{
+			location = transform.parent.GetComponent<Island>();
+			Init();
+		}
 	}
 	
 	void Update() 

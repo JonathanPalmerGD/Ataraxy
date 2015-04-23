@@ -341,8 +341,11 @@ public class Island : WorldObject
 		for (int i = 0; i < transform.childCount; i++)
 		{
 			Transform childTransform = transform.GetChild(i);
-			childTransform.SetParent(transform.parent);
-			assistingPlatforms.Add(childTransform.gameObject);
+			if (childTransform.name != "Encounter")
+			{
+				childTransform.SetParent(transform.parent);
+				assistingPlatforms.Add(childTransform.gameObject);
+			}
 		}
 
 		//Used by special case debug platforms.
@@ -483,7 +486,7 @@ public class Island : WorldObject
 
 			GameObject newEncounter = (GameObject)GameObject.Instantiate(TerrainManager.Instance.encounterPrefabs[Random.Range(0, TerrainManager.Instance.encounterPrefabs.Count)], Vector3.zero, transform.rotation);
 
-			EncounterCreator encCreator = newEncounter.GetComponent<EncounterCreator>() ;
+			EncounterCreator encCreator = newEncounter.GetComponent<EncounterCreator>();
 
 			newEncounter.transform.SetParent(transform);
 			newEncounter.transform.position = featurePosition;
