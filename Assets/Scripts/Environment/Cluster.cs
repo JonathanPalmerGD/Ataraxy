@@ -428,7 +428,7 @@ public class Cluster : WorldObject
 	#region Approaches
 	public void CreateIslandsPoisson()
 	{
-		PoissonDiscSampler pds = new PoissonDiscSampler(TerrainManager.clusterSize.x, TerrainManager.clusterSize.z, 16 + (sizeBonus * 1.2f), poissonKVal);
+		PoissonDiscSampler pds = new PoissonDiscSampler(TerrainManager.clusterSize.x - 5, TerrainManager.clusterSize.z - 5, 16 + (sizeBonus * 1.2f), poissonKVal);
 		
 		Island newIsland = null;
 		GameObject newIslandGO = null;
@@ -521,7 +521,7 @@ public class Cluster : WorldObject
 
 	public void CreateIslandsLayered()
 	{
-		PoissonDiscSampler pds = new PoissonDiscSampler(TerrainManager.clusterSize.x, TerrainManager.clusterSize.z, 16 + (sizeBonus * 1.2f), poissonKVal);
+		PoissonDiscSampler pds = new PoissonDiscSampler(TerrainManager.clusterSize.x - 5, TerrainManager.clusterSize.z - 5, 16 + (sizeBonus * 1.2f), poissonKVal);
 
 		Island newIsland = null;
 		GameObject newIslandGO = null;
