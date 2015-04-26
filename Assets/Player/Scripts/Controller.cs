@@ -133,6 +133,7 @@ public class Controller : MonoBehaviour {
 	}
 	void Update()
 	{
+		#region Time Checking for Fixed Update
 		if (Time.time > nextCheck)
 		{
 			nextCheck = Time.time + (1f / checksPerSecond);
@@ -140,9 +141,12 @@ public class Controller : MonoBehaviour {
 			moving = IsMoving();
 			canStand = CanStand();
 		}
-	   
+		#endregion
+
+		#region Ground to Air Transitions
 		if (lastGrounded != grounded)
 		{
+			#region Landing or Jumping (for Audio)
 			//This sound will play when jumping or when landing
 			if (grounded)
 			{
@@ -156,6 +160,8 @@ public class Controller : MonoBehaviour {
 					Footstep();
 				}
 			}
+			#endregion
+			#region Landing (for fall damage & jump count resetting)
 			lastGrounded = grounded;
 			if (lastGrounded == true)
 			{
@@ -179,7 +185,10 @@ public class Controller : MonoBehaviour {
 				lastAiredPos = transform.position.y;
 				jumpsDone = 0;
 			}
+			#endregion
 		}
+		#endregion
+		#region Airborn Handling
 		if (!grounded)
 		{
 			if(transform.position.y > lastAiredPos)
@@ -191,6 +200,7 @@ public class Controller : MonoBehaviour {
 				jumpedYPos = lastAiredPos;
 			}
 		}
+		#endregion
 		//Stamina regeneration for running
 		if (ableToRun)
 		{
@@ -248,6 +258,7 @@ public class Controller : MonoBehaviour {
 			CrouchState(crouching);
 		}
 
+		#region Disabled Crouching
 		/*if(Input.GetKey(KeyCode.LeftControl) || !canStand)
 		{
 			if (grounded)
@@ -257,7 +268,10 @@ public class Controller : MonoBehaviour {
 
 			crouching = true;
 		}
-		else */if (Input.GetKey(KeyCode.LeftShift) && canStand && stamina > 0 && ableToRun)
+		else */
+		#endregion
+		#region Running
+		if (Input.GetKey(KeyCode.RightShift) && canStand && stamina > 0 && ableToRun)
 		{
 			//Running
 			if (grounded)
@@ -295,6 +309,7 @@ public class Controller : MonoBehaviour {
 			}*/
 			#endregion
 		}
+		#endregion
 
 		if (grounded)
 		{
@@ -321,17 +336,31 @@ public class Controller : MonoBehaviour {
 		targetVelocity = transform.TransformDirection(targetVelocity.normalized) * speed;
 
 		velocityChange = (targetVelocity - myRB.velocity);
-		velocityChange.x = Mathf.Clamp(velocityChange.x, -acceleration, acceleration);
-		velocityChange.z = Mathf.Clamp(velocityChange.z, -acceleration, acceleration);
+		velocityChange.x = Mathf.Clamp(velocityChange.x, -acceleration * 2, acceleration * 2);
+		velocityChange.z = Mathf.Clamp(velocityChange.z, -acceleration * 2, acceleration * 2);
 		velocityChange.y = 0f;
+		
+		//If VelocityChange is normalized, the degree of air control we have goes WAY down but we can achieve the appropriate movement in directions.
+		//velocityChange.Normalize();
+
+		//Debug.DrawLine(transform.position, transform.position + targetVelocity, Color.magenta, .05f);
+		//Debug.DrawLine(transform.position + (Vector3.up * 1.2f) + myRB.velocity, transform.position + (Vector3.up * 1.2f) + myRB.velocity + velocityChange, Color.yellow, .05f);
+		//Debug.DrawLine(transform.position + Vector3.up, transform.position + Vector3.up + myRB.velocity, Color.red, .05f);
+
+		//Debug.Log("VelCh: " + velocityChange.ToString() + "\tVC Mag: " + velocityChange.magnitude + "\tSpeed: " + speed + "\tAccel: " + acceleration
+		//	+ "\nInput: " + input.ToString() + "\tIn Mag: " + input.magnitude + "\n\n");
 
 		if (controllerAble)
 		{
+			//Debug.Log("Walking Normal\n" + targetVelocity.sqrMagnitude + "\t" + (speed * speed));
+
 			//Speed limit for diagonal walking
 			if (targetVelocity.sqrMagnitude > (speed * speed))
 			{
+			//	Debug.Log("Walking Diagonal\n" + targetVelocity.sqrMagnitude + "\t" + (speed * speed));
 				targetVelocity = targetVelocity.normalized * speed;
 			}
+			
 			//Speed limit for falling
 			if (myRB.velocity.y < -maxFallSpeed)
 			{
@@ -346,7 +375,10 @@ public class Controller : MonoBehaviour {
 				//If in mid air then only change movement speed if actually trying to move
 				if (input.x != 0 || input.z != 0)
 				{
-					myRB.AddForce(velocityChange * 15f, ForceMode.Acceleration);
+					if (velocityChange.magnitude > .02f)
+					{
+						myRB.AddForce(velocityChange * 05f, ForceMode.Acceleration);
+					}
 				}
 			}
 		}

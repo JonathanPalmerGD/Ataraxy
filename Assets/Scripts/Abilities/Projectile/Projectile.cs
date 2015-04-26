@@ -144,10 +144,13 @@ public class Projectile : MonoBehaviour
 					}
 				}
 			}
-			//Clean up the bullet. This should be updated to add it to an object pool
-			if (!fizzled)
+			if (cTag != "Checkpoint")
 			{
-				Collide();
+				//Clean up the bullet. This should be updated to add it to an object pool
+				if (!fizzled)
+				{
+					Collide();
+				}
 			}
 		}
 	}
