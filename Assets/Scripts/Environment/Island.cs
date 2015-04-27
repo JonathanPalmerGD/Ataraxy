@@ -291,6 +291,25 @@ public class Island : WorldObject
 		return remainingOptions[Random.Range(0, remainingOptions.Count)];
 	}
 
+	public Island GetRandomNeighbor()
+	{
+		Island selectedNeighbor = null;
+		if (nearIslands.Count > 0)
+		{
+			int randIndex = Random.Range(0, nearIslands.Count);
+
+			selectedNeighbor = nearIslands[randIndex];
+
+			if (!selectedNeighbor.family.inPlace)
+			{
+				Debug.LogWarning("Randomly selected neighbor island was not yet in place.\nFizzled pathfinding.");
+				selectedNeighbor = null;
+			}
+		}
+
+		return selectedNeighbor;
+	}
+
 	public PathNode NearestNode(Vector3 pos)
 	{
 		PathNode pn = null;

@@ -684,7 +684,17 @@ public class EnemyController : MonoBehaviour
 		}
 		else
 		{
-			nextNode = null;
+			Island randomNeighbor = lastLocation.GetRandomNeighbor();
+			if (randomNeighbor != null && lastLocation != null)
+			{
+				Stack<PathNode> newPath = TerrainManager.Instance.PathToIsland(lastLocation, randomNeighbor, 120);
+
+				curPath = newPath;
+			}
+			else
+			{
+				nextNode = null;
+			}
 		}
 	}
 
@@ -717,15 +727,19 @@ public class EnemyController : MonoBehaviour
 
 			//Debug.DrawLine(transform.position, pnList[0].transform.position + Vector3.up, Color.black, 0.2f);
 
-
-			for (int i = 1; i < pnList.Count; i++)
+			if (pnList.Count > 1)
 			{
-				Vector3 firstPos = pnList[i - 1].transform.position;
-				Vector3 secondPos = pnList[i].transform.position;
-				//Debug.DrawLine(pnList[i - 1].transform.position + Vector3.up * i * 2, pnList[i].transform.position + Vector3.up * i * 2, Color.green, 15.0f);
-				Debug.DrawLine(firstPos + Vector3.up * i * .7f, secondPos + Vector3.up * i * .7f, Color.blue);
-				Debug.DrawLine(firstPos + Vector3.up * i * .7f, firstPos + Vector3.up * (i - 1) * .7f, Color.red);
-				
+				for (int i = 1; i < pnList.Count; i++)
+				{
+					if (pnList != null && pnList[i - 1] != null && pnList[i] != null)
+					{
+						Vector3 firstPos = pnList[i - 1].transform.position;
+						Vector3 secondPos = pnList[i].transform.position;
+						//Debug.DrawLine(pnList[i - 1].transform.position + Vector3.up * i * 2, pnList[i].transform.position + Vector3.up * i * 2, Color.green, 15.0f);
+						Debug.DrawLine(firstPos + Vector3.up * i * .7f, secondPos + Vector3.up * i * .7f, Color.blue);
+						Debug.DrawLine(firstPos + Vector3.up * i * .7f, firstPos + Vector3.up * (i - 1) * .7f, Color.red);
+					}
+				}
 			}
 		}
 	}

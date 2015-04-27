@@ -377,7 +377,10 @@ public class Controller : MonoBehaviour {
 				{
 					if (velocityChange.magnitude > .02f)
 					{
-						myRB.AddForce(velocityChange * 05f, ForceMode.Acceleration);
+						//if (collided = null)
+						//{
+							myRB.AddForce(velocityChange * 05f, ForceMode.Acceleration);
+						//}
 					}
 				}
 			}
@@ -388,6 +391,8 @@ public class Controller : MonoBehaviour {
 			targetVelocity = Vector3.zero;
 			myRB.velocity = new Vector3(0, myRB.velocity.y, 0);
 		}
+
+		//collided = null;
 	}
 	public bool IsMoving()
 	{
@@ -472,11 +477,20 @@ public class Controller : MonoBehaviour {
 			jumpedYPos = what.transform.position.y;
 		}
 	}
+
+	//GameObject collided = null;
 	void OnCollisionEnter(Collision what)
 	{
+		Debug.Log(what.gameObject.name);
+
+		//collided = what.gameObject;
 		if(what.transform.name == "Safepad")
 		{
 			jumpedYPos = what.transform.position.y;
 		}
 	}
+	//void OnCollisionStay(Collision what)
+	//{
+	//	GameObject collided = what.gameObject;
+	//}
 }

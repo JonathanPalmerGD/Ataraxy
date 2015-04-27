@@ -172,6 +172,7 @@ public class GroundEnemy : Enemy
 				//Jump to Ascend
 				if (!jumpedYet && nextNode.transform.position.y - 3 > transform.position.y && myRB.velocity.y < 0)
 				{
+					//Debug.DrawLine(transform.position, transform.position - Vector3.up * 55, Color.red, 35.0f);
 					//Debug.Log("Vertical Jump\n");
 					ApplyJump(true);
 					jumpedYet = true;
@@ -192,7 +193,7 @@ public class GroundEnemy : Enemy
 	}
 	float CalculateJumpVerticalSpeed(bool vertical)
 	{
-		return Mathf.Sqrt(jumpHeight * 20f * (vertical ? 1.5f : 1));
+		return Mathf.Sqrt(jumpHeight * 20f * (vertical ? 2f : 1));
 	}
 	public void Footstep()
 	{
@@ -790,7 +791,17 @@ public class GroundEnemy : Enemy
 		}
 		else
 		{
-			nextNode = null;
+			Island randomNeighbor = lastLocation.GetRandomNeighbor();
+			if (randomNeighbor != null && lastLocation != null)
+			{
+				Stack<PathNode> newPath = TerrainManager.Instance.PathToIsland(lastLocation, randomNeighbor, 120);
+
+				curPath = newPath;
+			}
+			else
+			{
+				nextNode = null;
+			}
 		}
 	}
 
@@ -820,14 +831,19 @@ public class GroundEnemy : Enemy
 			//Debug.DrawLine(transform.position, pnList[0].transform.position + Vector3.up, Color.black, 0.2f);
 
 
-			for (int i = 1; i < pnList.Count; i++)
+			if (pnList.Count > 1)
 			{
-				Vector3 firstPos = pnList[i - 1].transform.position;
-				Vector3 secondPos = pnList[i].transform.position;
-				//Debug.DrawLine(pnList[i - 1].transform.position + Vector3.up * i * 2, pnList[i].transform.position + Vector3.up * i * 2, Color.green, 15.0f);
-				Debug.DrawLine(firstPos + Vector3.up * i * .7f, secondPos + Vector3.up * i * .7f, Color.blue);
-				Debug.DrawLine(firstPos + Vector3.up * i * .7f, firstPos + Vector3.up * (i - 1) * .7f, Color.red);
-
+				for (int i = 1; i < pnList.Count; i++)
+				{
+					if (pnList != null && pnList[i - 1] != null && pnList[i] != null)
+					{
+						Vector3 firstPos = pnList[i - 1].transform.position;
+						Vector3 secondPos = pnList[i].transform.position;
+						//Debug.DrawLine(pnList[i - 1].transform.position + Vector3.up * i * 2, pnList[i].transform.position + Vector3.up * i * 2, Color.green, 15.0f);
+						Debug.DrawLine(firstPos + Vector3.up * i * .7f, secondPos + Vector3.up * i * .7f, Color.blue);
+						Debug.DrawLine(firstPos + Vector3.up * i * .7f, firstPos + Vector3.up * (i - 1) * .7f, Color.red);
+					}
+				}
 			}
 		}
 	}
@@ -887,16 +903,17 @@ public class GroundEnemy : Enemy
 			{
 				//Is there a ledge ahead of us?
 				//Is there a wall ahead of us.
-				bool wall = CheckWall();
-				bool edge = CheckEdge();
+				int complexWallCheck = CheckWallComplex();
+				//bool wallCheck = CheckWall();
+				bool edgeCheck = CheckEdge();
 				#region Wall Check
-				if (wall)
+				if (complexWallCheck > 0 && complexWallCheck < 2)
 				{
 					navState = GroundState.Turning;
 				}
 				#endregion
 				#region Edge Check
-				else if (edge)
+				else if (edgeCheck || complexWallCheck == 2)
 				{
 					//That way we can easily fail out to just turning around.
 					bool goingToJump = false;
@@ -1068,6 +1085,12 @@ public class GroundEnemy : Enemy
 		//if (Physics.Raycast(start, dir, out hit, (transform.localScale.y / 2 + 2)))
 		if (Physics.Raycast(start, dir, out hit, (transform.localScale.y * 1.5f)))
 		{
+			if (hit.collider.tag == "Island")
+			{
+				//Debug.LogError("Obstacle in front of me is an island.\n");
+
+			}
+
 			if (hit.collider.gameObject != gameObject)
 			{
 				turnRight = false;
@@ -1108,6 +1131,77 @@ public class GroundEnemy : Enemy
 		}
 
 		return false;
+	}
+	/// <summary>
+	/// A more sophisticated CheckWall.
+	/// Returns 0 if no obstacles. Greater than 1 for special cases.
+	/// </summary>
+	/// <returns></returns>
+	public int CheckWallComplex()
+	{
+		#region Left & Right Turn Checkers
+		RaycastHit hit;
+
+		Vector3 start = transform.position - transform.up * (transform.localScale.y / 5) + transform.right * (transform.localScale.y / 2 + .5f);
+		//Vector3 dir = transform.forward * (transform.localScale.y / 2 + 2);
+		Vector3 dir = transform.forward * (transform.localScale.y / 2 + 4);
+		Debug.DrawRay(start, dir, Color.cyan, 1 / checksPerSecond);
+		//if (Physics.Raycast(start, dir, out hit, (transform.localScale.y / 2 + 2)))
+		if (Physics.Raycast(start, dir, out hit, (transform.localScale.y * 1.5f)))
+		{
+			if (hit.collider.tag == "Island")
+			{
+				if (curPath.Count > 0)
+				{
+					//Debug.LogError("Obstacle in front of me is an island.\nMy destination: " + curPath.Peek().island.name + "\tMy location:" + lastLocation + "\tObstacle: " + hit.collider.name);
+					//Debug.DrawLine(transform.position, transform.position + Vector3.up * 155, Color.black, 10f);
+					if (curPath.Peek().gameObject == hit.collider.gameObject)
+					{
+						return 2;
+					}
+				}
+			}
+
+			if (hit.collider.gameObject != gameObject)
+			{
+				turnRight = false;
+			}
+			else
+			{
+				turnRight = true;
+			}
+		}
+		else
+		{
+			turnRight = true;
+		}
+
+		start = transform.position - transform.up * (transform.localScale.y / 5) - transform.right * (transform.localScale.y / 2 + .5f);
+		dir = transform.forward * (transform.localScale.y / 2 + 4);
+		Debug.DrawRay(start, dir, Color.cyan, 1 / checksPerSecond);
+		if (Physics.Raycast(start, dir, out hit, (transform.localScale.y / 2 + 2)))
+		{
+			if (hit.collider.gameObject != gameObject)
+			{
+				turnLeft = false;
+			}
+			else
+			{
+				turnLeft = true;
+			}
+		}
+		else
+		{
+			turnLeft = true;
+		}
+		#endregion
+
+		if (!turnRight || !turnLeft)
+		{
+			return 1;
+		}
+
+		return 0;
 	}
 	public bool CheckEdge()
 	{

@@ -745,7 +745,7 @@ public class TerrainManager : Singleton<TerrainManager>
 	void Update()
 	{
 		#if UNITY_EDITOR
-		if (Input.GetKey(KeyCode.LeftBracket))
+		if (Input.GetKey(KeyCode.Minus))
 		{
 			CreateNewCluster(clusters[Random.Range(0, clusters.Count)]);
 		}
@@ -956,7 +956,7 @@ public class DestinationConnection
 				drawColor = new Color(drawColor.r - darken, drawColor.g - darken, drawColor.b - darken);
 			}
 
-			Debug.DrawLine(sPos + Vector3.up * 0, tPos + Vector3.up * 0, drawColor, 5.0f);
+			Debug.DrawLine(sPos + Vector3.up * 0, tPos + Vector3.up * 0, drawColor, 35.0f);
 		}
 	}
 
