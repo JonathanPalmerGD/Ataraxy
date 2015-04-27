@@ -706,7 +706,7 @@ public class GroundEnemy : Enemy
 			//If our previous path appears invalid	
 			if (lastNode.island != lastLocation && nextNode.island != lastLocation)
 			{
-				Debug.Log("Forcing new path\n");
+				//Debug.Log("Forcing new path\n");
 				//Force us to find a new one?
 				curPath = new Stack<PathNode>();
 				GetNewDestination();
@@ -791,12 +791,19 @@ public class GroundEnemy : Enemy
 		}
 		else
 		{
-			Island randomNeighbor = lastLocation.GetRandomNeighbor();
-			if (randomNeighbor != null && lastLocation != null)
+			if (!CanSeePlayer)
 			{
-				Stack<PathNode> newPath = TerrainManager.Instance.PathToIsland(lastLocation, randomNeighbor, 120);
+				Island randomNeighbor = lastLocation.GetRandomNeighbor();
+				if (randomNeighbor != null && lastLocation != null)
+				{
+					Stack<PathNode> newPath = TerrainManager.Instance.PathToIsland(lastLocation, randomNeighbor, 120);
 
-				curPath = newPath;
+					curPath = newPath;
+				}
+				else
+				{
+					nextNode = null;
+				}
 			}
 			else
 			{

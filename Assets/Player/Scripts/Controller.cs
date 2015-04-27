@@ -481,8 +481,6 @@ public class Controller : MonoBehaviour {
 	//GameObject collided = null;
 	void OnCollisionEnter(Collision what)
 	{
-		Debug.Log(what.gameObject.name);
-
 		//collided = what.gameObject;
 		if(what.transform.name == "Safepad")
 		{

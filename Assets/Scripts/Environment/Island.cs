@@ -362,6 +362,7 @@ public class Island : WorldObject
 			Transform childTransform = transform.GetChild(i);
 			if (childTransform.name != "Encounter")
 			{
+				i--;
 				childTransform.SetParent(transform.parent);
 				assistingPlatforms.Add(childTransform.gameObject);
 			}
