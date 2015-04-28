@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class CrystalAdornment : MonoBehaviour 
 {
-	public int numCrystals;
+	//public int numCrystals;
 	public List<GameObject> crystalPrefabs;
 
 	void Start() 
@@ -14,25 +14,29 @@ public class CrystalAdornment : MonoBehaviour
 			crystalPrefabs = new List<GameObject>();
 		}
 
-		float xSize = transform.localScale.x - 3;
-		float zSize = transform.localScale.z - 3;
-
-		PoissonDiscSampler pds = new PoissonDiscSampler(transform.localScale.x - 3, zSize, 3.5f, 20);
-
-		#region PD Sample Loop
-		GameObject newCrystal;
-			
-		foreach (Vector2 sample in pds.Samples())
+		if (crystalPrefabs.Count > 0)
 		{
-			newCrystal = (GameObject)GameObject.Instantiate(crystalPrefabs[Random.Range(0, crystalPrefabs.Count)]);
+			float xSize = transform.localScale.x - 3;
+			float zSize = transform.localScale.z - 3;
 
-			newCrystal.transform.position = transform.position + new Vector3(sample.x - xSize / 2, -transform.localScale.y / 2, sample.y - zSize / 2);
-			newCrystal.transform.eulerAngles = new Vector3(0, Random.Range(0, 360), 180);
+			PoissonDiscSampler pds = new PoissonDiscSampler(xSize, zSize, 3.5f, 20);
 
-			newCrystal.transform.parent = transform;
+			#region PD Sample Loop
+			GameObject newCrystal;
+
+			foreach (Vector2 sample in pds.Samples())
+			{
+				newCrystal = (GameObject)GameObject.Instantiate(crystalPrefabs[Random.Range(0, crystalPrefabs.Count)]);
+
+				newCrystal.transform.position = transform.position + new Vector3(sample.x - xSize / 2, -transform.localScale.y / 2, sample.y - zSize / 2);
+				newCrystal.transform.eulerAngles = new Vector3(0, Random.Range(0, 360), 180);
+
+				newCrystal.transform.parent = transform;
+			}
+			#endregion
 		}
-		#endregion
 
+		#region [Old Code] Creating N Crystals
 		/*if (crystalPrefabs.Count > 0)
 		{
 			GameObject newCrystal;
@@ -48,6 +52,7 @@ public class CrystalAdornment : MonoBehaviour
 				newCrystal.transform.parent = transform;
 			}
 		}*/
+		#endregion
 	}
 	
 	void Update() 
