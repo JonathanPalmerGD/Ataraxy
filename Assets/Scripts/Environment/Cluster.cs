@@ -111,6 +111,8 @@ public class Cluster : WorldObject
 
 		float timeDelay = .6f + TerrainManager.underworldYOffset / (riseSpeed + riseSpeedVariation);
 		Invoke("ConfigureClusterNodes", timeDelay);
+		
+		transform.RotateAround(Vector3.up, Random.Range(0.0f, 360.0f)); 
 		//iTween.MoveBy(clusterContents, iTween.Hash("y", TerrainManager.underworldYOffset, "easeType", "easeOutBounce", "speed", 50, "loopType", "none", "delay", .1));
 	}
 

@@ -130,7 +130,6 @@ public class TerrainManager : Singleton<TerrainManager>
 
 							newCluster.transform.position += FindOffsetOfDir(direction);
 							newCluster.clusterContents.transform.position -= Vector3.up * underworldYOffset;
-
 							newCluster.RandomLandmarks = true;
 
 							tries = 1000;
