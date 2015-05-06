@@ -164,11 +164,11 @@ public class TerrainManager : Singleton<TerrainManager>
 		{
 			if (newClusterType == Cluster.ClusterType.Biome)
 			{
-				if (Random.Range(0, 10) > 8)
+				if (Random.Range(0, 10) > 5)
 				{
 					newClusterType = Cluster.ClusterType.Rare;
 				}
-				if (Random.Range(0, 50) > 48)
+				if (Random.Range(0, 50) > 44)
 				{
 					newClusterType = Cluster.ClusterType.Boss;
 				}
