@@ -7,7 +7,7 @@ public class CrystalAdornment : MonoBehaviour
 	//public int numCrystals;
 	public List<GameObject> crystalPrefabs;
 
-	void Start() 
+	void Awake()
 	{
 		if (crystalPrefabs == null)
 		{

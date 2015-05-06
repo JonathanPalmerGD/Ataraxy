@@ -7,7 +7,7 @@ public class BushAdornment : MonoBehaviour
 	//public int numCrystals;
 	public List<GameObject> bushPrefabs;
 
-	void Start() 
+	void Awake()
 	{
 		if (bushPrefabs == null)
 		{
