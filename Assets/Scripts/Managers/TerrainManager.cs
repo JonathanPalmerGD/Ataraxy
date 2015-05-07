@@ -18,6 +18,7 @@ public class TerrainManager : Singleton<TerrainManager>
 	public static Vector3 poissonMinScale = new Vector3(10, 1, 10);
 	public static Vector3 poissonMaxScale = new Vector3(18, 12, 18);
 	public static Vector3 clusterSize = new Vector3(100, 20, 100);
+	public static int clusterSizeEdge = 15;
 	public static int poissonMinK = 20;
 	public static int poissonMaxK = 30;
 	public static float minTiltDeviation = 2;
