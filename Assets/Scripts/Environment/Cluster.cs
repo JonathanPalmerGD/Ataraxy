@@ -48,6 +48,7 @@ public class Cluster : WorldObject
 
 	public float riseCounter = 0;
 	private float riseSpeed = 35.0f;
+	private AudioSource terrainRumble = null;
 	#endregion
 
 	public override void Start()
@@ -117,7 +118,10 @@ public class Cluster : WorldObject
 
 		float timeDelay = .6f + TerrainManager.underworldYOffset / (riseSpeed + riseSpeedVariation);
 		Invoke("ConfigureClusterNodes", timeDelay);
-		
+
+		//terrainRumble = AudioManager.Instance.MakeSource("Terrain_Rumble", clusterContents.transform.position, clusterContents.transform);
+		//terrainRumble.loop = true;
+		//terrainRumble.Play ();
 		//transform.RotateAround(Vector3.up, Random.Range(0.0f, 360.0f)); 
 		//iTween.MoveBy(clusterContents, iTween.Hash("y", TerrainManager.underworldYOffset, "easeType", "easeOutBounce", "speed", 50, "loopType", "none", "delay", .1));
 	}
@@ -375,6 +379,9 @@ public class Cluster : WorldObject
 		//inPlace is only set once we have finished rising.
 		//It is checked when handling neighbor connection setup to avoid setting incorrect neighbors.
 		inPlace = true;
+
+		//terrainRumble.Stop();
+		//Destroy (terrainRumble.gameObject);
 
 		for (int i = 0; i < platforms.Count; i++)
 		{

@@ -65,6 +65,8 @@ public class Player : Entity
 
 	public override void GainLevel()
 	{
+
+		AudioManager.Instance.MakeSource("LevelUp").Play();
 		MaxHealth += 5;
 		AdjustHealth(5);
 		

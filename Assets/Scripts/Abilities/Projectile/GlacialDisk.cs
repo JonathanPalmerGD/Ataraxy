@@ -67,6 +67,8 @@ public class GlacialDisk : Projectile
 			gameObject.collider.enabled = false;
 			gameObject.renderer.enabled = false;
 
+			AudioManager.Instance.MakeSourceAtPos("Ice_Shatter", transform.position).Play();
+
 			if (rigidbody)
 			{
 				Destroy(rigidbody);

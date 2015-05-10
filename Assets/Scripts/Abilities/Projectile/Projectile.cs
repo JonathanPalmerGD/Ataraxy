@@ -58,6 +58,8 @@ public class Projectile : MonoBehaviour
 		set { creator = value; }
 	}
 
+	public string AudioClipName = "Reflect";
+
 	public List<AbilityEffect> projectileEffects;
 
 	public virtual void Init()

@@ -14,7 +14,7 @@ public class IreWasps : FlyingEnemy
 	private Vector3 home;
 	private ParticleSystem waspPartSys;
 	ParticleSystem.Particle[] m_Particles;
-
+	private AudioSource buzzingSource;
 	float distFromPlayer;
 
 	public override void Start() 
@@ -32,6 +32,14 @@ public class IreWasps : FlyingEnemy
 		name = "Ire Wasps";
 		FiringTimer = Random.Range(0, FiringCooldown);
 		projectilePrefab = Resources.Load<GameObject>("Projectiles/Projectile");
+
+		buzzingSource = AudioManager.Instance.MakeSource ("Wasp_Buzz", transform.position, transform);
+		buzzingSource.loop = true;
+		//buzzingSource.rolloffMode = AudioRolloffMode.Linear;
+		buzzingSource.maxDistance = 50;
+		//buzzingSource.minDistance = 15;
+		buzzingSource.volume = .2f;
+		buzzingSource.Play ();
 	}
 
 	public override void FindFiringPositions()
@@ -239,6 +247,7 @@ public class IreWasps : FlyingEnemy
 			case EnemyState.Idle:
 				state = EnemyState.Idle;
 				stateTimer = 0;
+				buzzingSource.volume = .2f;
 				//particleSystem.startColor = passiveColor;
 				UpdateParticleColor(passiveColor);
 				TargVisualUpdateLineColor(passiveColorLighter, passiveColorLighter);
@@ -248,14 +257,16 @@ public class IreWasps : FlyingEnemy
 				state = EnemyState.Searching;
 				break;
 			case EnemyState.Preparing:
-
+			
+				buzzingSource.volume = .6f;
 				//particleSystem.startColor = prepareColor;
 				UpdateParticleColor(prepareColor);
 				TargVisualUpdateLineColor(prepareColor, prepareColor);
 				state = EnemyState.Preparing;
 				break;
 			case EnemyState.Attacking:
-
+			
+				buzzingSource.volume = .8f;
 				//particleSystem.startColor = attackColor;
 				UpdateParticleColor(attackColor);
 				TargVisualUpdateLineColor(attackColor, attackColor);

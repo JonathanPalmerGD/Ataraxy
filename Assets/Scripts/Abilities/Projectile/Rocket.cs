@@ -1,4 +1,4 @@
-﻿﻿using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 public class Rocket : Projectile
@@ -21,7 +21,7 @@ public class Rocket : Projectile
 	public override void Start()
 	{
 		body = transform.FindChild("Rocket Body").gameObject;
-		rocketThrust = AudioManager.Instance.MakeSource("iceSwish", transform.position, transform);
+		rocketThrust = AudioManager.Instance.MakeSource("Rocket_Thrust", transform.position, transform);
 
 		rocketThrust.loop = true;
 
@@ -94,7 +94,7 @@ public class Rocket : Projectile
 			rocketThrust.Stop();
 		}
 
-		AudioManager.Instance.MakeSourceAtPos("NearExplosionB", transform.position).Play();
+		AudioManager.Instance.MakeSourceAtPos("Rocket_Explosion", transform.position).Play();
 
 		gameObject.particleSystem.enableEmission = false;
 		gameObject.collider.enabled = false;

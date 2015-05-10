@@ -64,6 +64,7 @@ public class Checkpoint : MonoBehaviour
 						}
 					}
 					player.GetComponent<TeleTarget>().lastCheckpoint = gameObject;
+					AudioManager.Instance.MakeSource("Checkpoint_Activate").Play();
 				}
 			}
 		}
