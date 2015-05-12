@@ -507,6 +507,7 @@ public class Cluster : WorldObject
 		float xOffset, yOffset, zOffset;
 
 		float spacing = Random.Range(-10, 10);
+		//float spacing = Random.Range(0, 0);
 
 		Vector3 newPosition;
 		Vector3 scale = new Vector3(
@@ -523,7 +524,7 @@ public class Cluster : WorldObject
 				yOffset = 0;//Random.Range(TerrainManager.minDistance.y, TerrainManager.maxDistance.y);
 				zOffset = 0;//Random.Range(-2, 2);
 
-				newPosition = new Vector3((TerrainManager.clusterSize.x / xDiv) * i + xOffset + transform.position.x, transform.position.y + yOffset, (TerrainManager.clusterSize.z / zDiv) * j + zOffset + transform.position.z);
+				newPosition = new Vector3((TerrainManager.clusterSize.x / xDiv) * (i+1) + xOffset + transform.position.x, transform.position.y + yOffset, (TerrainManager.clusterSize.z / zDiv) * (j+1) + zOffset + transform.position.z);
 				
 				//newPosition = new Vector3((TerrainManager.clusterSize.x / xDiv) * i + xOffset + transform.position.x, transform.position.y + yOffset, (TerrainManager.clusterSize.z / zDiv) * j + zOffset + transform.position.z);
 				//newPosition -= TerrainManager.clusterSize / 2;
@@ -545,7 +546,7 @@ public class Cluster : WorldObject
 		}
 
 
-		//clusterContents.transform.position -= TerrainManager.clusterSize / 2;
+		clusterContents.transform.position -= (TerrainManager.clusterSize / 2) + newIslandGO.transform.localScale / 2 ;
 		#endregion
 	}
 

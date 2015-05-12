@@ -6,7 +6,7 @@ using System.Linq;
 public class EncounterCreator : MonoBehaviour 
 {
 	public int numEnemies = 5;
-	public List<GameObject> enemies;
+	public List<Enemy> enemies;
 	public Island location;
 	public bool initialized = false;
 	public bool nonRandomEncounter = false;
@@ -40,7 +40,7 @@ public class EncounterCreator : MonoBehaviour
 					newEnemy = (GameObject)GameObject.Instantiate(prefab, newPos, Quaternion.identity);
 
 					newEnemy.transform.SetParent(location.transform.parent);
-					enemies.Add(newEnemy);
+					enemies.Add(newEnemy.GetComponent<Enemy>());
 					samples.RemoveAt(randSample);
 				}
 			}
@@ -52,7 +52,7 @@ public class EncounterCreator : MonoBehaviour
 			}
 		}
 
-		//Debug.Log("Completed Init()\n" + enemies.Count);
+		//Debug.Log("Completed Init()" + gameObject.name + "\n" + enemies.Count);
 	}
 
 	void Start() 
@@ -62,10 +62,27 @@ public class EncounterCreator : MonoBehaviour
 			location = transform.parent.GetComponent<Island>();
 			Init();
 		}
+		
+		//particleSystem = GetComponent<ParticleSystem>();
 	}
 	
 	void Update() 
 	{
-	
+		if(initialized && particleSystem != null)
+		{
+			bool valid = true;
+			for(int i = 0; i < enemies.Count; i++)
+			{
+				if(enemies[i] == null)
+				{
+					valid = false;
+				}
+			}
+			
+			if(!valid)
+			{
+				Destroy(particleSystem);
+			}
+		}
 	}
 }
