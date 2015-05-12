@@ -524,7 +524,9 @@ public class Cluster : WorldObject
 				zOffset = 0;//Random.Range(-2, 2);
 
 				newPosition = new Vector3((TerrainManager.clusterSize.x / xDiv) * i + xOffset + transform.position.x, transform.position.y + yOffset, (TerrainManager.clusterSize.z / zDiv) * j + zOffset + transform.position.z);
-				newPosition -= TerrainManager.clusterSize / 2;
+				
+				//newPosition = new Vector3((TerrainManager.clusterSize.x / xDiv) * i + xOffset + transform.position.x, transform.position.y + yOffset, (TerrainManager.clusterSize.z / zDiv) * j + zOffset + transform.position.z);
+				//newPosition -= TerrainManager.clusterSize / 2;
 
 				newIslandGO = (GameObject)GameObject.Instantiate(choosenIslandPrefab,
 					newPosition, Quaternion.identity);
@@ -541,6 +543,9 @@ public class Cluster : WorldObject
 				platforms.Add(newIslandGO.GetComponent<Island>());
 			}
 		}
+
+
+		//clusterContents.transform.position -= TerrainManager.clusterSize / 2;
 		#endregion
 	}
 
