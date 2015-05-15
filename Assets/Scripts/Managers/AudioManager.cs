@@ -236,7 +236,9 @@ public class AudioManager : Singleton<AudioManager>
 			}
 		}
 
+#if UNITY_EDITOR
 		Debug.LogError("[AudioManager]\n\tCould not find: " + clipName + " in Audio Lib");
+#endif
 		return null;
 	}
 	#endregion
