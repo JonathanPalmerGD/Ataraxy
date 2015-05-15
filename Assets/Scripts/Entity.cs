@@ -340,7 +340,7 @@ public class Entity : MonoBehaviour
 		}
 		if (Level < GameManager.Instance.player.Level + 4)
 		{
-			XPToGain += xpValue * xpMultiplier;
+			XPToGain += xpValue * (1 + xpMultiplier / 10);
 		}
 	}
 
@@ -387,6 +387,7 @@ public class Entity : MonoBehaviour
 			Enemy e = (Enemy)deceased;
 
 			//Gain experience
+			Debug.Log("Reward: " + e.XpReward + "\nMentor Modifier: " + e.MentorModifier + " Needed: " + XPNeeded);
 			GainExperience(e.XpReward * e.MentorModifier);
 
 			//Get alerted of the perceived player's location

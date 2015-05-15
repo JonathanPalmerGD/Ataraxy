@@ -10,6 +10,9 @@ public class Rotate : MonoBehaviour
 
 	void Update()
 	{
-		transform.Rotate(rotationAxis, rotationSpeed);
+		if (!UIManager.Instance.paused)
+		{
+			transform.Rotate(rotationAxis, rotationSpeed);
+		}
 	}
 }

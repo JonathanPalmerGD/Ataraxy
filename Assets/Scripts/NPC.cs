@@ -22,7 +22,7 @@ public class NPC : Entity
 	public float xpGainWhenHit = .5f;
 	public float expGainPerShot = 5;
 	public float AlertRadius = 50;
-	public float MentorModifier = 15.0f;
+	public float MentorModifier = 1.0f;
 	public float FiringCooldown = 7;
 	#endregion
 
@@ -83,7 +83,7 @@ public class NPC : Entity
 		//Only update our UI if we're targeted.
 		if (GameManager.Instance.player.targetedEntity == this)
 		{
-			//Debug.Log("Updating Level UI\n");
+			//Debug.Log(name + " Updating Level UI\n");
 			base.UpdateLevelUI();
 		}
 	}

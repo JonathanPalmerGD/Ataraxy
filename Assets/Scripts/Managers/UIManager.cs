@@ -204,8 +204,8 @@ public class UIManager : Singleton<UIManager>
 			EnemyModifierPrefab = Resources.Load<GameObject>("UI/Modifier_Root");
 		}
 
-		if (Modifiers == null)
-		{
+		//if (Modifiers == null || (Modifiers.Count == 0 && Modifiers[0] == null))
+		//{
 			Modifiers = new List<ModifierUI>();
 
 			ModifierUI newModifier;
@@ -222,7 +222,7 @@ public class UIManager : Singleton<UIManager>
 				Modifiers.Add(newModifier);
 			}
 			//Debug.Log("Finished creating modifiers: " + Modifiers.Count + "\n");
-		}
+		//}
 		#endregion
 
 		target_HUD.enabled = false;
@@ -254,6 +254,7 @@ public class UIManager : Singleton<UIManager>
 		Icons = Resources.LoadAll<Sprite>("Atlases/AtaraxyIconAtlas");
 		#endregion
 
+		UnpauseGame();
 	}
 
 	void Start()
@@ -322,19 +323,24 @@ public class UIManager : Singleton<UIManager>
 	{
 		paused = true;
 		Time.timeScale = 0f;
-		pause_Menu.gameObject.SetActive(paused);
-
-		//Bring in the elements for the pause menu
-		//Unlock the mouse
-		Screen.lockCursor = false;
-		Screen.showCursor = true;
+		if (pause_Menu != null)
+		{
+			pause_Menu.gameObject.SetActive(paused);
+			//Bring in the elements for the pause menu
+			//Unlock the mouse
+			Screen.lockCursor = false;
+			Screen.showCursor = true;
+		}
 	}
 
 	public void UnpauseGame()
 	{
 		paused = false;
 		Time.timeScale = 1.0f;
-		pause_Menu.gameObject.SetActive(paused);
+		if (pause_Menu != null)
+		{
+			pause_Menu.gameObject.SetActive(paused);
+		}
 		
 #if !UNITY_EDITOR
 		//Lock the mouse
