@@ -159,10 +159,13 @@ public class GameManager : Singleton<GameManager>
 		}
 		else
 		{
-			//If we don't want music on
-			AudioManager.Instance.tracksActive[0] = false;
-			AudioManager.Instance.tracksActive[1] = false;
-			AudioManager.Instance.tracksActive[2] = false;
+			if(AudioManager.Instance.tracksActive.Count > 0)
+			{
+				//If we don't want music on
+				AudioManager.Instance.tracksActive[0] = false;
+				AudioManager.Instance.tracksActive[1] = false;
+				AudioManager.Instance.tracksActive[2] = false;
+			}
 		}
 
 		if (Input.GetKey(KeyCode.RightShift) && Input.GetKeyDown(KeyCode.M))
