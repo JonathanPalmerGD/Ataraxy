@@ -22,7 +22,7 @@ public class Mentor : Modifier
 
 	public override void Gained(int stacksGained = 0, bool newStack = false)
 	{
-		Carrier.MentorModifier += 2 * stacksGained;
+		Carrier.MentorModifier += .1f * stacksGained;
 
 		base.Gained(stacksGained, newStack);
 	}

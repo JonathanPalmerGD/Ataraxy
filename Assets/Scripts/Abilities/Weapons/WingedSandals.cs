@@ -26,6 +26,8 @@ public class WingedSandals : Weapon
 		DurSpecialCost = 6;
 		NormalCooldown = .4f;
 		SpecialCooldown = 10f;
+		primaryAudio = "Sandal_Flap";
+		specialAudio = "Sandal_Flap";
 #if CHEAT
 		//NormalCooldown = .30f;
 		//SpecialCooldown = .5f;
@@ -53,6 +55,9 @@ public class WingedSandals : Weapon
 		//Debug.DrawLine(firePoint, firePoint + dir, Color.black, 6.0f);
 		Debug.DrawLine(GameManager.Instance.playerGO.transform.position, GameManager.Instance.playerGO.transform.position + dir * 10, Color.green, 2f);
 		Debug.DrawLine(GameManager.Instance.playerGO.transform.position, GameManager.Instance.playerGO.transform.position + GameManager.Instance.playerGO.transform.forward * 10, Color.black, 2f);
+		
+		AudioSource flapAud = AudioManager.Instance.MakeSource(primaryAudio);
+		flapAud.Play();
 		
 		float lungeVel = 4.5f;
 		Vector3 movementDir = dir;

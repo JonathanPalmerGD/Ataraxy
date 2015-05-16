@@ -26,6 +26,9 @@ public class Rapier : Weapon
 		DurSpecialCost = 5;
 		NormalCooldown = .80f;
 		SpecialCooldown = 6f;
+		HasAudio = true;
+		primaryAudio = "Rapier_Stab";
+		specialAudio = "Rapier_Stab";
 #if CHEAT
 		//NormalCooldown = .30f;
 		//SpecialCooldown = .5f;
@@ -50,6 +53,9 @@ public class Rapier : Weapon
 		stab.Shooter = Carrier;
 		stab.Damage = PrimaryDamage;
 
+		AudioSource stabAud = AudioManager.Instance.MakeSourceAtPos(primaryAudio, stab.transform.position);
+		stabAud.Play();
+		
 		List<Vector3> stabPoints = new List<Vector3>();
 
 		stabPoints.Add(stab.transform.position - firePoints[0].transform.position - dir * 2);
@@ -73,7 +79,6 @@ public class Rapier : Weapon
 		//Debug.Log(dir + "\n" + movementDir + "\n");
 		MoveCarrier(movementDir, lungeVel, Vector3.up, 3, true);
 
-
 		dir.Normalize();
 
 		GameObject go = (GameObject)GameObject.Instantiate(daggerStabPrefab, firePoint, Quaternion.identity);
@@ -82,6 +87,9 @@ public class Rapier : Weapon
 		stab.Init();
 		stab.Shooter = Carrier;
 
+		AudioSource stabAud = AudioManager.Instance.MakeSourceAtPos(primaryAudio, stab.transform.position);
+		stabAud.Play();
+		
 		List<Vector3> stabPoints = new List<Vector3>();
 
 		stab.ProjVel = stab.ProjVel * 4;

@@ -23,8 +23,6 @@ public class WarpStaff : Weapon
 
 	// Aiming direction
 	Vector3 AimDir;
-
-
 	#endregion
 
 	#region Initialization
@@ -114,8 +112,6 @@ public class WarpStaff : Weapon
 				TeleDestObj.particleSystem.Clear();
 			}
 		}
-		
-
 	}
 	#endregion
 

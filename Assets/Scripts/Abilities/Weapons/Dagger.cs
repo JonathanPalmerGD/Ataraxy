@@ -25,6 +25,9 @@ public class Dagger : Weapon
 		DurSpecialCost = 5; 
 		NormalCooldown = .20f;
 		SpecialCooldown = 2f;
+		HasAudio = true;
+		primaryAudio = "Dagger_Stab";
+		specialAudio = "Dagger_Stab";
 #if CHEAT
 		//NormalCooldown = .30f;
 		//SpecialCooldown = .5f;
@@ -48,6 +51,9 @@ public class Dagger : Weapon
 		stab.Init();
 		stab.Shooter = Carrier;
 
+		AudioSource stabAud = AudioManager.Instance.MakeSourceAtPos(primaryAudio, stab.transform.position);
+		stabAud.Play();
+		
 		List<Vector3> stabPoints = new List<Vector3>();
 
 		stabPoints.Add(stab.transform.position - firePoints[0].transform.position - dir * 2);

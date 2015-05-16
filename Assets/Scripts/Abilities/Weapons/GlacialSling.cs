@@ -31,6 +31,7 @@ public class GlacialSling : Weapon
 		DurSpecialCost = 5;
 		NormalCooldown = .20f;
 		shatterRadius = 5;
+		HasAudio = true;
 		SpecialCooldown = Random.Range(1.0f, 1.5f);
 #if CHEAT
 		NormalCooldown = .3f;

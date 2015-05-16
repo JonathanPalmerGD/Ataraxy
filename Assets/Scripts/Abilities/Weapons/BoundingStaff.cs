@@ -20,6 +20,8 @@ public class BoundingStaff : Weapon
 		DurSpecialCost = 1;
 		NormalCooldown = .9f;
 		SpecialCooldown = .08f;
+		specialAudio = "IceSwish";
+		HasAudio = true;
 #if CHEAT
 		//NormalCooldown = .30f;
 		//SpecialCooldown = .5f;
@@ -32,6 +34,8 @@ public class BoundingStaff : Weapon
 	
 	public override void UpdateWeapon(float time)
 	{
+		UpdateWeaponAudio(time, SpecialCooldown * 2);
+		
 		if (IconUI != null)
 		{
 			IconUI.color = new Color(.72f, .62f, .37f, IconUI.color.a);
@@ -50,6 +54,8 @@ public class BoundingStaff : Weapon
 		movementDir = new Vector3(movementDir.x, 0, movementDir.z);
 		movementDir.Normalize();
 
+		LoopWeaponAudio(specialAudio, SpecialCooldown * 2);
+		
 		//Carrier.gameObject.GetComponent<Controller>().speedMultiplier = 3f;
 
 		//MoveCarrier(movementDir, 1.8f, Vector3.up, 0.05f, true);

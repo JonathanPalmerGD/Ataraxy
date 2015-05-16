@@ -6,7 +6,7 @@ public class GravityStaff : Weapon
 {
 	public static int IconIndex = 13;
 	Vector3 movementVector;
-
+	
 	public override void Init()
 	{
 		base.Init();
@@ -24,6 +24,8 @@ public class GravityStaff : Weapon
 		DurSpecialCost = 1;
 		NormalCooldown = .9f;
 		SpecialCooldown = .08f;
+		specialAudio = "IceSwish";
+		HasAudio = true;
 #if CHEAT
 		//NormalCooldown = .30f;
 		//SpecialCooldown = .5f;
@@ -36,6 +38,8 @@ public class GravityStaff : Weapon
 
 	public override void UpdateWeapon(float time)
 	{
+		UpdateWeaponAudio(time, SpecialCooldown * 2);
+		
 		if (IconUI != null)
 		{
 			IconUI.color = new Color(.65f, .13f, .89f, IconUI.color.a);
@@ -53,6 +57,8 @@ public class GravityStaff : Weapon
 		Vector3 movementDir = dir;
 		movementDir = new Vector3(movementDir.x, 0, movementDir.z);
 
+		LoopWeaponAudio(specialAudio, SpecialCooldown * 2);
+		
 		//Debug.Log(dir + "\n" + movementDir + "\n");
 		//MoveCarrier(movementDir, 0, Vector3.up, 1.5f, true);
 		MoveCarrier(movementDir, .00f, Vector3.up, 1.05f, true);
