@@ -25,6 +25,8 @@ public class AudioManager : Singleton<AudioManager>
 	//Set these externally if you want to enable/disable a track or tracks. AudioManager's Update will handle the fading.
 	public List<bool> tracksActive;
 
+	public float maxMusicVol = .6f;
+	
 	//An inspector visible value. Editing this does not do anything.
 	//Dictionary contents are not displayed in Unity's Inspector.
 	[Header("Note: This variable is for display only")]
@@ -128,13 +130,13 @@ public class AudioManager : Singleton<AudioManager>
 			if (fadingIn)
 			{
 				//We want to lerp our way towards louder until we're loud enough to snap the rest of the way.
-				if (audioSource.volume < .90f)
+				if (audioSource.volume < maxMusicVol - .1f)
 				{
-					audioSource.volume = Mathf.Lerp(audioSource.volume, 1.0f, 0.75f * Time.deltaTime);
+					audioSource.volume = Mathf.Lerp(audioSource.volume, maxMusicVol, 0.75f * Time.deltaTime);
 				}
 				else
 				{
-					audioSource.volume = 1;
+					audioSource.volume = maxMusicVol;
 				}
 			}
 			else
