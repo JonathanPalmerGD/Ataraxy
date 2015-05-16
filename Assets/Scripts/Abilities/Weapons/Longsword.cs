@@ -24,6 +24,7 @@ public class Longsword : Weapon
 		DurSpecialCost = 1;
 		NormalCooldown = Random.Range(.45f, .55f);
 		SpecialCooldown = NormalCooldown;
+		HasAudio = true;
 		primaryAudio = "Longsword_Swish";
 		specialAudio = "Longsword_Swish";
 		#if CHEAT

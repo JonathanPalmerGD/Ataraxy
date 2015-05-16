@@ -112,8 +112,6 @@ public class WarpStaff : Weapon
 				TeleDestObj.particleSystem.Clear();
 			}
 		}
-		
-
 	}
 	#endregion
 

@@ -83,6 +83,27 @@ public class Weapon : Ability
 		get { return specialDamage; }
 		set { specialDamage = value; }
 	}
+	
+	#endregion
+	#region Weapon Audio
+	private AudioSource weapLoopAudio;
+	public AudioSource WeapLoopAudio
+	{
+		get { return weapLoopAudio; }
+		set { weapLoopAudio = value; }
+	}
+	private bool hasAudio;
+	public bool HasAudio
+	{
+		get { return hasAudio; }
+		set { hasAudio = value; }
+	}
+	private float audioCounter;
+	public float AudioCounter
+	{
+		get { return audioCounter; }
+		set { audioCounter = value; }
+	}
 	public string primaryAudio;
 	public string specialAudio;
 	public string trivialAudio;
@@ -117,6 +138,11 @@ public class Weapon : Ability
 		else
 		{
 			CdLeft = 0;
+		}
+		
+		if(HasAudio)
+		{
+			AudioCounter += time;
 		}
 	}
 
@@ -184,12 +210,12 @@ public class Weapon : Ability
 		Vector2 lineSize = new Vector2( .1f, .1f );
 		SetupLineRenderer(lrColors, lineSize, .3f, firePoints, targetScanDir);
 
-		AudioSource audSource = PlayAudio(primaryAudio);
+		//AudioSource audSource = PlayAudio(primaryAudio);
 		
-		if(audSource != null)
+		/*if(audSource != null)
 		{
 			audSource.Play();
-		}
+		}*/
 		
 		if (targType != null)
 		{
@@ -219,7 +245,7 @@ public class Weapon : Ability
 
 			}
 		}
-		//If our targType is null from targetting a piece of terrain or something?
+		//If our targType is null from targeting a piece of terrain or something?
 		else
 		{
 			//Debug.Log("Weapon hitscan'd something else\n");
@@ -271,13 +297,26 @@ public class Weapon : Ability
 		}
 	}
 
-	public virtual AudioSource PlayAudio(string sourceName)
+	public virtual void UpdateWeaponAudio(float time, float counterLimit)
 	{
-		if(sourceName != null && sourceName.Length > 0)
+		if(weapLoopAudio != null && AudioCounter > counterLimit)
 		{
-			return AudioManager.Instance.MakeSource(sourceName);
+			weapLoopAudio.Stop();
 		}
-		return null;
+	}
+	
+	public virtual void LoopWeaponAudio(string name, float cooldownAmount)
+	{
+		if(AudioCounter > cooldownAmount)
+		{
+			if(weapLoopAudio == null)
+			{
+				weapLoopAudio = AudioManager.Instance.MakeSource(name);
+			}
+			weapLoopAudio.loop = true;
+			weapLoopAudio.Play();
+		}
+		AudioCounter = 0;
 	}
 	
 	public virtual void SetupLineRenderer(Color[] colors, Vector2 lineSize, float time, GameObject[] firePoints = null, Vector3 targetScanDir = default(Vector3))

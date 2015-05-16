@@ -25,6 +25,7 @@ public class Dagger : Weapon
 		DurSpecialCost = 5; 
 		NormalCooldown = .20f;
 		SpecialCooldown = 2f;
+		HasAudio = true;
 		primaryAudio = "Dagger_Stab";
 		specialAudio = "Dagger_Stab";
 #if CHEAT

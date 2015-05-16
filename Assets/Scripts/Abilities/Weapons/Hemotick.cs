@@ -33,9 +33,14 @@ public class Hemotick : Weapon
 		specialFirePointIndex = 0;
 		PrimaryDamage = 0.20f;
 		NormalCooldown = Random.Range(.10f, .15f);
-		SpecialCooldown = 3;
+		SpecialCooldown = 1.5f;
 		DurSpecialCost = 0;
 		hazeDur = .4f;
+		
+		primaryAudio = "IceSwish";
+		specialAudio = "Hurt";
+		HasAudio = true;
+		
 		#if UNITY_EDITOR
 		SpecialCooldown = .5f;
 		#endif
@@ -49,6 +54,8 @@ public class Hemotick : Weapon
 
 	public override void UpdateWeapon(float time)
 	{
+		UpdateWeaponAudio(time, NormalCooldown * 2);
+		
 		base.UpdateWeapon(time);
 		if (IconUI != null)
 		{
@@ -76,6 +83,8 @@ public class Hemotick : Weapon
 		
 		go.transform.LookAt(targetScanDir);
 		
+		LoopWeaponAudio(primaryAudio, NormalCooldown * 2);
+		
 		bh.Creator = this;
 		bh.rigidbody.AddForce((dir * hazeVelocity * Carrier.ProjSpeedAmp * (bh.ProjVel / 20) * bh.rigidbody.mass));
 		bh.ProjLife = hazeDur;
@@ -96,6 +105,9 @@ public class Hemotick : Weapon
 		upperHealthCost = Carrier.Health / 8;
 		#endif
 
+		AudioSource bleedAud = AudioManager.Instance.MakeSource(specialAudio);
+		bleedAud.Play();
+		
 		#if !UNITY_EDITOR
 		if(tickLevel == modifier.Length - 1)
 		{

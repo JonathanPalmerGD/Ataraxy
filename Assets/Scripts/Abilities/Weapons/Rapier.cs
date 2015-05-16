@@ -26,6 +26,7 @@ public class Rapier : Weapon
 		DurSpecialCost = 5;
 		NormalCooldown = .80f;
 		SpecialCooldown = 6f;
+		HasAudio = true;
 		primaryAudio = "Rapier_Stab";
 		specialAudio = "Rapier_Stab";
 #if CHEAT

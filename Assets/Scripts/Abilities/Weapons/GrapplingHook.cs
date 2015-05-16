@@ -27,6 +27,7 @@ public class GrapplingHook : Weapon
 		crosshairColor = new Color(.3f, .3f, .3f);
 		specialCrosshairColor = new Color(.3f, 1f, .3f);
 
+		HasAudio = true;
 		primaryFirePointIndex = 0;
 		specialFirePointIndex = 0;
 		PrimaryDamage = 0.4f;
