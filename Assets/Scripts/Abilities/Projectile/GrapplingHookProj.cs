@@ -13,6 +13,7 @@ public class GrapplingHookProj : Projectile
 	private LineRenderer lr;
 	public float timeRemaining = 5;
 	public float hookSpeed = 20;
+	public AudioSource chainAud;
 
 	public override void Init()
 	{
@@ -142,6 +143,11 @@ public class GrapplingHookProj : Projectile
 		if(Creator != null)
 		{
 			((GrapplingHook)Creator).ProjectileDestroyed();
+		}
+		
+		if(chainAud != null)
+		{
+			Destroy(chainAud.gameObject);
 		}
 	}
 
@@ -348,6 +354,7 @@ public class GrapplingHookProj : Projectile
 		if (!collidedYet)
 		{
 			AudioSource thunk = AudioManager.Instance.MakeSourceAtPos("Grappling_Thunk", transform.position);
+			thunk.minDistance = 15;
 			thunk.Play();
 			
 			if (Creator.Carrier.rigidbody != null)
@@ -368,7 +375,7 @@ public class GrapplingHookProj : Projectile
 	}
 
 	public void StopGrapple()
-	{
+	{
 		if (hookState == GrapplingState.Attached)
 		{
 			Vector3 pullDir = transform.position - Creator.Carrier.transform.position;
@@ -393,6 +400,20 @@ public class GrapplingHookProj : Projectile
 		timeRemaining = 0;
 	}
 
+	public void PlayChainCoroutine()
+	{
+		StartCoroutine(PlayChainAudio());
+	}
+	
+	IEnumerator PlayChainAudio() 
+	{
+		yield return new WaitForSeconds(.10f);
+		chainAud = AudioManager.Instance.MakeSource("Grappling_Chain", Creator.Carrier.transform.position, Creator.Carrier.transform);
+		chainAud.loop = true;
+		chainAud.minDistance = 5;
+		chainAud.Play();
+	}
+	
 	public override void Fizzle()
 	{
 		fizzled = true;

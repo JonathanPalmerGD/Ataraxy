@@ -35,6 +35,9 @@ public class TransmuterKit : Weapon
 		DurSpecialCost = 20;
 		SetupDurability(55, 95);
 		
+		primaryAudio = "IceSwish";
+		HasAudio = true;
+		
 		#if UNITY_EDITOR
 		SpecialCooldown = .5f;
 		DurSpecialCost = 0;
@@ -49,6 +52,8 @@ public class TransmuterKit : Weapon
 
 	public override void UpdateWeapon(float time)
 	{
+		UpdateWeaponAudio(time, NormalCooldown * 2);
+		
 		if (IconUI != null)
 		{
 			IconUI.color = new Color(.3f, 1, .3f, IconUI.color.a);
@@ -68,6 +73,8 @@ public class TransmuterKit : Weapon
 		float healingAmplification = (.5f + percentageMissing) * (.5f + percentageMissing) * (.5f + percentageMissing);
 
 		Carrier.AdjustHealth(PrimaryDamage * healingAmplification + PrimaryDamage / 5);
+		
+		LoopWeaponAudio(primaryAudio, NormalCooldown * 2);
 		
 		//Apply any item effects to the carrier - if this is a poisonous kit, you get poisoned using it!
 		//Carrier.ApplyAbilityEffect()

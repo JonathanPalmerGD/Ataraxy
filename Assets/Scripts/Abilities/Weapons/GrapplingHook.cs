@@ -27,7 +27,6 @@ public class GrapplingHook : Weapon
 		crosshairColor = new Color(.3f, .3f, .3f);
 		specialCrosshairColor = new Color(.3f, 1f, .3f);
 
-		HasAudio = true;
 		primaryFirePointIndex = 0;
 		specialFirePointIndex = 0;
 		PrimaryDamage = 0.4f;
@@ -35,6 +34,8 @@ public class GrapplingHook : Weapon
 		SpecialCooldown = NormalCooldown;
 		//SpecialCooldown = Random.Range(.45f, .65f);
 		DurSpecialCost = 1;
+		primaryAudio = "Grappling_Fire";
+		HasAudio = true;
 		#if CHEAT
 		NormalCooldown = .7f;
 		Durability = 100;
@@ -104,6 +105,12 @@ public class GrapplingHook : Weapon
 			Vector3 dir = targetScanDir - firePoint;
 			dir.Normalize();
 
+			AudioSource hookAud = AudioManager.Instance.MakeSource(primaryAudio, Carrier.transform.position, Carrier.transform);
+			hookAud.minDistance = 5;
+			hookAud.Play();
+			
+			currentProjectile.PlayChainCoroutine();
+			
 			go.transform.LookAt(targetScanDir);
 
 			currentProjectile.Creator = this;

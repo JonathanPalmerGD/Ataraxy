@@ -22,6 +22,7 @@ public class Rocket : Projectile
 	{
 		body = transform.FindChild("Rocket Body").gameObject;
 		rocketThrust = AudioManager.Instance.MakeSource("Rocket_Thrust", transform.position, transform);
+		rocketThrust.minDistance = 9;
 
 		rocketThrust.loop = true;
 
@@ -94,8 +95,10 @@ public class Rocket : Projectile
 			rocketThrust.Stop();
 		}
 
-		AudioManager.Instance.MakeSourceAtPos("Rocket_Explosion", transform.position).Play();
-
+		AudioSource rocketAud = AudioManager.Instance.MakeSourceAtPos("Rocket_Explosion", transform.position);
+		rocketAud.minDistance = 9;
+		rocketAud.Play();
+		
 		gameObject.particleSystem.enableEmission = false;
 		gameObject.collider.enabled = false;
 		body.renderer.enabled = false;
