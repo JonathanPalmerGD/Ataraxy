@@ -125,10 +125,10 @@ public class Cluster : WorldObject
 		float timeDelay = .6f + TerrainManager.underworldYOffset / (riseSpeed + riseSpeedVariation);
 		Invoke("ConfigureClusterNodes", timeDelay);
 
-		terrainRumble = AudioManager.Instance.MakeSource("Terrain_Rumble", transform.position, transform);
+		terrainRumble = AudioManager.Instance.MakeSource("Terrain_Cracking", transform.position, transform);
 		EasyFadeIn eFI = terrainRumble.gameObject.AddComponent<EasyFadeIn>();
 		eFI.approxSecondsToFade = .5f;
-		terrainRumble.loop = true;
+		//terrainRumble.loop = true;
 		terrainRumble.volume = 1f;
 		terrainRumble.minDistance = 50;
 		terrainRumble.maxDistance = 500;
