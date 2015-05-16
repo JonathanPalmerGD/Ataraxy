@@ -71,6 +71,11 @@ public class WarpStaff : Weapon
 		SpecialCooldown = 2.50f;
 		CdLeft = 0.0f;
 
+		// Audio
+		primaryAudio = "Teleport_Fwomp";
+		specialAudio = "Teleport_Bring";
+		HasAudio = true;
+		
 		// Durability Stats
 		DurCost = 3;
 		DurSpecialCost = 1;
@@ -133,6 +138,9 @@ public class WarpStaff : Weapon
 		// Stops Players momentum
 		Carrier.transform.rigidbody.velocity = new Vector3(0, 0, 0);
 		
+		AudioSource warpAud = AudioManager.Instance.MakeSource(primaryAudio);
+		warpAud.Play();
+		
 		// Creates Explosion.
 		if (ExplosionPrefab != null)
 		{
@@ -170,6 +178,9 @@ public class WarpStaff : Weapon
 						
 						// Damages Target. This is necessary because overlap sphere is not hitting it.
 						e.AdjustHealth(-MaxExplosiveDmg);
+						
+						AudioSource warpAud = AudioManager.Instance.MakeSource(primaryAudio);
+						warpAud.Play();
 					}
 					else
 					{	// Target has NO rigidBody
@@ -178,6 +189,9 @@ public class WarpStaff : Weapon
 						{
 							GameObject.Instantiate(ExplosionPrefab, e.transform.position, Quaternion.identity);
 						}
+						
+						AudioSource warpAud = AudioManager.Instance.MakeSource(specialAudio);
+						warpAud.Play();
 					}
 					// Applies damage
 					applyExplosionDamege(e.transform.position);

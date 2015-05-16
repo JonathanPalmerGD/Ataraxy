@@ -24,7 +24,7 @@ public class GravityStaff : Weapon
 		DurSpecialCost = 1;
 		NormalCooldown = .9f;
 		SpecialCooldown = .08f;
-		specialAudio = "IceSwish";
+		specialAudio = "Hum";
 		HasAudio = true;
 #if CHEAT
 		//NormalCooldown = .30f;

@@ -26,8 +26,8 @@ public class WingedSandals : Weapon
 		DurSpecialCost = 6;
 		NormalCooldown = .4f;
 		SpecialCooldown = 10f;
-		primaryAudio = "Sandal_Flap";
-		specialAudio = "Sandal_Flap";
+		primaryAudio = "Hermes_Flap";
+		specialAudio = "Hermes_Flap";
 #if CHEAT
 		//NormalCooldown = .30f;
 		//SpecialCooldown = .5f;
@@ -76,6 +76,9 @@ public class WingedSandals : Weapon
 		Vector3 movementDir = dir;
 		movementDir = new Vector3(movementDir.x, 0, movementDir.z);
 
+		AudioSource flapAud = AudioManager.Instance.MakeSource(specialAudio);
+		flapAud.Play();
+		
 		MoveCarrier(Vector3.zero, 0, Vector3.up, 28f, false);
 	}
 

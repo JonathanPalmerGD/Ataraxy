@@ -37,7 +37,7 @@ public class Hemotick : Weapon
 		DurSpecialCost = 0;
 		hazeDur = .4f;
 		
-		primaryAudio = "IceSwish";
+		primaryAudio = "Tick_Squelch";
 		specialAudio = "Hurt";
 		HasAudio = true;
 		
@@ -83,7 +83,7 @@ public class Hemotick : Weapon
 		
 		go.transform.LookAt(targetScanDir);
 		
-		LoopWeaponAudio(primaryAudio, NormalCooldown * 2);
+		AudioSource tickAud = LoopWeaponAudio(primaryAudio, NormalCooldown * 2, .5f);
 		
 		bh.Creator = this;
 		bh.rigidbody.AddForce((dir * hazeVelocity * Carrier.ProjSpeedAmp * (bh.ProjVel / 20) * bh.rigidbody.mass));

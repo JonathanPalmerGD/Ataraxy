@@ -35,7 +35,7 @@ public class TransmuterKit : Weapon
 		DurSpecialCost = 20;
 		SetupDurability(55, 95);
 		
-		primaryAudio = "IceSwish";
+		primaryAudio = "Trans_Heal";
 		HasAudio = true;
 		
 		#if UNITY_EDITOR
@@ -74,7 +74,7 @@ public class TransmuterKit : Weapon
 
 		Carrier.AdjustHealth(PrimaryDamage * healingAmplification + PrimaryDamage / 5);
 		
-		LoopWeaponAudio(primaryAudio, NormalCooldown * 2);
+		LoopWeaponAudio(primaryAudio, NormalCooldown * 2, .2f);
 		
 		//Apply any item effects to the carrier - if this is a poisonous kit, you get poisoned using it!
 		//Carrier.ApplyAbilityEffect()

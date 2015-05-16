@@ -321,7 +321,7 @@ public class UIManager : Singleton<UIManager>
 
 	public void PauseGame()
 	{
-		AudioListener.pause = true;
+		//AudioListener.pause = true;
 		paused = true;
 		Time.timeScale = 0f;
 		if (pause_Menu != null)
@@ -336,7 +336,7 @@ public class UIManager : Singleton<UIManager>
 
 	public void UnpauseGame()
 	{
-		AudioListener.pause = false;
+		//AudioListener.pause = false;
 		paused = false;
 		Time.timeScale = 1.0f;
 		if (pause_Menu != null)

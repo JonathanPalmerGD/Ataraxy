@@ -305,18 +305,22 @@ public class Weapon : Ability
 		}
 	}
 	
-	public virtual void LoopWeaponAudio(string name, float cooldownAmount)
+	public virtual AudioSource LoopWeaponAudio(string name, float cooldownAmount, float volume = 1)
 	{
+		if(weapLoopAudio == null)
+		{
+			weapLoopAudio = AudioManager.Instance.MakeSource(name);
+			weapLoopAudio.volume = volume;
+			weapLoopAudio.loop = true;
+		}
+			
 		if(AudioCounter > cooldownAmount)
 		{
-			if(weapLoopAudio == null)
-			{
-				weapLoopAudio = AudioManager.Instance.MakeSource(name);
-			}
-			weapLoopAudio.loop = true;
 			weapLoopAudio.Play();
 		}
 		AudioCounter = 0;
+		
+		return weapLoopAudio;
 	}
 	
 	public virtual void SetupLineRenderer(Color[] colors, Vector2 lineSize, float time, GameObject[] firePoints = null, Vector3 targetScanDir = default(Vector3))
