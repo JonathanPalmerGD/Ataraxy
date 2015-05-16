@@ -66,7 +66,7 @@ public class Weapon : Ability
 		set { durSpecialCost = value; }
 	}
 	#endregion
-	#region Indexes (Fire Point, Icon)
+	#region Indices (Fire Point, Icon)
 	public int primaryFirePointIndex = 1;
 	public int specialFirePointIndex = 1;
 	#endregion
@@ -83,7 +83,9 @@ public class Weapon : Ability
 		get { return specialDamage; }
 		set { specialDamage = value; }
 	}
-
+	public string primaryAudio;
+	public string specialAudio;
+	public string trivialAudio;
 	#endregion
 	#region Crosshair Index & Color
 	public int crosshairIndex = 3;
@@ -182,6 +184,13 @@ public class Weapon : Ability
 		Vector2 lineSize = new Vector2( .1f, .1f );
 		SetupLineRenderer(lrColors, lineSize, .3f, firePoints, targetScanDir);
 
+		AudioSource audSource = PlayAudio(primaryAudio);
+		
+		if(audSource != null)
+		{
+			audSource.Play();
+		}
+		
 		if (targType != null)
 		{
 			if (targType.IsSubclassOf(typeof(Enemy)) || targType == typeof(Enemy))
@@ -262,6 +271,15 @@ public class Weapon : Ability
 		}
 	}
 
+	public virtual AudioSource PlayAudio(string sourceName)
+	{
+		if(sourceName != null && sourceName.Length > 0)
+		{
+			return AudioManager.Instance.MakeSource(sourceName);
+		}
+		return null;
+	}
+	
 	public virtual void SetupLineRenderer(Color[] colors, Vector2 lineSize, float time, GameObject[] firePoints = null, Vector3 targetScanDir = default(Vector3))
 	{
 		if (targetScanDir != default(Vector3) && firePoints.Length > 0)

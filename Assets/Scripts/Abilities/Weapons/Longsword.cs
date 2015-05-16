@@ -24,7 +24,9 @@ public class Longsword : Weapon
 		DurSpecialCost = 1;
 		NormalCooldown = Random.Range(.45f, .55f);
 		SpecialCooldown = NormalCooldown;
-#if CHEAT
+		primaryAudio = "Longsword_Swish";
+		specialAudio = "Longsword_Swish";
+		#if CHEAT
 		NormalCooldown = .5f;
 		SpecialCooldown = .5f;
 		Durability = 100;
@@ -51,6 +53,9 @@ public class Longsword : Weapon
 
 		slash.Damage = PrimaryDamage;
 
+		AudioSource slashAud = AudioManager.Instance.MakeSourceAtPos(primaryAudio, slash.transform.position);
+		slashAud.Play();
+		
 		//Slash Edge Extend direction
 		Vector3 LeftVector = Vector3.Cross(dir, Vector3.up);
 
@@ -81,6 +86,9 @@ public class Longsword : Weapon
 
 		slash.Damage = SpecialDamage;
 
+		AudioSource slashAud = AudioManager.Instance.MakeSourceAtPos(specialAudio, slash.transform.position);
+		slashAud.Play();
+		
 		//Slash Edge Extend direction
 		Vector3 LeftVector = Vector3.Cross(dir, Vector3.up);
 

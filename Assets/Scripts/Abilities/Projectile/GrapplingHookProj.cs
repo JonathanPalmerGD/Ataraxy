@@ -347,9 +347,11 @@ public class GrapplingHookProj : Projectile
 	{
 		if (!collidedYet)
 		{
+			AudioSource thunk = AudioManager.Instance.MakeSourceAtPos("Grappling_Thunk", transform.position);
+			thunk.Play();
+			
 			if (Creator.Carrier.rigidbody != null)
 			{
-			
 				rigidbody.velocity = Vector3.zero;
 				rigidbody.useGravity = false;
 				Creator.Carrier.rigidbody.useGravity = false;

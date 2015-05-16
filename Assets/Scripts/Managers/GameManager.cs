@@ -22,7 +22,7 @@ public class GameManager : Singleton<GameManager>
 	public bool combatActive = false;
 	public bool bossActive = false;
 
-	public bool enableMusic = true;
+	public bool enableMusic = false;
 
 	public List<Enemy> enemiesEngaged;
 
