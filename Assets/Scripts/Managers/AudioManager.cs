@@ -25,7 +25,7 @@ public class AudioManager : Singleton<AudioManager>
 	//Set these externally if you want to enable/disable a track or tracks. AudioManager's Update will handle the fading.
 	public List<bool> tracksActive;
 
-	public float maxMusicVol = .6f;
+	public float maxMusicVol = .4f;
 	
 	//An inspector visible value. Editing this does not do anything.
 	//Dictionary contents are not displayed in Unity's Inspector.

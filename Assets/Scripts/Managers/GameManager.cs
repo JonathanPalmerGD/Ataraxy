@@ -22,7 +22,7 @@ public class GameManager : Singleton<GameManager>
 	public bool combatActive = false;
 	public bool bossActive = false;
 
-	public bool enableMusic = false;
+	public bool enableMusic = true;
 
 	public List<Enemy> enemiesEngaged;
 
@@ -168,7 +168,7 @@ public class GameManager : Singleton<GameManager>
 			}
 		}
 
-		if (Input.GetKey(KeyCode.RightShift) && Input.GetKeyDown(KeyCode.M))
+		if (Input.GetKeyDown(KeyCode.M))
 		{
 			enableMusic = !enableMusic;
 		}
