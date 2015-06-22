@@ -86,7 +86,7 @@ public class Hemotick : Weapon
 		AudioSource tickAud = LoopWeaponAudio(primaryAudio, NormalCooldown * 2, .5f);
 		
 		bh.Creator = this;
-		bh.rigidbody.AddForce((dir * hazeVelocity * Carrier.ProjSpeedAmp * (bh.ProjVel / 20) * bh.rigidbody.mass));
+		bh.GetComponent<Rigidbody>().AddForce((dir * hazeVelocity * Carrier.ProjSpeedAmp * (bh.ProjVel / 20) * bh.GetComponent<Rigidbody>().mass));
 		bh.ProjLife = hazeDur;
 		
 		bh.Damage = PrimaryDamage;

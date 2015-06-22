@@ -62,7 +62,7 @@ public class Floating : MonoBehaviour
 		
 		if(verticalWander)
 		{
-			rigidbody.AddForce(Vector3.up * vertPush * yChange * rigidbody.mass);
+			GetComponent<Rigidbody>().AddForce(Vector3.up * vertPush * yChange * GetComponent<Rigidbody>().mass);
 		}
 		//if (planarWander)
 		//{

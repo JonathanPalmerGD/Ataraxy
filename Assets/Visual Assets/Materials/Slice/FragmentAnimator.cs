@@ -27,6 +27,6 @@ public class FragmentAnimator : MonoBehaviour
 			counter = 0;
 		}
 
-		renderer.material.SetFloat("_PerComplete", perComplete);
+		GetComponent<Renderer>().material.SetFloat("_PerComplete", perComplete);
 	}
 }

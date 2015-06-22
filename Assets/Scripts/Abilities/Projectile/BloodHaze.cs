@@ -14,8 +14,8 @@ public class BloodHaze : Projectile
 		deathTimer -= Time.deltaTime;
 		if(deathTimer <= 0)
 		{
-			rigidbody.velocity = Vector3.zero;
-			particleSystem.Stop();
+			GetComponent<Rigidbody>().velocity = Vector3.zero;
+			GetComponent<ParticleSystem>().Stop();
 			GameObject.Destroy(gameObject, 2.0f);
 			enabled = false;
 		}

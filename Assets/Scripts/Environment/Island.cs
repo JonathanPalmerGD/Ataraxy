@@ -426,9 +426,9 @@ public class Island : WorldObject
 
 		newNode.GetComponent<PathNode>().island = this;
 
-		newNode.renderer.enabled = true;
+		newNode.GetComponent<Renderer>().enabled = true;
 #if !UNITY_EDITOR
-		newNode.renderer.enabled = false;
+		newNode.GetComponent<Renderer>().enabled = false;
 #endif
 
 		return newNode.GetComponent<PathNode>();

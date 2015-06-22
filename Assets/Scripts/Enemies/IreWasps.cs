@@ -69,8 +69,8 @@ public class IreWasps : FlyingEnemy
 		if (InfoHUD != null)
 		{
 			InfoHUD.enabled = false;
-			renderer.enabled = false;
-			particleSystem.startSpeed = .7f;
+			GetComponent<Renderer>().enabled = false;
+			GetComponent<ParticleSystem>().startSpeed = .7f;
 			//renderer.material.shader = normalShader;
 		}
 	}
@@ -112,13 +112,13 @@ public class IreWasps : FlyingEnemy
 			else
 			{
 				ChangeState(EnemyState.Attacking);
-				if (rigidbody.velocity.magnitude < 2)
+				if (GetComponent<Rigidbody>().velocity.magnitude < 2)
 				{
-					rigidbody.velocity = Vector3.zero;
+					GetComponent<Rigidbody>().velocity = Vector3.zero;
 				}
 				else
 				{
-					rigidbody.velocity = rigidbody.velocity * .9f;
+					GetComponent<Rigidbody>().velocity = GetComponent<Rigidbody>().velocity * .9f;
 				}
 			}
 		}
@@ -140,7 +140,7 @@ public class IreWasps : FlyingEnemy
 			{
 				if (CanSeePlayer)
 				{
-					rigidbody.velocity = Vector3.zero;
+					GetComponent<Rigidbody>().velocity = Vector3.zero;
 					ChangeState(EnemyState.Idle);
 				}
 				CanSeePlayer = false;
@@ -198,8 +198,8 @@ public class IreWasps : FlyingEnemy
 						//Debug.DrawLine(transform.position, chargeTargetLocation, Color.green, 5.0f);
 						Vector3 dirToPlayer = (chargeTargetLocation - transform.position + Vector3.up * .1f);
 						dirToPlayer.Normalize();
-						rigidbody.AddForce(dirToPlayer * ProjSpeedAmp * rigidbody.mass * 2000);
-						particleSystem.startColor = attackColor;
+						GetComponent<Rigidbody>().AddForce(dirToPlayer * ProjSpeedAmp * GetComponent<Rigidbody>().mass * 2000);
+						GetComponent<ParticleSystem>().startColor = attackColor;
 					}
 				}
 				#endregion
@@ -232,7 +232,7 @@ public class IreWasps : FlyingEnemy
 					Vector3 dirToHome = (home - transform.position);
 					dirToHome.Normalize();
 					//Debug.DrawLine(transform.position, transform.position + dirToHome, Color.red);
-					rigidbody.AddForce(dirToHome * rigidbody.mass * 15);
+					GetComponent<Rigidbody>().AddForce(dirToHome * GetComponent<Rigidbody>().mass * 15);
 				}
 			}
 			#endregion
@@ -251,7 +251,7 @@ public class IreWasps : FlyingEnemy
 				//particleSystem.startColor = passiveColor;
 				UpdateParticleColor(passiveColor);
 				TargVisualUpdateLineColor(passiveColorLighter, passiveColorLighter);
-				rigidbody.velocity = Vector3.zero;
+				GetComponent<Rigidbody>().velocity = Vector3.zero;
 				break;
 			case EnemyState.Searching:
 				state = EnemyState.Searching;
@@ -279,7 +279,7 @@ public class IreWasps : FlyingEnemy
 	{
 		InitializeIfNeeded();
 
-		particleSystem.startColor = newColor;
+		GetComponent<ParticleSystem>().startColor = newColor;
 
 		int numParticlesAlive = waspPartSys.GetParticles(m_Particles);
 
@@ -319,12 +319,12 @@ public class IreWasps : FlyingEnemy
 
 	public override void Target()
 	{
+		base.Target();
+
 		if (InfoHUD != null)
 		{
 			InfoHUD.enabled = true;
-			particleSystem.startSpeed = 1.3f;
-			//renderer.enabled = true;
-			//renderer.material.shader = outlineOnly;
+			GetComponent<ParticleSystem>().startSpeed = 1.3f;
 
 			SetupHealthUI();
 			SetupResourceUI();

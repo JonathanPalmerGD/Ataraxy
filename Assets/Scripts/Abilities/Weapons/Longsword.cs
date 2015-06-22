@@ -50,7 +50,7 @@ public class Longsword : Weapon
 		slash.Init();
 		slash.Shooter = Carrier;
 
-		slash.rigidbody.drag = slashDrag;
+		slash.GetComponent<Rigidbody>().drag = slashDrag;
 
 		slash.Damage = PrimaryDamage;
 
@@ -83,7 +83,7 @@ public class Longsword : Weapon
 		slash.Init();
 		slash.Shooter = Carrier;
 
-		slash.rigidbody.drag = slashDrag;
+		slash.GetComponent<Rigidbody>().drag = slashDrag;
 
 		slash.Damage = SpecialDamage;
 

@@ -10,8 +10,8 @@ public class Dimensions : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		float x = renderer.bounds.extents.x;
-		float z = renderer.bounds.extents.z;
+		float x = GetComponent<Renderer>().bounds.extents.x;
+		float z = GetComponent<Renderer>().bounds.extents.z;
 		//float renderRadius = Mathf.Sqrt (x * x + z * z);
 		//Debug.Log ("renderRadius = " + renderRadius);
 		

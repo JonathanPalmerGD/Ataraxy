@@ -69,8 +69,8 @@ public class DetonatorSpray : DetonatorComponent {
 						);
 				}
 
-				chunk.rigidbody.velocity = Vector3.Scale(randVec.normalized,velocityVec);
-				chunk.rigidbody.velocity = Vector3.Scale(randVec.normalized,velocityVec);
+				chunk.GetComponent<Rigidbody>().velocity = Vector3.Scale(randVec.normalized,velocityVec);
+				chunk.GetComponent<Rigidbody>().velocity = Vector3.Scale(randVec.normalized,velocityVec);
 				Destroy(chunk, (duration * timeScale)); 
 
 				_delayedExplosionStarted = false;

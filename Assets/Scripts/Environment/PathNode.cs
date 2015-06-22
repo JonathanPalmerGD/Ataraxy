@@ -10,7 +10,7 @@ public class PathNode : MonoBehaviour
 
 	void Start() 
 	{
-		renderer.enabled = false;
+		GetComponent<Renderer>().enabled = false;
 	}
 	
 	void Update() 
@@ -18,7 +18,7 @@ public class PathNode : MonoBehaviour
 		#if UNITY_EDITOR
 		if (Input.GetKeyDown(KeyCode.Home))
 		{
-			renderer.enabled = true;
+			GetComponent<Renderer>().enabled = true;
 		}
 		#endif
 	}

@@ -22,9 +22,9 @@ public class EasyFadeIn : MonoBehaviour
  
 	void FixedUpdate()
 	{
-		if (audio.volume < 1)
+		if (GetComponent<AudioSource>().volume < 1)
 		{
-			audio.volume = audio.volume + (Time.deltaTime / (approxSecondsToFade + 1));
+			GetComponent<AudioSource>().volume = GetComponent<AudioSource>().volume + (Time.deltaTime / (approxSecondsToFade + 1));
 		}
 		else
 		{

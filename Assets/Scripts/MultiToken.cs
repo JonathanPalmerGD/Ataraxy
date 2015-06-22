@@ -175,15 +175,15 @@ public class MultiToken : MonoBehaviour
 
 	public void DisableToken()
 	{
-		if (light != null)
+		if (GetComponent<Light>() != null)
 		{
-			light.enabled = false;
+			GetComponent<Light>().enabled = false;
 		}
 		gameObject.SetActive(false);
-		renderer.enabled = false;
-		if (particleSystem != null)
+		GetComponent<Renderer>().enabled = false;
+		if (GetComponent<ParticleSystem>() != null)
 		{
-			particleSystem.enableEmission = false;
+			GetComponent<ParticleSystem>().enableEmission = false;
 		}
 	}
 }

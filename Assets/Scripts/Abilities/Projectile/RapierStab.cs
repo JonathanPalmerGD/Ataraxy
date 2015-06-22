@@ -12,7 +12,7 @@ public class RapierStab : MeleeProjectile
 		ProjVel = 1900;
 		movementDecay = 0f;
 		visualDecay = .45f;
-		rigidbody.drag = 8;
+		GetComponent<Rigidbody>().drag = 8;
 #if CHEAT
 		//visualDecay = 50f;
 #else
@@ -27,6 +27,6 @@ public class RapierStab : MeleeProjectile
 
 	public override void Collide()
 	{
-		rigidbody.drag += 2;
+		GetComponent<Rigidbody>().drag += 2;
 	}
 }

@@ -13,8 +13,12 @@ public class UIManager : Singleton<UIManager>
 
 	public Canvas UIROOT;
 
+	CursorLockMode wantedMode;
+
 	#region Target HUD elements
 	public Canvas target_HUD;
+	public Canvas target_Mod;
+	public Canvas target_Info;
 	public Text target_Name;
 	public Slider target_HP;
 	public Slider target_XP;
@@ -185,8 +189,8 @@ public class UIManager : Singleton<UIManager>
 
 		#region Target UI
 		target_HUD = GameObject.Find("Target_HUD").GetComponent<Canvas>();
-		target_HUD.gameObject.SetActive(false);
-		target_HUD.gameObject.SetActive(true);
+		target_Mod = GameObject.Find("Target_Modifiers").GetComponent<Canvas>();
+		target_Info = GameObject.Find("Target_Info").GetComponent<Canvas>();
 		target_Name = GameObject.Find("Target_Name").GetComponent<Text>();
 		target_HP = GameObject.Find("Target_HP").GetComponent<Slider>();
 		target_XP = GameObject.Find("Target_XP").GetComponent<Slider>();
@@ -206,26 +210,27 @@ public class UIManager : Singleton<UIManager>
 
 		//if (Modifiers == null || (Modifiers.Count == 0 && Modifiers[0] == null))
 		//{
-			Modifiers = new List<ModifierUI>();
+		Modifiers = new List<ModifierUI>();
 
-			ModifierUI newModifier;
-			for (int i = 0; i < 10; i++)
-			{
-				newModifier = ((GameObject)GameObject.Instantiate(EnemyModifierPrefab)).GetComponent<ModifierUI>();
-				newModifier.gameObject.name = "Modifier [" + i + "]";
-				newModifier.transform.SetParent(ModifierMiddleRoot.transform);
-				newModifier.rootBackground.rectTransform.offsetMin = new Vector2(5, 0);
-				newModifier.rootBackground.rectTransform.offsetMax = new Vector2(1, 1);
-				newModifier.rootBackground.rectTransform.sizeDelta = new Vector2(0, 25);
-				newModifier.rootBackground.rectTransform.anchoredPosition = new Vector2(0, -2.5f - i * 25);
-				newModifier.gameObject.SetActive(false);
-				Modifiers.Add(newModifier);
-			}
+		ModifierUI newModifier;
+		for (int i = 0; i < 10; i++)
+		{
+			newModifier = ((GameObject)GameObject.Instantiate(EnemyModifierPrefab)).GetComponent<ModifierUI>();
+			newModifier.gameObject.name = "Modifier [" + i + "]";
+			newModifier.transform.SetParent(ModifierMiddleRoot.transform);
+			newModifier.rootBackground.rectTransform.offsetMin = new Vector2(5, 0);
+			newModifier.rootBackground.rectTransform.offsetMax = new Vector2(1, 1);
+			newModifier.rootBackground.rectTransform.sizeDelta = new Vector2(0, 25);
+			newModifier.rootBackground.rectTransform.localScale = Vector3.one;
+			newModifier.rootBackground.rectTransform.anchoredPosition = new Vector2(0, -2.5f - i * 25);
+			newModifier.gameObject.SetActive(false);
+			Modifiers.Add(newModifier);
+		}
 			//Debug.Log("Finished creating modifiers: " + Modifiers.Count + "\n");
 		//}
 		#endregion
 
-		target_HUD.enabled = false;
+		Untarget();
 
 		#region Player UI
 		damage_Indicator = GameObject.Find("Damage_Indicator").GetComponent<Image>();
@@ -269,10 +274,11 @@ public class UIManager : Singleton<UIManager>
 	bool wasFullScreen;
 	void Update()
 	{
+		SetCursorState();
 		if (!paused)
 		{
 #if !UNITY_EDITOR
-			Screen.lockCursor = true;
+			
 #endif
 		}
 		#region Quit Section
@@ -329,8 +335,8 @@ public class UIManager : Singleton<UIManager>
 			pause_Menu.gameObject.SetActive(paused);
 			//Bring in the elements for the pause menu
 			//Unlock the mouse
-			Screen.lockCursor = false;
-			Screen.showCursor = true;
+
+			wantedMode = CursorLockMode.Confined;
 		}
 	}
 
@@ -343,12 +349,29 @@ public class UIManager : Singleton<UIManager>
 		{
 			pause_Menu.gameObject.SetActive(paused);
 		}
-		
+
+		wantedMode = CursorLockMode.Locked;
 #if !UNITY_EDITOR
-		//Lock the mouse
-		Screen.lockCursor = true;
-		Screen.showCursor = false;
 #endif
+	}
+
+	public void Untarget()
+	{
+		target_HUD.enabled = false;
+		target_Mod.enabled = false;
+		target_Info.enabled = false;
+	}
+	public void Target()
+	{
+		target_HUD.enabled = true;
+		target_Mod.enabled = true;
+		target_Info.enabled = true;
+	}
+
+	void SetCursorState()
+	{
+		Cursor.lockState = wantedMode;
+		Cursor.visible = (CursorLockMode.Locked != wantedMode);
 	}
 
 	public void SetupModifier(Modifier m)

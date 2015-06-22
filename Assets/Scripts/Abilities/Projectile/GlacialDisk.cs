@@ -63,15 +63,15 @@ public class GlacialDisk : Projectile
 
 				det.Explode();
 			}
-			gameObject.particleSystem.enableEmission = false;
-			gameObject.collider.enabled = false;
-			gameObject.renderer.enabled = false;
+			gameObject.GetComponent<ParticleSystem>().enableEmission = false;
+			gameObject.GetComponent<Collider>().enabled = false;
+			gameObject.GetComponent<Renderer>().enabled = false;
 
 			AudioManager.Instance.MakeSourceAtPos("Ice_Shatter", transform.position).Play();
 
-			if (rigidbody)
+			if (GetComponent<Rigidbody>())
 			{
-				Destroy(rigidbody);
+				Destroy(GetComponent<Rigidbody>());
 			}
 			enabled = false;
 

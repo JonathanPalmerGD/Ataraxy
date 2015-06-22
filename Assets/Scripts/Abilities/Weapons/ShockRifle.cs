@@ -112,7 +112,7 @@ public class ShockRifle : Weapon
 		Vector3 dir = targetScanDir - firePoint;
 		dir.Normalize();
 
-		shock.rigidbody.AddForce(dir * shock.ProjVel * Carrier.ProjSpeedAmp * shock.rigidbody.mass);
+		shock.GetComponent<Rigidbody>().AddForce(dir * shock.ProjVel * Carrier.ProjSpeedAmp * shock.GetComponent<Rigidbody>().mass);
 
 		Destroy(go, 20);
 	}

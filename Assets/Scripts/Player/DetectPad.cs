@@ -56,7 +56,7 @@ public class DetectPad : MonoBehaviour
 
 	public void PlayJumpNoise()
 	{
-		audio.clip = jumpNoise;
-		audio.Play();
+		GetComponent<AudioSource>().clip = jumpNoise;
+		GetComponent<AudioSource>().Play();
 	}
 }

@@ -77,7 +77,7 @@ public class RocketLauncher : Weapon
 						rocket.target = null;
 						rocket.homing = false;
 
-						rocket.rigidbody.AddForce((targetScanDir - firePoint) * rocket.ProjVel * Carrier.ProjSpeedAmp * rocket.rigidbody.mass);
+						rocket.GetComponent<Rigidbody>().AddForce((targetScanDir - firePoint) * rocket.ProjVel * Carrier.ProjSpeedAmp * rocket.GetComponent<Rigidbody>().mass);
 					}
 				}
 			}
@@ -106,7 +106,7 @@ public class RocketLauncher : Weapon
 		rocket.Shooter = Carrier;
 		rocket.Creator = this;
 
-		rocket.rigidbody.drag = 0;
+		rocket.GetComponent<Rigidbody>().drag = 0;
 		rocket.target = null;
 		rocket.homing = false;
 
@@ -119,7 +119,7 @@ public class RocketLauncher : Weapon
 		Vector3 dir = targetScanDir - firePoint;
 		dir.Normalize();
 
-		rocket.rigidbody.AddForce((dir * rocket.ProjVel * Carrier.ProjSpeedAmp * rocket.rigidbody.mass));
+		rocket.GetComponent<Rigidbody>().AddForce((dir * rocket.ProjVel * Carrier.ProjSpeedAmp * rocket.GetComponent<Rigidbody>().mass));
 
 		Destroy(rocket, fuelPerRocket + 8);
 	}

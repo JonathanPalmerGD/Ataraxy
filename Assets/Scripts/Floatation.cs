@@ -50,7 +50,7 @@ public class Floatation : MonoBehaviour
 			//Debug.Log(vertPush + " " + yChange + " ");
 			if (verticalWander)
 			{
-				rigidbody.AddForce(Vector3.up * vertPush * yChange * rigidbody.mass);
+				GetComponent<Rigidbody>().AddForce(Vector3.up * vertPush * yChange * GetComponent<Rigidbody>().mass);
 			}
 
 			if (yFromHome < yWanderBound && yFromHome > -yWanderBound)

@@ -549,7 +549,7 @@ public class EnemyController : MonoBehaviour
 
 				float distFromDest = CheckDestinationDistance();
 				//Going to move this to function extensions later.
-				float newDistFromDest = Constants.CheckXZDistance(transform.position + rigidbody.velocity.normalized, nextNode.transform.position);
+				float newDistFromDest = Constants.CheckXZDistance(transform.position + GetComponent<Rigidbody>().velocity.normalized, nextNode.transform.position);
 				
 				
 				//Debug.Log(distFromDest + "\t\t\t" + newDistFromDest + "\n");
@@ -834,7 +834,7 @@ public class EnemyController : MonoBehaviour
 						//Debug.DrawLine(transform.position, transform.position + transform.forward * 10, Color.blue, 8.0f);
 
 						//We want to check that we are facing in the right direction and that we're moving forward.
-						float velocityDotProduct = Vector3.Dot(rigidbody.velocity.normalized, toOther.normalized);
+						float velocityDotProduct = Vector3.Dot(GetComponent<Rigidbody>().velocity.normalized, toOther.normalized);
 
 						if (dotProduct > .99f && velocityDotProduct > .7f)
 						{

@@ -15,7 +15,7 @@ public class GrimKeep : Enemy
 
 		foreach (GameObject go in Blocks)
 		{
-			go.renderer.material = renderer.material;
+			go.GetComponent<Renderer>().material = GetComponent<Renderer>().material;
 		}
 	}
 
@@ -25,7 +25,7 @@ public class GrimKeep : Enemy
 
 		foreach (GameObject go in Blocks)
 		{
-			go.renderer.material.shader = outline;
+			go.GetComponent<Renderer>().material.shader = outline;
 		}
 	}
 
@@ -35,7 +35,7 @@ public class GrimKeep : Enemy
 
 		foreach (GameObject go in Blocks)
 		{
-			go.renderer.material.shader = diffuse;
+			go.GetComponent<Renderer>().material.shader = diffuse;
 		}
 
 	}
@@ -45,13 +45,13 @@ public class GrimKeep : Enemy
 	{
 		foreach (GameObject go in Blocks)
 		{
-			go.renderer.material.shader = diffuse;
+			go.GetComponent<Renderer>().material.shader = diffuse;
 		}
 		base.KillEntity();
 	}
 
 	public override void ThrowToken(GameObject newToken)
 	{
-		newToken.rigidbody.useGravity = true;
+		newToken.GetComponent<Rigidbody>().useGravity = true;
 	}
 }

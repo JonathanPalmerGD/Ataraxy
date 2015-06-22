@@ -78,7 +78,7 @@ public class GrapplingHookProj : Projectile
 			//Pull the creator
 			//Creator.Carrier.ExternalMove(pullDir, 1, ForceMode.VelocityChange);
 
-			Creator.Carrier.rigidbody.velocity = Vector3.zero;
+			Creator.Carrier.GetComponent<Rigidbody>().velocity = Vector3.zero;
 			Creator.Carrier.ExternalMove(pullDir, 2 * hookSpeed, ForceMode.VelocityChange);
 		}
 		else if (hookState == GrapplingState.Pulling)
@@ -92,8 +92,8 @@ public class GrapplingHookProj : Projectile
 			transform.LookAt(transform.position - pullDir * 5, Vector3.up);
 
 			//This could let us move linearly towards the player.
-			rigidbody.velocity = Vector3.zero;
-			rigidbody.AddForce(pullDir * hookSpeed, ForceMode.VelocityChange);
+			GetComponent<Rigidbody>().velocity = Vector3.zero;
+			GetComponent<Rigidbody>().AddForce(pullDir * hookSpeed, ForceMode.VelocityChange);
 			if (pullingEntity != null)
 			{
 				//Pull the target
@@ -101,7 +101,7 @@ public class GrapplingHookProj : Projectile
 			}
 			else if (pullingGameObject != null)
 			{
-				if (pullingGameObject.rigidbody != null)
+				if (pullingGameObject.GetComponent<Rigidbody>() != null)
 				{
 					//Pull the target - Set it inside of us
 					pullingGameObject.transform.position = transform.position + transform.forward * (transform.localScale.z / 2);
@@ -204,7 +204,7 @@ public class GrapplingHookProj : Projectile
 							//Make ourself a child.
 							//gameObject.transform.SetParent(collidedEntity.transform);
 
-							if (collidedEntity.rigidbody != null)
+							if (collidedEntity.GetComponent<Rigidbody>() != null)
 							{
 								RetractPullingTarget(collidedEntity);
 							}
@@ -265,7 +265,7 @@ public class GrapplingHookProj : Projectile
 					RetractPullingTarget(collider.gameObject);
 				}
 			}
-			else if (collider.gameObject.rigidbody)
+			else if (collider.gameObject.GetComponent<Rigidbody>())
 			{
 				//Debug.Log("Pulling: " + collider.gameObject.name + "\n");
 				RetractPullingTarget(collider.gameObject);
@@ -284,12 +284,12 @@ public class GrapplingHookProj : Projectile
 	/// <param name="collidedEntity">Collided entity.</param>
 	public void RetractPullingTarget(GameObject collidedObject)
 	{
-		if(collidedObject.rigidbody != null)
+		if(collidedObject.GetComponent<Rigidbody>() != null)
 		{
 			if (!collidedYet)
 			{
-				rigidbody.velocity = Vector3.zero;
-				collidedObject.rigidbody.velocity = Vector3.zero;
+				GetComponent<Rigidbody>().velocity = Vector3.zero;
+				collidedObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
 
 				hookState = GrapplingState.Pulling;
 				pullingGameObject = collidedObject;
@@ -312,14 +312,14 @@ public class GrapplingHookProj : Projectile
 	/// <param name="collidedEntity">Collided entity.</param>
 	public void RetractPullingTarget(Entity collidedEntity)
 	{
-		if(collidedEntity.rigidbody != null)
+		if(collidedEntity.GetComponent<Rigidbody>() != null)
 		{
 			if (!collidedYet)
 			{
 				//Face what we grabbed towards the Carrier?
 
-				rigidbody.velocity = Vector3.zero;
-				collidedEntity.rigidbody.velocity = Vector3.zero;
+				GetComponent<Rigidbody>().velocity = Vector3.zero;
+				collidedEntity.GetComponent<Rigidbody>().velocity = Vector3.zero;
 				//collidedEntity.transform.LookAt(Creator.Carrier.transform.position, Vector3.up);
 			
 				hookState = GrapplingState.Pulling;
@@ -338,9 +338,9 @@ public class GrapplingHookProj : Projectile
 
 	public void Retract()
 	{
-		rigidbody.useGravity = false;
+		GetComponent<Rigidbody>().useGravity = false;
 		collidedYet = true;
-		rigidbody.velocity = Vector3.zero;
+		GetComponent<Rigidbody>().velocity = Vector3.zero;
 		hookState = GrapplingState.Pulling;
 		hookSpeed = 80;
 	}
@@ -357,11 +357,11 @@ public class GrapplingHookProj : Projectile
 			thunk.minDistance = 15;
 			thunk.Play();
 			
-			if (Creator.Carrier.rigidbody != null)
+			if (Creator.Carrier.GetComponent<Rigidbody>() != null)
 			{
-				rigidbody.velocity = Vector3.zero;
-				rigidbody.useGravity = false;
-				Creator.Carrier.rigidbody.useGravity = false;
+				GetComponent<Rigidbody>().velocity = Vector3.zero;
+				GetComponent<Rigidbody>().useGravity = false;
+				Creator.Carrier.GetComponent<Rigidbody>().useGravity = false;
 
 				hookState = GrapplingState.Attached;
 				collidedYet = true;
@@ -375,7 +375,8 @@ public class GrapplingHookProj : Projectile
 	}
 
 	public void StopGrapple()
-	{
+	{
+
 		if (hookState == GrapplingState.Attached)
 		{
 			Vector3 pullDir = transform.position - Creator.Carrier.transform.position;
@@ -388,7 +389,7 @@ public class GrapplingHookProj : Projectile
 		{
 			if (pullingEntity != null)
 			{
-				if (pullingEntity.rigidbody != null)
+				if (pullingEntity.GetComponent<Rigidbody>() != null)
 				{
 					Vector3 pullDir = Creator.Carrier.transform.position - transform.position;
 					pullDir.Normalize();

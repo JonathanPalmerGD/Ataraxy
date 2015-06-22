@@ -40,7 +40,7 @@ public class NPC : Entity
 		outline = Shader.Find("Outlined/Silhouetted Diffuse");
 		outlineOnly = Shader.Find("Outlined/Silhouette Only");
 		diffuse = Shader.Find("Diffuse");
-		normalShader = renderer.material.shader; 
+		normalShader = GetComponent<Renderer>().material.shader; 
 
 		//Set up HUD with UIManager
 		HealthSlider = UIManager.Instance.target_HP;
@@ -95,18 +95,20 @@ public class NPC : Entity
 			if(GameManager.Instance.player.targetedEntity == this)
 			{
 				GameManager.Instance.player.targetedEntity = null;
-				InfoHUD.enabled = false;
+				UIManager.Instance.Untarget();
 			}
-			renderer.material.shader = diffuse;
+			GetComponent<Renderer>().material.shader = diffuse;
 		}
 	}
 
 	public virtual void Target()
 	{
+		UIManager.Instance.Target();
+
 		if (InfoHUD != null)
 		{
-			InfoHUD.enabled = true;
-			renderer.material.shader = outline;
+			//InfoHUD.enabled = true;
+			GetComponent<Renderer>().material.shader = outline;
 
 			SetupHealthUI();
 			SetupResourceUI();
@@ -119,6 +121,7 @@ public class NPC : Entity
 
 	public virtual void InitModifiers()
 	{
+		//Debug.Log("Setting up Modifiers on: " + name + "\n");
 		if (modifiers == null || modifiers.Count == 0)
 		{
 			modifiers = new List<Modifier>();
@@ -141,6 +144,7 @@ public class NPC : Entity
 				//Debug.Log(name + " has " + modifiers.Count + " modifiers\n");
 			}
 		}
+		//Debug.Log("Finished Modifiers on: " + name + "\n" + modifiers.Count);
 	}
 
 	public override void SetupModifiersUI()

@@ -30,6 +30,6 @@ public class BladeSlash : MeleeProjectile
 
 	public override void Collide()
 	{
-		rigidbody.drag += 2;
+		GetComponent<Rigidbody>().drag += 2;
 	}
 }

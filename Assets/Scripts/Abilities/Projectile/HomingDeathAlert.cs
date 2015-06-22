@@ -26,7 +26,7 @@ public class HomingDeathAlert : MonoBehaviour
 			counter += Time.deltaTime;
 			if (target == null)
 			{
-				gameObject.particleSystem.enableEmission = false;
+				gameObject.GetComponent<ParticleSystem>().enableEmission = false;
 
 				Destroy(gameObject);
 			}
@@ -47,8 +47,8 @@ public class HomingDeathAlert : MonoBehaviour
 					}
 
 					//Increase the particle size greatly to create an arrival flash.
-					gameObject.particleSystem.startSpeed *= target.transform.localScale.x * 2;
-					gameObject.particleSystem.startSize *= target.transform.localScale.x;
+					gameObject.GetComponent<ParticleSystem>().startSpeed *= target.transform.localScale.x * 2;
+					gameObject.GetComponent<ParticleSystem>().startSize *= target.transform.localScale.x;
 
 					//Destroy in a moment.
 					Destroy(gameObject, 2.0f);

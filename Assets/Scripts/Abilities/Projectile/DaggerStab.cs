@@ -13,7 +13,7 @@ public class DaggerStab : MeleeProjectile
 		ProjVel = 1200;
 		movementDecay = 0f;
 		visualDecay = .35f;
-		rigidbody.drag = 8;
+		GetComponent<Rigidbody>().drag = 8;
 #if CHEAT
 		//visualDecay = 50f;
 #else
@@ -28,6 +28,6 @@ public class DaggerStab : MeleeProjectile
 
 	public override void Collide()
 	{
-		rigidbody.drag += 2;
+		GetComponent<Rigidbody>().drag += 2;
 	}
 }

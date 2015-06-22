@@ -222,9 +222,9 @@ public class TargetingVisual : MonoBehaviour
 
 			if (leadTarget)
 			{
-				if (target.rigidbody != null)
+				if (target.GetComponent<Rigidbody>() != null)
 				{
-					targPos += target.rigidbody.velocity * 3f;
+					targPos += target.GetComponent<Rigidbody>().velocity * 3f;
 				}
 			}
 			if (KnowledgeOfPlayer)

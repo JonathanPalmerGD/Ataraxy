@@ -101,8 +101,8 @@ public class WarpStaff : Weapon
 			if (GameManager.Instance.player.weapons[GameManager.Instance.player.WeaponIndex] == this)
 			{
 				// Enable the teleFragDestObj and keep it in front of the player
-				TeleDestObj.renderer.enabled = true;
-				TeleDestObj.particleSystem.enableEmission = true;
+				TeleDestObj.GetComponent<Renderer>().enabled = true;
+				TeleDestObj.GetComponent<ParticleSystem>().enableEmission = true;
 				// Calculate where the player is poiting at:
 				AimDir = GameManager.Instance.player.targetScanDir - GameManager.Instance.player.FirePoints[0].transform.position;
 				AimDir.Normalize();
@@ -112,9 +112,9 @@ public class WarpStaff : Weapon
 			else
 			{
 				//Disable the TeleFrag Obj renderer and particle emiter.
-				TeleDestObj.renderer.enabled = false;
-				TeleDestObj.particleSystem.enableEmission = false;
-				TeleDestObj.particleSystem.Clear();
+				TeleDestObj.GetComponent<Renderer>().enabled = false;
+				TeleDestObj.GetComponent<ParticleSystem>().enableEmission = false;
+				TeleDestObj.GetComponent<ParticleSystem>().Clear();
 			}
 		}
 	}
@@ -136,7 +136,7 @@ public class WarpStaff : Weapon
 		Carrier.transform.position = TelePosition;
 
 		// Stops Players momentum
-		Carrier.transform.rigidbody.velocity = new Vector3(0, 0, 0);
+		Carrier.transform.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
 		
 		AudioSource warpAud = AudioManager.Instance.MakeSource(primaryAudio);
 		warpAud.Play();
@@ -159,7 +159,7 @@ public class WarpStaff : Weapon
 				//Check If my faction is the same as the target
 				if (e.Faction != Faction)
 				{	// If different
-					if (e.gameObject.rigidbody != null)
+					if (e.gameObject.GetComponent<Rigidbody>() != null)
 					{	//If target has a rigidBody
 						Vector3 CurrTargPos = e.transform.position;
 						

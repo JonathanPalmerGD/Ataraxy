@@ -20,16 +20,16 @@ public class ShockBall : Projectile
 
 	public override void Update()
 	{
-		if (((SphereCollider)collider).radius < maxShockBallSize)
+		if (((SphereCollider)GetComponent<Collider>()).radius < maxShockBallSize)
 		{
-			((SphereCollider)collider).radius += shockBallGrowthRate * Time.deltaTime / 2;
+			((SphereCollider)GetComponent<Collider>()).radius += shockBallGrowthRate * Time.deltaTime / 2;
 			blastRadius += shockBallGrowthRate * Time.deltaTime;
 			explosiveDamage += shockBallGrowthRate * Time.deltaTime / 2;
 		}
-		if (particleSystem.startSize < maxShockBallSize)
+		if (GetComponent<ParticleSystem>().startSize < maxShockBallSize)
 		{
 			//particleSystem.startLifetime += shockBallGrowthRate * Time.deltaTime;
-			particleSystem.startSize += shockBallGrowthRate * Time.deltaTime;
+			GetComponent<ParticleSystem>().startSize += shockBallGrowthRate * Time.deltaTime;
 		}
 	}
 
@@ -43,9 +43,9 @@ public class ShockBall : Projectile
 
 			det.Explode();
 		}
-		gameObject.particleSystem.enableEmission = false;
-		gameObject.collider.enabled = false;
-		Destroy(rigidbody);
+		gameObject.GetComponent<ParticleSystem>().enableEmission = false;
+		gameObject.GetComponent<Collider>().enabled = false;
+		Destroy(GetComponent<Rigidbody>());
 		enabled = false;
 
 		Collider[] hitColliders = Physics.OverlapSphere(transform.position, blastRadius);

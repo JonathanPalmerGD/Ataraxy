@@ -365,17 +365,17 @@ public class Weapon : Ability
 			if (additiveMovement)
 			{
 				//Vector3 updatedVelocity = charMotor.movement.velocity;
-				Vector3 updatedVelocity = Carrier.gameObject.rigidbody.velocity;
+				Vector3 updatedVelocity = Carrier.gameObject.GetComponent<Rigidbody>().velocity;
 				Vector3 gainedVelocity = (movementDir * movementVel) + (secondDir * secondVel);
 				updatedVelocity += gainedVelocity;// new Vector3(gainedVelocity.x, gainedVelocity.y / 2, gainedVelocity.z);
-				Carrier.gameObject.rigidbody.velocity = updatedVelocity;
+				Carrier.gameObject.GetComponent<Rigidbody>().velocity = updatedVelocity;
 			}
 			else
 			{
 				Vector3 updatedVelocity = Vector3.zero;
 				Vector3 gainedVelocity = (movementDir * movementVel) + (secondDir * secondVel);
 				updatedVelocity += gainedVelocity;
-				Carrier.gameObject.rigidbody.velocity = updatedVelocity;
+				Carrier.gameObject.GetComponent<Rigidbody>().velocity = updatedVelocity;
 				//float mag = updatedVelocity.magnitude;
 				//Carrier.ExternalMove(updatedVelocity.normalized, 40, ForceMode.VelocityChange);
 			}
@@ -420,11 +420,11 @@ public class Weapon : Ability
 		//Give the projectile velocity. Melee projectiles generally have drag to slow them down quickly.
 		if (specialVelocity != 0)
 		{
-			proj.rigidbody.AddForce(velocityDirection * specialVelocity * Carrier.ProjSpeedAmp * proj.rigidbody.mass);
+			proj.GetComponent<Rigidbody>().AddForce(velocityDirection * specialVelocity * Carrier.ProjSpeedAmp * proj.GetComponent<Rigidbody>().mass);
 		}
 		else
 		{
-			proj.rigidbody.AddForce(velocityDirection * proj.ProjVel * Carrier.ProjSpeedAmp * proj.rigidbody.mass);
+			proj.GetComponent<Rigidbody>().AddForce(velocityDirection * proj.ProjVel * Carrier.ProjSpeedAmp * proj.GetComponent<Rigidbody>().mass);
 		}
 
 		//Target is ahead of the projectile (the 8 hard coded value is just enough to always be in front of the projectile

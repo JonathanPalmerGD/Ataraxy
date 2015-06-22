@@ -263,7 +263,7 @@ public class Nullgard : GroundEnemy
 				state = EnemyState.Idle;
 				stateTimer = 0;
 				
-				rigidbody.velocity = Vector3.zero;
+				GetComponent<Rigidbody>().velocity = Vector3.zero;
 				break;
 
 			case EnemyState.Searching:

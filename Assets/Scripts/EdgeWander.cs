@@ -90,9 +90,9 @@ public class EdgeWander : MonoBehaviour
 			haveNewHeading = false;
 		}
 
-		CurrentVelocity = rigidbody.velocity;
+		CurrentVelocity = GetComponent<Rigidbody>().velocity;
 		Vector3 desiredDirection = transform.forward;
-		float forceAmt = maxSpeed - rigidbody.velocity.magnitude;
+		float forceAmt = maxSpeed - GetComponent<Rigidbody>().velocity.magnitude;
 
 		if (navState == GroundState.OnGround)
 		{
@@ -100,13 +100,13 @@ public class EdgeWander : MonoBehaviour
 			if (!haveNewHeading)
 			{
 				//Move forward
-				rigidbody.AddForce(desiredDirection * forceAmt * rigidbody.mass);
+				GetComponent<Rigidbody>().AddForce(desiredDirection * forceAmt * GetComponent<Rigidbody>().mass);
 			}
 			
 		}
 		else if (navState == GroundState.Falling)
 		{
-			rigidbody.AddForce(-transform.up * forceAmt * rigidbody.mass);
+			GetComponent<Rigidbody>().AddForce(-transform.up * forceAmt * GetComponent<Rigidbody>().mass);
 			//Do nothing
 		}
 		else if( navState == GroundState.Turning)
@@ -125,7 +125,7 @@ public class EdgeWander : MonoBehaviour
 			}
 			//Debug.DrawLine(transform.position, transform.position + desiredDirection * 15, Color.blue, 3.0f);
 
-			rigidbody.AddForce(desiredDirection * 3 *  forceAmt * rigidbody.mass);
+			GetComponent<Rigidbody>().AddForce(desiredDirection * 3 *  forceAmt * GetComponent<Rigidbody>().mass);
 
 			transform.eulerAngles = Vector3.Lerp(oldRotation, targetRotation, (counter / turnTime));
 			
@@ -143,7 +143,7 @@ public class EdgeWander : MonoBehaviour
 		//If our distance from our target is greater than 27
 		//steeringForce += 15 * Steering.Seek(transform, GameManager.Instance.playerGO.transform.position, speed, maxSpeed);
 
-		Vector3 curVel = rigidbody.velocity;
+		Vector3 curVel = GetComponent<Rigidbody>().velocity;
 		Debug.DrawLine(transform.position, transform.position + curVel, Color.white);
 		Vector3 futurePos = (transform.position + (curVel * Time.deltaTime));
 		Debug.DrawLine(futurePos, futurePos + Vector3.up * 15, Color.red);
@@ -184,9 +184,9 @@ public class EdgeWander : MonoBehaviour
 		//direction.y -= gravity;
 		
 		// the CharacterController moves us subject to physical constraints
-		rigidbody.AddForce(direction * speed/ 4 * rigidbody.mass);
+		GetComponent<Rigidbody>().AddForce(direction * speed/ 4 * GetComponent<Rigidbody>().mass);
 
-		Debug.DrawLine(transform.position, transform.position + 10 * rigidbody.velocity, Color.white);
+		Debug.DrawLine(transform.position, transform.position + 10 * GetComponent<Rigidbody>().velocity, Color.white);
 		//characterController.Move (direction * Time.deltaTime);
 		
 		

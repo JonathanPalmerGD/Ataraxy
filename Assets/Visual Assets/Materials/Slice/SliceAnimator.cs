@@ -47,8 +47,8 @@ public class SliceAnimator : MonoBehaviour
 			}
 		}
 
-		renderer.material.SetFloat("_Openness", sOpenness);
+		GetComponent<Renderer>().material.SetFloat("_Openness", sOpenness);
 		//renderer.material.SetFloat("_Offset",( Time.realtimeSinceStartup / 10) %1);
-		renderer.material.SetFloat("_Frequency", sClipFrequency);
+		GetComponent<Renderer>().material.SetFloat("_Frequency", sClipFrequency);
 	}
 }

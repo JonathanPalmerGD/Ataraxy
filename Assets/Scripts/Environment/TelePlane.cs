@@ -39,8 +39,8 @@ public class TelePlane : MonoBehaviour
 		{
 			if (contactClipToPlay != null)
 			{
-				player.audio.clip = contactClipToPlay;
-				player.audio.Play();
+				player.GetComponent<AudioSource>().clip = contactClipToPlay;
+				player.GetComponent<AudioSource>().Play();
 			}
 
 			//If the target object exists
@@ -51,7 +51,7 @@ public class TelePlane : MonoBehaviour
 				player.transform.rotation = player.GetComponent<TeleTarget>().lastCheckpoint.transform.rotation;
 
 				//Stop their movement
-				player.rigidbody.velocity = Vector3.zero;
+				player.GetComponent<Rigidbody>().velocity = Vector3.zero;
 				//player.GetComponent<CharacterMotor>().SetVelocity(new Vector3(0, 0, 0));
 
 
@@ -61,7 +61,7 @@ public class TelePlane : MonoBehaviour
 			{
 				player.transform.position = startPos;
 				player.transform.rotation = startRot;
-				player.rigidbody.velocity = Vector3.zero;
+				player.GetComponent<Rigidbody>().velocity = Vector3.zero;
 				//player.GetComponent<CharacterMotor>().SetVelocity(new Vector3(0, 0, 0));
 
 

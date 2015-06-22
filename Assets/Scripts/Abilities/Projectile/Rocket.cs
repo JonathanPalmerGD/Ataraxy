@@ -49,11 +49,11 @@ public class Rocket : Projectile
 				else
 				{
 					//Update the direction we want to go.
-					dirToTarget = target.transform.position - (transform.position + Time.deltaTime * rigidbody.velocity);
+					dirToTarget = target.transform.position - (transform.position + Time.deltaTime * GetComponent<Rigidbody>().velocity);
 					dirToTarget.Normalize();
 
 					//Apply a force in 
-					rigidbody.AddForce(dirToTarget * homingVelocity * rigidbody.mass);
+					GetComponent<Rigidbody>().AddForce(dirToTarget * homingVelocity * GetComponent<Rigidbody>().mass);
 
 					//Debug.Log("Current Speed: " + rigidbody.velocity.magnitude + "\nFuel: " + fuelRemaining);
 				}
@@ -65,13 +65,13 @@ public class Rocket : Projectile
 			{
 				rocketThrust.Stop();
 			}
-			rigidbody.useGravity = true;
-			rigidbody.drag = .3f;
-			gameObject.particleSystem.enableEmission = false;
+			GetComponent<Rigidbody>().useGravity = true;
+			GetComponent<Rigidbody>().drag = .3f;
+			gameObject.GetComponent<ParticleSystem>().enableEmission = false;
 		}
 
 		//Face the the homing object in the direction it is moving. This gives the illusion of turning.
-		transform.LookAt(transform.position + rigidbody.velocity * 3);
+		transform.LookAt(transform.position + GetComponent<Rigidbody>().velocity * 3);
 	}
 
 	public override void ProjectileHitTarget(Entity target)
@@ -81,7 +81,7 @@ public class Rocket : Projectile
 
 	public override void Collide()
 	{
-		rigidbody.drag += 2;
+		GetComponent<Rigidbody>().drag += 2;
 		Detonator det;
 		if (explosive != null)
 		{
@@ -99,9 +99,9 @@ public class Rocket : Projectile
 		rocketAud.minDistance = 9;
 		rocketAud.Play();
 		
-		gameObject.particleSystem.enableEmission = false;
-		gameObject.collider.enabled = false;
-		body.renderer.enabled = false;
+		gameObject.GetComponent<ParticleSystem>().enableEmission = false;
+		gameObject.GetComponent<Collider>().enabled = false;
+		body.GetComponent<Renderer>().enabled = false;
 		enabled = false;
 		body.SetActive(false);
 

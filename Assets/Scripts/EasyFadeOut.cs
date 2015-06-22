@@ -9,9 +9,9 @@ public class EasyFadeOut : MonoBehaviour
  
 	void FixedUpdate()
 	{
-		if (audio.volume > 0)
+		if (GetComponent<AudioSource>().volume > 0)
 		{
-			audio.volume = audio.volume - (Time.deltaTime / (fadeDuration + 1));
+			GetComponent<AudioSource>().volume = GetComponent<AudioSource>().volume - (Time.deltaTime / (fadeDuration + 1));
 		}
 		else
 		{

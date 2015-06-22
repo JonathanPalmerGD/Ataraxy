@@ -15,7 +15,7 @@ public class StaffThwack : MeleeProjectile
 		ProjVel = 2400;
 		movementDecay = 0f;
 		visualDecay = .75f;
-		rigidbody.drag = 8;
+		GetComponent<Rigidbody>().drag = 8;
 #if CHEAT
 		visualDecay = 50f;
 #else
@@ -31,6 +31,6 @@ public class StaffThwack : MeleeProjectile
 
 	public override void Collide()
 	{
-		rigidbody.drag += 2;
+		GetComponent<Rigidbody>().drag += 2;
 	}
 }

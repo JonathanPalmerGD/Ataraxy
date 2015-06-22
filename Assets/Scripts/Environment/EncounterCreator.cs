@@ -68,7 +68,7 @@ public class EncounterCreator : MonoBehaviour
 	
 	void Update() 
 	{
-		if(initialized && particleSystem != null)
+		if(initialized && GetComponent<ParticleSystem>() != null)
 		{
 			bool valid = true;
 			for(int i = 0; i < enemies.Count; i++)
@@ -81,7 +81,7 @@ public class EncounterCreator : MonoBehaviour
 			
 			if(!valid)
 			{
-				Destroy(particleSystem);
+				Destroy(GetComponent<ParticleSystem>());
 			}
 		}
 	}

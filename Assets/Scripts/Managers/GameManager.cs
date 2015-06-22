@@ -40,10 +40,13 @@ public class GameManager : Singleton<GameManager>
 		}
 
 		enemiesEngaged = new List<Enemy>();
-
 #if !UNITY_EDITOR
-		Screen.showCursor = false;
-		Screen.lockCursor = true;
+		//Cursor.visible = false;
+		//Cursor.lockState = CursorLockMode.Locked;
+
+		//Unity <5
+		//Screen.showCursor = false;
+		//Screen.lockCursor = true;
 #endif
 
 	}

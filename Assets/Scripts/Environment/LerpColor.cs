@@ -14,8 +14,8 @@ public class LerpColor : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-		oldColor = light.color;
-		oldIntensity = light.intensity;
+		oldColor = GetComponent<Light>().color;
+		oldIntensity = GetComponent<Light>().intensity;
 	}
 	
 	/// <summary>
@@ -30,13 +30,13 @@ public class LerpColor : MonoBehaviour
 			{
 				changingColor = false;
 				counter = 0;
-				light.color = targetColor;
-				light.intensity = targetIntensity;
+				GetComponent<Light>().color = targetColor;
+				GetComponent<Light>().intensity = targetIntensity;
 			}
 			else
 			{
-				light.color = new Color(Mathf.Lerp(oldColor.r, targetColor.r, counter / changeDuration), Mathf.Lerp(oldColor.g, targetColor.g, counter / changeDuration), Mathf.Lerp(oldColor.b, targetColor.b, counter / changeDuration), Mathf.Lerp(oldColor.a, targetColor.a, counter / changeDuration));
-				light.intensity = Mathf.Lerp(oldIntensity, targetIntensity, counter / changeDuration);
+				GetComponent<Light>().color = new Color(Mathf.Lerp(oldColor.r, targetColor.r, counter / changeDuration), Mathf.Lerp(oldColor.g, targetColor.g, counter / changeDuration), Mathf.Lerp(oldColor.b, targetColor.b, counter / changeDuration), Mathf.Lerp(oldColor.a, targetColor.a, counter / changeDuration));
+				GetComponent<Light>().intensity = Mathf.Lerp(oldIntensity, targetIntensity, counter / changeDuration);
 			}
 		}
 	}

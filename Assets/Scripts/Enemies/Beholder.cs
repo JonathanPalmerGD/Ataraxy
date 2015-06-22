@@ -45,21 +45,25 @@ public class Beholder : FlyingEnemy
 
 	public override void Untarget()
 	{
+		base.Untarget();
+
 		if (InfoHUD != null)
 		{
 			InfoHUD.enabled = false;
-			renderer.enabled = false;
-			renderer.material.shader = normalShader;
+			GetComponent<Renderer>().enabled = false;
+			GetComponent<Renderer>().material.shader = normalShader;
 		}
 	}
 
 	public override void Target()
 	{
+		base.Target();
+
 		if (InfoHUD != null)
 		{
 			InfoHUD.enabled = true;
-			renderer.enabled = true;
-			renderer.material.shader = outlineOnly;
+			GetComponent<Renderer>().enabled = true;
+			GetComponent<Renderer>().material.shader = outlineOnly;
 
 			SetupHealthUI();
 			SetupResourceUI();

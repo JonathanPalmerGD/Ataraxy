@@ -23,7 +23,7 @@ public class MeleeProjectile : Projectile
 
 		if (projectileCollider == null)
 		{
-			projectileCollider = transform.FindChild(ColliderName).collider;
+			projectileCollider = transform.FindChild(ColliderName).GetComponent<Collider>();
 
 			if (projectileCollider == null)
 			{
@@ -80,7 +80,7 @@ public class MeleeProjectile : Projectile
 
 	public override void Fizzle()
 	{
-		rigidbody.drag = 50;
+		GetComponent<Rigidbody>().drag = 50;
 		projectileCollider.enabled = false;
 		fizzled = true;
 	}

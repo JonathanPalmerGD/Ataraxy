@@ -6,6 +6,6 @@ public class ForceMouseUnlock : MonoBehaviour
 	void Update()
 	{
 		Screen.lockCursor = false;
-		Screen.showCursor = true;
+		Cursor.visible = true;
 	}
 }

@@ -115,7 +115,7 @@ public class GrapplingHook : Weapon
 
 			currentProjectile.Creator = this;
 
-			currentProjectile.rigidbody.AddForce((dir * assignedHookSpeed * Carrier.ProjSpeedAmp * (currentProjectile.ProjVel / 20) * currentProjectile.rigidbody.mass));
+			currentProjectile.GetComponent<Rigidbody>().AddForce((dir * assignedHookSpeed * Carrier.ProjSpeedAmp * (currentProjectile.ProjVel / 20) * currentProjectile.GetComponent<Rigidbody>().mass));
 
 			currentProjectile.Damage = PrimaryDamage;
 
@@ -149,9 +149,9 @@ public class GrapplingHook : Weapon
 			go.transform.LookAt(dir * 10000);
 
 			currentProjectile.Creator = this;
-			currentProjectile.rigidbody.useGravity = true;
+			currentProjectile.GetComponent<Rigidbody>().useGravity = true;
 
-			currentProjectile.rigidbody.AddForce((dir * assignedHookSpeed * Carrier.ProjSpeedAmp * (currentProjectile.ProjVel / 20) * currentProjectile.rigidbody.mass));
+			currentProjectile.GetComponent<Rigidbody>().AddForce((dir * assignedHookSpeed * Carrier.ProjSpeedAmp * (currentProjectile.ProjVel / 20) * currentProjectile.GetComponent<Rigidbody>().mass));
 
 			currentProjectile.Damage = PrimaryDamage;
 
@@ -201,9 +201,9 @@ public class GrapplingHook : Weapon
 
 	public void ProjectileDestroyed()
 	{
-		if (Carrier != null && Carrier.rigidbody != null)
+		if (Carrier != null && Carrier.GetComponent<Rigidbody>() != null)
 		{
-			Carrier.rigidbody.useGravity = true;
+			Carrier.GetComponent<Rigidbody>().useGravity = true;
 		}
 		//Set us to ready.
 		weaponState = GrapplingHookWeaponState.Ready;

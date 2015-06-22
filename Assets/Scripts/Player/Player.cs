@@ -600,6 +600,11 @@ public class Player : Entity
 				AdjustActiveDurability(-15);
 			}
 
+			if (Input.GetKeyDown(KeyCode.Z))
+			{
+				UIManager.Instance.target_HUD.gameObject.SetActive(false);
+			}
+
 			#region Dev Movement Buttons
 			if (Input.GetKeyDown(KeyCode.PageUp))
 			{
@@ -611,7 +616,7 @@ public class Player : Entity
 			{
 				Vector3 newVel = new Vector3(0.0f, 1, 0.0f);
 				newVel.Normalize();
-				rigidbody.velocity = Vector3.zero;
+				GetComponent<Rigidbody>().velocity = Vector3.zero;
 				ExternalMove(newVel, 30, ForceMode.VelocityChange);
 			}
 			//Go down
@@ -619,7 +624,7 @@ public class Player : Entity
 			{
 				Vector3 newVel = new Vector3(0.0f, -1, 0.0f);
 				newVel.Normalize();
-				rigidbody.velocity = Vector3.zero;
+				GetComponent<Rigidbody>().velocity = Vector3.zero;
 				ExternalMove(newVel, 40, ForceMode.VelocityChange);
 			}
 			//Go Forward
@@ -627,18 +632,18 @@ public class Player : Entity
 			{
 				Vector3 newVel = new Vector3(GetForward().x, 0, GetForward().z);
 				newVel.Normalize();
-				rigidbody.velocity = Vector3.zero;
+				GetComponent<Rigidbody>().velocity = Vector3.zero;
 				ExternalMove(newVel, 110, ForceMode.VelocityChange);
 			}
 			//Stops all player movement.
 			if (Input.GetKeyDown(KeyCode.LeftControl))
 			{
-				rigidbody.velocity = Vector3.zero;
+				GetComponent<Rigidbody>().velocity = Vector3.zero;
 			}
 			//Toggles gravity. 
 			if (Input.GetKeyDown(KeyCode.LeftControl))
 			{
-				rigidbody.useGravity = !rigidbody.useGravity;
+				GetComponent<Rigidbody>().useGravity = !GetComponent<Rigidbody>().useGravity;
 			}
 			#endregion
 
@@ -718,10 +723,22 @@ public class Player : Entity
 	{
 		//Put the player there.
 		transform.position = teleTarget.lastCheckpoint.transform.position;
-		transform.rotation = teleTarget.lastCheckpoint.transform.rotation;
+		transform.eulerAngles = teleTarget.lastCheckpoint.transform.eulerAngles;
 
 		//Stop their movement
-		rigidbody.velocity = Vector3.zero;
+		GetComponent<Rigidbody>().velocity = Vector3.zero;
+	}
+
+	public void FellBelow()
+	{
+		for (int i = 0; i < weapons.Count; i++)
+		{
+			if (weapons[i] is GrapplingHook)
+			{
+				((GrapplingHook)weapons[i]).RemoveProjectile(0);
+				//Debug.Log(i + " is a grappling hook\n");
+			}
+		}
 	}
 
 	public override void KillEntity()
@@ -737,18 +754,6 @@ public class Player : Entity
 			base.KillEntity();
 
 			Application.LoadLevel("GameOver");
-		}
-	}
-
-	public void FellBelow()
-	{
-		for (int i = 0; i < weapons.Count; i++)
-		{
-			if (weapons[i] is GrapplingHook)
-			{
-				((GrapplingHook)weapons[i]).RemoveProjectile(0);
-				//Debug.Log(i + " is a grappling hook\n");
-			}
 		}
 	}
 
@@ -802,6 +807,7 @@ public class Player : Entity
 			{
 				//Island e = hit.collider.gameObject.GetComponent<Island>();
 				//CheckNewTarget((Island)e);
+				return hit.collider.gameObject;
 			}
 			else if (hit.collider.gameObject.tag == "Projectile")
 			{
