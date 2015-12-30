@@ -193,7 +193,7 @@ public class EnemyController : MonoBehaviour
 		//networkView.RPC("Step", RPCMode.All);
 		Step();
 	}
-	[RPC]
+	//[RPC]
 	void Step()
 	{
 		if(audioSource && footstepSound)
@@ -204,7 +204,7 @@ public class EnemyController : MonoBehaviour
 			audioSource.PlayOneShot(footstepSound);
 		}
 	}
-	[RPC]
+	//[RPC]
 	void CrouchState(bool newCrouch)
 	{
 		//croucher.crouching = newCrouch;

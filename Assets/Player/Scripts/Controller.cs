@@ -229,7 +229,7 @@ public class Controller : MonoBehaviour {
 		//networkView.RPC("Step", RPCMode.All);
 		Step();
 	}
-	[RPC]
+	//[RPC]
 	void Step()
 	{
 		if(audioSource && footstepSound)
@@ -240,7 +240,7 @@ public class Controller : MonoBehaviour {
 			audioSource.PlayOneShot(footstepSound);
 		}
 	}
-	[RPC]
+	//[RPC]
 	void CrouchState(bool newCrouch)
 	{
 		croucher.crouching = newCrouch;

@@ -200,7 +200,7 @@ public class GroundEnemy : Enemy
 		//networkView.RPC("Step", RPCMode.All);
 		Step();
 	}
-	[RPC]
+	//[RPC]
 	void Step()
 	{
 		if(audioSource && footstepSound)
@@ -211,7 +211,7 @@ public class GroundEnemy : Enemy
 			audioSource.PlayOneShot(footstepSound);
 		}
 	}
-	[RPC]
+	//[RPC]
 	void CrouchState(bool newCrouch)
 	{
 		//croucher.crouching = newCrouch;
