@@ -3,6 +3,11 @@ First-Person,
 Roguelike,
 Floating Islands
 
+Made in 2014-2015.
+Built to learn more about ScriptableObjects, UGUI (Unity's GUI system) and using multiple scenes effectively.
+Many lessons were applied to AttunementArena (which later become Attunement)
+Check out Attunement [Here](http://www.jpalmergd.com/portfolio/attunement/)
+
 Collect a host of weapons and tools.
 Dispatch adapting enemies.
 Rebuild the shattered lands.
